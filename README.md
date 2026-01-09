@@ -1,59 +1,244 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🛒 ARTIKA POS System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=flat&logo=laravel)
+![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=flat&logo=php)
+![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=flat&logo=mysql)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat&logo=bootstrap)
 
-## About Laravel
+**ARTIKA** adalah sistem Point of Sale (POS) lengkap dan modern yang dibangun dengan Laravel 12, dirancang khusus untuk retail dan toko dengan fitur-fitur canggih seperti barcode scanning, multi-branch support, role-based access control, dan inventory management.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Fitur Utama
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 🎯 Point of Sale (POS)
+- **Barcode Scanner** - USB scanner & camera scanner dengan html5-qrcode
+- **Product Search** - Pencarian produk real-time berdasarkan nama atau barcode
+- **Cart Management** - Kelola keranjang belanja dengan mudah (add, remove, adjust quantity)
+- **Multiple Payment Methods** - Cash, QRIS, Debit Card, Credit Card, E-Wallet
+- **Hold Transaction** - Simpan transaksi untuk dilanjutkan kemudian
+- **Keyboard Shortcuts** - Workflow cepat dengan shortcut (F2, F4, F8, Esc)
+- **Auto Calculation** - Perhitungan otomatis subtotal, diskon, pajak, kembalian
+- **Receipt Printing** - Cetak struk transaksi
 
-## Learning Laravel
+### 👨‍💼 Admin Dashboard
+- **Product Management** - CRUD produk dengan barcode
+- **Category Management** - Kelola kategori produk
+- **User Management** - Kelola user dengan role-based access
+- **Customer Management** - Database pelanggan dengan loyalty points
+- **Sales Reports** - Laporan penjualan dan analitik
+- **Multi-Branch Support** - Kelola multiple cabang/toko
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 📦 Warehouse Management
+- **Stock Management** - Monitoring dan kelola stok produk
+- **Low Stock Alerts** - Notifikasi stok menipis
+- **Stock Movements** - Tracking pergerakan stok (in/out)
+- **Stock Adjustment** - Penyesuaian stok manual
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🔐 Authentication & Security
+- **Dual Login System** - Login dengan Username atau NIS (untuk kasir/siswa)
+- **Role-Based Access Control** - 3 role: Admin, Cashier, Warehouse
+- **Secure Password** - Bcrypt password hashing
+- **Session Management** - Secure session handling
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🚀 Quick Start
 
-### Premium Partners
+### Prerequisites
+- PHP 8.2 atau lebih tinggi
+- Composer
+- MySQL 5.7+
+- Node.js & NPM (untuk asset compilation)
+- Laragon / XAMPP / Valet (opsional, untuk development lokal)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### Installation
 
-## Contributing
+```bash
+# Clone repository
+git clone https://github.com/yourusername/artika-pos.git
+cd artika-pos
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Install dependencies
+composer install
+npm install
 
-## Code of Conduct
+# Setup environment
+cp .env.example .env
+php artisan key:generate
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Configure database di .env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=artika
+DB_USERNAME=root
+DB_PASSWORD=
 
-## Security Vulnerabilities
+# Run migrations & seeders
+php artisan migrate:fresh --seed
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Compile assets
+npm run build
 
-## License
+# Start development server
+php artisan serve
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Akses aplikasi di `http://localhost:8000`
+
+### Default Login Credentials
+
+| Role | Username | NIS | Password | Dashboard |
+|------|----------|-----|----------|-----------|
+| **Admin** | `admin` | - | `password` | `/admin/dashboard` |
+| **Cashier** | `kasir1` | `12345` | `password` | `/pos` |
+| **Warehouse** | `gudang` | - | `password` | `/warehouse/dashboard` |
+
+> **Note:** Cashier dapat login dengan Username (`kasir1`) atau NIS (`12345`)
+
+---
+
+## 📚 Documentation
+
+Dokumentasi lengkap tersedia dalam file-file berikut:
+
+### 🔧 Setup & Installation
+- **[INSTALLATION.md](file:///c:/laragon/www/ARTIKA/INSTALLATION.md)** - Panduan instalasi lengkap untuk Windows, Linux, dan macOS
+- **[DEPLOYMENT.md](file:///c:/laragon/www/ARTIKA/DEPLOYMENT.md)** - Panduan deployment ke production server
+
+### 🏗️ Technical Documentation
+- **[ARCHITECTURE.md](file:///c:/laragon/www/ARTIKA/ARCHITECTURE.md)** - Arsitektur sistem dan design patterns
+- **[DATABASE.md](file:///c:/laragon/www/ARTIKA/DATABASE.md)** - Database schema dan Entity Relationship Diagram
+- **[API.md](file:///c:/laragon/www/ARTIKA/API.md)** - API routes dan endpoint documentation
+
+### 📖 User Guides
+- **[Admin Guide](file:///c:/laragon/www/ARTIKA/docs/USER_GUIDE_ADMIN.md)** - Panduan lengkap untuk Admin
+- **[Cashier Guide](file:///c:/laragon/www/ARTIKA/docs/USER_GUIDE_CASHIER.md)** - Panduan lengkap untuk Kasir/Cashier
+- **[Warehouse Guide](file:///c:/laragon/www/ARTIKA/docs/USER_GUIDE_WAREHOUSE.md)** - Panduan lengkap untuk Staff Gudang
+
+### 👨‍💻 Developer Documentation
+- **[DEVELOPMENT.md](file:///c:/laragon/www/ARTIKA/DEVELOPMENT.md)** - Development environment setup dan coding standards
+- **[CONTRIBUTING.md](file:///c:/laragon/www/ARTIKA/CONTRIBUTING.md)** - Panduan kontribusi untuk developer
+
+### 📋 Additional Resources
+- **[CHANGELOG.md](file:///c:/laragon/www/ARTIKA/CHANGELOG.md)** - Version history dan release notes
+- **[FAQ.md](file:///c:/laragon/www/ARTIKA/FAQ.md)** - Frequently Asked Questions dan troubleshooting
+
+---
+
+## 🎨 Design System
+
+ARTIKA menggunakan **Modern Brown Theme** yang elegan dan profesional:
+
+- **Primary Color:** `#85695a` (Warm Brown)
+- **Accent Color:** `#c17a5c` (Terracotta)
+- **Background:** Light cream tones (`#fdf8f6`, `#f2e8e5`)
+- **Typography:** Inter font family (Google Fonts)
+- **UI Style:** Modern card-based design with glassmorphism effects
+- **Responsive:** Fully responsive untuk desktop, tablet, dan mobile
+
+---
+
+## 🛠️ Tech Stack
+
+- **Backend:** Laravel 12 (PHP 8.2+)
+- **Frontend:** Blade Templates + Bootstrap 5 + Custom SCSS
+- **Database:** MySQL with Foreign Keys
+- **Authentication:** Custom multi-field authentication (Username/NIS)
+- **Architecture:** MVC with Service & Repository Pattern
+- **Asset Bundling:** Vite
+- **Barcode Scanner:** html5-qrcode library
+- **Icons:** Bootstrap Icons
+
+---
+
+## 📊 Database Overview
+
+Sistem menggunakan 19 tabel utama:
+
+- `users` - User accounts dengan role-based access
+- `roles` - User roles (Admin, Cashier, Warehouse)
+- `branches` - Store branches/cabang
+- `categories` - Product categories
+- `products` - Product catalog dengan barcode
+- `stocks` - Inventory per branch
+- `customers` - Customer database dengan loyalty points
+- `transactions` - Sales transactions
+- `transaction_items` - Transaction line items
+- `held_transactions` - Parked/held transactions
+- `returns` - Return/refund records
+- `payment_methods` - Payment options
+- `shifts` - Cashier shift management
+- `journals` - Accounting journal entries
+- `promos` - Promotions dan discounts
+- `stock_movements` - Stock movement tracking
+- Dan lainnya...
+
+Lihat [DATABASE.md](file:///c:/laragon/www/ARTIKA/DATABASE.md) untuk detail lengkap schema dan ERD.
+
+---
+
+## ⌨️ Keyboard Shortcuts (POS)
+
+| Shortcut | Action |
+|----------|--------|
+| `F2` | Open checkout modal |
+| `F4` | Hold current transaction |
+| `F8` | Clear cart |
+| `Esc` | Cancel/close modal |
+
+---
+
+## 🔄 Development Workflow
+
+```bash
+# Install dependencies
+composer install && npm install
+
+# Run migrations & seed database
+php artisan migrate:fresh --seed
+
+# Start development servers
+npm run dev          # Vite dev server (terminal 1)
+php artisan serve    # Laravel dev server (terminal 2)
+```
+
+Lihat [DEVELOPMENT.md](file:///c:/laragon/www/ARTIKA/DEVELOPMENT.md) untuk panduan development lengkap.
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 🤝 Contributing
+
+Kontribusi selalu welcome! Silakan baca [CONTRIBUTING.md](file:///c:/laragon/www/ARTIKA/CONTRIBUTING.md) untuk panduan berkontribusi.
+
+---
+
+## 📧 Support
+
+Jika menemukan bug atau memiliki pertanyaan, silakan buat issue di repository ini atau hubungi tim development.
+
+---
+
+## 🙏 Acknowledgments
+
+- Laravel Framework
+- Bootstrap Team
+- html5-qrcode Library
+- Dan semua open-source libraries yang digunakan dalam project ini
+
+---
+
+**Version:** 2.0  
+**Last Updated:** 2026-01-09  
+**Status:** ✅ Production Ready
+
+---
+
+Made with ❤️ using Laravel & Bootstrap
