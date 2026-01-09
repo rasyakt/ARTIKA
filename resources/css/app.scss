@@ -1,0 +1,81 @@
+// ============================================
+// ARTIKA POS - Main Stylesheet
+// ============================================
+
+// Google Fonts
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+// Variables (must be imported before Bootstrap)
+@import 'variables';
+
+// Bootstrap with custom variables
+@import 'bootstrap/scss/bootstrap';
+
+// Custom Components
+@import 'components';
+
+// ============================================
+// Global Styles
+// ============================================
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: $font-family-sans;
+    background: $gray-50;
+    color: $gray-800;
+    line-height: $line-height-normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+// Override Bootstrap primary color
+$primary: #85695a;
+$secondary: #d2bab0;
+
+// ============================================
+// Utility Classes
+// ============================================
+
+.h-60px {
+    height: 60px;
+}
+
+.h-100vh {
+    height: 100vh;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.transition-all {
+    transition: all $transition-base;
+}
+
+// ============================================
+// Custom Scrollbar for specific elements
+// ============================================
+
+.custom-scroll {
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $gray-100;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $primary-light;
+        border-radius: $radius-full;
+
+        &:hover {
+            background: $primary;
+        }
+    }
+}

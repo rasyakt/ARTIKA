@@ -1,0 +1,273 @@
+@extends('layouts.app')
+
+@section('content')
+    <div class="container-fluid py-4">
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-1" style="color: #6f5849;">👥 User Management</h2>
+                <p class="text-muted mb-0">Manage system users and permissions</p>
+            </div>
+            <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addUserModal"
+                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
+                <span style="font-size: 1.25rem;">+</span> Add User
+            </button>
+        </div>
+
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
+                <strong>✅ Success!</strong> {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
+                <strong>❌ Error!</strong> {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
+        <!-- Users Table -->
+        <div class="card shadow-sm" style="border-radius: 16px; border: none;">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead style="background: #fdf8f6;">
+                            <tr>
+                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">User</th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">Username</th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">NIS</th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">Role</th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">Branch</th>
+                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($users as $user)
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="me-3"
+                                                style="width: 45px; height: 45px; background: linear-gradient(135deg, #f2e8e5 0%, #e0cec7 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                                👤
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold" style="color: #6f5849;">{{ $user->name }}</div>
+                                                <small class="text-muted">ID: {{ $user->id }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <code
+                                            style="background: #fdf8f6; padding: 0.25rem 0.5rem; border-radius: 6px; color: #85695a;">{{ $user->username }}</code>
+                                    </td>
+                                    <td>{{ $user->nis ?? '-' }}</td>
+                                    <td>
+                                        @php
+                                            $roleColors = [
+                                                'admin' => 'bg-danger',
+                                                'cashier' => 'bg-success',
+                                                'warehouse' => 'bg-primary'
+                                            ];
+                                            $roleColor = $roleColors[$user->role->name] ?? 'bg-secondary';
+                                        @endphp
+                                        <span class="badge {{ $roleColor }}">{{ ucfirst($user->role->name) }}</span>
+                                    </td>
+                                    <td>{{ $user->branch->name }}</td>
+                                    <td>
+                                        <div class="dropdown text-center">
+                                            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                                style="border-radius: 8px; border: 1px solid #e0cec7; font-size: 1.2rem; line-height: 1; padding: 0.25rem 0.5rem;">
+                                                ⋮
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end"
+                                                style="border-radius: 12px; border: 1px solid #e0cec7; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                                <li>
+                                                    <button class="dropdown-item" onclick='editUser(@json($user))'
+                                                        style="border-radius: 8px; padding: 0.5rem 1rem;">
+                                                        ✏️ Edit User
+                                                    </button>
+                                                </li>
+                                                @if($user->id !== auth()->id())
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                    <li>
+                                                        <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
+                                                            onsubmit="return confirm('Delete this user?');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="dropdown-item text-danger"
+                                                                style="border-radius: 8px; padding: 0.5rem 1rem;">
+                                                                🗑️ Delete User
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-5">
+                                        <div style="font-size: 4rem; opacity: 0.2;">👥</div>
+                                        <p class="text-muted mb-0">No users found</p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius: 16px; border: none;">
+                <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;">➕ Add New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ route('admin.users.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Full Name *</label>
+                                <input type="text" class="form-control" name="name" required
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Username *</label>
+                                <input type="text" class="form-control" name="username" required
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Password *</label>
+                                <input type="password" class="form-control" name="password" required
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">NIS (Optional)</label>
+                                <input type="text" class="form-control" name="nis"
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Role *</label>
+                                <select class="form-select" name="role_id" required
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    <option value="">Select Role</option>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Branch *</label>
+                                <select class="form-select" name="branch_id" required
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    <option value="">Select Branch</option>
+                                    @foreach($branches as $branch)
+                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                            style="border-radius: 12px;">Cancel</button>
+                        <button type="submit" class="btn btn-primary"
+                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
+                            💾 Save User
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="border-radius: 16px; border: none;">
+                <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;">✏️ Edit User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="editUserForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Full Name *</label>
+                                <input type="text" class="form-control" id="edit_name" name="name" required
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Username *</label>
+                                <input type="text" class="form-control" id="edit_username" name="username" required
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Password (Leave blank to keep
+                                    current)</label>
+                                <input type="password" class="form-control" name="password"
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">NIS (Optional)</label>
+                                <input type="text" class="form-control" id="edit_nis" name="nis"
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Role *</label>
+                                <select class="form-select" id="edit_role_id" name="role_id" required
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold" style="color: #6f5849;">Branch *</label>
+                                <select class="form-select" id="edit_branch_id" name="branch_id" required
+                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    @foreach($branches as $branch)
+                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                            style="border-radius: 12px;">Cancel</button>
+                        <button type="submit" class="btn btn-primary"
+                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
+                            💾 Update User
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function editUser(user) {
+            document.getElementById('edit_name').value = user.name;
+            document.getElementById('edit_username').value = user.username;
+            document.getElementById('edit_nis').value = user.nis || '';
+            document.getElementById('edit_role_id').value = user.role_id;
+            document.getElementById('edit_branch_id').value = user.branch_id;
+            document.getElementById('editUserForm').action = `/admin/users/${user.id}`;
+            new bootstrap.Modal(document.getElementById('editUserModal')).show();
+        }
+    </script>
+@endsection
