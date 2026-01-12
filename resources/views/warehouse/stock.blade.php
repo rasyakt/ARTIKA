@@ -10,7 +10,8 @@
         <!-- Stock Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>Stock Levels</h5>
+                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>Stock Levels
+                </h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -56,9 +57,11 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                            <button class="btn btn-sm btn-outline-primary"
-                                            onclick="adjustStock({{ $stock->id }}, {{ $stock->product_id }}, {{ $stock->branch_id }}, '{{ $stock->product->name }}', {{ $stock->quantity }})"
-                                            style="border-radius: 8px;">
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                            data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"
+                                            data-product-id="{{ $stock->product_id }}" data-branch-id="{{ $stock->branch_id }}"
+                                            data-product-name="{{ $stock->product->name }}"
+                                            data-current-qty="{{ $stock->quantity }}" style="border-radius: 8px;">
                                             <i class="fa-solid fa-gear me-1"></i> Adjust
                                         </button>
                                     </td>
@@ -76,7 +79,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-gear me-1"></i> Adjust Stock</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-gear me-1"></i> Adjust
+                        Stock</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -131,16 +135,30 @@
         let currentProductId = null;
         let currentBranchId = null;
 
-        function adjustStock(stockId, productId, branchId, productName, currentQty) {
-            currentStockId = stockId;
-            currentProductId = productId;
-            currentBranchId = branchId;
-            document.getElementById('product_name').value = productName;
-            document.getElementById('current_stock').value = currentQty + ' units';
-            document.getElementById('adjustment_qty').value = '';
-            document.getElementById('adjustment_reason').value = '';
-            new bootstrap.Modal(document.getElementById('adjustStockModal')).show();
-        }
+        document.addEventListener('DOMContentLoaded', function () {
+            var adjustStockModal = document.getElementById('adjustStockModal');
+            if (adjustStockModal) {
+                adjustStockModal.addEventListener('show.bs.modal', function (event) {
+                    // Button that triggered the modal
+                    var button = event.relatedTarget;
+
+                    // Extract info from data-* attributes
+                    currentStockId = button.getAttribute('data-stock-id');
+                    currentProductId = button.getAttribute('data-product-id');
+                    currentBranchId = button.getAttribute('data-branch-id');
+                    var productName = button.getAttribute('data-product-name');
+                    var currentQty = button.getAttribute('data-current-qty');
+
+                    // Update the modal's content.
+                    document.getElementById('product_name').value = productName;
+                    document.getElementById('current_stock').value = currentQty + ' units';
+
+                    // Reset fields
+                    document.getElementById('adjustment_qty').value = '';
+                    document.getElementById('adjustment_reason').value = '';
+                });
+            }
+        });
 
         function saveAdjustment() {
             const type = document.getElementById('adjustment_type').value;
@@ -171,22 +189,22 @@
                     reason: reason
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(data.message + '\nNew quantity: ' + data.new_quantity + ' units');
-                    location.reload();
-                } else {
-                    alert('Error: ' + data.message);
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message + '\nNew quantity: ' + data.new_quantity + ' units');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                        saveBtn.disabled = false;
+                        saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> Save Adjustment';
+                    }
+                })
+                .catch(error => {
+                    alert('Error: ' + error.message);
                     saveBtn.disabled = false;
                     saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> Save Adjustment';
-                }
-            })
-            .catch(error => {
-                alert('Error: ' + error.message);
-                saveBtn.disabled = false;
-                saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> Save Adjustment';
-            });
+                });
         }
     </script>
 @endsection
