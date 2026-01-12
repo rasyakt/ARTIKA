@@ -14,6 +14,33 @@
 // Custom Components
 @import 'components';
 
+/* Expose theme colors as CSS custom properties for runtime use */
+:root {
+    --color-primary: #{$primary};
+    --color-primary-dark: #{$primary-dark};
+    --color-primary-light: #{$primary-light};
+    --color-secondary: #{$secondary};
+    --color-accent-warm: #{$accent-warm};
+    --color-accent-gold: #{$accent-gold};
+    --color-cream: #{$accent-cream};
+    --color-bg: #{$gray-50};
+    --color-text: #{$gray-800};
+    --radius-lg: #{$radius-lg};
+}
+
+/* Hide default paginator Previous / Next controls globally (visually) */
+.pagination .page-item:first-child,
+.pagination .page-item:last-child,
+.pagination .page-link[rel="prev"],
+.pagination .page-link[rel="next"] {
+    display: none !important;
+}
+
+/* If paginator uses aria-label attributes, also hide those */
+.pagination .page-item[aria-label*="Previous"],
+.pagination .page-item[aria-label*="Next"] {
+    display: none !important;
+}
 // ============================================
 // Global Styles
 // ============================================
@@ -33,9 +60,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-// Override Bootstrap primary color
-$primary: #85695a;
-$secondary: #d2bab0;
+// (Bootstrap primary is defined in _variables.scss)
 
 // ============================================
 // Utility Classes

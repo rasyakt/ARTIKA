@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\HeldTransaction;
-use App\Models\Customer;
+use App\Models\AuditLog;
 
 class PosController extends Controller
 {
@@ -22,13 +22,13 @@ class PosController extends Controller
     public function index()
     {
         $products = $this->productRepository->getAllProducts();
+        $categories = \App\Models\Category::all();
         $paymentMethods = \App\Models\PaymentMethod::where('is_active', true)->get();
-        $customers = Customer::orderBy('name')->get();
         $heldTransactions = HeldTransaction::where('user_id', \Illuminate\Support\Facades\Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('pos.index', compact('products', 'paymentMethods', 'customers', 'heldTransactions'));
+        return view('pos.index', compact('products', 'categories', 'paymentMethods', 'heldTransactions'));
     }
 
     public function scanner()
@@ -40,8 +40,8 @@ class PosController extends Controller
     public function store(\Illuminate\Http\Request $request)
     {
         // Validation
-        $request->validate([
-            'items' => 'required|array',
+        $validated = $request->validate([
+            'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0',
@@ -49,29 +49,52 @@ class PosController extends Controller
             'total_amount' => 'required|numeric|min:0',
             'payment_method' => 'required|string',
             'cash_amount' => 'nullable|numeric|min:0',
+            'change_amount' => 'nullable|numeric|min:0',
         ]);
 
-        $data = [
-            'user_id' => \Illuminate\Support\Facades\Auth::id(),
-            'branch_id' => \Illuminate\Support\Facades\Auth::user()->branch_id,
-            'customer_id' => $request->customer_id,
-            'subtotal' => $request->subtotal,
-            'discount' => $request->discount ?? 0,
-            'total_amount' => $request->total_amount,
-            'payment_method' => $request->payment_method,
-            'cash_amount' => $request->cash_amount ?? $request->total_amount,
-        ];
-
-        $items = $request->items;
-
         try {
+            $data = [
+                'user_id' => \Illuminate\Support\Facades\Auth::id(),
+                'branch_id' => \Illuminate\Support\Facades\Auth::user()->branch_id,
+                'subtotal' => $validated['subtotal'],
+                'discount' => $validated['discount'] ?? 0,
+                'total_amount' => $validated['total_amount'],
+                'payment_method' => $validated['payment_method'],
+                'cash_amount' => $validated['cash_amount'] ?? $validated['total_amount'],
+                'change_amount' => $validated['change_amount'] ?? 0,
+            ];
+
+            $items = $validated['items'];
+
             $transaction = $this->transactionService->processTransaction($data, $items);
+
+            // AUTO AUDIT LOG
+            AuditLog::log(
+                'transaction_created',
+                'Transaction',
+                $transaction->id,
+                $transaction->total_amount,
+                $transaction->payment_method,
+                [
+                    'subtotal' => $transaction->subtotal,
+                    'discount' => $transaction->discount,
+                    'items_count' => count($items),
+                    'cash_amount' => $data['cash_amount'],
+                    'change_amount' => $data['change_amount'],
+                ],
+                'Invoice: ' . $transaction->invoice_no
+            );
+
             return response()->json([
                 'success' => true,
-                'transaction_id' => $transaction->invoice_no,
-                'change' => $data['cash_amount'] - $data['total_amount']
+                'transaction_id' => $transaction->id,
+                'invoice_no' => $transaction->invoice_no,
+                'change' => $data['change_amount']
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['success' => false, 'message' => 'Validasi gagal: ' . implode(', ', $e->errors()[array_key_first($e->errors())])], 422);
         } catch (\Exception $e) {
+            \Log::error('POS Checkout Error: ' . $e->getMessage(), ['exception' => $e]);
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
@@ -91,7 +114,6 @@ class PosController extends Controller
             $held = HeldTransaction::create([
                 'user_id' => \Illuminate\Support\Facades\Auth::id(),
                 'branch_id' => \Illuminate\Support\Facades\Auth::user()->branch_id,
-                'customer_id' => $request->customer_id,
                 'items' => $request->items,
                 'subtotal' => $request->subtotal,
                 'discount' => $request->discount ?? 0,
@@ -127,7 +149,7 @@ class PosController extends Controller
         // Return the held transaction data
         $data = [
             'items' => $held->items,
-            'customer_id' => $held->customer_id,
+            // customer_id removed
             'subtotal' => $held->subtotal,
             'discount' => $held->discount,
             'total' => $held->total,
@@ -155,7 +177,7 @@ class PosController extends Controller
      */
     public function printReceipt($transactionId)
     {
-        $transaction = \App\Models\Transaction::with(['user', 'branch', 'customer', 'items.product'])
+        $transaction = \App\Models\Transaction::with(['user', 'branch', 'items.product'])
             ->findOrFail($transactionId);
 
         return view('pos.receipt', compact('transaction'));

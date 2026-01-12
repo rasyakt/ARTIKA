@@ -28,7 +28,7 @@
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="mb-4">
-            <h2 class="fw-bold mb-1" style="color: #6f5849;">📦 Warehouse Dashboard</h2>
+            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-box me-2"></i>Warehouse Dashboard</h2>
             <p class="text-muted mb-0">Stock monitoring and management</p>
         </div>
 
@@ -47,7 +47,7 @@
                                 <small class="opacity-75">In catalog</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
-                                📦
+                                <i class="fa-solid fa-box"></i>
                             </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                                 <small class="opacity-75">Total inventory</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
-                                💰
+                                <i class="fa-solid fa-money-bill-wave"></i>
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                                 <small class="opacity-75">Items need restock</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
-                                ⚠️
+                                <i class="fa-solid fa-triangle-exclamation"></i>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">⚠️ Low Stock Alerts</h5>
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-triangle-exclamation me-2"></i>Low Stock Alerts</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -143,7 +143,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="5" class="text-center py-5">
-                                                <div style="font-size: 3rem; opacity: 0.3;">✅</div>
+                                                <div style="font-size: 3rem; opacity: 0.3;"><i class="fa-solid fa-circle-check"></i></div>
                                                 <p class="text-muted mb-0">All stock levels are healthy!</p>
                                             </td>
                                         </tr>
@@ -160,7 +160,7 @@
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">📂 Stock by Category</h5>
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-folder me-2"></i>Stock by Category</h5>
                     </div>
                     <div class="card-body" style="max-height: 500px; overflow-y: auto;">
                         @foreach($stockByCategory as $category)
@@ -188,7 +188,7 @@
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">📋 Recent Products</h5>
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>Recent Products</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">

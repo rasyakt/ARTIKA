@@ -47,16 +47,21 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/users/{id}', [\App\Http\Controllers\UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{id}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.delete');
 
-        // Customer Management
-        Route::get('/customers', [\App\Http\Controllers\CustomerController::class, 'index'])->name('customers');
-        Route::post('/customers', [\App\Http\Controllers\CustomerController::class, 'store'])->name('customers.store');
-        Route::put('/customers/{id}', [\App\Http\Controllers\CustomerController::class, 'update'])->name('customers.update');
-        Route::delete('/customers/{id}', [\App\Http\Controllers\CustomerController::class, 'destroy'])->name('customers.delete');
+        // Supplier Management (replaces Customers)
+        Route::get('/suppliers', [\App\Http\Controllers\SupplierController::class, 'index'])->name('suppliers');
+        Route::post('/suppliers', [\App\Http\Controllers\SupplierController::class, 'store'])->name('suppliers.store');
+        Route::put('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'update'])->name('suppliers.update');
+        Route::delete('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->name('suppliers.delete');
 
         // Reports
         Route::get('/reports', function () {
             return view('admin.reports.index');
         })->name('reports');
+
+        // Audit Logs
+        Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])->name('audit.index');
+        Route::get('/audit/download-pdf', [\App\Http\Controllers\AuditController::class, 'downloadPdf'])->name('audit.download-pdf');
+        Route::get('/audit/export-csv', [\App\Http\Controllers\AuditController::class, 'exportCsv'])->name('audit.export-csv');
     });
 
     // Cashier Routes (POS)

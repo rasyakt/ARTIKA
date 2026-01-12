@@ -7,9 +7,9 @@
                 <!-- Header -->
                 <div class="mb-4">
                     <a href="{{ route('admin.products') }}" class="text-decoration-none text-muted mb-2 d-inline-block">
-                        ← Back to Products
+                        <i class="fa-solid fa-arrow-left me-1"></i> Back to Products
                     </a>
-                    <h2 class="fw-bold mb-1" style="color: #6f5849;">➕ Add New Product</h2>
+                    <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-plus me-2"></i>Add New Product</h2>
                     <p class="text-muted mb-0">Fill in the product details below</p>
                 </div>
 
@@ -119,7 +119,7 @@
                                 </a>
                                 <button type="submit" class="btn btn-primary shadow-sm"
                                     style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600;">
-                                    💾 Save Product
+                                    <i class="fa-solid fa-floppy-disk me-1"></i> Save Product
                                 </button>
                             </div>
                         </form>

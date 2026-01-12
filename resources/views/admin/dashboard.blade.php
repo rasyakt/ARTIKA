@@ -42,6 +42,9 @@
                 <p class="text-muted mb-0">Overview of store performance</p>
             </div>
             <div class="text-end">
+                <a href="{{ route('admin.audit.index') }}" class="btn btn-outline-primary btn-sm me-2">
+                    <i class="fas fa-clipboard-list"></i> Audit Log
+                </a>
                 <small class="text-muted">Last updated: {{ now()->format('d M Y, H:i') }}</small>
             </div>
         </div>
@@ -61,7 +64,7 @@
                                 <small class="opacity-75">This month</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
-                                💰
+                                <i class="fa-solid fa-money-bill-wave"></i>
                             </div>
                         </div>
                     </div>
@@ -81,7 +84,7 @@
                                 <small class="opacity-75">Completed</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
-                                📊
+                                <i class="fa-solid fa-chart-pie"></i>
                             </div>
                         </div>
                     </div>
@@ -101,14 +104,14 @@
                                 <small class="opacity-75">In catalog</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
-                                📦
+                                <i class="fa-solid fa-box"></i>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Total Customers -->
+            <!-- Total Suppliers -->
             <div class="col-md-3">
                 <div class="card stats-card shadow-sm"
                     style="background: linear-gradient(135deg, #0284c7 0%, #075985 100%);">
@@ -116,12 +119,12 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 opacity-75 text-uppercase"
-                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">Customers</p>
-                                <h3 class="fw-bold mb-0">{{ $totalCustomers }}</h3>
-                                <small class="opacity-75">Registered</small>
+                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">Suppliers</p>
+                                <h3 class="fw-bold mb-0">{{ $totalSuppliers ?? $totalCustomers ?? 0 }}</h3>
+                                <small class="opacity-75">Registered suppliers</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
-                                👥
+                                <i class="fa-solid fa-truck"></i>
                             </div>
                         </div>
                     </div>
@@ -137,7 +140,7 @@
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0 fw-bold" style="color: #6f5849;">📈 Sales Overview</h5>
+                            <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-chart-line me-2"></i>Sales Overview</h5>
                             <div class="btn-group btn-group-sm" role="group">
                                 <button type="button" class="btn btn-outline-primary active"
                                     onclick="updateChart('daily')">Daily</button>
@@ -161,7 +164,7 @@
                 <div class="card shadow-sm" style="border-radius: 16px; border: none; height: 100%;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">🏆 Top Products</h5>
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-trophy me-2"></i>Top Products</h5>
                     </div>
                     <div class="card-body" style="max-height: 400px; overflow-y: auto;">
                         @forelse($topProducts as $index => $product)
@@ -185,7 +188,7 @@
                             </div>
                         @empty
                             <div class="text-center text-muted py-4">
-                                <div style="font-size: 3rem; opacity: 0.3;">📊</div>
+                                <div style="font-size: 3rem; opacity: 0.3;"><i class="fa-solid fa-chart-pie"></i></div>
                                 <p class="mb-0">No sales data yet</p>
                             </div>
                         @endforelse
@@ -201,7 +204,7 @@
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">🧾 Recent Transactions</h5>
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-receipt me-2"></i>Recent Transactions</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
@@ -244,7 +247,7 @@
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">⚠️ Low Stock Alerts</h5>
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-triangle-exclamation me-2"></i>Low Stock Alerts</h5>
                     </div>
                     <div class="card-body" style="max-height: 350px; overflow-y: auto;">
                         @forelse($lowStockProducts as $stock)
@@ -260,9 +263,28 @@
                             </div>
                         @empty
                             <div class="text-center text-muted py-4">
-                                <div style="font-size: 3rem; opacity: 0.3;">✅</div>
+                                <div style="font-size: 3rem; opacity: 0.3;"><i class="fa-solid fa-circle-check"></i></div>
                                 <p class="mb-0">All products in stock</p>
                             </div>
+                        @endforelse
+
+                        {{-- Suppliers summary --}}
+                        @php $recentSuppliers = $recentSuppliers ?? ($suppliers ?? collect()); @endphp
+                        <hr style="border-color: #f2e8e5; margin: 1rem 0;">
+                        <h6 class="fw-bold mb-3" style="color: #6f5849;"><i class="fa-solid fa-truck me-2"></i>Recent Suppliers</h6>
+                        @forelse($recentSuppliers->take(5) as $supplier)
+                            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
+                                <div>
+                                    <div class="fw-bold" style="color: #6f5849;">{{ $supplier->name ?? $supplier['name'] ?? '-' }}</div>
+                                    <small class="text-muted">{{ $supplier->phone ?? $supplier['phone'] ?? '-' }} • {{ $supplier->address ?? $supplier['address'] ?? '-' }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <small class="text-muted">Last PO: {{ $supplier->last_purchase_at ? 
+                                        \Carbon\Carbon::parse($supplier->last_purchase_at)->diffForHumans() : '-' }}</small>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center text-muted py-3">No suppliers yet</div>
                         @endforelse
                     </div>
                 </div>

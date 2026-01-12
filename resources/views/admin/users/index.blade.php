@@ -5,7 +5,7 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;">👥 User Management</h2>
+                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-users me-2"></i>User Management</h2>
                 <p class="text-muted mb-0">Manage system users and permissions</p>
             </div>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addUserModal"
@@ -15,15 +15,15 @@
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
-                <strong>✅ Success!</strong> {{ session('success') }}
+                <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
+                <strong><i class="fa-solid fa-circle-check me-1"></i>Success!</strong> {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
-                <strong>❌ Error!</strong> {{ session('error') }}
+                <strong><i class="fa-solid fa-circle-exclamation me-1"></i>Error!</strong> {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
@@ -50,7 +50,7 @@
                                         <div class="d-flex align-items-center">
                                             <div class="me-3"
                                                 style="width: 45px; height: 45px; background: linear-gradient(135deg, #f2e8e5 0%, #e0cec7 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
-                                                👤
+                                                <i class="fa-solid fa-user"></i>
                                             </div>
                                             <div>
                                                 <div class="fw-bold" style="color: #6f5849;">{{ $user->name }}</div>
@@ -85,9 +85,9 @@
                                             <ul class="dropdown-menu dropdown-menu-end"
                                                 style="border-radius: 12px; border: 1px solid #e0cec7; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                                 <li>
-                                                    <button class="dropdown-item" onclick='editUser(@json($user))'
+                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editUserModal" onclick='editUser(@json($user))'
                                                         style="border-radius: 8px; padding: 0.5rem 1rem;">
-                                                        ✏️ Edit User
+                                                        <i class="fa-solid fa-pen me-1"></i> Edit User
                                                     </button>
                                                 </li>
                                                 @if($user->id !== auth()->id())
@@ -101,7 +101,7 @@
                                                             @method('DELETE')
                                                             <button type="submit" class="dropdown-item text-danger"
                                                                 style="border-radius: 8px; padding: 0.5rem 1rem;">
-                                                                🗑️ Delete User
+                                                                <i class="fa-solid fa-trash me-1"></i> Delete User
                                                             </button>
                                                         </form>
                                                     </li>
@@ -113,7 +113,7 @@
                             @empty
                                 <tr>
                                     <td colspan="6" class="text-center py-5">
-                                        <div style="font-size: 4rem; opacity: 0.2;">👥</div>
+                                        <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-users"></i></div>
                                         <p class="text-muted mb-0">No users found</p>
                                     </td>
                                 </tr>
@@ -130,7 +130,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">➕ Add New User</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i> Add New User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form action="{{ route('admin.users.store') }}" method="POST">
@@ -184,7 +184,7 @@
                             style="border-radius: 12px;">Cancel</button>
                         <button type="submit" class="btn btn-primary"
                             style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
-                            💾 Save User
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Save User
                         </button>
                     </div>
                 </form>
@@ -197,7 +197,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">✏️ Edit User</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i> Edit User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form id="editUserForm" method="POST">
@@ -251,7 +251,7 @@
                             style="border-radius: 12px;">Cancel</button>
                         <button type="submit" class="btn btn-primary"
                             style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
-                            💾 Update User
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Update User
                         </button>
                     </div>
                 </form>

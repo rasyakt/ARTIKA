@@ -164,12 +164,7 @@
                 <span>Cashier:</span>
                 <span>{{ $transaction->user->name }}</span>
             </div>
-            @if($transaction->customer)
-                <div>
-                    <span>Customer:</span>
-                    <span>{{ $transaction->customer->name }}</span>
-                </div>
-            @endif
+            {{-- Customer information removed (customers feature deprecated). --}}
         </div>
 
         <!-- Items -->
@@ -211,13 +206,13 @@
                 <span>Payment Method:</span>
                 <span>{{ strtoupper($transaction->payment_method) }}</span>
             </div>
-            @if($transaction->payment_method === 'cash')
+            @if(strtolower($transaction->payment_method) === 'cash')
                 <div class="total-row">
-                    <span>Cash:</span>
+                    <span>Uang Diterima:</span>
                     <span>Rp {{ number_format($transaction->cash_amount, 0, ',', '.') }}</span>
                 </div>
-                <div class="total-row">
-                    <span>Change:</span>
+                <div class="total-row" style="border-top: 1px solid #000; padding-top: 5px; margin-top: 5px; font-weight: bold; font-size: 13px;">
+                    <span>Kembalian:</span>
                     <span>Rp {{ number_format($transaction->change_amount, 0, ',', '.') }}</span>
                 </div>
             @endif

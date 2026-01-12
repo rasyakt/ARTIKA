@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid py-4">
         <div class="mb-4">
-            <h2 class="fw-bold mb-1" style="color: #6f5849;">📈 Sales Reports</h2>
+            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-chart-line me-2"></i>Sales Reports</h2>
             <p class="text-muted mb-0">View and analyze sales data</p>
         </div>
 
@@ -33,7 +33,7 @@
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100"
                             style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
-                            🔍 Filter
+                            <i class="fa-solid fa-magnifying-glass me-1"></i> Filter
                         </button>
                     </div>
                 </form>
@@ -87,7 +87,7 @@
         <!-- Transactions Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;">📋 Transaction History</h5>
+                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>Transaction History</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">

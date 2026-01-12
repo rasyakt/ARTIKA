@@ -599,8 +599,10 @@
             <span>📱</span>
             <span>Mobile Scanner</span>
         </div>
-        <a href="{{ route('pos.index') }}" class="btn-header" id="btnGoToCart">
-            🛒 Go to POS
+        <a href="{{ route('pos.index') }}" class="btn-header d-flex align-items-center" id="btnGoToCart">
+            <i class="fa-solid fa-cart-shopping me-2"></i>
+            <span class="btn-go-text">Go to POS</span>
+            <span class="btn-cart-count ms-2"></span>
         </a>
     </div>
 
@@ -630,7 +632,7 @@
     <!-- Product Toast -->
     <div class="product-toast" id="productToast">
         <div class="toast-content">
-            <div class="toast-icon">✅</div>
+            <div class="toast-icon"><i class="fa-solid fa-circle-check"></i></div>
             <div class="toast-info">
                 <div class="toast-name" id="toastName"></div>
                 <div class="toast-price" id="toastPrice"></div>
@@ -657,7 +659,7 @@
         <!-- Control Buttons -->
         <div class="control-buttons">
             <button class="btn-control btn-switch-camera" id="btnSwitchCamera">
-                🔄 Switch Camera
+                <i class="fa-solid fa-camera-rotate me-2"></i> Switch Camera
             </button>
         </div>
     </div>
@@ -706,12 +708,12 @@
                 
                 // Show detailed error message
                 let errorHTML = '<div class="error-message">';
-                errorHTML += '<div class="error-icon">🚫</div>';
+                errorHTML += '<div class="error-icon"><i class="fa-solid fa-ban"></i></div>';
                 errorHTML += '<div class="error-title">Camera Access Failed</div>';
                 
                 if (!isSecure) {
                     errorHTML += '<div class="error-description">';
-                    errorHTML += '⚠️ <strong>HTTPS Required!</strong><br>';
+                    errorHTML += '<i class="fa-solid fa-triangle-exclamation"></i> <strong>HTTPS Required!</strong><br>';
                     errorHTML += 'Camera access requires a secure connection (HTTPS) on mobile devices.';
                     errorHTML += '</div>';
                     errorHTML += '<div class="error-steps">';
@@ -737,7 +739,7 @@
                 }
                 
                 errorHTML += '<button class="error-back-btn" onclick="window.location.href=\'' + "{{ route('pos.index') }}" + '\'">';
-                errorHTML += '← Back to POS';
+                errorHTML += '<i class="fa-solid fa-arrow-left me-1"></i> Back to POS';
                 errorHTML += '</button>';
                 errorHTML += '</div>';
                 
@@ -909,10 +911,11 @@
             const btn = document.getElementById('btnGoToCart');
             const totalItems = scannedItems.reduce((sum, item) => sum + item.quantity, 0);
 
+            const countEl = btn.querySelector('.btn-cart-count');
             if (totalItems > 0) {
-                btn.textContent = `🛒 Go to POS (${totalItems})`;
+                countEl.textContent = `(${totalItems})`;
             } else {
-                btn.textContent = '🛒 Go to POS';
+                countEl.textContent = '';
             }
         }
 

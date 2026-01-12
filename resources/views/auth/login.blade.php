@@ -315,7 +315,7 @@
             <div class="card-body">
                 @if($errors->any())
                     <div class="alert alert-danger">
-                        <strong>⚠️ Login Failed!</strong>
+                        <strong><i class="fa-solid fa-triangle-exclamation me-1"></i>Login Failed!</strong>
                         <ul class="mb-0 mt-2" style="padding-left: 20px;">
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
@@ -329,7 +329,7 @@
                     <div class="mb-4">
                         <label for="username" class="form-label">Username / NIS</label>
                         <div class="input-group">
-                            <span class="input-icon">👤</span>
+                            <span class="input-icon"><i class="fa-solid fa-user"></i></span>
                             <input type="text" name="username" class="form-control with-icon" id="username"
                                 placeholder="Enter your username or NIS" required autofocus
                                 value="{{ old('username') }}">
@@ -338,7 +338,7 @@
                     <div class="mb-4">
                         <label for="password" class="form-label">Password</label>
                         <div class="input-group">
-                            <span class="input-icon">🔒</span>
+                            <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
                             <input type="password" name="password" class="form-control with-icon" id="password"
                                 placeholder="Enter your password" required>
                         </div>

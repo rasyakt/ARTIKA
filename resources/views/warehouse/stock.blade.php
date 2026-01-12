@@ -3,14 +3,14 @@
 @section('content')
     <div class="container-fluid py-4">
         <div class="mb-4">
-            <h2 class="fw-bold mb-1" style="color: #6f5849;">📦 Stock Management</h2>
+            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-box me-2"></i>Stock Management</h2>
             <p class="text-muted mb-0">Manage product stock across all branches</p>
         </div>
 
         <!-- Stock Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;">📋 Stock Levels</h5>
+                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>Stock Levels</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -56,10 +56,10 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-sm btn-outline-primary"
+                                            <button class="btn btn-sm btn-outline-primary"
                                             onclick="adjustStock({{ $stock->id }}, {{ $stock->product_id }}, {{ $stock->branch_id }}, '{{ $stock->product->name }}', {{ $stock->quantity }})"
                                             style="border-radius: 8px;">
-                                            ⚙️ Adjust
+                                            <i class="fa-solid fa-gear me-1"></i> Adjust
                                         </button>
                                     </td>
                                 </tr>
@@ -76,7 +76,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">⚙️ Adjust Stock</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-gear me-1"></i> Adjust Stock</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
@@ -119,7 +119,7 @@
                         style="border-radius: 12px;">Cancel</button>
                     <button type="button" class="btn btn-primary" onclick="saveAdjustment()"
                         style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
-                        💾 Save Adjustment
+                        <i class="fa-solid fa-floppy-disk me-1"></i> Save Adjustment
                     </button>
                 </div>
             </div>
@@ -155,7 +155,7 @@
             // Disable button to prevent double submission
             const saveBtn = event.target;
             saveBtn.disabled = true;
-            saveBtn.innerHTML = '⏳ Saving...';
+            saveBtn.innerHTML = '<i class="fa-solid fa-hourglass-half me-1"></i> Saving...';
 
             fetch('{{ route("warehouse.stock.adjust") }}', {
                 method: 'POST',
@@ -174,18 +174,18 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert('✅ ' + data.message + '\nNew quantity: ' + data.new_quantity + ' units');
+                    alert(data.message + '\nNew quantity: ' + data.new_quantity + ' units');
                     location.reload();
                 } else {
-                    alert('❌ Error: ' + data.message);
+                    alert('Error: ' + data.message);
                     saveBtn.disabled = false;
-                    saveBtn.innerHTML = '💾 Save Adjustment';
+                    saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> Save Adjustment';
                 }
             })
             .catch(error => {
-                alert('❌ Error: ' + error.message);
+                alert('Error: ' + error.message);
                 saveBtn.disabled = false;
-                saveBtn.innerHTML = '💾 Save Adjustment';
+                saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> Save Adjustment';
             });
         }
     </script>

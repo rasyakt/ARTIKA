@@ -12,7 +12,6 @@ class Transaction extends Model
         'invoice_no',
         'user_id',
         'branch_id',
-        'customer_id',
         'subtotal',
         'discount',
         'total_amount',
@@ -63,10 +62,7 @@ class Transaction extends Model
     /**
      * Get the customer for this transaction
      */
-    public function customer(): BelongsTo
-    {
-        return $this->belongsTo(Customer::class);
-    }
+    // Customer relation removed — customers replaced by suppliers in admin.
 
     /**
      * Get all items for this transaction

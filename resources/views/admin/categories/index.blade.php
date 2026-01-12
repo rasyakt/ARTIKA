@@ -5,7 +5,7 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;">📂 Category Management</h2>
+                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-folder me-2"></i>Category Management</h2>
                 <p class="text-muted mb-0">Manage product categories</p>
             </div>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addCategoryModal"
@@ -15,15 +15,15 @@
         </div>
 
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
-                <strong>✅ Success!</strong> {{ session('success') }}
+                <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
+                <strong><i class="fa-solid fa-circle-check me-1"></i>Success!</strong> {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
-                <strong>❌ Error!</strong> {{ session('error') }}
+                <strong><i class="fa-solid fa-circle-exclamation me-1"></i>Error!</strong> {{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
@@ -34,9 +34,9 @@
                 <div class="col-md-3">
                     <div class="card shadow-sm h-100" style="border-radius: 16px; border: none; transition: all 0.3s;">
                         <div class="card-body text-center">
-                            <div class="mb-3"
+                                <div class="mb-3"
                                 style="width: 80px; height: 80px; margin: 0 auto; background: linear-gradient(135deg, #f2e8e5 0%, #e0cec7 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">
-                                📂
+                                <i class="fa-solid fa-folder"></i>
                             </div>
                             <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ $category->name }}</h5>
                             <p class="text-muted mb-3">
@@ -54,9 +54,10 @@
                                     style="border-radius: 12px; border: 1px solid #e0cec7; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                     <li>
                                         <button class="dropdown-item"
-                                            onclick="editCategory({{ $category->id }}, '{{ $category->name }}')"
+                                            data-bs-toggle="modal" data-bs-target="#editCategoryModal"
+                                            onclick="editCategory(@json($category))"
                                             style="border-radius: 8px; padding: 0.5rem 1rem;">
-                                            ✏️ Edit Category
+                                            <i class="fa-solid fa-pen me-1"></i> Edit Category
                                         </button>
                                     </li>
                                     <li>
@@ -69,7 +70,7 @@
                                             @method('DELETE')
                                             <button type="submit" class="dropdown-item text-danger"
                                                 style="border-radius: 8px; padding: 0.5rem 1rem;">
-                                                🗑️ Delete Category
+                                                <i class="fa-solid fa-trash me-1"></i> Delete Category
                                             </button>
                                         </form>
                                     </li>
@@ -80,8 +81,8 @@
                 </div>
             @empty
                 <div class="col-12">
-                    <div class="text-center py-5">
-                        <div style="font-size: 5rem; opacity: 0.2;">📂</div>
+                        <div class="text-center py-5">
+                        <div style="font-size: 5rem; opacity: 0.2;"><i class="fa-solid fa-folder"></i></div>
                         <p class="text-muted mb-3">No categories yet</p>
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
                             Add Your First Category
@@ -97,7 +98,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">➕ Add New Category</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i> Add New Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form action="{{ route('admin.categories.store') }}" method="POST">
@@ -115,7 +116,7 @@
                             style="border-radius: 12px;">Cancel</button>
                         <button type="submit" class="btn btn-primary"
                             style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
-                            💾 Save Category
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Save Category
                         </button>
                     </div>
                 </form>
@@ -128,7 +129,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">✏️ Edit Category</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i> Edit Category</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form id="editCategoryForm" method="POST">
@@ -147,7 +148,7 @@
                             style="border-radius: 12px;">Cancel</button>
                         <button type="submit" class="btn btn-primary"
                             style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
-                            💾 Update Category
+                            <i class="fa-solid fa-floppy-disk me-1"></i> Update Category
                         </button>
                     </div>
                 </form>
@@ -156,9 +157,9 @@
     </div>
 
     <script>
-        function editCategory(id, name) {
-            document.getElementById('edit_name').value = name;
-            document.getElementById('editCategoryForm').action = `/admin/categories/${id}`;
+        function editCategory(category) {
+            document.getElementById('edit_name').value = category.name;
+            document.getElementById('editCategoryForm').action = `/admin/categories/${category.id}`;
             new bootstrap.Modal(document.getElementById('editCategoryModal')).show();
         }
     </script>

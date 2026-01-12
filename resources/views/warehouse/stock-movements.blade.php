@@ -53,7 +53,7 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;">🔄 Stock Movements</h2>
+                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-arrows-rotate me-2"></i>Stock Movements</h2>
                 <p class="text-muted mb-0">Track all stock changes and adjustments</p>
             </div>
         </div>
@@ -65,7 +65,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <div style="font-size: 2.5rem;">📥</div>
+                                <div style="font-size: 2.5rem;"><i class="fa-solid fa-arrow-down me-1"></i></div>
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">Stock In (Today)</h6>
@@ -80,7 +80,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <div style="font-size: 2.5rem;">📤</div>
+                                <div style="font-size: 2.5rem;"><i class="fa-solid fa-arrow-up me-1"></i></div>
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">Stock Out (Today)</h6>
@@ -95,7 +95,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <div style="font-size: 2.5rem;">⚙️</div>
+                                <div style="font-size: 2.5rem;"><i class="fa-solid fa-gear"></i></div>
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">Adjustments</h6>
@@ -110,7 +110,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <div style="font-size: 2.5rem;">📊</div>
+                                <div style="font-size: 2.5rem;"><i class="fa-solid fa-chart-pie"></i></div>
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">Total Movements</h6>
@@ -125,7 +125,7 @@
         <!-- Movement Timeline -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;">📜 Recent Movements</h5>
+                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-scroll me-2"></i>Recent Movements</h5>
             </div>
             <div class="card-body">
                 @if($recentMovements->count() > 0)
@@ -133,7 +133,7 @@
                         <div class="timeline-item">
                             <div
                                 class="timeline-dot {{ $movement->type === 'in' ? 'bg-success' : ($movement->type === 'out' ? 'bg-danger' : 'bg-warning') }}">
-                                {{ $movement->type === 'in' ? '📥' : ($movement->type === 'out' ? '📤' : '⚙️') }}
+                                {!! $movement->type === 'in' ? '<i class="fa-solid fa-arrow-down text-white"></i>' : ($movement->type === 'out' ? '<i class="fa-solid fa-arrow-up text-white"></i>' : '<i class="fa-solid fa-gear text-white"></i>') !!}
                             </div>
                             <div class="card border-0 shadow-sm">
                                 <div class="card-body">
@@ -172,8 +172,8 @@
                                         </div>
                                     @endif
                                     <div class="mt-2">
-                                        <small class="text-muted">
-                                            🕐 {{ $movement->created_at->diffForHumans() }}
+                                            <small class="text-muted">
+                                            <i class="fa-solid fa-clock me-1"></i> {{ $movement->created_at->diffForHumans() }}
                                             ({{ $movement->created_at->format('d M Y, H:i') }})
                                             • Ref: {{ $movement->reference }}
                                         </small>
@@ -190,7 +190,7 @@
                     @endif
                 @else
                     <div class="text-center py-5">
-                        <div style="font-size: 4rem; opacity: 0.2;">📋</div>
+                        <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-clipboard"></i></div>
                         <p class="text-muted mb-0">No stock movements yet</p>
                         <small class="text-muted">Stock movements will appear here when products are adjusted</small>
                     </div>

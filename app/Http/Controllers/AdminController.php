@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\Customer;
 use App\Models\Stock;
 use App\Models\TransactionItem;
 use Carbon\Carbon;
@@ -20,7 +19,16 @@ class AdminController extends Controller
         $totalSales = Transaction::where('status', 'completed')->sum('total_amount');
         $totalTransactions = Transaction::where('status', 'completed')->count();
         $totalProducts = Product::count();
-        $totalCustomers = Customer::count();
+        // customer feature removed; keep placeholder
+        $totalCustomers = 0;
+        // Supplier metrics (fallback to 0 if Supplier model/table doesn't exist yet)
+        try {
+            $totalSuppliers = \App\Models\Supplier::count();
+            $recentSuppliers = \App\Models\Supplier::latest()->limit(5)->get();
+        } catch (\Exception $e) {
+            $totalSuppliers = 0;
+            $recentSuppliers = collect();
+        }
 
         // Sales Chart Data
         $salesChartData = $this->getSalesChartData();
@@ -59,6 +67,8 @@ class AdminController extends Controller
             'totalTransactions',
             'totalProducts',
             'totalCustomers',
+            'totalSuppliers',
+            'recentSuppliers',
             'salesChartData',
             'topProducts',
             'recentTransactions',

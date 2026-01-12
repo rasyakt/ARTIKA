@@ -21,8 +21,8 @@ class DatabaseSeeder extends Seeder
         $warehouseRole = \App\Models\Role::create(['name' => 'warehouse', 'description' => 'Staff Gudang']);
 
         // Branches
-        $pusat = \App\Models\Branch::create(['name' => 'Pusat', 'address' => 'Jl. Utama No. 1']);
-        $cabang1 = \App\Models\Branch::create(['name' => 'Cabang 1', 'address' => 'Jl. Cabang No. 2']);
+        $pusat = \App\Models\Branch::create(['name' => 'Pusat', 'location' => 'Jl. Utama No. 1']);
+        $cabang1 = \App\Models\Branch::create(['name' => 'Cabang 1', 'location' => 'Jl. Cabang No. 2']);
 
         // Users
         \App\Models\User::create([
@@ -98,32 +98,29 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        // Customers
-        \App\Models\Customer::create([
-            'name' => 'John Doe',
-            'phone' => '081234567890',
-            'email' => 'john@example.com',
-            'address' => 'Jl. Contoh No. 123',
-            'points' => 100,
-            'member_since' => now()->subMonths(6),
+        // Sample Suppliers (replacing Customers seeds)
+        \App\Models\Supplier::create([
+            'name' => 'CV. Sumber Jaya',
+            'phone' => '081298765432',
+            'email' => 'sumberjaya@example.com',
+            'address' => 'Jl. Supplier No. 10',
+            'last_purchase_at' => now()->subDays(10),
         ]);
 
-        \App\Models\Customer::create([
-            'name' => 'Jane Smith',
-            'phone' => '081234567891',
-            'email' => 'jane@example.com',
-            'address' => 'Jl. Sample No. 456',
-            'points' => 250,
-            'member_since' => now()->subYear(),
+        \App\Models\Supplier::create([
+            'name' => 'UD. Maju Sentosa',
+            'phone' => '081233344455',
+            'email' => 'maju@example.com',
+            'address' => 'Jl. Supplier No. 20',
+            'last_purchase_at' => now()->subMonths(1),
         ]);
 
-        \App\Models\Customer::create([
-            'name' => 'Bob Wilson',
-            'phone' => '081234567892',
-            'email' => 'bob@example.com',
-            'address' => 'Jl. Test No. 789',
-            'points' => 50,
-            'member_since' => now()->subMonths(3),
+        \App\Models\Supplier::create([
+            'name' => 'PT. Grosir Utama',
+            'phone' => '081277788899',
+            'email' => 'grosir@example.com',
+            'address' => 'Jl. Supplier No. 30',
+            'last_purchase_at' => now()->subMonths(2),
         ]);
 
         // Payment Methods

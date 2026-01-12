@@ -24,7 +24,7 @@
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="mb-4">
-            <h2 class="fw-bold mb-1" style="color: #6f5849;">⚠️ Low Stock Alerts</h2>
+            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-triangle-exclamation me-2"></i>Low Stock Alerts</h2>
             <p class="text-muted mb-0">Products that are running low on stock (below 20 units)</p>
         </div>
 
@@ -35,7 +35,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <div style="font-size: 2.5rem;">🔴</div>
+                                <div style="font-size: 2.5rem;"><i class="fa-solid fa-circle text-danger"></i></div>
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">Critical Stock</h6>
@@ -53,7 +53,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <div style="font-size: 2.5rem;">🟡</div>
+                                <div style="font-size: 2.5rem;"><i class="fa-solid fa-circle text-warning"></i></div>
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">Low Stock</h6>
@@ -71,7 +71,7 @@
                     <div class="card-body">
                         <div class="d-flex align-items-center">
                             <div class="flex-shrink-0">
-                                <div style="font-size: 2.5rem;">📊</div>
+                                <div style="font-size: 2.5rem;"><i class="fa-solid fa-chart-pie"></i></div>
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">Total Alerts</h6>
@@ -89,7 +89,7 @@
         <!-- Alerts Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;">📋 Alert List</h5>
+                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>Alert List</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -126,22 +126,22 @@
                                     <td>{{ $stock->min_stock }}</td>
                                     <td>
                                         @if($stock->quantity < 10)
-                                            <span class="badge bg-danger stock-badge">🔴 Critical</span>
+                                            <span class="badge bg-danger stock-badge"><i class="fa-solid fa-circle me-1"></i>Critical</span>
                                         @else
-                                            <span class="badge bg-warning stock-badge">🟡 Low</span>
+                                            <span class="badge bg-warning stock-badge"><i class="fa-solid fa-circle me-1"></i>Low</span>
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         <a href="{{ route('warehouse.stock') }}" class="btn btn-sm btn-outline-primary"
                                             style="border-radius: 8px;">
-                                            ⚙️ Adjust Stock
+                                            <i class="fa-solid fa-gear me-1"></i> Adjust Stock
                                         </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center py-5">
-                                        <div style="font-size: 4rem; opacity: 0.2;">✅</div>
+                                        <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-circle-check"></i></div>
                                         <p class="text-muted mb-0">All products have sufficient stock levels!</p>
                                     </td>
                                 </tr>

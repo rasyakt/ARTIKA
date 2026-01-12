@@ -10,7 +10,6 @@ class HeldTransaction extends Model
     protected $fillable = [
         'user_id',
         'branch_id',
-        'customer_id',
         'items',
         'subtotal',
         'discount',
@@ -44,8 +43,5 @@ class HeldTransaction extends Model
     /**
      * Get the customer for this held transaction
      */
-    public function customer(): BelongsTo
-    {
-        return $this->belongsTo(Customer::class);
-    }
+    // Customer relation removed — held transactions no longer reference Customer model.
 }
