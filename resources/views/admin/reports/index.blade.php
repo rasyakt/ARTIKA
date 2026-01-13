@@ -110,7 +110,7 @@
                                     <td>{{ $transaction->user->name }}</td>
                                     <td>{{ $transaction->items->count() }} items</td>
                                     <td class="fw-bold" style="color: #c17a5c;">Rp
-                                        {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
+                                        {{ number_format(floatval((string)($transaction->total_amount ?? 0)), 0, ',', '.') }}</td>
                                     <td><span class="badge"
                                             style="background: #e0cec7; color: #6f5849;">{{ ucfirst($transaction->payment_method) }}</span>
                                     </td>

@@ -179,7 +179,7 @@ class AuditController extends Controller
                 $log->branch?->name ?? 'N/A',
                 $log->action,
                 $log->model_type . ($log->model_id ? '#' . $log->model_id : ''),
-                $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '',
+                $log->amount ? 'Rp' . number_format((float)$log->amount, 0, ',', '.') : '',
                 $log->payment_method ?? '',
                 $log->ip_address,
                 $log->notes,

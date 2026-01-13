@@ -114,7 +114,19 @@
                                         <small><code>{{ $log->ip_address }}</code></small>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary" onclick="viewDetails({{ $log->id }})">
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#detailModal" 
+                                            data-id="{{ $log->id }}"
+                                            data-user="{{ $log->user?->name ?? 'System' }}"
+                                            data-action="{{ $log->action }}"
+                                            data-model="{{ $log->model_type }}"
+                                            data-model-id="{{ $log->model_id }}"
+                                            data-amount="{{ $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '-' }}"
+                                            data-method="{{ $log->payment_method ?? '-' }}"
+                                            data-ip="{{ $log->ip_address }}"
+                                            data-agent="{{ $log->user_agent }}"
+                                            data-date="{{ $log->created_at->format('Y-m-d H:i:s') }}"
+                                            data-changes="{{ json_encode($log->changes ?? []) }}"
+                                            data-notes="{{ $log->notes ?? '-' }}">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                     </td>
@@ -192,7 +204,111 @@
         </div>
     </div>
 
+    <!-- Detail Modal -->
+    <div class="modal fade" id="detailModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Audit Log Detail</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Tanggal</label>
+                            <p id="detail-date" class="mb-0 fw-bold"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">User</label>
+                            <p id="detail-user" class="mb-0 fw-bold"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Aksi</label>
+                            <p id="detail-action" class="mb-0 fw-bold"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Model Type</label>
+                            <p id="detail-model" class="mb-0 fw-bold"></p>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Model ID</label>
+                            <p id="detail-model-id" class="mb-0 fw-bold"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">Amount</label>
+                            <p id="detail-amount" class="mb-0 fw-bold"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small">Payment Method</label>
+                            <p id="detail-method" class="mb-0 fw-bold"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small">IP Address</label>
+                            <p id="detail-ip" class="mb-0 fw-bold"><code></code></p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small">User Agent</label>
+                        <p id="detail-agent" class="mb-0 fw-bold" style="font-size: 0.75rem; word-break: break-all;"></p>
+                    </div>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="text-muted small">Catatan</label>
+                        <p id="detail-notes" class="mb-0 fw-bold"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small">Perubahan Data</label>
+                        <pre id="detail-changes" class="bg-light p-2" style="border-radius: 6px; max-height: 300px; overflow-y: auto;"></pre>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Handle detail modal button click
+        document.getElementById('detailModal').addEventListener('show.bs.modal', function (e) {
+            const button = e.relatedTarget;
+            const modal = this;
+
+            // Get data from button attributes
+            const date = button.getAttribute('data-date');
+            const user = button.getAttribute('data-user');
+            const action = button.getAttribute('data-action');
+            const model = button.getAttribute('data-model');
+            const modelId = button.getAttribute('data-model-id');
+            const amount = button.getAttribute('data-amount');
+            const method = button.getAttribute('data-method');
+            const ip = button.getAttribute('data-ip');
+            const agent = button.getAttribute('data-agent');
+            const notes = button.getAttribute('data-notes');
+            const changes = JSON.parse(button.getAttribute('data-changes') || '{}');
+
+            // Populate modal
+            modal.querySelector('#detail-date').textContent = date;
+            modal.querySelector('#detail-user').textContent = user;
+            modal.querySelector('#detail-action').innerHTML = `<span class="badge bg-secondary">${action}</span>`;
+            modal.querySelector('#detail-model').textContent = model;
+            modal.querySelector('#detail-model-id').textContent = modelId || '-';
+            modal.querySelector('#detail-amount').textContent = amount;
+            modal.querySelector('#detail-method').textContent = method;
+            modal.querySelector('#detail-ip').innerHTML = `<code>${ip}</code>`;
+            modal.querySelector('#detail-agent').textContent = agent;
+            modal.querySelector('#detail-notes').textContent = notes;
+            modal.querySelector('#detail-changes').textContent = JSON.stringify(changes, null, 2);
+        });
+
         function downloadPdf() {
             const params = new URLSearchParams(window.location.search);
             const url = "{{ route('admin.audit.download-pdf') }}?" + params.toString();
@@ -203,10 +319,6 @@
             const params = new URLSearchParams(window.location.search);
             const url = "{{ route('admin.audit.export-csv') }}?" + params.toString();
             window.location.href = url;
-        }
-
-        function viewDetails(id) {
-            alert('Detail view coming soon!');
         }
     </script>
 
