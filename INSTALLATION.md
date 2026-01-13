@@ -1,744 +1,205 @@
 # 📦 ARTIKA POS - Installation Guide
 
-Complete installation guide untuk ARTIKA POS System pada berbagai platform (Windows, Linux, macOS).
+Panduan lengkap instalasi ARTIKA POS System dari awal (clone) hingga siap dijalankan.
 
 ---
 
-## 📋 Table of Contents
+## 📋 Daftar Isi
 
-- [System Requirements](#system-requirements)
-- [Installation - Windows (Laragon)](#installation---windows-laragon)
-- [Installation - Windows (XAMPP)](#installation---windows-xampp)
-- [Installation - Linux](#installation---linux)
-- [Installation - macOS](#installation---macos)
-- [Environment Configuration](#environment-configuration)
-- [Database Setup](#database-setup)
-- [Asset Compilation](#asset-compilation)
-- [Running the Application](#running-the-application)
+- [Prasyarat Sistem](#prasyarat-sistem)
+- [Quick Start (Langkah Demi Langkah)](#quick-start-langkah-demi-langkah)
+- [Detail Instalasi per Platform](#detail-instalasi-per-platform)
+    - [Windows (Laragon - Recommended)](#windows-laragon---recommended)
+    - [Windows (XAMPP)](#windows-xampp)
+    - [Linux / macOS](#linux--macos)
 - [Troubleshooting](#troubleshooting)
 
 ---
 
-## System Requirements
+## Prasyarat Sistem
 
-### Minimum Requirements
+Pastikan perangkat Anda sudah terinstall tools berikut:
 
-- **PHP:** 8.2 atau lebih tinggi
-- **Composer:** 2.x
-- **Node.js:** 18.x atau lebih tinggi
-- **NPM:** 9.x atau lebih tinggi
-- **MySQL:** 5.7+ atau MariaDB 10.3+
-- **Web Server:** Apache 2.4+ atau Nginx 1.18+
-- **Memory:** 512MB minimum, 1GB recommended
-- **Disk Space:** 500MB minimum
-
-### PHP Extensions Required
-
-Pastikan PHP extensions berikut sudah terinstall dan enabled:
-
-```
-- OpenSSL
-- PDO
-- Mbstring
-- Tokenizer
-- XML
-- Ctype
-- JSON
-- BCMath
-- Fileinfo
-- GD (untuk image processing)
-```
-
-Cek PHP extensions dengan command:
-```bash
-php -m
-```
+1.  **Git**: Untuk clone repository. [Download Git](https://git-scm.com/downloads)
+2.  **PHP 8.2+**: Wajib versi 8.2 atau lebih baru.
+3.  **Composer**: Dependency manager untuk PHP. [Download Composer](https://getcomposer.org/download/)
+4.  **Node.js (LTS)**: Untuk compile aset frontend (Vite). [Download Node.js](https://nodejs.org/)
+5.  **MySQL/MariaDB**: Database server.
 
 ---
 
-## Installation - Windows (Laragon)
+## Quick Start (Langkah Demi Langkah)
 
-### 1. Install Laragon
+Ikuti langkah-langkah ini secara berurutan untuk menjalankan aplikasi.
 
-Download dan install **Laragon** dari [laragon.org](https://laragon.org/download/)
-
-Pilih **Laragon Full** yang sudah include Apache, PHP 8.x, MySQL, dan Node.js.
-
-### 2. Setup Project
+### 1. Clone Project
+Buka terminal (Command Prompt, PowerShell, atau Git Bash) dan arahkan ke folder web server Anda (contoh: `C:\laragon\www`).
 
 ```bash
-# Navigate ke document root Laragon
-cd C:\laragon\www
-
-# Clone atau copy project ARTIKA
-# Jika dari git:
 git clone https://github.com/yourusername/artika-pos.git ARTIKA
-
-# Atau copy folder project ke C:\laragon\www\ARTIKA
-
-# Masuk ke folder project
 cd ARTIKA
 ```
 
-### 3. Install Dependencies
+### 2. Install Dependencies
+Install library PHP dan Node.js yang dibutuhkan.
 
 ```bash
 # Install PHP dependencies
 composer install
 
-# Install Node.js dependencies
+# Install JavaScript dependencies
 npm install
 ```
 
-### 4. Environment Configuration
+### 3. Konfigurasi Environment (.env)
+Copy file contoh konfigurasi dan buat file `.env` baru.
 
 ```bash
-# Copy environment file
+# Windows
 copy .env.example .env
 
-# Generate application key
-php artisan key:generate
-```
-
-Edit file `.env` dan sesuaikan konfigurasi database:
-
-```env
-APP_NAME="ARTIKA POS"
-APP_ENV=local
-APP_DEBUG=true
-APP_URL=http://artika.test
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=artika
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-### 5. Create Database
-
-Buka **HeidiSQL** (included in Laragon) atau MySQL client lainnya:
-
-```sql
-CREATE DATABASE artika CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-### 6. Run Migrations & Seeders
-
-```bash
-# Run migrations dan seeders
-php artisan migrate:fresh --seed
-```
-
-Perintah ini akan:
-- Membuat semua tabel database
-- Mengisi data sample (users, products, categories, dll)
-
-### 7. Setup Virtual Host (Optional)
-
-Laragon biasanya otomatis membuat virtual host. Akses aplikasi via:
-- `http://artika.test` (jika Laragon auto-detect)
-- atau `http://localhost/ARTIKA/public`
-
-Untuk setup manual virtual host, klik kanan Laragon icon → Apache → `sites-enabled` → buat file `artika.conf`:
-
-```apache
-<VirtualHost *:80>
-    DocumentRoot "C:/laragon/www/ARTIKA/public"
-    ServerName artika.test
-    <Directory "C:/laragon/www/ARTIKA/public">
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
-```
-
-Tambahkan di `C:\Windows\System32\drivers\etc\hosts`:
-```
-127.0.0.1 artika.test
-```
-
-### 8. Compile Assets
-
-```bash
-# Development mode (with hot reload)
-npm run dev
-
-# Atau build untuk production
-npm run build
-```
-
-### 9. Start Application
-
-Jika menggunakan Laragon virtual host:
-```
-http://artika.test
-```
-
-Atau gunakan PHP built-in server:
-```bash
-php artisan serve
-# Akses di http://localhost:8000
-```
-
----
-
-## Installation - Windows (XAMPP)
-
-### 1. Install XAMPP
-
-Download dan install **XAMPP** dari [apachefriends.org](https://www.apachefriends.org/)
-
-Pilih versi dengan PHP 8.2+
-
-### 2. Install Composer
-
-Download dan install **Composer** dari [getcomposer.org](https://getcomposer.org/download/)
-
-### 3. Install Node.js
-
-Download dan install **Node.js** dari [nodejs.org](https://nodejs.org/)
-
-Pilih versi LTS (Long Term Support)
-
-### 4. Setup Project
-
-```bash
-# Navigate ke htdocs XAMPP
-cd C:\xampp\htdocs
-
-# Clone atau copy project
-git clone https://github.com/yourusername/artika-pos.git ARTIKA
-cd ARTIKA
-```
-
-### 5. Install Dependencies
-
-```bash
-composer install
-npm install
-```
-
-### 6. Environment Configuration
-
-```bash
-copy .env.example .env
-php artisan key:generate
-```
-
-Edit `.env`:
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=artika
-DB_USERNAME=root
-DB_PASSWORD=
-```
-
-### 7. Create Database
-
-Buka **phpMyAdmin** (`http://localhost/phpmyadmin`):
-- Buat database baru bernama `artika`
-- Collation: `utf8mb4_unicode_ci`
-
-### 8. Run Migrations
-
-```bash
-php artisan migrate:fresh --seed
-```
-
-### 9. Compile Assets & Run
-
-```bash
-# Terminal 1: Compile assets
-npm run dev
-
-# Terminal 2: Start server (optional, bisa langsung via Apache)
-php artisan serve
-```
-
-Akses aplikasi di:
-- `http://localhost/ARTIKA/public`
-- atau `http://localhost:8000` (jika pakai artisan serve)
-
----
-
-## Installation - Linux (Ubuntu/Debian)
-
-### 1. Update System
-
-```bash
-sudo apt update
-sudo apt upgrade
-```
-
-### 2. Install PHP 8.2+
-
-```bash
-# Add PHP repository
-sudo add-apt-repository ppa:ondrej/php
-sudo apt update
-
-# Install PHP dan extensions
-sudo apt install php8.2 php8.2-cli php8.2-common php8.2-mysql \
-php8.2-zip php8.2-gd php8.2-mbstring php8.2-curl php8.2-xml \
-php8.2-bcmath php8.2-intl
-```
-
-### 3. Install Composer
-
-```bash
-curl -sS https://getcomposer.org/installer | php
-sudo mv composer.phar /usr/local/bin/composer
-```
-
-### 4. Install Node.js & NPM
-
-```bash
-# Install Node.js 18.x
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt install nodejs
-```
-
-### 5. Install MySQL
-
-```bash
-sudo apt install mysql-server
-sudo mysql_secure_installation
-```
-
-### 6. Setup Project
-
-```bash
-# Navigate to web directory
-cd /var/www
-
-# Clone project
-sudo git clone https://github.com/yourusername/artika-pos.git artika
-cd artika
-
-# Set permissions
-sudo chown -R www-data:www-data /var/www/artika
-sudo chmod -R 755 /var/www/artika
-sudo chmod -R 775 /var/www/artika/storage
-sudo chmod -R 775 /var/www/artika/bootstrap/cache
-```
-
-### 7. Install Dependencies
-
-```bash
-composer install --no-dev
-npm install
-```
-
-### 8. Environment Configuration
-
-```bash
+# Mac/Linux
 cp .env.example .env
-php artisan key:generate
 ```
 
-Edit `.env`:
-```env
-APP_ENV=production
-APP_DEBUG=false
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_DATABASE=artika
-DB_USERNAME=artika_user
-DB_PASSWORD=your_password
-```
+Buka file `.env` dengan text editor dan sesuaikan bagian Database:
 
-### 9. Create Database & User
-
-```bash
-sudo mysql -u root -p
-```
-
-```sql
-CREATE DATABASE artika CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'artika_user'@'localhost' IDENTIFIED BY 'your_password';
-GRANT ALL PRIVILEGES ON artika.* TO 'artika_user'@'localhost';
-FLUSH PRIVILEGES;
-EXIT;
-```
-
-### 10. Run Migrations
-
-```bash
-php artisan migrate:fresh --seed
-```
-
-### 11. Setup Apache Virtual Host
-
-```bash
-sudo nano /etc/apache2/sites-available/artika.conf
-```
-
-Tambahkan:
-```apache
-<VirtualHost *:80>
-    ServerName artika.local
-    ServerAdmin admin@artika.local
-    DocumentRoot /var/www/artika/public
-
-    <Directory /var/www/artika/public>
-        Options -Indexes +FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-
-    ErrorLog ${APACHE_LOG_DIR}/artika-error.log
-    CustomLog ${APACHE_LOG_DIR}/artika-access.log combined
-</VirtualHost>
-```
-
-Enable site:
-```bash
-sudo a2ensite artika.conf
-sudo a2enmod rewrite
-sudo systemctl restart apache2
-```
-
-### 12. Build Assets
-
-```bash
-npm run build
-```
-
----
-
-## Installation - macOS
-
-### 1. Install Homebrew
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-### 2. Install PHP
-
-```bash
-brew install php@8.2
-brew link php@8.2
-```
-
-### 3. Install Composer
-
-```bash
-brew install composer
-```
-
-### 4. Install Node.js
-
-```bash
-brew install node@18
-```
-
-### 5. Install MySQL
-
-```bash
-brew install mysql
-brew services start mysql
-mysql_secure_installation
-```
-
-### 6. Setup Project
-
-```bash
-cd ~/Sites  # atau directory lain
-git clone https://github.com/yourusername/artika-pos.git artika
-cd artika
-```
-
-### 7. Install Dependencies
-
-```bash
-composer install
-npm install
-```
-
-### 8. Environment & Database
-
-```bash
-cp .env.example .env
-php artisan key:generate
-```
-
-Create database:
-```bash
-mysql -u root -p
-```
-```sql
-CREATE DATABASE artika CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-### 9. Run Migrations
-
-```bash
-php artisan migrate:fresh --seed
-```
-
-### 10. Run Application
-
-```bash
-# Terminal 1
-npm run dev
-
-# Terminal 2
-php artisan serve
-```
-
----
-
-## Environment Configuration
-
-### Full `.env` Configuration Example
-
-```env
-# Application
-APP_NAME="ARTIKA POS"
-APP_ENV=local
-APP_KEY=base64:GENERATED_KEY_HERE
-APP_DEBUG=true
-APP_URL=http://localhost
-
-# Database
+```ini
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=artika
-DB_USERNAME=root
-DB_PASSWORD=
-
-# Session & Cache
-SESSION_DRIVER=database
-SESSION_LIFETIME=120
-CACHE_STORE=database
-QUEUE_CONNECTION=database
-
-# Mail (optional)
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_FROM_ADDRESS="noreply@artika.test"
-MAIL_FROM_NAME="${APP_NAME}"
+DB_DATABASE=artika       <-- Pastikan nama database ini sama dengan yang akan dibuat
+DB_USERNAME=root         <-- Default Laragon/XAMPP biasanya 'root'
+DB_PASSWORD=             <-- Default Laragon/XAMPP biasanya kosong
 ```
 
----
+### 4. Generate App Key
+Generate encryption key untuk keamanan aplikasi.
 
-## Database Setup
+```bash
+php artisan key:generate
+```
 
-### Default Seeded Data
+### 5. Setup Database
+1.  Buka aplikasi database manager (HeidiSQL, phpMyAdmin, DBeaver, dll).
+2.  Buat database baru dengan nama `artika` (sesuai setting `.env` tadi).
+    ```sql
+    CREATE DATABASE artika;
+    ```
+3.  Jalankan migrasi untuk membuat tabel dan mengisi data awal (seeder).
 
-Setelah menjalankan `php artisan migrate:fresh --seed`, database akan berisi:
+```bash
+php artisan migrate:fresh --seed
+```
 
-**Users (3)**
-- Admin: username `admin`, password `password`
-- Kasir: username `kasir1`, NIS `12345`, password `password`
-- Gudang: username `gudang`, password `password`
+> **Info:** Perintah ini akan membuat tabel dan mengisi data sample seperti user admin, kasir, produk, dll.
 
-**Branches (2)**
-- Pusat
-- Cabang 1
+### 6. Jalankan Aplikasi
+Anda perlu menjalankan **dua terminal** secara bersamaan.
 
-**Categories (5)**
-- Snack, Drink, Food, Dairy, Household
-
-**Products (20)**
-- Various products dengan barcode unik
-- Stock 50-200 per product
-
-**Customers (3)**
-- Sample customer data dengan loyalty points
-
-**Payment Methods (5)**
-- Cash, QRIS, Debit Card, Credit Card, E-Wallet
-
----
-
-## Asset Compilation
-
-### Development Mode
-
+**Terminal 1 (Vite Development Server):**
+Untuk compile aset CSS/JS secara real-time.
 ```bash
 npm run dev
 ```
-- Hot module replacement (HMR)
-- Source maps
-- Tidak minified
 
-### Production Build
-
-```bash
-npm run build
-```
-- Minified & optimized
-- Versioned assets
-- Ready for deployment
-
----
-
-## Running the Application
-
-### Option 1: PHP Built-in Server (Development)
-
+**Terminal 2 (Laravel Server):**
+Jika tidak menggunakan Virtual Host Laragon.
 ```bash
 php artisan serve
 ```
-Akses: `http://localhost:8000`
+Akses aplikasi di: [http://localhost:8000](http://localhost:8000)
 
-### Option 2: Laragon/XAMPP (Development)
+---
 
-```
-http://artika.test
-http://localhost/ARTIKA/public
-```
+## Detail Instalasi per Platform
 
-### Option 3: Production Server
+### Windows (Laragon - Recommended)
+Laragon sangat disarankan karena fiturnya yang lengkap dan mudah untuk Laravel.
 
-Setup web server (Apache/Nginx) dengan document root pointing ke `/public` directory.
+1.  Buka **Terminal Laragon** (cmder).
+2.  Masuk ke folder `www`: `cd C:\laragon\www`
+3.  Jalankan langkah **Quick Start** nomor 1-5 di atas.
+4.  **Virtual Host**:
+    - Setelah folder `ARTIKA` ada di `www`, Laragon biasanya otomatis mendeteksi.
+    - Reload Laragon (Stop & Start All).
+    - Aplikasi bisa diakses langsung via **http://artika.test** (tanpa `php artisan serve`).
+5.  Jangan lupa tetap jalankan `npm run dev` di terminal agar tampilan tidak berantakan.
 
-Lihat [DEPLOYMENT.md](file:///c:/laragon/www/ARTIKA/DEPLOYMENT.md) untuk production deployment.
+#### Menggunakan phpMyAdmin di Laragon
+Jika Anda lebih suka menggunakan **phpMyAdmin** daripada HeidiSQL:
+1.  Pastikan phpMyAdmin sudah terinstall di Laragon (jika belum, download dari *Menu > Tools > Quick add > phpMyAdmin*).
+2.  Akses di browser: [http://localhost/phpmyadmin](http://localhost/phpmyadmin).
+3.  Login default:
+    - Username: `root`
+    - Password: (kosong)
+4.  Buat database `artika` di sini jika belum dibuat.
+
+#### Kasus: Install Ulang Laragon / Pindah Laptop
+Jika Anda menghapus/menginstall ulang Laragon, **database akan hilang**, tetapi file project di `www` biasanya aman (jika tidak dihapus manual).
+
+**Langkah Pemulihan:**
+1.  Install Laragon baru.
+2.  Pastikan folder project `ARTIKA` ada di `C:\laragon\www\`.
+3.  Start Laragon (Start All).
+4.  Buka **phpMyAdmin** atau HeidiSQL.
+5.  Buat ulang database `artika`.
+6.  Buka terminal di folder project (`C:\laragon\www\ARTIKA`), lalu jalankan migrasi ulang:
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
+    *(Ini akan membuat ulang tabel & data default. Data transaksi lama akan hilang kecuali Anda punya backup SQL).*
+7.  Akses web kembali.
+
+### Windows (XAMPP)
+1.  Buka terminal/CMD, masuk ke `htdocs`: `cd C:\xampp\htdocs`.
+2.  Jalankan langkah **Quick Start** nomor 1-5.
+3.  Pastikan Apache & MySQL di Control Panel XAMPP sudah Start.
+4.  Akses aplikasi bisa via `http://localhost/ARTIKA/public` atau gunakan `php artisan serve`.
+
+### Linux / macOS
+Mirip dengan Quick Start, namun perhatikan *permission* folder.
+
+1.  Setelah clone dan install dependencies:
+    ```bash
+    chmod -R 775 storage bootstrap/cache
+    ```
+2.  Pastikan user web server memiliki akses write ke folder tersebut.
+
+---
+
+## Login Credentials (Default)
+
+Setelah menjalankan `php artisan migrate:fresh --seed`, gunakan akun berikut untuk login:
+
+| Role | Username | Password | Keterangan |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin` | `password` | Akses penuh ke dashboard admin |
+| **Kasir** | `kasir1` | `password` | Login menggunakan NIS: `12345` |
+| **Gudang** | `gudang` | `password` | Akses manajemen stok |
 
 ---
 
 ## Troubleshooting
 
-### Error: "No application encryption key has been specified"
+**1. Tampilan acak-acakan / CSS tidak load**
+*   Pastikan command `npm run dev` sedang berjalan di terminal.
+*   Jika di production, jalankan `npm run build`.
 
-**Solution:**
-```bash
-php artisan key:generate
-```
+**2. Access denied for user 'root'@'localhost'**
+*   Cek file `.env`, pastikan `DB_PASSWORD` kosong (jika default Laragon/XAMPP) atau sesuai password root Anda.
 
-### Error: "SQLSTATE[HY000] [1045] Access denied for user"
+**3. Could not find driver (PDO Exception)**
+*   Pastikan ekstensi PHP untuk MySQL aktif. Cek `php.ini` dan uncomment `extension=pdo_mysql`.
 
-**Solution:**
-- Check database credentials di `.env`
-- Pastikan MySQL service running
-- Test connection: `mysql -u root -p`
+**4. 500 Server Error**
+*   Cek file `.env` apakah sudah ada.
+*   Cek key apakah sudah digenerate (`php artisan key:generate`).
+*   Cek permission folder `storage` (terutama di Linux/Mac).
 
-### Error: "Class 'PDO' not found"
-
-**Solution:**
-Enable PHP PDO extension:
-```bash
-# Windows: uncomment di php.ini
-extension=pdo_mysql
-
-# Linux:
-sudo apt install php8.2-mysql
-```
-
-### Error: "Permission denied" (Linux)
-
-**Solution:**
-```bash
-sudo chown -R www-data:www-data /var/www/artika
-sudo chmod -R 775 storage bootstrap/cache
-```
-
-### Error: npm install fails
-
-**Solution:**
-```bash
-# Clear cache
-npm cache clean --force
-
-# Delete node_modules dan reinstall
-rm -rf node_modules package-lock.json
-npm install
-```
-
-### Error: "Mix manifest does not exist"
-
-**Solution:**
-```bash
-npm run build
-```
-
-### Database migration error
-
-**Solution:**
-```bash
-# Drop all tables dan migrate ulang
-php artisan migrate:fresh --seed
-```
-
-### Port 8000 already in use
-
-**Solution:**
-```bash
-# Gunakan port lain
-php artisan serve --port=8080
-```
-
-### Vite server tidak bisa diakses
-
-**Solution:**
-```bash
-# Edit vite.config.js, tambahkan server config:
-server: {
-    host: '0.0.0.0',
-    port: 5173
-}
-```
+**5. Target class controller does not exist**
+*   Coba jalankan: `composer dump-autoload`
+*   Lalu: `php artisan route:clear`
 
 ---
-
-## Post-Installation
-
-### 1. Verify Installation
-
-Buka browser dan akses aplikasi. Test login dengan credentials default.
-
-### 2. Change Default Passwords
-
-**PENTING:** Ubah password default setelah installation!
-
-Login sebagai admin dan ubah semua user passwords di User Management.
-
-### 3. Configure Application
-
-- Setup branch/cabang toko
-- Tambahkan kategori dan produk
-- Konfigurasi payment methods sesuai kebutuhan
-- Setup printer untuk receipt (opsional)
-
-### 4. Backup Database
-
-```bash
-# Manual backup
-mysqldump -u root -p artika > artika_backup.sql
-
-# Restore backup
-mysql -u root -p artika < artika_backup.sql
-```
-
----
-
-## Next Steps
-
-- 📖 Baca [USER_GUIDE_ADMIN.md](file:///c:/laragon/www/ARTIKA/docs/USER_GUIDE_ADMIN.md) untuk panduan Admin
-- 📖 Baca [USER_GUIDE_CASHIER.md](file:///c:/laragon/www/ARTIKA/docs/USER_GUIDE_CASHIER.md) untuk panduan Kasir
-- 📖 Baca [USER_GUIDE_WAREHOUSE.md](file:///c:/laragon/www/ARTIKA/docs/USER_GUIDE_WAREHOUSE.md) untuk panduan Gudang
-- 🔧 Baca [DEVELOPMENT.md](file:///c:/laragon/www/ARTIKA/DEVELOPMENT.md) untuk development
-- 🚀 Baca [DEPLOYMENT.md](file:///c:/laragon/www/ARTIKA/DEPLOYMENT.md) untuk production deployment
-
----
-
-## Support
-
-Jika mengalami masalah installation, silakan:
-1. Check [FAQ.md](file:///c:/laragon/www/ARTIKA/FAQ.md)
-2. Buat issue di GitHub repository
-3. Hubungi tim development
-
----
-
-**Happy Installing! 🎉**
+**Happy Coding! 🚀**
