@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->decimal('price', 15, 2);
             $table->decimal('cost_price', 15, 2);
             $table->string('image')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

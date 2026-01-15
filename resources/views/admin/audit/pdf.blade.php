@@ -286,7 +286,7 @@
     <div class="footer">
         <p>Laporan ini dicetak otomatis oleh Sistem ARTIKA POS</p>
         <p>Untuk keperluan audit internal dan pelaporan manajemen</p>
-        <p style="margin-top: 20px;">{{ now()->format('d MMMM Y, H:i:s') }}</p>
+        <p style="margin-top: 20px;">{{ now()->format('d M Y, H:i:s') }}</p>
     </div>
 </body>
-</html>
+</html> 
