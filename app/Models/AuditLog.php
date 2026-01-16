@@ -11,7 +11,6 @@ class AuditLog extends Model
 
     protected $fillable = [
         'user_id',
-        'branch_id',
         'action',
         'model_type',
         'model_id',
@@ -39,27 +38,11 @@ class AuditLog extends Model
     }
 
     /**
-     * Get the branch where action occurred
-     */
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
-    }
-
-    /**
      * Scope: Get logs for specific user
      */
     public function scopeByUser($query, $userId)
     {
         return $query->where('user_id', $userId);
-    }
-
-    /**
-     * Scope: Get logs for specific branch
-     */
-    public function scopeByBranch($query, $branchId)
-    {
-        return $query->where('branch_id', $branchId);
     }
 
     /**
@@ -93,7 +76,6 @@ class AuditLog extends Model
     {
         return self::create([
             'user_id' => auth()->id(),
-            'branch_id' => auth()->user()->branch_id ?? null,
             'action' => $action,
             'model_type' => $modelType,
             'model_id' => $modelId,

@@ -11,7 +11,6 @@ class Transaction extends Model
     protected $fillable = [
         'invoice_no',
         'user_id',
-        'branch_id',
         'subtotal',
         'discount',
         'total_amount',
@@ -52,14 +51,6 @@ class Transaction extends Model
     }
 
     /**
-     * Get the branch for this transaction
-     */
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
-    }
-
-    /**
      * Get the customer for this transaction
      */
     // Customer relation removed — customers replaced by suppliers in admin.
@@ -87,13 +78,4 @@ class Transaction extends Model
     {
         return $query->whereDate('created_at', today());
     }
-
-    /**
-     * Scope for transactions by branch
-     */
-    public function scopeByBranch($query, $branchId)
-    {
-        return $query->where('branch_id', $branchId);
-    }
 }
-

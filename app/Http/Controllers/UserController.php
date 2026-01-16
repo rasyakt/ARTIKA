@@ -5,18 +5,16 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
-use App\Models\Branch;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with(['role', 'branch'])->latest()->get();
+        $users = User::with(['role'])->latest()->get();
         $roles = Role::all();
-        $branches = Branch::all();
 
-        return view('admin.users.index', compact('users', 'roles', 'branches'));
+        return view('admin.users.index', compact('users', 'roles'));
     }
 
     public function store(Request $request)
@@ -26,7 +24,6 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:6',
             'role_id' => 'required|exists:roles,id',
-            'branch_id' => 'required|exists:branches,id',
             'nis' => 'nullable|string|unique:users',
         ]);
 
@@ -35,7 +32,6 @@ class UserController extends Controller
             'username' => $request->username,
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
-            'branch_id' => $request->branch_id,
             'nis' => $request->nis,
         ]);
 
@@ -51,7 +47,6 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users,username,' . $id,
             'password' => 'nullable|string|min:6',
             'role_id' => 'required|exists:roles,id',
-            'branch_id' => 'required|exists:branches,id',
             'nis' => 'nullable|string|unique:users,nis,' . $id,
         ]);
 
@@ -59,7 +54,6 @@ class UserController extends Controller
             'name' => $request->name,
             'username' => $request->username,
             'role_id' => $request->role_id,
-            'branch_id' => $request->branch_id,
             'nis' => $request->nis,
         ];
 

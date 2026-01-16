@@ -548,7 +548,6 @@ Cache::forget('categories');
 ```php
 // Migration
 $table->index('barcode');
-$table->index(['branch_id', 'product_id']);
 ```
 
 ---

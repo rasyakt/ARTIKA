@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Audit - {{ $branch->name }}</title>
+    <title>Laporan Audit</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -147,7 +147,7 @@
     <!-- Header -->
     <div class="header">
         <p class="company-name">ARTIKA MINIMARKET</p>
-        <p style="margin: 5px 0; font-size: 12px;">{{ $branch->location ?? 'Lokasi Toko' }}</p>
+        <p style="margin: 5px 0; font-size: 12px;">Jl. Utama No. 1</p>
         <p class="report-title">Laporan Audit Sistem</p>
         <p style="margin: 5px 0; font-size: 12px;">Periode: {{ \Carbon\Carbon::parse($startDate)->format('d M Y') }} s/d {{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</p>
         <p style="margin: 5px 0; font-size: 11px; color: #666;">Dicetak pada: {{ now()->format('d M Y H:i:s') }}</p>

@@ -146,7 +146,7 @@
         <!-- Header -->
         <div class="header">
             <div class="store-name">ARTIKA MINIMARKET</div>
-            <div class="store-info">{{ $transaction->branch->address ?? 'Jl. Utama No. 1' }}</div>
+            <div class="store-info">Jl. Utama No. 1</div>
             <div class="store-info">Telp: (021) 1234-5678</div>
         </div>
 

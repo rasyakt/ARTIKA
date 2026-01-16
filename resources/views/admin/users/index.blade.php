@@ -39,7 +39,6 @@
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Username</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">NIS</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Role</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Branch</th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Actions</th>
                             </tr>
                         </thead>
@@ -74,7 +73,6 @@
                                         @endphp
                                         <span class="badge {{ $roleColor }}">{{ ucfirst($user->role->name) }}</span>
                                     </td>
-                                    <td>{{ $user->branch->name }}</td>
                                     <td>
                                         <div class="dropdown text-center">
                                             <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
@@ -167,16 +165,6 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">Branch *</label>
-                                <select class="form-select" name="branch_id" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
-                                    <option value="">Select Branch</option>
-                                    @foreach($branches as $branch)
-                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
@@ -235,26 +223,9 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">Branch *</label>
-                                <select class="form-select" id="edit_branch_id" name="branch_id" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
-                                    @foreach($branches as $branch)
-                                        <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+
                         </div>
-                    </div>
-                    <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                            style="border-radius: 12px;">Cancel</button>
-                        <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
-                            <i class="fa-solid fa-floppy-disk me-1"></i> Update User
-                        </button>
-                    </div>
-                </form>
+                    </di
             </div>
         </div>
     </div>
@@ -265,7 +236,6 @@
             document.getElementById('edit_username').value = user.username;
             document.getElementById('edit_nis').value = user.nis || '';
             document.getElementById('edit_role_id').value = user.role_id;
-            document.getElementById('edit_branch_id').value = user.branch_id;
             document.getElementById('editUserForm').action = `/admin/users/${user.id}`;
             new bootstrap.Modal(document.getElementById('editUserModal')).show();
         }

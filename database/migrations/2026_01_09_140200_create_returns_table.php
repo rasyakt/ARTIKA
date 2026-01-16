@@ -15,7 +15,6 @@ return new class extends Migration {
             $table->string('return_no')->unique();
             $table->foreignId('transaction_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('branch_id')->constrained()->onDelete('cascade');
             $table->json('items'); // Items being returned with quantities
             $table->decimal('total_refund', 15, 2);
             $table->text('reason')->nullable();

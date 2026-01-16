@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('audit_logs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('branch_id')->nullable();
             $table->string('action'); // transaction_created, payment_received, refund, etc
             $table->string('model_type')->nullable(); // Transaction, Product, User, etc
             $table->unsignedBigInteger('model_id')->nullable();
@@ -28,10 +27,8 @@ return new class extends Migration
             
             // Indexes for faster queries
             $table->index('user_id');
-            $table->index('branch_id');
             $table->index('action');
             $table->index('created_at');
-            $table->index(['branch_id', 'created_at']);
         });
     }
 

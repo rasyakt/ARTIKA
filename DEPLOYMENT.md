@@ -386,7 +386,6 @@ php artisan optimize
 ```sql
 -- Add indexes
 ALTER TABLE products ADD INDEX idx_barcode (barcode);
-ALTER TABLE stocks ADD INDEX idx_branch_product (branch_id, product_id);
 
 -- Analyze tables
 ANALYZE TABLE products, stocks, transactions;

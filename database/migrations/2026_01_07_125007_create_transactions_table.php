@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->string('invoice_no')->unique();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('branch_id')->nullable()->constrained('branches')->nullOnDelete();
             $table->decimal('total_amount', 15, 2);
             $table->decimal('tax', 15, 2)->default(0);
             $table->decimal('discount', 15, 2)->default(0);

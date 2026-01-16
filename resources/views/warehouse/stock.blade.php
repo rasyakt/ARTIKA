@@ -4,7 +4,7 @@
     <div class="container-fluid py-4">
         <div class="mb-4">
             <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-box me-2"></i>Stock Management</h2>
-            <p class="text-muted mb-0">Manage product stock across all branches</p>
+            <p class="text-muted mb-0">Manage product stock</p>
         </div>
 
         <!-- Stock Table -->
@@ -20,7 +20,6 @@
                             <tr>
                                 <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">Product</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Category</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Branch</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Current Stock</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Min Stock</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Status</th>
@@ -39,7 +38,6 @@
                                             {{ $stock->product->category->name }}
                                         </span>
                                     </td>
-                                    <td>{{ $stock->branch->name }}</td>
                                     <td>
                                         <span
                                             class="fw-bold {{ $stock->quantity < 10 ? 'text-danger' : ($stock->quantity < 20 ? 'text-warning' : 'text-success') }}">
@@ -59,7 +57,7 @@
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                             data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"
-                                            data-product-id="{{ $stock->product_id }}" data-branch-id="{{ $stock->branch_id }}"
+                                            data-product-id="{{ $stock->product_id }}"
                                             data-product-name="{{ $stock->product->name }}"
                                             data-current-qty="{{ $stock->quantity }}" style="border-radius: 8px;">
                                             <i class="fa-solid fa-gear me-1"></i> Adjust
@@ -133,7 +131,6 @@
     <script>
         let currentStockId = null;
         let currentProductId = null;
-        let currentBranchId = null;
 
         document.addEventListener('DOMContentLoaded', function () {
             var adjustStockModal = document.getElementById('adjustStockModal');
@@ -145,7 +142,6 @@
                     // Extract info from data-* attributes
                     currentStockId = button.getAttribute('data-stock-id');
                     currentProductId = button.getAttribute('data-product-id');
-                    currentBranchId = button.getAttribute('data-branch-id');
                     var productName = button.getAttribute('data-product-name');
                     var currentQty = button.getAttribute('data-current-qty');
 
@@ -183,7 +179,6 @@
                 },
                 body: JSON.stringify({
                     product_id: currentProductId,
-                    branch_id: currentBranchId,
                     quantity: quantity,
                     type: type,
                     reason: reason

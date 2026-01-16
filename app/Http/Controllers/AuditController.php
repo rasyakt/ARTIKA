@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditLog;
-use App\Models\Branch;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -15,11 +14,6 @@ class AuditController extends Controller
     public function index(Request $request)
     {
         $query = AuditLog::query();
-
-        // Filter by branch
-        if (auth()->user()->branch_id) {
-            $query->where('branch_id', auth()->user()->branch_id);
-        }
 
         // Filter by date range
         if ($request->filled('start_date') && $request->filled('end_date')) {
@@ -39,13 +33,12 @@ class AuditController extends Controller
             $query->where('user_id', $request->user_id);
         }
 
-        $logs = $query->with('user', 'branch')
+        $logs = $query->with('user')
             ->latest()
             ->paginate(50);
 
         $actions = AuditLog::distinct()->pluck('action');
-        $users = AuditLog::where('branch_id', auth()->user()->branch_id)
-            ->distinct()
+        $users = AuditLog::distinct()
             ->pluck('user_id')
             ->map(function ($userId) {
                 return \App\Models\User::find($userId);
@@ -63,11 +56,6 @@ class AuditController extends Controller
     {
         $query = AuditLog::query();
 
-        // Filter by branch
-        if (auth()->user()->branch_id) {
-            $query->where('branch_id', auth()->user()->branch_id);
-        }
-
         // Filter by date range
         $startDate = $request->start_date ?? now()->subDays(30)->format('Y-m-d');
         $endDate = $request->end_date ?? now()->format('Y-m-d');
@@ -82,16 +70,15 @@ class AuditController extends Controller
             $query->where('action', $request->action);
         }
 
-        $logs = $query->with('user', 'branch')
+        $logs = $query->with('user')
             ->latest()
             ->get();
 
-        $branch = auth()->user()->branch;
         $summary = $this->generateSummary($logs);
 
-        $pdf = Pdf::loadView('admin.audit.pdf', compact('logs', 'branch', 'summary', 'startDate', 'endDate'));
+        $pdf = Pdf::loadView('admin.audit.pdf', compact('logs', 'summary', 'startDate', 'endDate'));
         
-        $filename = 'audit-report-' . $branch->name . '-' . now()->format('Y-m-d-H-i-s') . '.pdf';
+        $filename = 'audit-report-' . now()->format('Y-m-d-H-i-s') . '.pdf';
         
         return $pdf->download($filename);
     }
@@ -136,10 +123,6 @@ class AuditController extends Controller
     {
         $query = AuditLog::query();
 
-        if (auth()->user()->branch_id) {
-            $query->where('branch_id', auth()->user()->branch_id);
-        }
-
         if ($request->filled('start_date') && $request->filled('end_date')) {
             $query->whereBetween('created_at', [
                 $request->start_date . ' 00:00:00',
@@ -151,7 +134,7 @@ class AuditController extends Controller
             $query->where('action', $request->action);
         }
 
-        $logs = $query->with('user', 'branch')
+        $logs = $query->with('user')
             ->latest()
             ->get();
 
@@ -162,7 +145,6 @@ class AuditController extends Controller
         fputcsv($handle, [
             'Tanggal',
             'User',
-            'Branch',
             'Aksi',
             'Model',
             'Amount',
@@ -176,7 +158,6 @@ class AuditController extends Controller
             fputcsv($handle, [
                 $log->created_at->format('Y-m-d H:i:s'),
                 $log->user?->name ?? 'System',
-                $log->branch?->name ?? 'N/A',
                 $log->action,
                 $log->model_type . ($log->model_id ? '#' . $log->model_id : ''),
                 $log->amount ? 'Rp' . number_format((float)$log->amount, 0, ',', '.') : '',

@@ -152,10 +152,6 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <small class="text-muted">Branch:</small>
-                                            <div class="fw-semibold">{{ $movement->branch->name }}</div>
-                                        </div>
-                                        <div class="col-md-4">
                                             <small class="text-muted">Type:</small>
                                             <div class="fw-semibold text-capitalize">
                                                 {{ $movement->type === 'in' ? 'Stock In' : ($movement->type === 'out' ? 'Stock Out' : 'Adjustment') }}

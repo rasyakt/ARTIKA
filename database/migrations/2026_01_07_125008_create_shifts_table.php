@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('branch_id')->constrained('branches')->cascadeOnDelete();
             $table->timestamp('start_time');
             $table->timestamp('end_time')->nullable();
             $table->decimal('start_cash', 15, 2);

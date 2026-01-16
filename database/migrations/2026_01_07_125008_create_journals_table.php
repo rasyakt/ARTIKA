@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('journals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('transaction_id')->nullable()->constrained('transactions')->nullOnDelete();
-            $table->foreignId('branch_id')->nullable()->constrained('branches')->cascadeOnDelete();
             $table->enum('type', ['debit', 'credit']);
             $table->string('account_name'); // e.g. 'Cash', 'Sales', 'COGS'
             $table->decimal('amount', 15, 2);

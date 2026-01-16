@@ -25,7 +25,7 @@ Sebagai **Administrator**, Anda memiliki full access ke sistem ARTIKA POS dengan
 - Monitoring sales dan inventory
 - Generating reports
 - Managing system configuration
-- User dan branch management
+- User management
 
 ---
 
@@ -177,7 +177,6 @@ Admin dashboard menampilkan:
 - Username
 - NIS (if applicable)
 - Role
-- Branch
 - Actions
 
 ### Add New User
@@ -191,7 +190,6 @@ Admin dashboard menampilkan:
    - **NIS:** (Optional) Untuk cashier/student
    - **Password:** Minimum 8 characters
    - **Role:** Pilih Admin/Cashier/Warehouse
-   - **Branch:** Assign ke branch
 
 3. Klik **Create User**
 
@@ -294,17 +292,12 @@ Admin dashboard menampilkan:
    - Top selling products
    - Revenue analysis
 
-3. **Sales by Branch**
-   - Compare sales across branches
-   - Branch performance
-
-4. **Sales by Cashier**
+3. **Sales by Cashier**
    - Kasir performance
    - Transaction speed metrics
 
 **Filters:**
 - Date range
-- Branch
 - Product category
 - Payment method
 
@@ -388,14 +381,6 @@ Admin dashboard menampilkan:
 
 ## System Configuration
 
-### Branch Settings
-
-**Path:** Admin → Settings → Branches (future)
-
-- Add/edit branches
-- Set default branch
-- Branch-specific configurations
-
 ### Payment Methods
 
 **Path:** Admin → Settings → Payment Methods (future)
@@ -443,7 +428,7 @@ Admin dashboard menampilkan:
 
 **Solution:**
 - Reduce date range for report
-- Filter by branch/category untuk smaller dataset
+- Filter by category untuk smaller dataset
 - Contact system administrator
 
 ---

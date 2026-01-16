@@ -21,15 +21,6 @@
                         <input type="date" class="form-control" name="to" value="{{ request('to', date('Y-m-d')) }}"
                             style="border-radius: 12px;">
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold" style="color: #6f5849;">Branch</label>
-                        <select class="form-select" name="branch" style="border-radius: 12px;">
-                            <option value="">All Branches</option>
-                            @foreach(\App\Models\Branch::all() as $branch)
-                                <option value="{{ $branch->id }}">{{ $branch->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
                     <div class="col-md-3 d-flex align-items-end">
                         <button type="submit" class="btn btn-primary w-100"
                             style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">

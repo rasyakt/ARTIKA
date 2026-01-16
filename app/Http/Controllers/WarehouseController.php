@@ -14,10 +14,8 @@ class WarehouseController extends Controller
 {
     public function index()
     {
-        $branchId = Auth::user()->branch_id;
-
         // Low Stock Alerts (quantity < 20)
-        $lowStockItems = Stock::with(['product.category', 'branch'])
+        $lowStockItems = Stock::with(['product.category'])
             ->where('quantity', '<', 20)
             ->orderBy('quantity', 'asc')
             ->get();
@@ -67,7 +65,7 @@ class WarehouseController extends Controller
     public function lowStock()
     {
         // Low Stock Alerts (quantity < 20)
-        $lowStockItems = Stock::with(['product.category', 'branch'])
+        $lowStockItems = Stock::with(['product.category'])
             ->where('quantity', '<', 20)
             ->orderBy('quantity', 'asc')
             ->paginate(20);
@@ -82,7 +80,7 @@ class WarehouseController extends Controller
 
     public function stockManagement()
     {
-        $stocks = Stock::with(['product.category', 'branch'])
+        $stocks = Stock::with(['product.category'])
             ->orderBy('quantity', 'asc')
             ->get();
 
@@ -91,7 +89,7 @@ class WarehouseController extends Controller
 
     public function stockMovements()
     {
-        $movements = StockMovement::with(['product', 'branch', 'user'])
+        $movements = StockMovement::with(['product', 'user'])
             ->latest()
             ->paginate(20);
 
@@ -128,14 +126,12 @@ class WarehouseController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
-            'branch_id' => 'required|exists:branches,id',
             'quantity' => 'required|integer',
             'type' => 'required|in:add,subtract,set',
             'reason' => 'nullable|string|max:255'
         ]);
 
         $stock = Stock::where('product_id', $request->product_id)
-            ->where('branch_id', $request->branch_id)
             ->first();
 
         if (!$stock) {
@@ -164,7 +160,6 @@ class WarehouseController extends Controller
         // Log the movement
         StockMovement::create([
             'product_id' => $request->product_id,
-            'branch_id' => $request->branch_id,
             'user_id' => Auth::id(),
             'type' => 'adjustment',
             'quantity_before' => $quantityBefore,

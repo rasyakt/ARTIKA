@@ -55,7 +55,6 @@ class PosController extends Controller
         try {
             $data = [
                 'user_id' => \Illuminate\Support\Facades\Auth::id(),
-                'branch_id' => \Illuminate\Support\Facades\Auth::user()->branch_id,
                 'subtotal' => $validated['subtotal'],
                 'discount' => $validated['discount'] ?? 0,
                 'total_amount' => $validated['total_amount'],
@@ -113,7 +112,6 @@ class PosController extends Controller
         try {
             $held = HeldTransaction::create([
                 'user_id' => \Illuminate\Support\Facades\Auth::id(),
-                'branch_id' => \Illuminate\Support\Facades\Auth::user()->branch_id,
                 'items' => $request->items,
                 'subtotal' => $request->subtotal,
                 'discount' => $request->discount ?? 0,
@@ -177,7 +175,7 @@ class PosController extends Controller
      */
     public function printReceipt($transactionId)
     {
-        $transaction = \App\Models\Transaction::with(['user', 'branch', 'items.product'])
+        $transaction = \App\Models\Transaction::with(['user', 'items.product'])
             ->findOrFail($transactionId);
 
         return view('pos.receipt', compact('transaction'));

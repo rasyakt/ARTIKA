@@ -7,7 +7,6 @@
             <div class="card-body">
                 <h4>Welcome, {{ Auth::user()->name }}!</h4>
                 <p>Role: <span class="badge bg-info">{{ Auth::user()->role->name ?? 'User' }}</span></p>
-                <p>Branch: {{ Auth::user()->branch->name ?? 'N/A' }}</p>
                 <div class="alert alert-info mt-3">
                     Select a menu to proceed.
                 </div>

@@ -110,7 +110,6 @@
                                     <tr>
                                         <th class="border-0 fw-semibold" style="color: #6f5849;">Product</th>
                                         <th class="border-0 fw-semibold" style="color: #6f5849;">Category</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Branch</th>
                                         <th class="border-0 fw-semibold" style="color: #6f5849;">Stock</th>
                                         <th class="border-0 fw-semibold" style="color: #6f5849;">Status</th>
                                     </tr>
@@ -127,7 +126,6 @@
                                                     {{ $stock->product->category->name }}
                                                 </span>
                                             </td>
-                                            <td>{{ $stock->branch->name }}</td>
                                             <td>
                                                 <span
                                                     class="fw-bold {{ $stock->quantity < 10 ? 'text-danger' : 'text-warning' }}">

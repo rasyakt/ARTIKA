@@ -141,15 +141,11 @@ class AdminController extends Controller
 
         $product = Product::create($request->all());
 
-        // Create initial stock for all branches
-        $branches = \App\Models\Branch::all();
-        foreach ($branches as $branch) {
-            Stock::create([
-                'product_id' => $product->id,
-                'branch_id' => $branch->id,
-                'quantity' => 0
-            ]);
-        }
+        // Create initial stock
+        Stock::create([
+            'product_id' => $product->id,
+            'quantity' => 0
+        ]);
 
         return redirect()->route('admin.products')->with('success', 'Product created successfully!');
     }

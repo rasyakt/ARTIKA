@@ -20,9 +20,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function updateStock($productId, $quantity)
     {
-        // Decrement stock for the branch (assuming branch 1 for now or passed branch)
-        // For simplicity, we'll just find the first stock record for this product
-        // In reality, we need branch_id context.
+        // Decrement stock for the product
         $stock = Stock::where('product_id', $productId)->first();
         if ($stock) {
             $stock->decrement('quantity', $quantity);

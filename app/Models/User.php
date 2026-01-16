@@ -23,7 +23,6 @@ class User extends Authenticatable
         'nis',
         'password',
         'role_id',
-        'branch_id',
     ];
 
     /**
@@ -52,10 +51,5 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
-    }
-
-    public function branch()
-    {
-        return $this->belongsTo(Branch::class);
     }
 }

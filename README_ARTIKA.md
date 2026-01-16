@@ -87,7 +87,7 @@
 
 ### 2. Admin Dashboard
 *   **Login**: Use Username `admin`.
-*   **Features**: View Sales Reports, Manage Users, Branches.
+*   **Features**: View Sales Reports, Manage Users.
 
 ### 3. Warehouse Dashboard
 *   **Login**: Use Username `gudang`.
@@ -132,10 +132,9 @@ The entire application uses a modern brown color scheme:
 ### **Main Tables**
 - `users` - User accounts (Admin, Cashier, Warehouse)
 - `roles` - User roles
-- `branches` - Store branches
 - `categories` - Product categories
 - `products` - Product catalog
-- `stocks` - Inventory per branch
+- `stocks` - Inventory
 - `customers` - Customer database
 - `transactions` - Sales transactions
 - `transaction_items` - Transaction line items

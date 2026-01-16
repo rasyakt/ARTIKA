@@ -9,7 +9,6 @@ class HeldTransaction extends Model
 {
     protected $fillable = [
         'user_id',
-        'branch_id',
         'items',
         'subtotal',
         'discount',
@@ -30,14 +29,6 @@ class HeldTransaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the branch where this transaction was held
-     */
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
     }
 
     /**

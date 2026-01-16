@@ -34,7 +34,7 @@ class Product extends Model
     }
 
     /**
-     * Get all stocks for this product across branches
+     * Get all stocks for this product
      */
     public function stocks(): HasMany
     {
@@ -42,15 +42,7 @@ class Product extends Model
     }
 
     /**
-     * Get stock for a specific branch
-     */
-    public function stockForBranch($branchId)
-    {
-        return $this->stocks()->where('branch_id', $branchId)->first();
-    }
-
-    /**
-     * Get total stock across all branches
+     * Get total stock
      */
     public function getTotalStockAttribute()
     {

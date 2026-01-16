@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->string('nis')->nullable()->unique(); // For Students/Cashiers
             $table->string('password');
             $table->foreignId('role_id')->nullable()->constrained('roles')->nullOnDelete();
-            $table->foreignId('branch_id')->nullable()->constrained('branches')->nullOnDelete();
             $table->rememberToken();
             $table->timestamps();
         });

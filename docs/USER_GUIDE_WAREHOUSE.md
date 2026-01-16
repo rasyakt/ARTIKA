@@ -71,7 +71,6 @@ Warehouse dashboard menampilkan:
 - **Product Name**
 - **Barcode**
 - **Category**
-- **Branch**
 - **Current Stock**
 - **Minimum Stock**
 - **Status** (Normal / Low Stock / Out of Stock)
@@ -80,7 +79,6 @@ Warehouse dashboard menampilkan:
 **Features:**
 - Search by product name atau barcode
 - Filter by:
-  - Branch
   - Category
   - Stock status (All / Low Stock / Out of Stock)
 - Sort by stock quantity, product name, etc
@@ -116,11 +114,7 @@ Menampilkan products dengan `quantity <= min_stock`
    - Generate PO untuk supplier
    - Specify quantity to reorder
 
-2. **Transfer from Other Branch**
-   - Check stock di cabang lain
-   - Request transfer
-
-3. **Adjust Minimum Stock**
+2. **Adjust Minimum Stock**
    - Jika min_stock terlalu tinggi, adjust threshold
 
 ### Setting Minimum Stock
@@ -151,13 +145,12 @@ Min Stock = (10 × 7) + 20 = 90 units
 | **IN** | Stock masuk (receiving) | +Positive |
 | **OUT** | Stock keluar (manual) | -Negative |
 | **ADJUSTMENT** | Manual correction | +/- |
-| **TRANSFER** | Transfer antar branch | +/- |
+| **ADJUSTMENT** | Adjust stock quantity | +/- |
 | **SALE** | Sold via POS | -Negative (auto) |
 
 **Table Columns:**
 - Date/Time
 - Product
-- Branch
 - Type
 - Quantity Changed
 - Quantity Before
@@ -170,7 +163,6 @@ Min Stock = (10 × 7) + 20 = 90 units
 - Date range
 - Product
 - Movement type
-- Branch
 - User
 
 **Use Cases:**
@@ -223,7 +215,6 @@ Min Stock = (10 × 7) + 20 = 90 units
      - `IN` - Receiving new stock
      - `OUT` - Remove stock
      - `ADJUSTMENT` - General correction
-     - `TRANSFER` - Move to/from branch
    
    - **Quantity:** 
      - For IN/TRANSFER IN: Enter positive number (e.g., `50`)
@@ -373,49 +364,13 @@ Min Stock = (10 × 7) + 20 = 90 units
 
 ---
 
-## Branch Transfer
-
-### Transfer Stock Between Branches
-
-**Scenario:** Cabang 1 butuh stock, but Cabang 2 ada excess
-
-**Process:**
-
-**At Source Branch (Cabang 2):**
-
-1. Go to Stock Management
-2. Select product
-3. Adjust Stock:
-   - Type: `TRANSFER`
-   - Quantity: `-20` (negative, stock OUT)
-   - Reference: Transfer doc no
-   - Notes: "Transfer to Branch Cabang 1"
-
-**At Destination Branch (Cabang 1):**
-
-1. When items arrive
-2. Go to Stock Management
-3. Select same product
-4. Adjust Stock:
-   - Type: `TRANSFER`
-   - Quantity: `+20` (positive, stock IN)
-   - Reference: Same transfer doc no
-   - Notes: "Transfer from Branch Cabang 2"
-
-**Important:**
-- Use same reference no for traceability
-- Both adjustments should match quantity
-- Verify items physically before IN adjustment
-
----
-
 ## Stock Reports
 
 ### Available Reports
 
 1. **Stock Level Report**
    - Current stock per product
-   - Grouped by category/branch
+   - Grouped by category
    - Stock value calculation
 
 2. **Stock Movement Report**

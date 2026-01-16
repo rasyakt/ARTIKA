@@ -43,9 +43,6 @@ Total: 19 migration files di `database/migrations/`
 ```mermaid
 erDiagram
     ROLES ||--o{ USERS : "has"
-    BRANCHES ||--o{ USERS : "employs"
-    BRANCHES ||--o{ STOCKS : "stores"
-    BRANCHES ||--o{ TRANSACTIONS : "processes"
     
     USERS ||--o{ TRANSACTIONS : "creates"
     USERS ||--o{ SHIFTS : "operates"
@@ -61,7 +58,6 @@ erDiagram
     
     PRODUCTS ||--o{ STOCK_MOVEMENTS : "moved"
     USERS ||--o{ STOCK_MOVEMENTS : "recorded_by"
-    BRANCHES ||--o{ STOCK_MOVEMENTS : "occurred_at"
     
     CUSTOMERS ||--o{ RETURNS : "makes"
     TRANSACTIONS ||--o| RETURNS : "returned_from"
@@ -85,7 +81,6 @@ erDiagram
         string nis UK
         string password
         bigint role_id FK
-        bigint branch_id FK
         string remember_token
         timestamp created_at
         timestamp updated_at

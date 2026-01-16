@@ -98,7 +98,6 @@
                             <tr>
                                 <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">Product</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Category</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Branch</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Current Stock</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Min Stock</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">Alert Level</th>
@@ -117,7 +116,6 @@
                                             {{ $stock->product->category->name }}
                                         </span>
                                     </td>
-                                    <td>{{ $stock->branch->name }}</td>
                                     <td>
                                         <span class="fw-bold {{ $stock->quantity < 10 ? 'text-danger' : 'text-warning' }}">
                                             {{ $stock->quantity }} units

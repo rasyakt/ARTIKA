@@ -44,7 +44,6 @@ class TransactionService
             // Debit Application: Cash
             \App\Models\Journal::create([
                 'transaction_id' => $transaction->id,
-                'branch_id' => $data['branch_id'],
                 'type' => 'debit',
                 'account_name' => 'Cash',
                 'amount' => $transaction->total_amount,
@@ -54,7 +53,6 @@ class TransactionService
             // Credit Application: Sales Revenue
             \App\Models\Journal::create([
                 'transaction_id' => $transaction->id,
-                'branch_id' => $data['branch_id'],
                 'type' => 'credit',
                 'account_name' => 'Sales Revenue',
                 'amount' => $transaction->total_amount,

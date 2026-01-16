@@ -13,7 +13,6 @@ class ReturnTransaction extends Model
         'return_no',
         'transaction_id',
         'user_id',
-        'branch_id',
         'items',
         'total_refund',
         'reason',
@@ -55,11 +54,4 @@ class ReturnTransaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the branch where return was processed
-     */
-    public function branch(): BelongsTo
-    {
-        return $this->belongsTo(Branch::class);
     }
-}

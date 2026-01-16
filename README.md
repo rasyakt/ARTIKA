@@ -5,7 +5,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-Database-4479A1?style=flat&logo=mysql)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat&logo=bootstrap)
 
-**ARTIKA** adalah sistem Point of Sale (POS) lengkap dan modern yang dibangun dengan Laravel 12, dirancang khusus untuk retail dan toko dengan fitur-fitur canggih seperti barcode scanning, multi-branch support, role-based access control, dan inventory management.
+**ARTIKA** adalah sistem Point of Sale (POS) lengkap dan modern yang dibangun dengan Laravel 12, dirancang khusus untuk retail dan toko dengan fitur-fitur canggih seperti barcode scanning, role-based access control, dan inventory management.
 
 ---
 
@@ -27,7 +27,6 @@
 - **User Management** - Kelola user dengan role-based access
 - **Customer Management** - Database pelanggan dengan loyalty points
 - **Sales Reports** - Laporan penjualan dan analitik
-- **Multi-Branch Support** - Kelola multiple cabang/toko
 
 ### 📦 Warehouse Management
 - **Stock Management** - Monitoring dan kelola stok produk
@@ -159,10 +158,9 @@ Sistem menggunakan 19 tabel utama:
 
 - `users` - User accounts dengan role-based access
 - `roles` - User roles (Admin, Cashier, Warehouse)
-- `branches` - Store branches/cabang
 - `categories` - Product categories
 - `products` - Product catalog dengan barcode
-- `stocks` - Inventory per branch
+- `stocks` - Inventory
 - `customers` - Customer database dengan loyalty points
 - `transactions` - Sales transactions
 - `transaction_items` - Transaction line items

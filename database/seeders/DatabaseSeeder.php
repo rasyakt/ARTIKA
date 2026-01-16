@@ -20,17 +20,12 @@ class DatabaseSeeder extends Seeder
         $cashierRole = \App\Models\Role::create(['name' => 'cashier', 'description' => 'Kasir']);
         $warehouseRole = \App\Models\Role::create(['name' => 'warehouse', 'description' => 'Staff Gudang']);
 
-        // Branches
-        $pusat = \App\Models\Branch::create(['name' => 'Pusat', 'location' => 'Jl. Utama No. 1']);
-        $cabang1 = \App\Models\Branch::create(['name' => 'Cabang 1', 'location' => 'Jl. Cabang No. 2']);
-
         // Users
         \App\Models\User::create([
             'name' => 'Super Admin',
             'username' => 'admin',
             'password' => bcrypt('password'), // password
             'role_id' => $adminRole->id,
-            'branch_id' => $pusat->id,
         ]);
 
         \App\Models\User::create([
@@ -39,7 +34,6 @@ class DatabaseSeeder extends Seeder
             'nis' => '12345',
             'password' => bcrypt('password'),
             'role_id' => $cashierRole->id,
-            'branch_id' => $pusat->id,
         ]);
 
         \App\Models\User::create([
@@ -47,7 +41,6 @@ class DatabaseSeeder extends Seeder
             'username' => 'gudang',
             'password' => bcrypt('password'),
             'role_id' => $warehouseRole->id,
-            'branch_id' => $pusat->id,
         ]);
         // Categories
         $catSnack = \App\Models\Category::create(['name' => 'Snack', 'slug' => 'snack']);
@@ -90,10 +83,9 @@ class DatabaseSeeder extends Seeder
 
         foreach ($products as $productData) {
             $product = \App\Models\Product::create($productData);
-            // Add stock for each product
+            // Add stock for product
             \App\Models\Stock::create([
                 'product_id' => $product->id,
-                'branch_id' => $pusat->id,
                 'quantity' => rand(50, 200)
             ]);
         }
