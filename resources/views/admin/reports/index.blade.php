@@ -1,116 +1,243 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        .report-card {
+            border-radius: 16px;
+            border: none;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .report-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(133, 105, 90, 0.2) !important;
+        }
+
+        .report-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+    </style>
+
     <div class="container-fluid py-4">
-        <div class="mb-4">
-            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-chart-line me-2"></i>{{ __('admin.sales_reports') }}</h2>
-            <p class="text-muted mb-0">{{ __('admin.view_analyze_sales') }}</p>
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold mb-1" style="color: #6f5849;">
+                    <i class="fa-solid fa-chart-line me-2"></i>{{ __('admin.reports_hub') }}
+                </h2>
+                <p class="text-muted mb-0">{{ __('admin.reports_hub_subtitle') }}</p>
+            </div>
+            <div>
+                <button class="btn btn-lg shadow-sm"
+                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 12px; transition: all 0.3s;"
+                    data-bs-toggle="modal" data-bs-target="#printAllModal"
+                    onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <i class="fa-solid fa-file-invoice me-2"></i> {{ __('admin.print_all_reports') }}
+                </button>
+            </div>
         </div>
 
-        <!-- Date Filter -->
-        <div class="card shadow-sm mb-4" style="border-radius: 16px; border: none;">
-            <div class="card-body">
-                <form method="GET" class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.from_date') }}</label>
-                        <input type="date" class="form-control" name="from" value="{{ request('from', date('Y-m-01')) }}"
-                            style="border-radius: 12px;">
+        <!-- Report Cards -->
+        <div class="row g-4 mb-4">
+            <!-- Warehouse Report -->
+            <div class="col-md-4">
+                <a href="{{ route('admin.reports.warehouse') }}" class="text-decoration-none">
+                    <div class="card report-card shadow-sm"
+                        style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
+                        <div class="card-body text-center p-5">
+                            <div class="report-icon mx-auto"
+                                style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white;">
+                                <i class="fa-solid fa-warehouse"></i>
+                            </div>
+                            <h4 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.warehouse_report') }}</h4>
+                            <p class="text-muted mb-3">{{ __('admin.warehouse_report_desc') }}</p>
+                            <ul class="list-unstyled text-start small" style="color: #78716c;">
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.total_valuation') }}
+                                </li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.top_moving_items') }}
+                                </li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.low_stock_alerts') }}
+                                </li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.movements') }}</li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.to_date') }}</label>
-                        <input type="date" class="form-control" name="to" value="{{ request('to', date('Y-m-d')) }}"
-                            style="border-radius: 12px;">
+                </a>
+            </div>
+
+            <!-- Cashier Report -->
+            <div class="col-md-4">
+                <a href="{{ route('admin.reports.cashier') }}" class="text-decoration-none">
+                    <div class="card report-card shadow-sm"
+                        style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
+                        <div class="card-body text-center p-5">
+                            <div class="report-icon mx-auto"
+                                style="background: linear-gradient(135deg, #0284c7 0%, #075985 100%); color: white;">
+                                <i class="fa-solid fa-cash-register"></i>
+                            </div>
+                            <h4 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.cashier_report') }}</h4>
+                            <p class="text-muted mb-3">{{ __('admin.cashier_report_desc') }}</p>
+                            <ul class="list-unstyled text-start small" style="color: #78716c;">
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.total_sales') }}</li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.top_selling_products') }}
+                                </li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.cashier_performance') }}
+                                </li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.payment_method') }}
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                    <div class="col-md-3 d-flex align-items-end">
-                        <button type="submit" class="btn btn-primary w-100"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
-                            <i class="fa-solid fa-magnifying-glass me-1"></i> {{ __('common.filter') }}
+                </a>
+            </div>
+
+            <!-- Audit Logs -->
+            <div class="col-md-4">
+                <a href="{{ route('admin.audit.index') }}" class="text-decoration-none">
+                    <div class="card report-card shadow-sm"
+                        style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
+                        <div class="card-body text-center p-5">
+                            <div class="report-icon mx-auto"
+                                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white;">
+                                <i class="fa-solid fa-clipboard-list"></i>
+                            </div>
+                            <h4 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.logs_report') }}</h4>
+                            <p class="text-muted mb-3">{{ __('admin.logs_report_desc') }}</p>
+                            <ul class="list-unstyled text-start small" style="color: #78716c;">
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.user_management') }}
+                                </li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.ip_address') }}</li>
+                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>System Security</li>
+                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Username Tracking</li>
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="card shadow-sm" style="border-radius: 16px; border: none;">
+            <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+                <h5 class="mb-0 fw-bold" style="color: #6f5849;">
+                    <i class="fa-solid fa-info-circle me-2"></i>{{ __('admin.quick_report') }}
+                </h5>
+            </div>
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="alert alert-info"
+                            style="background: #e0f2fe; border: none; border-left: 4px solid #0284c7;">
+                            <h6 class="fw-bold mb-2"><i class="fa-solid fa-lightbulb me-2"></i>{{ __('admin.how_to_use') }}
+                            </h6>
+                            <ul class="mb-0 small">
+                                <li>{{ __('admin.how_to_use_1') }}</li>
+                                <li>{{ __('admin.how_to_use_2') }}</li>
+                                <li>{{ __('admin.how_to_use_3') }}</li>
+                                <li>{{ __('admin.how_to_use_4') }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Print All Modal -->
+    <div class="modal fade" id="printAllModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius: 16px;">
+                <div class="modal-header"
+                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 16px 16px 0 0;">
+                    <h5 class="modal-title">
+                        <i class="fa-solid fa-file-invoice me-2"></i>{{ __('admin.print_all_reports') }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="{{ route('admin.reports.print-all') }}" method="GET" target="_blank">
+                    <div class="modal-body p-4">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold" style="color: #6f5849;">
+                                <i class="fa-solid fa-calendar-days me-2"></i>{{ __('admin.select_period') }}
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light border-end-0"><i
+                                        class="fa-solid fa-clock text-muted"></i></span>
+                                <select name="period" id="period" class="form-select border-start-0 ps-0">
+                                    <option value="today">{{ __('admin.today') }}</option>
+                                    <option value="week">{{ __('admin.this_week') }}</option>
+                                    <option value="month" selected>{{ __('admin.this_month') }}</option>
+                                    <option value="year">{{ __('admin.this_year') }}</option>
+                                    <option value="custom">{{ __('admin.custom_range') }}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div id="customRange" style="display: none;" class="mb-4">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold" style="color: #6f5849;">
+                                        <i class="fa-regular fa-calendar-plus me-2"></i>{{ __('admin.start_date') }}
+                                    </label>
+                                    <input type="date" name="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold" style="color: #6f5849;">
+                                        <i class="fa-regular fa-calendar-minus me-2"></i>{{ __('admin.end_date') }}
+                                    </label>
+                                    <input type="date" name="end_date" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center"
+                            style="background-color: #fff7ed; color: #9a3412;">
+                            <i class="fa-solid fa-circle-info fa-lg me-3"></i>
+                            <div>
+                                {{ __('admin.comprehensive_report_warning') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light border-top-0 rounded-bottom-4 px-4 pb-3">
+                        <button type="button" class="btn btn-light text-muted border-0"
+                            data-bs-dismiss="modal">{{ __('admin.cancel') }}</button>
+                        <button type="submit" class="btn px-4 py-2 fw-bold"
+                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 8px;">
+                            <i class="fa-solid fa-print me-2"></i> {{ __('admin.generate_report') }}
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-
-        <!-- Summary Cards -->
-        <div class="row g-4 mb-4">
-            <div class="col-md-3">
-                <div class="card shadow-sm"
-                    style="border-radius: 16px; border: none; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);">
-                    <div class="card-body text-white">
-                        <h6 class="opacity-75 mb-2">{{ __('common.total_sales') }}</h6>
-                        <h3 class="fw-bold mb-0">Rp
-                            {{ number_format(\App\Models\Transaction::where('status', 'completed')->sum('total_amount'), 0, ',', '.') }}
-                        </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm"
-                    style="border-radius: 16px; border: none; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);">
-                    <div class="card-body text-white">
-                        <h6 class="opacity-75 mb-2">{{ __('common.transactions') }}</h6>
-                        <h3 class="fw-bold mb-0">{{ \App\Models\Transaction::where('status', 'completed')->count() }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm"
-                    style="border-radius: 16px; border: none; background: linear-gradient(135deg, #c17a5c 0%, #a18072 100%);">
-                    <div class="card-body text-white">
-                        <h6 class="opacity-75 mb-2">{{ __('admin.avg_transaction') }}</h6>
-                        <h3 class="fw-bold mb-0">Rp
-                            {{ number_format(\App\Models\Transaction::where('status', 'completed')->avg('total_amount') ?? 0, 0, ',', '.') }}
-                        </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card shadow-sm"
-                    style="border-radius: 16px; border: none; background: linear-gradient(135deg, #0284c7 0%, #075985 100%);">
-                    <div class="card-body text-white">
-                        <h6 class="opacity-75 mb-2">{{ __('admin.products_sold') }}</h6>
-                        <h3 class="fw-bold mb-0">{{ \App\Models\TransactionItem::sum('quantity') }}</h3>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Transactions Table -->
-        <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-            <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>{{ __('common.recent_transactions') }}</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead style="background: #fdf8f6;">
-                            <tr>
-                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">{{ __('common.invoice') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.date') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.cashier') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.items') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.total') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.payment') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach(\App\Models\Transaction::with(['user', 'items'])->where('status', 'completed')->latest()->limit(50)->get() as $transaction)
-                                <tr>
-                                    <td class="ps-4 fw-bold" style="color: #85695a;">{{ $transaction->invoice_no }}</td>
-                                    <td class="text-muted">{{ $transaction->created_at->format('d M Y H:i') }}</td>
-                                    <td>{{ $transaction->user->name }}</td>
-                                    <td>{{ $transaction->items->count() }} {{ __('common.items') }}</td>
-                                    <td class="fw-bold" style="color: #c17a5c;">Rp
-                                        {{ number_format(floatval((string)($transaction->total_amount ?? 0)), 0, ',', '.') }}</td>
-                                    <td><span class="badge"
-                                            style="background: #e0cec7; color: #6f5849;">{{ ucfirst($transaction->payment_method) }}</span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
+
+    <script>
+        document.getElementById('period').addEventListener('change', function () {
+            const customRange = document.getElementById('customRange');
+            if (this.value === 'custom') {
+                customRange.style.display = 'block';
+            } else {
+                customRange.style.display = 'none';
+            }
+        });
+    </script>
 @endsection

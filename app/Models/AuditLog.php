@@ -18,6 +18,8 @@ class AuditLog extends Model
         'payment_method',
         'changes',
         'ip_address',
+        'mac_address',
+        'device_name',
         'user_agent',
         'notes',
     ];
@@ -74,6 +76,9 @@ class AuditLog extends Model
      */
     public static function log($action, $modelType = null, $modelId = null, $amount = null, $paymentMethod = null, $changes = null, $notes = null)
     {
+        $userAgent = request()->userAgent();
+        $deviceName = self::extractDeviceName($userAgent);
+
         return self::create([
             'user_id' => auth()->id(),
             'action' => $action,
@@ -83,8 +88,51 @@ class AuditLog extends Model
             'payment_method' => $paymentMethod,
             'changes' => $changes,
             'ip_address' => request()->ip(),
-            'user_agent' => request()->userAgent(),
+            'mac_address' => request()->header('X-Mac-Address'), // Will be sent from client if available
+            'device_name' => $deviceName,
+            'user_agent' => $userAgent,
             'notes' => $notes,
         ]);
+    }
+
+    /**
+     * Extract device name from user agent
+     */
+    protected static function extractDeviceName($userAgent)
+    {
+        if (!$userAgent)
+            return 'Unknown Device';
+
+        // Detect OS
+        if (preg_match('/Windows NT 10/i', $userAgent)) {
+            $os = 'Windows 10';
+        } elseif (preg_match('/Windows NT 11/i', $userAgent)) {
+            $os = 'Windows 11';
+        } elseif (preg_match('/Macintosh/i', $userAgent)) {
+            $os = 'macOS';
+        } elseif (preg_match('/Android/i', $userAgent)) {
+            $os = 'Android';
+        } elseif (preg_match('/iPhone|iPad/i', $userAgent)) {
+            $os = 'iOS';
+        } elseif (preg_match('/Linux/i', $userAgent)) {
+            $os = 'Linux';
+        } else {
+            $os = 'Unknown OS';
+        }
+
+        // Detect Browser
+        if (preg_match('/Edg\//i', $userAgent)) {
+            $browser = 'Edge';
+        } elseif (preg_match('/Chrome\//i', $userAgent)) {
+            $browser = 'Chrome';
+        } elseif (preg_match('/Firefox\//i', $userAgent)) {
+            $browser = 'Firefox';
+        } elseif (preg_match('/Safari\//i', $userAgent) && !preg_match('/Chrome/i', $userAgent)) {
+            $browser = 'Safari';
+        } else {
+            $browser = 'Unknown Browser';
+        }
+
+        return "$os - $browser";
     }
 }

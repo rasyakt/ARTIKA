@@ -31,6 +31,68 @@ class PosController extends Controller
         return view('pos.index', compact('products', 'categories', 'paymentMethods', 'heldTransactions'));
     }
 
+    public function logs(\Illuminate\Http\Request $request)
+    {
+        $query = AuditLog::where('user_id', \Illuminate\Support\Facades\Auth::id());
+
+        // Filter by type
+        if ($request->has('type')) {
+            $type = $request->type;
+            if ($type === 'login') {
+                $query->where('action', 'login');
+            } elseif ($type === 'transaction') {
+                $query->where('action', 'transaction_created');
+            }
+        }
+
+        $logs = $query->orderBy('created_at', 'desc')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('pos.logs', compact('logs'));
+    }
+
+    public function history(\Illuminate\Http\Request $request)
+    {
+        $query = \App\Models\Transaction::where('user_id', \Illuminate\Support\Facades\Auth::id())
+            ->with('items.product');
+
+        // Date Filter
+        if ($request->filled('start_date')) {
+            $query->whereDate('created_at', '>=', $request->start_date);
+        }
+        if ($request->filled('end_date')) {
+            $query->whereDate('created_at', '<=', $request->end_date);
+        }
+
+        // Get Summary Stats (before pagination)
+        $summaryQuery = clone $query;
+        $totalRevenue = $summaryQuery->sum('total_amount') ?? 0;
+
+        // Get Sold Items Summary
+        $soldItems = \App\Models\TransactionItem::whereIn('transaction_id', $summaryQuery->pluck('id'))
+            ->join('products', 'transaction_items.product_id', '=', 'products.id')
+            ->select('products.name', \Illuminate\Support\Facades\DB::raw('SUM(transaction_items.quantity) as total_qty'), \Illuminate\Support\Facades\DB::raw('SUM(transaction_items.subtotal) as total_sales'))
+            ->groupBy('products.name')
+            ->orderByDesc('total_qty')
+            ->get();
+
+        $transactions = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('pos.history', compact('transactions', 'totalRevenue', 'soldItems'));
+    }
+
+    public function showReceipt($id)
+    {
+        $transaction = \App\Models\Transaction::where('user_id', \Illuminate\Support\Facades\Auth::id())
+            ->with(['user', 'items.product'])
+            ->findOrFail($id);
+
+        return view('pos.receipt', compact('transaction'));
+    }
+
     public function scanner()
     {
         $products = $this->productRepository->getAllProducts();

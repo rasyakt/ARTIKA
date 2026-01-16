@@ -8,6 +8,8 @@ Route::get('/', function () {
 });
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/login/admin', [AuthController::class, 'showAdminLoginForm'])->name('login.admin');
+Route::get('/login/warehouse', [AuthController::class, 'showWarehouseLoginForm'])->name('login.warehouse');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -54,9 +56,17 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->name('suppliers.delete');
 
         // Reports
-        Route::get('/reports', function () {
-            return view('admin.reports.index');
-        })->name('reports');
+        // Reports Hub
+        Route::get('/reports', [\App\Http\Controllers\Admin\ReportsHubController::class, 'index'])->name('reports');
+        Route::get('/reports/print-all', [\App\Http\Controllers\Admin\ReportsHubController::class, 'printAll'])->name('reports.print-all');
+
+        // Warehouse Reports
+        Route::get('/reports/warehouse', [\App\Http\Controllers\Admin\WarehouseReportController::class, 'index'])->name('reports.warehouse');
+        Route::get('/reports/warehouse/export', [\App\Http\Controllers\Admin\WarehouseReportController::class, 'export'])->name('reports.warehouse.export');
+
+        // Cashier Reports
+        Route::get('/reports/cashier', [\App\Http\Controllers\Admin\CashierReportController::class, 'index'])->name('reports.cashier');
+        Route::get('/reports/cashier/export', [\App\Http\Controllers\Admin\CashierReportController::class, 'export'])->name('reports.cashier.export');
 
         // Audit Logs
         Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])->name('audit.index');
@@ -66,6 +76,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Cashier Routes (POS)
     Route::middleware(['role:cashier'])->prefix('pos')->name('pos.')->group(function () {
+        Route::get('/logs', [\App\Http\Controllers\PosController::class, 'logs'])->name('logs');
+        Route::get('/history', [\App\Http\Controllers\PosController::class, 'history'])->name('history');
         Route::get('/', [\App\Http\Controllers\PosController::class, 'index'])->name('index');
         Route::get('/scanner', [\App\Http\Controllers\PosController::class, 'scanner'])->name('scanner');
         Route::post('/checkout', [\App\Http\Controllers\PosController::class, 'store'])->name('checkout');

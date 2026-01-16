@@ -25,7 +25,7 @@ class LogSuccessfulLogin
         AuditLog::log(
             'login',
             'User',
-            $event->user->id,
+            $event->user->getAuthIdentifier(),
             null,
             null,
             null,

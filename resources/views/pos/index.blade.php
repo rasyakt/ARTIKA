@@ -1194,9 +1194,18 @@
                 <div class="navbar-user">
                     {{ Auth::user()->name }}
                 </div>
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                <a href="{{ route('pos.history') }}" class="btn-logout text-decoration-none me-2"
+                    style="background: rgba(255, 255, 255, 0.25);">
+                    <i class="fa-solid fa-list-check me-1"></i> History
+                </a>
+                <a href="{{ route('pos.logs') }}" class="btn-logout text-decoration-none me-2"
+                    style="background: rgba(255, 255, 255, 0.25);">
+                    <i class="fa-solid fa-clock-rotate-left me-1"></i> Logs
+                </a>
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;"
+                    onsubmit="return confirm('{{ __('pos.logout_confirmation_message') }}')">
                     @csrf
-                    <button type="submit" class="btn-logout">
+                    <button type="submit" class="btn-logout" title="{{ __('pos.logout') }}">
                         <i class="fas fa-sign-out-alt"></i>
                     </button>
                 </form>
@@ -1348,7 +1357,7 @@
                         <div class="text-center mb-3">
                             <label class="form-label fw-bold">{{ __('pos.upload_proof') }} <span
                                     class="text-danger">*</span></label>
-                            
+
                             <!-- Preview Area -->
                             <div id="previewContainer" class="d-none mb-3">
                                 <img id="imagePreview" src="" alt="Preview" class="img-fluid rounded mb-2"
@@ -1421,6 +1430,18 @@
             // Scanner handlers
             document.getElementById('openScannerBtn').addEventListener('click', openScanner);
             document.getElementById('closeScannerBtn').addEventListener('click', closeScanner);
+
+            // Auto-focus payment input when modal opens
+            const keypadModal = document.getElementById('keypadModal');
+            if (keypadModal) {
+                keypadModal.addEventListener('shown.bs.modal', function () {
+                    const display = document.getElementById('keypadDisplay');
+                    const cashSection = document.getElementById('cashInputSection');
+                    if (display && cashSection.style.display !== 'none') {
+                        display.focus();
+                    }
+                });
+            }
 
             initializeKeypad();
         });
@@ -1630,7 +1651,7 @@
                 if (this.files && this.files[0]) {
                     // Clear the other input
                     document.getElementById(otherInputId).value = '';
-                    
+
                     const reader = new FileReader();
                     reader.onload = function (e) {
                         document.getElementById('imagePreview').src = e.target.result;
@@ -1754,6 +1775,13 @@
             if (display) {
                 display.addEventListener('keydown', (e) => {
                     console.log('Keypress:', e.key);
+
+                    // Allow Enter to confirm payment
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        document.getElementById('keypadConfirm').click();
+                        return;
+                    }
 
                     // Allow: numbers (0-9), backspace, delete
                     if (!/^[0-9]$/.test(e.key) &&

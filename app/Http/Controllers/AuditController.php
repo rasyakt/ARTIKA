@@ -70,16 +70,16 @@ class AuditController extends Controller
             $query->where('action', $request->action);
         }
 
-        $logs = $query->with('user')
+        $logs = $query->with('user.role')
             ->latest()
             ->get();
 
         $summary = $this->generateSummary($logs);
 
         $pdf = Pdf::loadView('admin.audit.pdf', compact('logs', 'summary', 'startDate', 'endDate'));
-        
+
         $filename = 'audit-report-' . now()->format('Y-m-d-H-i-s') . '.pdf';
-        
+
         return $pdf->download($filename);
     }
 
@@ -134,35 +134,50 @@ class AuditController extends Controller
             $query->where('action', $request->action);
         }
 
-        $logs = $query->with('user')
+        $logs = $query->with('user.role')
             ->latest()
             ->get();
 
         $filename = 'audit-logs-' . now()->format('Y-m-d-H-i-s') . '.csv';
         $handle = fopen('php://memory', 'r+');
 
-        // Write CSV headers
+        // Write CSV headers with new columns
         fputcsv($handle, [
             'Tanggal',
             'User',
+            'Role',
+            'NIS',
+            'Username',
             'Aksi',
             'Model',
             'Amount',
             'Metode Pembayaran',
             'IP Address',
+            'MAC Address',
+            'Device',
+            'User Agent',
             'Catatan'
         ]);
 
         // Write data rows
         foreach ($logs as $log) {
+            $user = $log->user;
+            $isCashier = $user && $user->role && $user->role->name === 'cashier';
+
             fputcsv($handle, [
                 $log->created_at->format('Y-m-d H:i:s'),
-                $log->user?->name ?? 'System',
+                $user?->name ?? 'System',
+                $user?->role->name ?? '',
+                $isCashier ? ($user->nis ?? '-') : '',
+                $isCashier ? ($user->username ?? '-') : '',
                 $log->action,
                 $log->model_type . ($log->model_id ? '#' . $log->model_id : ''),
-                $log->amount ? 'Rp' . number_format((float)$log->amount, 0, ',', '.') : '',
+                $log->amount ? 'Rp' . number_format((float) $log->amount, 0, ',', '.') : '',
                 $log->payment_method ?? '',
                 $log->ip_address,
+                $log->mac_address ?? 'N/A',
+                $log->device_name ?? 'Unknown',
+                $log->user_agent,
                 $log->notes,
             ]);
         }

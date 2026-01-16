@@ -31,6 +31,18 @@
             </div>
         @endif
 
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
+                <strong><i class="fa-solid fa-circle-exclamation me-1"></i>Error!</strong>
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        @endif
+
         <!-- Users Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-body p-0">
@@ -43,7 +55,8 @@
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.nis') }}</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.role') }}</th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('common.actions') }}</th>
+                                    {{ __('common.actions') }}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>

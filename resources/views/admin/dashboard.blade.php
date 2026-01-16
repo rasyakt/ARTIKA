@@ -42,9 +42,6 @@
                 <p class="text-muted mb-0">{{ __('admin.dashboard_subtitle') }}</p>
             </div>
             <div class="text-end">
-                <a href="{{ route('admin.audit.index') }}" class="btn btn-outline-primary btn-sm me-2">
-                    <i class="fas fa-clipboard-list "></i> {{ __('admin.audit_log') }}
-                </a>
                 <small class="text-muted">{{ __('common.last_updated') }}: {{ now()->format('d M Y, H:i') }}</small>
             </div>
         </div>

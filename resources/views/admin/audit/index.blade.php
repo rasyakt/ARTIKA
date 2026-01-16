@@ -4,7 +4,12 @@
     <div class="container-fluid py-4">
         <div class="row mb-4">
             <div class="col-md-8">
-                <h1><i class="fas fa-clipboard-list"></i> {{ __('admin.audit_log') }}</h1>
+                <h1>
+                    <a href="{{ route('admin.reports') }}" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <i class="fas fa-clipboard-list"></i> {{ __('admin.audit_log') }}
+                </h1>
                 <p class="text-muted">{{ __('admin.audit_log_desc') }}</p>
             </div>
             <div class="col-md-4 text-end">
@@ -72,8 +77,8 @@
                                 <th>{{ __('common.action') }}</th>
                                 <th>{{ __('admin.model') }}</th>
                                 <th>{{ __('common.amount') }}</th>
-                                <th>{{ __('admin.method') }}</th>
                                 <th>{{ __('admin.ip_address') }}</th>
+                                <th>Device</th>
                                 <th>{{ __('common.actions') }}</th>
                             </tr>
                         </thead>
@@ -85,6 +90,15 @@
                                     </td>
                                     <td>
                                         <span class="badge bg-info">{{ $log->user?->name ?? __('common.system') }}</span>
+                                        <br><small class="text-muted">{{ $log->user?->role->name ?? '' }}</small>
+                                        @if($log->user && $log->user->role && $log->user->role->name === 'cashier')
+                                            <br><small class="text-muted">
+                                                <i class="fa-solid fa-id-card me-1"></i>{{ $log->user->nis ?? '-' }}
+                                            </small>
+                                            <br><small class="text-muted">
+                                                <i class="fa-solid fa-user me-1"></i>{{ $log->user->username ?? '-' }}
+                                            </small>
+                                        @endif
                                     </td>
                                     <td>
                                         <span class="badge bg-secondary">{{ $log->action }}</span>
@@ -105,23 +119,27 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if($log->payment_method)
-                                            {{ $log->payment_method }}
-                                        @else
-                                            <span class="text-muted">-</span>
-                                        @endif
+                                        <small><code>{{ $log->ip_address }}</code></small>
                                     </td>
                                     <td>
-                                        <small><code>{{ $log->ip_address }}</code></small>
+                                        <small>
+                                            <i class="fa-solid fa-desktop"></i> {{ $log->device_name ?? 'Unknown' }}
+                                        </small>
                                     </td>
                                     <td>
                                         <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
                                             data-bs-target="#detailModal" data-id="{{ $log->id }}"
                                             data-user="{{ $log->user?->name ?? __('common.system') }}"
+                                            data-role="{{ $log->user?->role->name ?? '' }}"
+                                            data-nis="{{ $log->user?->nis ?? '-' }}"
+                                            data-username="{{ $log->user?->username ?? '-' }}"
                                             data-action="{{ $log->action }}" data-model="{{ $log->model_type }}"
                                             data-model-id="{{ $log->model_id }}"
                                             data-amount="{{ $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '-' }}"
-                                            data-method="{{ $log->payment_method ?? '-' }}" data-ip="{{ $log->ip_address }}"
+                                            data-method="{{ $log->payment_method ?? '-' }}" 
+                                            data-ip="{{ $log->ip_address }}"
+                                            data-mac="{{ $log->mac_address ?? 'Not Available' }}"
+                                            data-device="{{ $log->device_name ?? 'Unknown Device' }}"
                                             data-agent="{{ $log->user_agent }}"
                                             data-date="{{ $log->created_at->format('Y-m-d H:i:s') }}"
                                             data-changes="{{ json_encode($log->changes ?? []) }}"
@@ -214,7 +232,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row mb-3">
+                   <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="text-muted small">{{ __('common.date') }}</label>
                             <p id="detail-date" class="mb-0 fw-bold"></p>
@@ -222,6 +240,17 @@
                         <div class="col-md-6">
                             <label class="text-muted small">{{ __('common.user') }}</label>
                             <p id="detail-user" class="mb-0 fw-bold"></p>
+                            <p id="detail-role" class="mb-0 text-muted small"></p>
+                        </div>
+                    </div>
+                    <div class="row mb-3" id="cashier-info-row" style="display: none;">
+                        <div class="col-md-6">
+                            <label class="text-muted small"><i class="fa-solid fa-id-card me-1"></i>NIS</label>
+                            <p id="detail-nis" class="mb-0 fw-bold"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small"><i class="fa-solid fa-user me-1"></i>Username</label>
+                            <p id="detail-username" class="mb-0 fw-bold"></p>
                         </div>
                     </div>
                     <hr>
@@ -246,27 +275,32 @@
                         </div>
                     </div>
                     <hr>
+                    <h6 class="text-muted mb-3"><i class="fa-solid fa-network-wired me-2"></i>Device Information</h6>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label class="text-muted small">{{ __('admin.payment_method') }}</label>
-                            <p id="detail-method" class="mb-0 fw-bold"></p>
+                            <label class="text-muted small"><i class="fa-solid fa-globe me-1"></i>IP Address</label>
+                            <p id="detail-ip" class="mb-0 fw-bold"><code></code></p>
                         </div>
                         <div class="col-md-6">
-                            <label class="text-muted small">{{ __('admin.ip_address') }}</label>
-                            <p id="detail-ip" class="mb-0 fw-bold"><code></code></p>
+                            <label class="text-muted small"><i class="fa-solid fa-ethernet me-1"></i>MAC Address</label>
+                            <p id="detail-mac" class="mb-0 fw-bold"><code></code></p>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="text-muted small">{{ __('admin.user_agent') }}</label>
+                        <label class="text-muted small"><i class="fa-solid fa-desktop me-1"></i>Device Name</label>
+                        <p id="detail-device" class="mb-0 fw-bold"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small"><i class="fa-solid fa-browser me-1"></i>User Agent</label>
                         <p id="detail-agent" class="mb-0 fw-bold" style="font-size: 0.75rem; word-break: break-all;"></p>
                     </div>
                     <hr>
                     <div class="mb-3">
-                        <label class="text-muted small">{{ __('common.notes') }}</label>
+                        <label class="text-muted small"><i class="fa-solid fa-sticky-note me-1"></i>Notes</label>
                         <p id="detail-notes" class="mb-0 fw-bold"></p>
                     </div>
                     <div class="mb-3">
-                        <label class="text-muted small">{{ __('admin.data_changes') }}</label>
+                        <label class="text-muted small"><i class="fa-solid fa-code me-1"></i>Data Changes</label>
                         <pre id="detail-changes" class="bg-light p-2"
                             style="border-radius: 6px; max-height: 300px; overflow-y: auto;"></pre>
                     </div>
@@ -288,12 +322,17 @@
             // Get data from button attributes
             const date = button.getAttribute('data-date');
             const user = button.getAttribute('data-user');
+            const role = button.getAttribute('data-role');
+            const nis = button.getAttribute('data-nis');
+            const username = button.getAttribute('data-username');
             const action = button.getAttribute('data-action');
             const model = button.getAttribute('data-model');
             const modelId = button.getAttribute('data-model-id');
             const amount = button.getAttribute('data-amount');
             const method = button.getAttribute('data-method');
             const ip = button.getAttribute('data-ip');
+            const mac = button.getAttribute('data-mac');
+            const device = button.getAttribute('data-device');
             const agent = button.getAttribute('data-agent');
             const notes = button.getAttribute('data-notes');
             const changes = JSON.parse(button.getAttribute('data-changes') || '{}');
@@ -301,12 +340,25 @@
             // Populate modal
             modal.querySelector('#detail-date').textContent = date;
             modal.querySelector('#detail-user').textContent = user;
+            modal.querySelector('#detail-role').textContent = role;
+            
+            // Show NIS and username only for cashiers
+            const cashierInfoRow = modal.querySelector('#cashier-info-row');
+            if (role && role.toLowerCase() === 'cashier') {
+                cashierInfoRow.style.display = 'flex';
+                modal.querySelector('#detail-nis').textContent = nis;
+                modal.querySelector('#detail-username').textContent = username;
+            } else {
+                cashierInfoRow.style.display = 'none';
+            }
+            
             modal.querySelector('#detail-action').innerHTML = `<span class="badge bg-secondary">${action}</span>`;
             modal.querySelector('#detail-model').textContent = model;
             modal.querySelector('#detail-model-id').textContent = modelId || '-';
             modal.querySelector('#detail-amount').textContent = amount;
-            modal.querySelector('#detail-method').textContent = method;
             modal.querySelector('#detail-ip').innerHTML = `<code>${ip}</code>`;
+            modal.querySelector('#detail-mac').innerHTML = `<code>${mac}</code>`;
+            modal.querySelector('#detail-device').textContent = device;
             modal.querySelector('#detail-agent').textContent = agent;
             modal.querySelector('#detail-notes').textContent = notes;
             modal.querySelector('#detail-changes').textContent = JSON.stringify(changes, null, 2);
