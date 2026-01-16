@@ -85,3 +85,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/stock/adjust', [\App\Http\Controllers\WarehouseController::class, 'adjustStock'])->name('stock.adjust');
     });
 });
+
+// Language switching route (accessible to all)
+Route::get('/language/{lang}', [\App\Http\Controllers\LanguageController::class, 'change'])
+    ->name('language.change')
+    ->where('lang', 'id|en');
+

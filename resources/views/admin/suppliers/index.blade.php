@@ -4,18 +4,20 @@
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-truck me-2"></i>Supplier Management</h2>
-                <p class="text-muted mb-0">Manage supplier database and purchase contacts</p>
+                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
+                        class="fa-solid fa-truck me-2"></i>{{ __('admin.supplier_management') }}</h2>
+                <p class="text-muted mb-0">{{ __('admin.manage_suppliers_contacts') }}</p>
             </div>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addSupplierModal"
                 style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
-                <span style="font-size: 1.25rem;">+</span> Add Supplier
+                <span style="font-size: 1.25rem;">+</span> {{ __('admin.add_supplier') }}
             </button>
         </div>
 
         @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
-                <strong><i class="fa-solid fa-circle-check me-1"></i>Success!</strong> {{ session('success') }}
+            <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
+                <strong><i class="fa-solid fa-circle-check me-1"></i>{{ __('common.success') }}</strong>
+                {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
@@ -26,11 +28,13 @@
                     <table class="table table-hover mb-0">
                         <thead style="background: #fdf8f6;">
                             <tr>
-                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">Supplier</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Phone</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Email</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Address</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Actions</th>
+                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">{{ __('common.supplier') }}
+                                </th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.phone') }}</th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.email') }}</th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.address') }}</th>
+                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                    {{ __('common.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -53,9 +57,12 @@
                                             <ul class="dropdown-menu dropdown-menu-end"
                                                 style="border-radius: 12px; border: 1px solid #e0cec7; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                                 <li>
-                                                    <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editSupplierModal" onclick='editSupplier(@json($supplier))'
+                                                <li>
+                                                    <button class="dropdown-item" data-bs-toggle="modal"
+                                                        data-bs-target="#editSupplierModal"
+                                                        onclick='editSupplier(@json($supplier))'
                                                         style="border-radius: 8px; padding: 0.5rem 1rem;">
-                                                        <i class="fa-solid fa-pen me-1"></i> Edit Supplier
+                                                        <i class="fa-solid fa-pen me-1"></i> {{ __('admin.edit_supplier') }}
                                                     </button>
                                                 </li>
                                                 <li>
@@ -63,12 +70,14 @@
                                                 </li>
                                                 <li>
                                                     <form action="{{ route('admin.suppliers.delete', $supplier->id) }}"
-                                                        method="POST" onsubmit="return confirm('Delete this supplier?');">
+                                                        method="POST"
+                                                        onsubmit="return confirm('{{ __('admin.delete_supplier_confirm') }}');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="dropdown-item text-danger"
                                                             style="border-radius: 8px; padding: 0.5rem 1rem;">
-                                                            <i class="fa-solid fa-trash me-1"></i> Delete Supplier
+                                                            <i class="fa-solid fa-trash me-1"></i>
+                                                            {{ __('admin.delete_supplier') }}
                                                         </button>
                                                     </form>
                                                 </li>
@@ -80,7 +89,7 @@
                                 <tr>
                                     <td colspan="5" class="text-center py-5">
                                         <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-truck"></i></div>
-                                        <p class="text-muted mb-0">No suppliers yet</p>
+                                        <p class="text-muted mb-0">{{ __('admin.no_suppliers_yet') }}</p>
                                     </td>
                                 </tr>
                             @endforelse
@@ -101,39 +110,41 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i> Add New Supplier</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i>
+                        {{ __('admin.add_new_supplier') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form action="{{ route('admin.suppliers.store') }}" method="POST">
                     @csrf
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #6f5849;">Name *</label>
+                            <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.name') }} *</label>
                             <input type="text" class="form-control" name="name" required
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #6f5849;">Phone</label>
+                            <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.phone') }}</label>
                             <input type="text" class="form-control" name="phone"
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #6f5849;">Email</label>
+                            <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.email') }}</label>
                             <input type="email" class="form-control" name="email"
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #6f5849;">Address</label>
+                            <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.address') }}</label>
                             <textarea class="form-control" name="address" rows="2"
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                            style="border-radius: 12px;">Cancel</button>
+                            style="border-radius: 12px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i class="fa-solid fa-floppy-disk me-1"></i>
-                            Save</button>
+                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i
+                                class="fa-solid fa-floppy-disk me-1"></i>
+                            {{ __('common.save') }}</button>
                     </div>
                 </form>
             </div>
@@ -145,7 +156,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i> Edit Supplier</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i>
+                        {{ __('admin.edit_supplier') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form id="editSupplierForm" method="POST">
@@ -153,32 +165,33 @@
                     @method('PUT')
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #6f5849;">Name *</label>
+                            <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.name') }} *</label>
                             <input type="text" class="form-control" id="edit_name" name="name" required
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #6f5849;">Phone</label>
+                            <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.phone') }}</label>
                             <input type="text" class="form-control" id="edit_phone" name="phone"
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #6f5849;">Email</label>
+                            <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.email') }}</label>
                             <input type="email" class="form-control" id="edit_email" name="email"
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #6f5849;">Address</label>
+                            <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.address') }}</label>
                             <textarea class="form-control" id="edit_address" name="address" rows="2"
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                            style="border-radius: 12px;">Cancel</button>
+                            style="border-radius: 12px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i class="fa-solid fa-floppy-disk me-1"></i>
-                            Update</button>
+                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i
+                                class="fa-solid fa-floppy-disk me-1"></i>
+                            {{ __('common.update') }}</button>
                     </div>
                 </form>
             </div>

@@ -50,6 +50,7 @@ class PosController extends Controller
             'payment_method' => 'required|string',
             'cash_amount' => 'nullable|numeric|min:0',
             'change_amount' => 'nullable|numeric|min:0',
+            'payment_proof' => 'nullable|image|max:5120', // Max 5MB
         ]);
 
         try {
@@ -61,7 +62,19 @@ class PosController extends Controller
                 'payment_method' => $validated['payment_method'],
                 'cash_amount' => $validated['cash_amount'] ?? $validated['total_amount'],
                 'change_amount' => $validated['change_amount'] ?? 0,
+                'payment_proof' => null,
             ];
+
+            // Handle Payment Proof for Non-Cash
+            if ($request->hasFile('payment_proof')) {
+                $file = $request->file('payment_proof');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $file->move(public_path('uploads/payment_proofs'), $filename);
+                $data['payment_proof'] = 'uploads/payment_proofs/' . $filename;
+            } elseif ($validated['payment_method'] === 'non-cash') {
+                // If strictly required, throw error. For now, we allow it (or frontend validation handles it).
+                // return response()->json(['success' => false, 'message' => 'Bukti pembayaran wajib diunggah untuk transaksi non-tunai.'], 422);
+            }
 
             $items = $validated['items'];
 

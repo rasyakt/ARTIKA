@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Receipt - {{ $transaction->invoice_no }}</title>
+    <title>{{ __('pos.receipt') }} - {{ $transaction->invoice_no }}</title>
     <style>
         @media print {
             body {
@@ -140,7 +140,7 @@
 </head>
 
 <body>
-    <button class="print-button no-print" onclick="window.print()">🖨️ Print Receipt</button>
+    <button class="print-button no-print" onclick="window.print()">{{ __('pos.print_receipt') }}</button>
 
     <div class="receipt">
         <!-- Header -->
@@ -153,15 +153,15 @@
         <!-- Transaction Info -->
         <div class="transaction-info">
             <div>
-                <span>Invoice:</span>
+                <span>{{ __('pos.invoice') }}</span>
                 <span><strong>{{ $transaction->invoice_no }}</strong></span>
             </div>
             <div>
-                <span>Date:</span>
+                <span>{{ __('pos.date') }}:</span>
                 <span>{{ $transaction->created_at->format('d/m/Y H:i') }}</span>
             </div>
             <div>
-                <span>Cashier:</span>
+                <span>{{ __('pos.cashier') }}:</span>
                 <span>{{ $transaction->user->name }}</span>
             </div>
             {{-- Customer information removed (customers feature deprecated). --}}
@@ -185,17 +185,17 @@
         <!-- Totals -->
         <div class="totals">
             <div class="total-row">
-                <span>Subtotal:</span>
+                <span>{{ __('pos.subtotal') }}:</span>
                 <span>Rp {{ number_format($transaction->subtotal, 0, ',', '.') }}</span>
             </div>
             @if($transaction->discount > 0)
                 <div class="total-row">
-                    <span>Discount:</span>
+                    <span>{{ __('pos.discount') }}:</span>
                     <span>- Rp {{ number_format($transaction->discount, 0, ',', '.') }}</span>
                 </div>
             @endif
             <div class="total-row grand-total">
-                <span>TOTAL:</span>
+                <span>{{ __('pos.total') }}:</span>
                 <span>Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</span>
             </div>
         </div>
@@ -203,16 +203,17 @@
         <!-- Payment Info -->
         <div class="payment-info">
             <div class="total-row">
-                <span>Payment Method:</span>
+                <span>{{ __('pos.payment_method_label') }}:</span>
                 <span>{{ strtoupper($transaction->payment_method) }}</span>
             </div>
             @if(strtolower($transaction->payment_method) === 'cash')
                 <div class="total-row">
-                    <span>Uang Diterima:</span>
+                    <span>{{ __('pos.cash_received_label') }}:</span>
                     <span>Rp {{ number_format($transaction->cash_amount, 0, ',', '.') }}</span>
                 </div>
-                <div class="total-row" style="border-top: 1px solid #000; padding-top: 5px; margin-top: 5px; font-weight: bold; font-size: 13px;">
-                    <span>Kembalian:</span>
+                <div class="total-row"
+                    style="border-top: 1px solid #000; padding-top: 5px; margin-top: 5px; font-weight: bold; font-size: 13px;">
+                    <span>{{ __('pos.change_label') }}:</span>
                     <span>Rp {{ number_format($transaction->change_amount, 0, ',', '.') }}</span>
                 </div>
             @endif
@@ -220,8 +221,8 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p style="margin: 5px 0;">Thank you for shopping!</p>
-            <p style="margin: 5px 0;">Please come again</p>
+            <p style="margin: 5px 0;">{{ __('pos.thank_you') }}</p>
+            <p style="margin: 5px 0;">{{ __('pos.come_again') }}</p>
             <p style="margin: 10px 0 5px 0;">{{ now()->format('d/m/Y H:i:s') }}</p>
         </div>
     </div>

@@ -28,8 +28,8 @@
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="mb-4">
-            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-box me-2"></i>Warehouse Dashboard</h2>
-            <p class="text-muted mb-0">Stock monitoring and management</p>
+            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-box me-2"></i>{{ __('warehouse.dashboard') }}</h2>
+            <p class="text-muted mb-0">{{ __('warehouse.stock_monitoring') }}</p>
         </div>
 
         <!-- Statistics Cards -->
@@ -42,9 +42,9 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 opacity-75 text-uppercase"
-                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">Total Products</p>
+                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('warehouse.total_products') }}</p>
                                 <h3 class="fw-bold mb-0">{{ $totalProducts }}</h3>
-                                <small class="opacity-75">In catalog</small>
+                                <small class="opacity-75">{{ __('warehouse.in_catalog') }}</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
                                 <i class="fa-solid fa-box"></i>
@@ -62,9 +62,9 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 opacity-75 text-uppercase"
-                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">Stock Value</p>
+                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('warehouse.stock_value') }}</p>
                                 <h3 class="fw-bold mb-0">Rp {{ number_format($totalStockValue, 0, ',', '.') }}</h3>
-                                <small class="opacity-75">Total inventory</small>
+                                <small class="opacity-75">{{ __('warehouse.total_inventory') }}</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
                                 <i class="fa-solid fa-money-bill-wave"></i>
@@ -82,9 +82,9 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 opacity-75 text-uppercase"
-                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">Low Stock</p>
+                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('warehouse.low_stock') }}</p>
                                 <h3 class="fw-bold mb-0">{{ $lowStockItems->count() }}</h3>
-                                <small class="opacity-75">Items need restock</small>
+                                <small class="opacity-75">{{ __('warehouse.items_need_restock') }}</small>
                             </div>
                             <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
@@ -101,17 +101,17 @@
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-triangle-exclamation me-2"></i>Low Stock Alerts</h5>
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-triangle-exclamation me-2"></i>{{ __('warehouse.low_stock_alerts') }}</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
                                 <thead style="background: #fdf8f6;">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Product</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Category</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Stock</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Status</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.product') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.category') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.stock') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.status') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -129,12 +129,12 @@
                                             <td>
                                                 <span
                                                     class="fw-bold {{ $stock->quantity < 10 ? 'text-danger' : 'text-warning' }}">
-                                                    {{ $stock->quantity }} units
+                                                    {{ $stock->quantity }} {{ __('warehouse.units') }}
                                                 </span>
                                             </td>
                                             <td>
                                                 <span class="badge {{ $stock->quantity < 10 ? 'bg-danger' : 'bg-warning' }}">
-                                                    {{ $stock->quantity < 10 ? 'Critical' : 'Low' }}
+                                                    {{ $stock->quantity < 10 ? __('warehouse.critical') : __('warehouse.low') }}
                                                 </span>
                                             </td>
                                         </tr>
@@ -142,7 +142,7 @@
                                         <tr>
                                             <td colspan="5" class="text-center py-5">
                                                 <div style="font-size: 3rem; opacity: 0.3;"><i class="fa-solid fa-circle-check"></i></div>
-                                                <p class="text-muted mb-0">All stock levels are healthy!</p>
+                                                <p class="text-muted mb-0">{{ __('warehouse.all_stock_healthy') }}</p>
                                             </td>
                                         </tr>
                                     @endforelse
@@ -158,7 +158,7 @@
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-folder me-2"></i>Stock by Category</h5>
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-folder me-2"></i>{{ __('warehouse.stock_by_category') }}</h5>
                     </div>
                     <div class="card-body" style="max-height: 500px; overflow-y: auto;">
                         @foreach($stockByCategory as $category)
@@ -166,12 +166,12 @@
                                 <div class="d-flex justify-content-between align-items-center mb-2">
                                     <div class="fw-bold" style="color: #6f5849;">{{ $category['name'] }}</div>
                                     <span class="badge" style="background: #e0cec7; color: #6f5849;">
-                                        {{ $category['products_count'] }} products
+                                        {{ $category['products_count'] }} {{ __('common.products') }}
                                     </span>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">Total Stock:</small>
-                                    <span class="fw-bold" style="color: #c17a5c;">{{ $category['total_stock'] }} units</span>
+                                    <small class="text-muted">{{ __('warehouse.total_stock') }}:</small>
+                                    <span class="fw-bold" style="color: #c17a5c;">{{ $category['total_stock'] }} {{ __('warehouse.units') }}</span>
                                 </div>
                             </div>
                         @endforeach
@@ -186,18 +186,18 @@
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>Recent Products</h5>
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>{{ __('warehouse.recent_products') }}</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
                                 <thead style="background: #fdf8f6;">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Product</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Category</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Price</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Total Stock</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Added</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.product') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.category') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.price') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.total_stock') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.added') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -220,7 +220,7 @@
                                                 @endphp
                                                 <span
                                                     class="badge {{ $totalStock > 50 ? 'bg-success' : ($totalStock > 20 ? 'bg-warning' : 'bg-danger') }}">
-                                                    {{ $totalStock }} units
+                                                    {{ $totalStock }} {{ __('warehouse.units') }}
                                                 </span>
                                             </td>
                                             <td class="text-muted">{{ $product->created_at->diffForHumans() }}</td>

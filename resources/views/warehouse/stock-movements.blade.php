@@ -53,8 +53,9 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-arrows-rotate me-2"></i>Stock Movements</h2>
-                <p class="text-muted mb-0">Track all stock changes and adjustments</p>
+                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
+                        class="fa-solid fa-arrows-rotate me-2"></i>{{ __('warehouse.stock_movements') }}</h2>
+                <p class="text-muted mb-0">{{ __('warehouse.track_stock_changes') }}</p>
             </div>
         </div>
 
@@ -68,7 +69,7 @@
                                 <div style="font-size: 2.5rem;"><i class="fa-solid fa-arrow-down me-1"></i></div>
                             </div>
                             <div class="ms-3">
-                                <h6 class="text-muted mb-1">Stock In (Today)</h6>
+                                <h6 class="text-muted mb-1">{{ __('warehouse.stock_in_today') }}</h6>
                                 <h3 class="mb-0 text-success fw-bold">{{ $stockInToday }}</h3>
                             </div>
                         </div>
@@ -83,7 +84,7 @@
                                 <div style="font-size: 2.5rem;"><i class="fa-solid fa-arrow-up me-1"></i></div>
                             </div>
                             <div class="ms-3">
-                                <h6 class="text-muted mb-1">Stock Out (Today)</h6>
+                                <h6 class="text-muted mb-1">{{ __('warehouse.stock_out_today') }}</h6>
                                 <h3 class="mb-0 text-danger fw-bold">{{ $stockOutToday }}</h3>
                             </div>
                         </div>
@@ -98,7 +99,7 @@
                                 <div style="font-size: 2.5rem;"><i class="fa-solid fa-gear"></i></div>
                             </div>
                             <div class="ms-3">
-                                <h6 class="text-muted mb-1">Adjustments</h6>
+                                <h6 class="text-muted mb-1">{{ __('warehouse.adjustments_today') }}</h6>
                                 <h3 class="mb-0 fw-bold" style="color: #6f5849;">{{ $adjustmentsToday }}</h3>
                             </div>
                         </div>
@@ -113,7 +114,7 @@
                                 <div style="font-size: 2.5rem;"><i class="fa-solid fa-chart-pie"></i></div>
                             </div>
                             <div class="ms-3">
-                                <h6 class="text-muted mb-1">Total Movements</h6>
+                                <h6 class="text-muted mb-1">{{ __('warehouse.total_movements') }}</h6>
                                 <h3 class="mb-0 fw-bold" style="color: #6f5849;">{{ $totalMovements }}</h3>
                             </div>
                         </div>
@@ -125,7 +126,8 @@
         <!-- Movement Timeline -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-scroll me-2"></i>Recent Movements</h5>
+                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i
+                        class="fa-solid fa-scroll me-2"></i>{{ __('warehouse.recent_movements') }}</h5>
             </div>
             <div class="card-body">
                 @if($recentMovements->count() > 0)
@@ -147,31 +149,31 @@
                                         <span
                                             class="movement-type-badge {{ $movement->type === 'in' ? 'bg-success' : ($movement->type === 'out' ? 'bg-danger' : 'bg-warning') }} text-white">
                                             {{ $movement->type === 'in' ? '+ ' : ($movement->type === 'out' ? '- ' : '') }}{{ abs($movement->quantity_change) }}
-                                            units
+                                            {{ __('warehouse.units') }}
                                         </span>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <small class="text-muted">Type:</small>
+                                            <small class="text-muted">{{ __('warehouse.adjustment_type') }}:</small>
                                             <div class="fw-semibold text-capitalize">
-                                                {{ $movement->type === 'in' ? 'Stock In' : ($movement->type === 'out' ? 'Stock Out' : 'Adjustment') }}
+                                                {{ $movement->type === 'in' ? __('warehouse.stock_in') : ($movement->type === 'out' ? __('warehouse.stock_out') : __('warehouse.adjustment')) }}
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <small class="text-muted">By:</small>
+                                            <small class="text-muted">{{ __('warehouse.by') }}:</small>
                                             <div class="fw-semibold">{{ $movement->user->name }}</div>
                                         </div>
                                     </div>
                                     @if($movement->reason)
                                         <div class="mt-2 p-2 bg-light rounded">
-                                            <small class="text-muted">Reason: {{ $movement->reason }}</small>
+                                            <small class="text-muted">{{ __('warehouse.reason') }}: {{ $movement->reason }}</small>
                                         </div>
                                     @endif
                                     <div class="mt-2">
-                                            <small class="text-muted">
+                                        <small class="text-muted">
                                             <i class="fa-solid fa-clock me-1"></i> {{ $movement->created_at->diffForHumans() }}
                                             ({{ $movement->created_at->format('d M Y, H:i') }})
-                                            • Ref: {{ $movement->reference }}
+                                            • {{ __('warehouse.reference') }}: {{ $movement->reference }}
                                         </small>
                                     </div>
                                 </div>
@@ -187,8 +189,8 @@
                 @else
                     <div class="text-center py-5">
                         <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-clipboard"></i></div>
-                        <p class="text-muted mb-0">No stock movements yet</p>
-                        <small class="text-muted">Stock movements will appear here when products are adjusted</small>
+                        <p class="text-muted mb-0">{{ __('warehouse.no_movements') }}</p>
+                        <small class="text-muted">{{ __('warehouse.no_movements_desc') }}</small>
                     </div>
                 @endif
             </div>

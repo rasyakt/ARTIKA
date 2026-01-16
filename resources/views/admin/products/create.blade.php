@@ -7,10 +7,10 @@
                 <!-- Header -->
                 <div class="mb-4">
                     <a href="{{ route('admin.products') }}" class="text-decoration-none text-muted mb-2 d-inline-block">
-                        <i class="fa-solid fa-arrow-left me-1"></i> Back to Products
+                        <i class="fa-solid fa-arrow-left me-1"></i> {{ __('common.back_to_list') }}
                     </a>
-                    <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-plus me-2"></i>Add New Product</h2>
-                    <p class="text-muted mb-0">Fill in the product details below</p>
+                    <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-plus me-2"></i>{{ __('admin.add_product') }}</h2>
+                    <p class="text-muted mb-0">{{ __('common.fill_details') }}</p>
                 </div>
 
                 <!-- Form Card -->
@@ -21,10 +21,10 @@
 
                             <!-- Product Name -->
                             <div class="mb-4">
-                                <label for="name" class="form-label fw-semibold" style="color: #6f5849;">Product Name
+                                <label for="name" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.product_name') }}
                                     *</label>
                                 <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                                    name="name" value="{{ old('name') }}" placeholder="e.g., Chitato Lite" required
+                                    name="name" value="{{ old('name') }}" placeholder="{{ __('common.name_placeholder') }}" required
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -33,25 +33,25 @@
 
                             <!-- Barcode -->
                             <div class="mb-4">
-                                <label for="barcode" class="form-label fw-semibold" style="color: #6f5849;">Barcode
+                                <label for="barcode" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.barcode') }}
                                     *</label>
                                 <input type="text" class="form-control @error('barcode') is-invalid @enderror" id="barcode"
-                                    name="barcode" value="{{ old('barcode') }}" placeholder="e.g., 899999911111" required
+                                    name="barcode" value="{{ old('barcode') }}" placeholder="{{ __('common.barcode_placeholder') }}" required
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                 @error('barcode')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
-                                <small class="text-muted">Unique barcode for this product</small>
+                                <small class="text-muted">{{ __('common.barcode_help') }}</small>
                             </div>
 
                             <!-- Category -->
                             <div class="mb-4">
-                                <label for="category_id" class="form-label fw-semibold" style="color: #6f5849;">Category
+                                <label for="category_id" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.category') }}
                                     *</label>
                                 <select class="form-select @error('category_id') is-invalid @enderror" id="category_id"
                                     name="category_id" required
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
-                                    <option value="">Select Category</option>
+                                    <option value="">{{ __('common.select_category') }}</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                                             {{ $category->name }}
@@ -66,29 +66,28 @@
                             <!-- Prices Row -->
                             <div class="row">
                                 <div class="col-md-6 mb-4">
-                                    <label for="cost_price" class="form-label fw-semibold" style="color: #6f5849;">Cost
-                                        Price (Rp) *</label>
+                                    <label for="cost_price" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.cost_price') }} (Rp) *</label>
                                     <input type="number" class="form-control @error('cost_price') is-invalid @enderror"
                                         id="cost_price" name="cost_price" value="{{ old('cost_price') }}"
-                                        placeholder="e.g., 12000" min="0" step="100" required
+                                        placeholder="{{ __('common.cost_price_placeholder') }}" min="0" step="100" required
                                         style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     @error('cost_price')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <small class="text-muted">Purchase price from supplier</small>
+                                    <small class="text-muted">{{ __('common.cost_price_help') }}</small>
                                 </div>
 
                                 <div class="col-md-6 mb-4">
-                                    <label for="price" class="form-label fw-semibold" style="color: #6f5849;">Selling Price
+                                    <label for="price" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.sell_price') }}
                                         (Rp) *</label>
                                     <input type="number" class="form-control @error('price') is-invalid @enderror"
-                                        id="price" name="price" value="{{ old('price') }}" placeholder="e.g., 15000" min="0"
+                                        id="price" name="price" value="{{ old('price') }}" placeholder="{{ __('common.sell_price_placeholder') }}" min="0"
                                         step="100" required
                                         style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     @error('price')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
-                                    <small class="text-muted">Price for customers</small>
+                                    <small class="text-muted">{{ __('common.sell_price_help') }}</small>
                                 </div>
                             </div>
 
@@ -96,18 +95,18 @@
                             <div class="mb-4 p-3"
                                 style="background: #fdf8f6; border-radius: 12px; border: 2px dashed #e0cec7;">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-semibold" style="color: #6f5849;">Profit Margin:</span>
+                                    <span class="fw-semibold" style="color: #6f5849;">{{ __('common.profit_margin') }}:</span>
                                     <span class="fw-bold fs-5" style="color: #16a34a;" id="marginPreview">0%</span>
                                 </div>
-                                <small class="text-muted">Calculated automatically based on cost and selling price</small>
+                                <small class="text-muted">{{ __('common.margin_calc_help') }}</small>
                             </div>
 
                             <!-- Description (Optional) -->
                             <div class="mb-4">
-                                <label for="description" class="form-label fw-semibold" style="color: #6f5849;">Description
-                                    (Optional)</label>
+                                <label for="description" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.description') }}
+                                    ({{ __('common.optional') }})</label>
                                 <textarea class="form-control" id="description" name="description" rows="3"
-                                    placeholder="Product description..."
+                                    placeholder="{{ __('common.description_placeholder') }}"
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">{{ old('description') }}</textarea>
                             </div>
 
@@ -115,11 +114,11 @@
                             <div class="d-flex gap-3 justify-content-end pt-3 border-top">
                                 <a href="{{ route('admin.products') }}" class="btn btn-outline-secondary"
                                     style="border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
-                                    Cancel
+                                    {{ __('common.cancel') }}
                                 </a>
                                 <button type="submit" class="btn btn-primary shadow-sm"
                                     style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600;">
-                                    <i class="fa-solid fa-floppy-disk me-1"></i> Save Product
+                                    <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.save') }} {{ __('common.product') }}
                                 </button>
                             </div>
                         </form>

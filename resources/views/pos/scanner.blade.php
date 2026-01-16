@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Mobile Scanner - ARTIKA POS</title>
+    <title>{{ __('pos.mobile_scanner_title') }}</title>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
@@ -597,11 +597,11 @@
     <div class="scanner-header">
         <div class="header-title">
             <span>📱</span>
-            <span>Mobile Scanner</span>
+            <span>{{ __('pos.mobile_scanner') }}</span>
         </div>
         <a href="{{ route('pos.index') }}" class="btn-header d-flex align-items-center" id="btnGoToCart">
             <i class="fa-solid fa-cart-shopping me-2"></i>
-            <span class="btn-go-text">Go to POS</span>
+            <span class="btn-go-text">{{ __('pos.go_to_pos') }}</span>
             <span class="btn-cart-count ms-2"></span>
         </a>
     </div>
@@ -613,7 +613,7 @@
         <!-- Loading State -->
         <div class="scanner-loading" id="loadingState">
             <div class="loading-spinner"></div>
-            <div>Starting camera...</div>
+            <div>{{ __('pos.starting_camera') }}</div>
         </div>
     </div>
 
@@ -625,7 +625,7 @@
             <div class="scan-corner bottom-left"></div>
             <div class="scan-corner bottom-right"></div>
             <div class="scan-line"></div>
-            <div class="scan-instruction">Aim at barcode</div>
+            <div class="scan-instruction">{{ __('pos.aim_barcode') }}</div>
         </div>
     </div>
 
@@ -642,7 +642,7 @@
 
     <!-- Error Toast -->
     <div class="error-toast" id="errorToast">
-        Product not found!
+        {{ __('pos.product_not_found_exclamation') }}
     </div>
 
     <!-- Bottom Controls -->
@@ -650,7 +650,7 @@
         <!-- Scanned Items Preview -->
         <div class="scanned-items" id="scannedItemsContainer" style="display: none;">
             <div class="scanned-header">
-                <span>Scanned Items</span>
+                <span>{{ __('pos.scanned_items') }}</span>
                 <span class="item-count" id="itemCount">0</span>
             </div>
             <div class="scanned-list" id="scannedList"></div>
@@ -659,7 +659,7 @@
         <!-- Control Buttons -->
         <div class="control-buttons">
             <button class="btn-control btn-switch-camera" id="btnSwitchCamera">
-                <i class="fa-solid fa-camera-rotate me-2"></i> Switch Camera
+                <i class="fa-solid fa-camera-rotate me-2"></i> {{ __('pos.switch_camera') }}
             </button>
         </div>
     </div>
@@ -705,19 +705,19 @@
                 console.log('Scanner started successfully');
             }).catch(err => {
                 console.error('Failed to start scanner:', err);
-                
+
                 // Show detailed error message
                 let errorHTML = '<div class="error-message">';
                 errorHTML += '<div class="error-icon"><i class="fa-solid fa-ban"></i></div>';
-                errorHTML += '<div class="error-title">Camera Access Failed</div>';
-                
+                errorHTML += '<div class="error-title">{{ __('pos.camera_access_failed') }}</div>';
+
                 if (!isSecure) {
                     errorHTML += '<div class="error-description">';
-                    errorHTML += '<i class="fa-solid fa-triangle-exclamation"></i> <strong>HTTPS Required!</strong><br>';
-                    errorHTML += 'Camera access requires a secure connection (HTTPS) on mobile devices.';
+                    errorHTML += '<i class="fa-solid fa-triangle-exclamation"></i> <strong>{{ __('pos.https_required') }}</strong><br>';
+                    errorHTML += '{{ __('pos.https_message') }}';
                     errorHTML += '</div>';
                     errorHTML += '<div class="error-steps">';
-                    errorHTML += '<strong>Solutions:</strong>';
+                    errorHTML += '<strong>{{ __('pos.solutions') }}</strong>';
                     errorHTML += '<ol>';
                     errorHTML += '<li>Use <code>localhost</code> or <code>127.0.0.1</code></li>';
                     errorHTML += '<li>Setup HTTPS for your server</li>';
@@ -726,23 +726,23 @@
                     errorHTML += '</div>';
                 } else {
                     errorHTML += '<div class="error-description">';
-                    errorHTML += 'Please allow camera permissions when prompted by your browser.';
+                    errorHTML += '{{ __('pos.camera_permission_msg') }}';
                     errorHTML += '</div>';
                     errorHTML += '<div class="error-steps">';
-                    errorHTML += '<strong>Steps:</strong>';
+                    errorHTML += '<strong>{{ __('pos.steps') }}</strong>';
                     errorHTML += '<ol>';
-                    errorHTML += '<li>Tap "Allow" when browser asks for camera access</li>';
-                    errorHTML += '<li>Check browser settings if permission was previously denied</li>';
-                    errorHTML += '<li>Refresh the page and try again</li>';
+                    errorHTML += '<li>{{ __('pos.camera_step_1') }}</li>';
+                    errorHTML += '<li>{{ __('pos.camera_step_2') }}</li>';
+                    errorHTML += '<li>{{ __('pos.camera_step_3') }}</li>';
                     errorHTML += '</ol>';
                     errorHTML += '</div>';
                 }
-                
+
                 errorHTML += '<button class="error-back-btn" onclick="window.location.href=\'' + "{{ route('pos.index') }}" + '\'">';
-                errorHTML += '<i class="fa-solid fa-arrow-left me-1"></i> Back to POS';
+                errorHTML += '<i class="fa-solid fa-arrow-left me-1"></i> {{ __('pos.back_to_pos') }}';
                 errorHTML += '</button>';
                 errorHTML += '</div>';
-                
+
                 loadingState.innerHTML = errorHTML;
             });
         }

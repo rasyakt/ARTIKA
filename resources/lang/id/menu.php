@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'dashboard' => 'Dashboard',
+    'products' => 'Produk',
+    'categories' => 'Kategori',
+    'users' => 'Pengguna',
+    'suppliers' => 'Supplier',
+    'transactions' => 'Transaksi',
+    'sales' => 'Penjualan',
+    'returns' => 'Pengembalian',
+    'inventory' => 'Inventaris',
+    'stock' => 'Stok',
+    'reports' => 'Laporan',
+    'settings' => 'Pengaturan',
+    'profile' => 'Profil',
+    'admin' => 'Admin',
+    'cashier' => 'Kasir',
+    'warehouse' => 'Gudang',
+    'audit_logs' => 'Log Audit',
+    'promotions' => 'Promosi',
+    'payment_methods' => 'Metode Pembayaran',
+    'logout' => 'Keluar',
+    'stock_management' => 'Manajemen Stok',
+    'low_stock_alerts' => 'Peringatan Stok Rendah',
+    'stock_movements' => 'Pergerakan Stok',
+    'menu' => 'Menu',
+];

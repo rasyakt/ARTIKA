@@ -8,7 +8,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>POS System - ARTIKA</title>
+    <title>{{ __('pos.title') }}</title>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,8 +36,12 @@
         }
 
         /* Touch-friendly sizing */
-        input, button, select, textarea {
-            font-size: 16px; /* Prevents auto-zoom on iOS */
+        input,
+        button,
+        select,
+        textarea {
+            font-size: 16px;
+            /* Prevents auto-zoom on iOS */
         }
 
         /* Smooth scrolling on mobile */
@@ -52,7 +56,8 @@
             overflow: hidden;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
         }
 
@@ -162,7 +167,7 @@
             -webkit-overflow-scrolling: touch;
             position: sticky;
             top: 0;
-            background: linear-gradient(to right, white 0%, white 95%, rgba(255,255,255,0.8) 100%);
+            background: linear-gradient(to right, white 0%, white 95%, rgba(255, 255, 255, 0.8) 100%);
             z-index: 50;
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
             align-items: center;
@@ -256,6 +261,7 @@
                 width: 0;
                 height: 0;
             }
+
             100% {
                 width: 300px;
                 height: 300px;
@@ -727,6 +733,7 @@
             .cart-section {
                 width: 300px;
             }
+
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
             }
@@ -773,7 +780,7 @@
                 padding: 0.75rem 0.75rem;
                 gap: 0.45rem;
                 border-bottom: 2px solid var(--gray-200);
-                background: linear-gradient(to right, white 0%, white 95%, rgba(255,255,255,0.8) 100%);
+                background: linear-gradient(to right, white 0%, white 95%, rgba(255, 255, 255, 0.8) 100%);
                 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
             }
 
@@ -825,7 +832,8 @@
                 overflow: auto;
             }
 
-            html, body {
+            html,
+            body {
                 height: auto;
             }
 
@@ -889,12 +897,13 @@
                 top: 0;
                 background: white;
                 z-index: 40;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             }
 
             .search-input {
                 padding: 0.6rem;
-                font-size: 1rem; /* Prevent iOS zoom */
+                font-size: 1rem;
+                /* Prevent iOS zoom */
                 height: 44px;
             }
 
@@ -902,11 +911,11 @@
                 position: sticky;
                 top: 68px;
                 z-index: 40;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
                 padding: 0.7rem 0.75rem;
                 gap: 0.45rem;
                 border-bottom: 2px solid var(--gray-300);
-                background: linear-gradient(to right, white 0%, white 95%, rgba(255,255,255,0.8) 100%);
+                background: linear-gradient(to right, white 0%, white 95%, rgba(255, 255, 255, 0.8) 100%);
             }
 
             .category-btn {
@@ -1031,7 +1040,7 @@
                 padding: 0.75rem;
                 background: white;
                 border-top: 2px solid var(--gray-200);
-                box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+                box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
             }
 
             .totals-section {
@@ -1160,7 +1169,7 @@
             .category-filter {
                 padding: 0.6rem 0.5rem;
                 gap: 0.35rem;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
             }
 
             .category-btn {
@@ -1179,7 +1188,7 @@
         <!-- NAVBAR -->
         <div class="pos-navbar">
             <div class="navbar-brand">
-                <i class="fas fa-shopping-cart"></i> ARTIKA POS
+                <i class="fas fa-shopping-cart"></i> {{ __('pos.brand') }}
             </div>
             <div class="navbar-right">
                 <div class="navbar-user">
@@ -1202,31 +1211,32 @@
                 <div class="search-section">
                     <div class="search-input-group">
                         <span class="search-icon"><i class="fas fa-search"></i></span>
-                        <input type="text" id="productSearch" class="search-input" placeholder="Cari produk...">
+                        <input type="text" id="productSearch" class="search-input"
+                            placeholder="{{ __('pos.search_placeholder') }}">
                     </div>
                 </div>
 
                 <!-- SCANNER TOGGLE -->
                 <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--gray-200); text-align: right;">
                     <button id="openScannerBtn" class="btn-toggle-scanner">
-                        <i class="fas fa-barcode"></i> Buka Scanner
+                        <i class="fas fa-barcode "></i> {{ __('pos.open_scanner') }}
                     </button>
                 </div>
 
                 <!-- SCANNER -->
                 <div class="scanner-section" id="scannerSection">
                     <div class="scanner-header">
-                        <span class="scanner-title"><i class="fas fa-barcode"></i> Barcode Scanner</span>
-                        <button class="btn-toggle-scanner" id="closeScannerBtn">Tutup</button>
+                        <span class="scanner-title"><i class="fas fa-barcode"></i> {{ __('pos.scanner_title') }}</span>
+                        <button class="btn-toggle-scanner" id="closeScannerBtn">{{ __('common.close') }}</button>
                     </div>
                     <div id="reader"></div>
                 </div>
 
                 <!-- CATEGORIES -->
                 <div class="category-filter">
-                    <button class="category-btn active" data-category="all">Semua</button>
+                    <button class="category-btn active" data-category="all">{{ __('common.all') }}</button>
                     @foreach($categories as $category)
-                    <button class="category-btn" data-category="{{ $category->id }}">{{ $category->name }}</button>
+                        <button class="category-btn" data-category="{{ $category->id }}">{{ $category->name }}</button>
                     @endforeach
                 </div>
 
@@ -1234,11 +1244,13 @@
                 <div class="products-grid-container">
                     <div class="products-grid" id="productsGrid">
                         @foreach($products as $product)
-                        <div class="product-card" data-product-id="{{ $product->id }}" data-category="{{ $product->category_id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}">
-                            <div class="product-icon"><i class="fas fa-box"></i></div>
-                            <div class="product-name">{{ $product->name }}</div>
-                            <div class="product-price">Rp{{ number_format($product->price, 0, ',', '.') }}</div>
-                        </div>
+                            <div class="product-card" data-product-id="{{ $product->id }}"
+                                data-category="{{ $product->category_id }}" data-name="{{ $product->name }}"
+                                data-price="{{ $product->price }}">
+                                <div class="product-icon"><i class="fas fa-box"></i></div>
+                                <div class="product-name">{{ $product->name }}</div>
+                                <div class="product-price">Rp{{ number_format($product->price, 0, ',', '.') }}</div>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -1248,14 +1260,14 @@
             <div class="cart-section">
                 <!-- CART HEADER -->
                 <div class="cart-header">
-                    <div class="cart-title"><i class="fas fa-shopping-basket"></i> Keranjang</div>
+                    <div class="cart-title"><i class="fas fa-shopping-basket"></i> {{ __('pos.cart') }}</div>
                     <div class="summary-stats">
                         <div class="stat-item">
-                            <div class="stat-label">Items</div>
+                            <div class="stat-label">{{ __('pos.items') }}</div>
                             <div class="stat-value" id="cartItemCount">0</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-label">Qty</div>
+                            <div class="stat-label">{{ __('pos.qty') }}</div>
                             <div class="stat-value" id="cartQtyCount">0</div>
                         </div>
                     </div>
@@ -1263,7 +1275,7 @@
 
                 <!-- CART ITEMS -->
                 <div class="cart-items" id="cartItems">
-                    <div class="cart-empty">Keranjang kosong</div>
+                    <div class="cart-empty">{{ __('pos.cart_empty') }}</div>
                 </div>
 
                 <!-- FOOTER -->
@@ -1271,25 +1283,30 @@
                     <!-- TOTALS -->
                     <div class="totals-section">
                         <div class="total-row">
-                            <span>Total:</span>
+                            <span>{{ __('common.total') }}:</span>
                             <span id="totalDisplay">Rp0</span>
                         </div>
                     </div>
 
                     <!-- PAYMENT -->
                     <div class="payment-section">
-                        <label class="payment-label"><i class="fas fa-wallet"></i> Metode</label>
+                        <label class="payment-label"><i class="fas fa-wallet"></i>
+                            {{ __('pos.payment_method') }}</label>
                         <div class="payment-methods">
-                            @foreach($paymentMethods as $method)
-                            <button class="payment-method-btn" data-method="{{ $method->name }}">{{ $method->name }}</button>
-                            @endforeach
+                            <div class="payment-methods">
+                                <button class="payment-method-btn active"
+                                    data-method="cash">{{ __('pos.cash') }}</button>
+                                <button class="payment-method-btn"
+                                    data-method="non-cash">{{ __('pos.non_cash') }}</button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- BUTTONS -->
                     <div class="checkout-buttons">
                         <button class="btn-checkout btn-cancel" id="clearBtn"><i class="fas fa-trash"></i></button>
-                        <button class="btn-checkout btn-finish" id="checkoutBtn" onclick="checkout()" disabled><i class="fas fa-check-circle"></i> Selesaikan</button>
+                        <button class="btn-checkout btn-finish" id="checkoutBtn" onclick="checkout()" disabled><i
+                                class="fas fa-check-circle"></i> {{ __('pos.checkout') }}</button>
                     </div>
                 </div>
             </div>
@@ -1301,28 +1318,66 @@
         <div class="modal-dialog modal-dialog-centered" style="max-width: 320px;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title">Jumlah Uang</h6>
+                    <h6 class="modal-title">{{ __('pos.cash_amount') }}</h6>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="keypadDisplay" class="form-control" style="font-size: 1.2rem; font-weight: bold; text-align: right; margin-bottom: 1rem; padding: 10px;" placeholder="0" autocomplete="off" inputmode="decimal">
-                    <div class="numeric-keypad">
-                        <button class="keypad-btn" data-key="1">1</button>
-                        <button class="keypad-btn" data-key="2">2</button>
-                        <button class="keypad-btn" data-key="3">3</button>
-                        <button class="keypad-btn" data-key="4">4</button>
-                        <button class="keypad-btn" data-key="5">5</button>
-                        <button class="keypad-btn" data-key="6">6</button>
-                        <button class="keypad-btn" data-key="7">7</button>
-                        <button class="keypad-btn" data-key="8">8</button>
-                        <button class="keypad-btn" data-key="9">9</button>
-                        <button class="keypad-btn" data-key="0" style="grid-column: 1 / 3;">0</button>
-                        <button class="keypad-btn delete" id="keypadDelete"><i class="fas fa-backspace"></i></button>
+                    <!-- Cash Input Section -->
+                    <div id="cashInputSection">
+                        <input type="text" id="keypadDisplay" class="form-control"
+                            style="font-size: 1.2rem; font-weight: bold; text-align: right; margin-bottom: 1rem; padding: 10px;"
+                            placeholder="0" autocomplete="off" inputmode="decimal">
+                        <div class="numeric-keypad">
+                            <button class="keypad-btn" data-key="1">1</button>
+                            <button class="keypad-btn" data-key="2">2</button>
+                            <button class="keypad-btn" data-key="3">3</button>
+                            <button class="keypad-btn" data-key="4">4</button>
+                            <button class="keypad-btn" data-key="5">5</button>
+                            <button class="keypad-btn" data-key="6">6</button>
+                            <button class="keypad-btn" data-key="7">7</button>
+                            <button class="keypad-btn" data-key="8">8</button>
+                            <button class="keypad-btn" data-key="9">9</button>
+                            <button class="keypad-btn" data-key="0" style="grid-column: 1 / 3;">0</button>
+                            <button class="keypad-btn delete" id="keypadDelete"><i
+                                    class="fas fa-backspace"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Non-Cash Upload Section -->
+                    <div id="nonCashInputSection" style="display: none;">
+                        <div class="text-center mb-3">
+                            <label class="form-label fw-bold">{{ __('pos.upload_proof') }} <span
+                                    class="text-danger">*</span></label>
+                            
+                            <!-- Preview Area -->
+                            <div id="previewContainer" class="d-none mb-3">
+                                <img id="imagePreview" src="" alt="Preview" class="img-fluid rounded mb-2"
+                                    style="max-height: 200px;">
+                                <button type="button" class="btn btn-sm btn-outline-danger w-100"
+                                    id="removeImageBtn">{{ __('pos.retake_photo') }}</button>
+                            </div>
+
+                            <!-- Upload Buttons -->
+                            <div id="uploadButtons" class="d-grid gap-2">
+                                <button type="button" class="btn btn-primary" id="btnCamera">
+                                    <i class="fas fa-camera me-2"></i> {{ __('pos.take_photo') }}
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary" id="btnGallery">
+                                    <i class="fas fa-image me-2"></i> {{ __('pos.choose_from_gallery') }}
+                                </button>
+                            </div>
+
+                            <!-- Hidden Inputs -->
+                            <input type="file" id="inputCamera" class="d-none" accept="image/*" capture="environment">
+                            <input type="file" id="inputGallery" class="d-none" accept="image/*">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn" style="background: var(--primary); color: white;" id="keypadConfirm">Konfirmasi</button>
+                    <button type="button" class="btn btn-secondary"
+                        data-bs-dismiss="modal">{{ __('pos.cancel') }}</button>
+                    <button type="button" class="btn" style="background: var(--primary); color: white;"
+                        id="keypadConfirm">{{ __('pos.confirm') }}</button>
                 </div>
             </div>
         </div>
@@ -1334,7 +1389,7 @@
         let selectedPaymentMethod = null;
         let scanner = null;
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.payment-method-btn').forEach((btn, idx) => {
                 if (idx === 0) {
                     btn.classList.add('active');
@@ -1362,11 +1417,11 @@
             });
 
             document.getElementById('productSearch').addEventListener('keyup', searchProducts);
-            
+
             // Scanner handlers
             document.getElementById('openScannerBtn').addEventListener('click', openScanner);
             document.getElementById('closeScannerBtn').addEventListener('click', closeScanner);
-            
+
             initializeKeypad();
         });
 
@@ -1397,7 +1452,7 @@
             const cartItemsContainer = document.getElementById('cartItems');
 
             if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<div class="cart-empty">Keranjang kosong</div>';
+                cartItemsContainer.innerHTML = '<div class="cart-empty">{{ __('pos.cart_empty') }}</div>';
                 document.getElementById('checkoutBtn').disabled = true;
             } else {
                 cartItemsContainer.innerHTML = cart.map((item, index) => `
@@ -1447,7 +1502,7 @@
         }
 
         function clearCart() {
-            if (cart.length > 0 && confirm('Yakin ingin menghapus semua item?')) {
+            if (cart.length > 0 && confirm('{{ __('pos.confirm_clear_cart') }}')) {
                 cart = [];
                 updateCartDisplay();
             }
@@ -1489,179 +1544,191 @@
         }
 
         function checkout() {
-            console.log('=== CHECKOUT FUNCTION CALLED ===');
-            
             if (cart.length === 0) {
-                alert('Keranjang kosong');
-                console.log('Cart is empty');
+                alert('{{ __('pos.cart_empty') }}');
                 return;
             }
-
-            const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
-            const total = subtotal;
-
-            console.log('Subtotal:', subtotal);
-            console.log('Total:', total);
-            console.log('Payment Method:', selectedPaymentMethod);
 
             if (!selectedPaymentMethod) {
-                alert('Pilih metode pembayaran');
+                alert('{{ __('pos.select_payment_method') }}');
                 return;
             }
 
-            // Check if payment method is Cash
-            const isCash = selectedPaymentMethod && selectedPaymentMethod.toLowerCase() === 'cash';
+            const modalElement = document.getElementById('keypadModal');
+            // Use getOrCreateInstance to prevent multiple instances/backdrops
+            const modal = window.bootstrap.Modal.getOrCreateInstance(modalElement);
+            const isCash = selectedPaymentMethod === 'cash';
+
+            // Toggle sections
+            document.getElementById('cashInputSection').style.display = isCash ? 'block' : 'none';
+            document.getElementById('nonCashInputSection').style.display = isCash ? 'none' : 'block';
+            document.querySelector('.modal-title').textContent = isCash ? '{{ __('pos.cash_amount') }}' : '{{ __('pos.non_cash') }}';
 
             if (isCash) {
-                console.log('Opening cash input modal...');
-                
-                const modalElement = document.getElementById('keypadModal');
-                if (!modalElement) {
-                    console.error('keypadModal element not found!');
-                    alert('Error: Modal tidak ditemukan');
-                    return;
-                }
-                
-                // Show cash input modal
-                try {
-                    const modal = new window.bootstrap.Modal(modalElement);
-                    document.getElementById('keypadDisplay').value = '';
-                    modal.show();
+                document.getElementById('keypadDisplay').value = '';
+            } else {
+                // Reset file input
+                resetFileInput();
+            }
 
-                    // Override confirm button for cash payment
-                    const confirmBtn = document.getElementById('keypadConfirm');
-                    if (!confirmBtn) {
-                        console.error('keypadConfirm button not found!');
+            modal.show();
+
+            // Setup confirm button
+            document.getElementById('keypadConfirm').onclick = () => {
+                const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
+                const total = subtotal; // Logic for discount if needed
+
+                if (isCash) {
+                    const cashAmount = parseFloat(document.getElementById('keypadDisplay').value);
+                    if (!cashAmount || cashAmount === 0) {
+                        alert('{{ __('pos.enter_cash_amount') }}');
                         return;
                     }
-                    
-                    confirmBtn.onclick = () => {
-                        console.log('Cash amount confirmed');
-                        const cashAmount = parseFloat(document.getElementById('keypadDisplay').value);
-                        
-                        if (!cashAmount || cashAmount === 0) {
-                            alert('Masukkan jumlah uang');
-                            return;
-                        }
+                    if (cashAmount < total) {
+                        alert(`{{ __('pos.insufficient_cash') }}Rp${formatCurrency(total - cashAmount)}`);
+                        return;
+                    }
+                    modal.hide();
+                    processCheckout(cart, subtotal, total, cashAmount, null);
+                } else {
+                    const inputCamera = document.getElementById('inputCamera');
+                    const inputGallery = document.getElementById('inputGallery');
+                    let file = null;
 
-                        if (cashAmount < total) {
-                            alert(`Uang tidak cukup!\nKurang: Rp${formatCurrency(total - cashAmount)}`);
-                            return;
-                        }
+                    if (inputCamera.files.length > 0) {
+                        file = inputCamera.files[0];
+                    } else if (inputGallery.files.length > 0) {
+                        file = inputGallery.files[0];
+                    }
 
-                        modal.hide();
-                        processCheckout(cart, subtotal, total, cashAmount);
-                    };
-                } catch (err) {
-                    console.error('Error creating modal:', err);
-                    alert('Error: Gagal membuka modal: ' + err.message);
+                    if (!file) {
+                        alert('{{ __('pos.payment_proof_required') }}');
+                        return;
+                    }
+                    modal.hide();
+                    processCheckout(cart, subtotal, total, total, file);
                 }
-            } else {
-                // Non-cash payment (QRIS, Card, E-Wallet, etc.)
-                console.log('Processing non-cash payment...');
-                processCheckout(cart, subtotal, total, total);
-            }
+            };
         }
 
-        function processCheckout(items, subtotal, total, cashAmount) {
-            console.log('=== PROCESS CHECKOUT ===');
-            console.log('Items:', items.length);
-            console.log('Subtotal:', subtotal);
-            console.log('Total:', total);
-            console.log('Cash Amount:', cashAmount);
-            console.log('Payment Method:', selectedPaymentMethod);
+        // File Upload Handlers
+        document.getElementById('btnCamera').addEventListener('click', () => {
+            document.getElementById('inputCamera').click();
+        });
 
-            const change = cashAmount - total;
+        document.getElementById('btnGallery').addEventListener('click', () => {
+            document.getElementById('inputGallery').click();
+        });
 
-            const data = {
-                items: items,
-                subtotal: subtotal,
-                discount: 0,
-                total_amount: total,
-                payment_method: selectedPaymentMethod,
-                cash_amount: cashAmount,
-                change_amount: change > 0 ? change : 0
-            };
+        document.getElementById('removeImageBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetFileInput();
+        });
 
-            console.log('Request data:', JSON.stringify(data));
+        function handleFileSelect(input, otherInputId) {
+            input.addEventListener('change', function (e) {
+                if (this.files && this.files[0]) {
+                    // Clear the other input
+                    document.getElementById(otherInputId).value = '';
+                    
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('imagePreview').src = e.target.result;
+                        document.getElementById('previewContainer').classList.remove('d-none');
+                        document.getElementById('uploadButtons').classList.add('d-none');
+                    }
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
 
-            // Show loading
+        handleFileSelect(document.getElementById('inputCamera'), 'inputGallery');
+        handleFileSelect(document.getElementById('inputGallery'), 'inputCamera');
+
+        function resetFileInput() {
+            document.getElementById('inputCamera').value = '';
+            document.getElementById('inputGallery').value = '';
+            document.getElementById('previewContainer').classList.add('d-none');
+            document.getElementById('uploadButtons').classList.remove('d-none');
+            document.getElementById('imagePreview').src = '';
+        }
+
+        function processCheckout(items, subtotal, total, cashAmount, paymentProofFile) {
             const checkoutBtn = document.getElementById('checkoutBtn');
-            if (!checkoutBtn) {
-                console.error('Checkout button not found!');
-                return;
-            }
-
             const originalText = checkoutBtn.innerHTML;
-            checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __('pos.processing') }}';
             checkoutBtn.disabled = true;
 
-            const url = '{{ route("pos.checkout") }}';
-            console.log('Posting to:', url);
+            const change = cashAmount - total;
+            const formData = new FormData();
 
-            fetch(url, {
+            // Append items as JSON string because FormData doesn't handle array of objects well directly for Laravel validation
+            // However, Laravel validation `items.*.product_id` expects an array.
+            // Best approach for FormData array:
+            items.forEach((item, index) => {
+                formData.append(`items[${index}][product_id]`, item.product_id);
+                formData.append(`items[${index}][quantity]`, item.quantity);
+                formData.append(`items[${index}][price]`, item.price);
+            });
+
+            formData.append('subtotal', subtotal);
+            formData.append('total_amount', total);
+            formData.append('payment_method', selectedPaymentMethod);
+            formData.append('cash_amount', cashAmount);
+            formData.append('change_amount', change > 0 ? change : 0);
+
+            if (paymentProofFile) {
+                formData.append('payment_proof', paymentProofFile);
+            }
+
+            fetch('{{ route("pos.checkout") }}', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    // Content-Type not set to let browser set boundary
                 },
-                body: JSON.stringify(data)
+                body: formData
             })
-            .then(response => {
-                console.log('Response status:', response.status);
-                console.log('Response ok:', response.ok);
-                return response.text().then(text => {
-                    console.log('Response text:', text);
-                    try {
-                        return JSON.parse(text);
-                    } catch (e) {
-                        console.error('Failed to parse JSON:', e);
-                        throw new Error('Invalid JSON response: ' + text.substring(0, 100));
-                    }
-                });
-            })
-            .then(result => {
-                console.log('Parsed result:', result);
-                checkoutBtn.innerHTML = originalText;
-                checkoutBtn.disabled = false;
+                .then(response => response.json())
+                .then(result => {
+                    checkoutBtn.innerHTML = originalText;
+                    checkoutBtn.disabled = false;
 
-                if (result.success) {
-                    const isCash = selectedPaymentMethod && selectedPaymentMethod.toLowerCase() === 'cash';
-                    
-                    if (isCash && change > 0) {
-                        alert(`✓ Transaksi Berhasil!\n\nInvoice: ${result.invoice_no}\nUang Diterima: Rp${formatCurrency(cashAmount)}\nKembalian: Rp${formatCurrency(change)}`);
+                    if (result.success) {
+                        const isCash = selectedPaymentMethod === 'cash';
+                        let alertMsg = `{{ __('pos.transaction_success') }}\n\n{{ __('pos.invoice') }} ${result.invoice_no}`;
+
+                        if (isCash && change > 0) {
+                            alertMsg += `\n{{ __('pos.cash_received') }} Rp${formatCurrency(cashAmount)}\n{{ __('pos.change') }} Rp${formatCurrency(change)}`;
+                        }
+
+                        alert(alertMsg);
+
+                        cart = [];
+                        updateCartDisplay();
+
+                        if (result.transaction_id) {
+                            window.open('{{ url("pos/receipt") }}/' + result.transaction_id, '_blank');
+                        }
                     } else {
-                        alert(`✓ Transaksi Berhasil!\n\nInvoice: ${result.invoice_no}`);
+                        alert('❌ {{ __('common.error') }}: ' + (result.message || '{{ __('pos.transaction_failed') }}'));
                     }
-
-                    // Clear cart
-                    cart = [];
-                    updateCartDisplay();
-
-                    // Open receipt
-                    if (result.transaction_id) {
-                        console.log('Opening receipt:', result.transaction_id);
-                        window.open('{{ url("pos/receipt") }}/' + result.transaction_id, '_blank');
-                    }
-                } else {
-                    alert('❌ Error: ' + (result.message || 'Transaksi gagal'));
-                }
-            })
-            .catch(error => {
-                console.error('Fetch error:', error);
-                checkoutBtn.innerHTML = originalText;
-                checkoutBtn.disabled = false;
-                alert('❌ Error: ' + error.message);
-            });
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    checkoutBtn.innerHTML = originalText;
+                    checkoutBtn.disabled = false;
+                    alert('❌ {{ __('common.error') }}: ' + error.message);
+                });
         }
 
         function initializeKeypad() {
             console.log('Initializing keypad...');
-            
+
             const display = document.getElementById('keypadDisplay');
             const keypadBtns = document.querySelectorAll('.keypad-btn[data-key]');
             console.log('Found keypad buttons:', keypadBtns.length);
-            
+
             // Button click handlers
             keypadBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -1682,24 +1749,24 @@
                     }
                 });
             }
-            
+
             // Keyboard input handler - only accept numbers and backspace
             if (display) {
                 display.addEventListener('keydown', (e) => {
                     console.log('Keypress:', e.key);
-                    
+
                     // Allow: numbers (0-9), backspace, delete
-                    if (!/^[0-9]$/.test(e.key) && 
-                        e.key !== 'Backspace' && 
-                        e.key !== 'Delete' && 
-                        e.key !== 'ArrowLeft' && 
-                        e.key !== 'ArrowRight' && 
-                        e.key !== 'Home' && 
+                    if (!/^[0-9]$/.test(e.key) &&
+                        e.key !== 'Backspace' &&
+                        e.key !== 'Delete' &&
+                        e.key !== 'ArrowLeft' &&
+                        e.key !== 'ArrowRight' &&
+                        e.key !== 'Home' &&
                         e.key !== 'End') {
                         e.preventDefault();
                     }
                 });
-                
+
                 // Prevent pasting non-numeric content
                 display.addEventListener('paste', (e) => {
                     e.preventDefault();
@@ -1710,7 +1777,7 @@
                     }
                 });
             }
-            
+
             console.log('Keypad initialized');
         }
 
@@ -1750,8 +1817,8 @@
 
         function onScanSuccess(decodedText, decodedResult) {
             const product = document.querySelector(`[data-product-id="${decodedText}"]`) ||
-                          document.querySelector(`[data-barcode="${decodedText}"]`);
-            
+                document.querySelector(`[data-barcode="${decodedText}"]`);
+
             if (product) {
                 addToCart(product);
                 console.log('Scanned:', decodedText);
@@ -1764,7 +1831,7 @@
                         return;
                     }
                 }
-                alert('Produk tidak ditemukan: ' + decodedText);
+                alert('{{ __('pos.product_not_found') }} ' + decodedText);
             }
         }
 

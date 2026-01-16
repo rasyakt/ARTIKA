@@ -24,8 +24,9 @@
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="mb-4">
-            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-triangle-exclamation me-2"></i>Low Stock Alerts</h2>
-            <p class="text-muted mb-0">Products that are running low on stock (below 20 units)</p>
+            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
+                    class="fa-solid fa-triangle-exclamation me-2"></i>{{ __('warehouse.low_stock_alerts') }}</h2>
+            <p class="text-muted mb-0">{{ __('warehouse.low_stock_description') }}</p>
         </div>
 
         <!-- Alert Summary Cards -->
@@ -38,11 +39,11 @@
                                 <div style="font-size: 2.5rem;"><i class="fa-solid fa-circle text-danger"></i></div>
                             </div>
                             <div class="ms-3">
-                                <h6 class="text-muted mb-1">Critical Stock</h6>
+                                <h6 class="text-muted mb-1">{{ __('warehouse.critical_stock') }}</h6>
                                 <h3 class="mb-0 text-danger fw-bold">
                                     {{ $criticalCount }}
                                 </h3>
-                                <small class="text-muted">Below 10 units</small>
+                                <small class="text-muted">{{ __('warehouse.below_10_units') }}</small>
                             </div>
                         </div>
                     </div>
@@ -56,11 +57,11 @@
                                 <div style="font-size: 2.5rem;"><i class="fa-solid fa-circle text-warning"></i></div>
                             </div>
                             <div class="ms-3">
-                                <h6 class="text-muted mb-1">Low Stock</h6>
+                                <h6 class="text-muted mb-1">{{ __('warehouse.low_stock_label') }}</h6>
                                 <h3 class="mb-0 text-warning fw-bold">
                                     {{ $lowCount }}
                                 </h3>
-                                <small class="text-muted">10-19 units</small>
+                                <small class="text-muted">{{ __('warehouse.10_19_units') }}</small>
                             </div>
                         </div>
                     </div>
@@ -74,11 +75,11 @@
                                 <div style="font-size: 2.5rem;"><i class="fa-solid fa-chart-pie"></i></div>
                             </div>
                             <div class="ms-3">
-                                <h6 class="text-muted mb-1">Total Alerts</h6>
+                                <h6 class="text-muted mb-1">{{ __('warehouse.total_alerts') }}</h6>
                                 <h3 class="mb-0 fw-bold" style="color: #6f5849;">
                                     {{ $totalAlerts }}
                                 </h3>
-                                <small class="text-muted">Requires attention</small>
+                                <small class="text-muted">{{ __('warehouse.requires_attention') }}</small>
                             </div>
                         </div>
                     </div>
@@ -89,19 +90,25 @@
         <!-- Alerts Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>Alert List</h5>
+                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i
+                        class="fa-solid fa-clipboard-list me-2"></i>{{ __('warehouse.alert_list') }}</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead style="background: #fdf8f6;">
                             <tr>
-                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">Product</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Category</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Current Stock</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Min Stock</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">Alert Level</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Action</th>
+                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">{{ __('common.product') }}
+                                </th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.category') }}</th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.current_stock') }}
+                                </th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.min_stock') }}
+                                </th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.alert_level') }}
+                                </th>
+                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                    {{ __('common.action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -118,29 +125,32 @@
                                     </td>
                                     <td>
                                         <span class="fw-bold {{ $stock->quantity < 10 ? 'text-danger' : 'text-warning' }}">
-                                            {{ $stock->quantity }} units
+                                            {{ $stock->quantity }} {{ __('warehouse.units') }}
                                         </span>
                                     </td>
                                     <td>{{ $stock->min_stock }}</td>
                                     <td>
                                         @if($stock->quantity < 10)
-                                            <span class="badge bg-danger stock-badge"><i class="fa-solid fa-circle me-1"></i>Critical</span>
+                                            <span class="badge bg-danger stock-badge"><i
+                                                    class="fa-solid fa-circle me-1"></i>{{ __('warehouse.critical') }}</span>
                                         @else
-                                            <span class="badge bg-warning stock-badge"><i class="fa-solid fa-circle me-1"></i>Low</span>
+                                            <span class="badge bg-warning stock-badge"><i
+                                                    class="fa-solid fa-circle me-1"></i>{{ __('warehouse.low') }}</span>
                                         @endif
                                     </td>
                                     <td class="text-center">
                                         <a href="{{ route('warehouse.stock') }}" class="btn btn-sm btn-outline-primary"
                                             style="border-radius: 8px;">
-                                            <i class="fa-solid fa-gear me-1"></i> Adjust Stock
+                                            <i class="fa-solid fa-gear me-1"></i> {{ __('warehouse.adjust_stock') }}
                                         </a>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center py-5">
-                                        <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-circle-check"></i></div>
-                                        <p class="text-muted mb-0">All products have sufficient stock levels!</p>
+                                        <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-circle-check"></i>
+                                        </div>
+                                        <p class="text-muted mb-0">{{ __('warehouse.all_stock_sufficient') }}</p>
                                     </td>
                                 </tr>
                             @endforelse

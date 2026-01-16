@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'dashboard' => 'Dashboard',
+    'products' => 'Products',
+    'categories' => 'Categories',
+    'users' => 'Users',
+    'suppliers' => 'Suppliers',
+    'transactions' => 'Transactions',
+    'sales' => 'Sales',
+    'returns' => 'Returns',
+    'inventory' => 'Inventory',
+    'stock' => 'Stock',
+    'reports' => 'Reports',
+    'settings' => 'Settings',
+    'profile' => 'Profile',
+    'admin' => 'Admin',
+    'cashier' => 'Cashier',
+    'warehouse' => 'Warehouse',
+    'audit_logs' => 'Audit Logs',
+    'promotions' => 'Promotions',
+    'payment_methods' => 'Payment Methods',
+    'logout' => 'Logout',
+    'stock_management' => 'Stock Management',
+    'low_stock_alerts' => 'Low Stock Alerts',
+    'stock_movements' => 'Stock Movements',
+    'menu' => 'Menu',
+];
