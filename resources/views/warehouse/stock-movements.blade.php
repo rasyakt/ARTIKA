@@ -182,8 +182,8 @@
                     @endforeach
 
                     @if($recentMovements->hasPages())
-                        <div class="mt-4">
-                            {{ $recentMovements->links() }}
+                        <div class="mt-4 d-flex justify-content-end">
+                            {{ $recentMovements->links('vendor.pagination.no-prevnext') }}
                         </div>
                     @endif
                 @else

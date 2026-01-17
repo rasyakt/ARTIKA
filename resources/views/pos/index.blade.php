@@ -438,19 +438,19 @@
         .qty-btn {
             background: none;
             border: none;
-            width: 20px;
-            height: 20px;
+            width: 32px;
+            height: 32px;
             cursor: pointer;
             font-weight: bold;
             color: var(--primary);
             transition: all 0.2s;
-            font-size: 0.7rem;
-            min-height: 28px;
-            min-width: 28px;
+            font-size: 0.85rem;
+            min-height: 32px;
+            min-width: 32px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 3px;
+            border-radius: 6px;
         }
 
         .qty-btn:active {
@@ -549,14 +549,15 @@
         }
 
         .payment-method-btn {
-            padding: 0.5rem;
+            padding: 0.75rem;
             border: 1px solid var(--gray-300);
             background: white;
-            border-radius: 6px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: 600;
             transition: all 0.2s;
+            white-space: nowrap;
         }
 
         .payment-method-btn:hover {
@@ -578,15 +579,15 @@
 
         .btn-checkout {
             flex: 1;
-            padding: 0.6rem;
+            padding: 0.75rem;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             font-weight: 700;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             transition: all 0.2s;
             color: white;
-            min-height: 44px;
+            min-height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -606,6 +607,7 @@
         .btn-cancel {
             background: var(--gray-300);
             color: var(--gray-700);
+            border-radius: 10px;
         }
 
         .btn-cancel:hover:not(:disabled) {
@@ -656,13 +658,13 @@
         }
 
         .keypad-btn {
-            padding: 0.75rem;
+            padding: 1rem;
             border: 1px solid var(--gray-200);
             background: white;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.1rem;
             transition: all 0.2s;
         }
 

@@ -5,7 +5,7 @@
         <div class="row mb-4">
             <div class="col-md-8">
                 <h1>
-                    <a href="{{ route('admin.reports') }}" class="btn btn-outline-secondary me-2">
+                    <a href="{{ route('admin.reports') }}" class="btn btn-light me-2 shadow-sm" style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <i class="fas fa-clipboard-list"></i> {{ __('admin.audit_log') }}
@@ -13,13 +13,13 @@
                 <p class="text-muted">{{ __('admin.audit_log_desc') }}</p>
             </div>
             <div class="col-md-4 text-end">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#filterModal" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                     <i class="fas fa-filter"></i> {{ __('common.filter') }}
                 </button>
-                <button class="btn btn-success" onclick="downloadPdf()">
+                <button class="btn btn-success shadow-sm" onclick="downloadPdf()" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                     <i class="fas fa-file-pdf"></i> {{ __('admin.download_pdf') }}
                 </button>
-                <button class="btn btn-info" onclick="exportCsv()">
+                <button class="btn btn-info shadow-sm text-white" onclick="exportCsv()" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                     <i class="fas fa-file-csv"></i> {{ __('admin.export_csv') }}
                 </button>
             </div>
@@ -127,8 +127,9 @@
                                         </small>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
+                                        <button class="btn btn-outline-primary" data-bs-toggle="modal"
                                             data-bs-target="#detailModal" data-id="{{ $log->id }}"
+                                            style="border-radius: 8px; padding: 0.25rem 0.6rem;"
                                             data-user="{{ $log->user?->name ?? __('common.system') }}"
                                             data-role="{{ $log->user?->role->name ?? '' }}"
                                             data-nis="{{ $log->user?->nis ?? '-' }}"
@@ -159,8 +160,8 @@
                     </table>
                 </div>
             </div>
-            <div class="card-footer bg-light">
-                {{ $logs->links() }}
+            <div class="card-footer bg-light d-flex justify-content-end">
+                {{ $logs->links('vendor.pagination.no-prevnext') }}
             </div>
         </div>
     </div>
@@ -212,11 +213,11 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"
-                            data-bs-dismiss="modal">{{ __('common.cancel') }}</button>
+                        <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal" style="border-radius: 10px; padding: 0.6rem 1.25rem;">{{ __('common.cancel') }}</button>
                         <a href="{{ route('admin.audit.index') }}"
-                            class="btn btn-outline-secondary">{{ __('common.reset') }}</a>
-                        <button type="submit" class="btn btn-primary">{{ __('admin.apply_filter') }}</button>
+                            class="btn btn-light border" style="border-radius: 10px; padding: 0.6rem 1.25rem;">{{ __('common.reset') }}</a>
+                        <button type="submit" class="btn btn-primary" style="border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">{{ __('admin.apply_filter') }}</button>
                     </div>
                 </form>
             </div>

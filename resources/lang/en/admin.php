@@ -187,4 +187,9 @@ return [
     'no_audit_logs_print' => 'No audit logs for this period',
     'computer_generated' => 'This is a computer-generated report. No signature required.',
     'report_period' => 'Report Period',
+    'total_movements' => 'Total Movements',
+    'cashier_name' => 'Cashier Name',
+    'device' => 'Device',
+    'complete_report_footer' => 'ARTIKA POS SYSTEM - Complete Store Performance Report',
+    'report_disclaimer' => 'This is a computer-generated comprehensive report combining Warehouse, Cashier, and System Audit data.',
 ];

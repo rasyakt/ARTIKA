@@ -105,4 +105,6 @@ return [
     'printed_at' => 'Printed at',
     'status' => 'Status',
     'adjust' => 'Adjust',
+    'print' => 'Print',
+    'rank' => 'Rank',
 ];

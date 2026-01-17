@@ -106,21 +106,29 @@
 						<thead style="background: var(--color-primary-light);">
 							<tr>
 								<th class="ps-4 border-0 fw-semibold" style="color:var(--color-primary-dark);">
-									{{ __('common.product') }}</th>
+									{{ __('common.product') }}
+								</th>
 								<th class="border-0 fw-semibold" style="color:var(--color-primary-dark);">
-									{{ __('common.category') }}</th>
+									{{ __('common.category') }}
+								</th>
 								<th class="border-0 fw-semibold" style="color:var(--color-primary-dark);">
-									{{ __('common.barcode') }}</th>
+									{{ __('common.barcode') }}
+								</th>
 								<th class="border-0 fw-semibold" style="color:var(--color-primary-dark);">
-									{{ __('common.cost_price') }}</th>
+									{{ __('common.cost_price') }}
+								</th>
 								<th class="border-0 fw-semibold" style="color:var(--color-primary-dark);">
-									{{ __('common.sell_price') }}</th>
+									{{ __('common.sell_price') }}
+								</th>
 								<th class="border-0 fw-semibold" style="color:var(--color-primary-dark);">
-									{{ __('common.margin') }}</th>
+									{{ __('common.margin') }}
+								</th>
 								<th class="border-0 fw-semibold" style="color:var(--color-primary-dark);">
-									{{ __('common.stock') }}</th>
+									{{ __('common.stock') }}
+								</th>
 								<th class="border-0 fw-semibold text-center" style="color:var(--color-primary-dark);">
-									{{ __('common.actions') }}</th>
+									{{ __('common.actions') }}
+								</th>
 							</tr>
 						</thead>
 						<tbody id="productsTableBody">
@@ -138,7 +146,8 @@
 											</div>
 											<div>
 												<div class="fw-bold" style="color:var(--color-primary-dark);">
-													{{ $product->name }}</div>
+													{{ $product->name }}
+												</div>
 												<small class="text-muted">ID: {{ $product->id }}</small>
 											</div>
 										</div>
@@ -153,7 +162,8 @@
 									</td>
 									<td class="text-muted">Rp {{ number_format($product->cost_price, 0, ',', '.') }}</td>
 									<td class="fw-bold" style="color:var(--color-accent-warm);">Rp
-										{{ number_format($product->price, 0, ',', '.') }}</td>
+										{{ number_format($product->price, 0, ',', '.') }}
+									</td>
 									<td>
 										<span
 											class="badge {{ $margin > 30 ? 'bg-success' : ($margin > 15 ? 'bg-warning' : 'bg-danger') }}">{{ number_format($margin, 1) }}%</span>

@@ -70,7 +70,7 @@
         <div class="container-fluid px-4">
             <span class="navbar-brand fw-bold mb-0 h1"><i class="fa-solid fa-clock-rotate-left me-2"></i>{{ __('pos.transaction_history') }}</span>
             <div>
-                <a href="{{ route('pos.index') }}" class="btn btn-outline-light btn-sm">
+                <a href="{{ route('pos.index') }}" class="btn" style="border-radius: 10px; padding: 0.5rem 1.25rem; background: rgba(255, 255, 255, 0.15); border: none; color: white; font-weight: 600;">
                     <i class="fa-solid fa-arrow-left me-2"></i>{{ __('pos.back_to_pos') }}
                 </a>
             </div>
@@ -95,7 +95,7 @@
                                     value="{{ request('end_date') }}">
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary w-100">
+                                <button type="submit" class="btn btn-primary w-100" style="border-radius: 10px; padding: 0.6rem;">
                                     <i class="fa-solid fa-filter me-1"></i> {{ __('pos.filter_report') }}
                                 </button>
                             </div>
@@ -258,10 +258,8 @@
                 </div>
             </div>
             @if($transactions->hasPages())
-                <div class="card-footer bg-white py-3">
-                    <div class="d-flex justify-content-center">
-                        {{ $transactions->links() }}
-                    </div>
+                <div class="card-footer bg-white py-3 d-flex justify-content-end">
+                    {{ $transactions->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
         </div>

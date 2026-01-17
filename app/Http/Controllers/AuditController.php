@@ -35,7 +35,7 @@ class AuditController extends Controller
 
         $logs = $query->with('user')
             ->latest()
-            ->paginate(50);
+            ->paginate(10);
 
         $actions = AuditLog::distinct()->pluck('action');
         $users = AuditLog::distinct()

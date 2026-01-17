@@ -98,8 +98,8 @@
                 </div>
             </div>
             @if($suppliers->hasPages())
-                <div class="card-footer bg-white border-0">
-                    {{ $suppliers->links() }}
+                <div class="card-footer bg-white border-0 d-flex justify-content-end">
+                    {{ $suppliers->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
         </div>

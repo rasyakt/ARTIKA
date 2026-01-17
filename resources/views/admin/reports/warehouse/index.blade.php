@@ -34,8 +34,8 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <div class="d-flex align-items-center mb-1">
-                    <a href="{{ route('admin.reports') }}" class="btn btn-outline-secondary me-3"
-                        style="border-radius: 10px;">
+                    <a href="{{ route('admin.reports') }}" class="btn btn-light me-3 shadow-sm"
+                        style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <h2 class="fw-bold mb-0" style="color: #6f5849;">
@@ -46,7 +46,7 @@
             </div>
             <div class="text-end">
                 <a href="{{ route('admin.reports.warehouse.export', request()->all()) }}" target="_blank"
-                    class="btn btn-outline-primary btn-sm">
+                    class="btn btn-outline-primary" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                     <i class="fa-solid fa-file-pdf me-1"></i> {{ __('admin.export_report') }}
                 </a>
             </div>
@@ -84,7 +84,7 @@
                         <input type="date" class="form-select" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <button type="submit" class="btn btn-light w-100 fw-semibold">
+                        <button type="submit" class="btn btn-light w-100 fw-bold" style="border-radius: 8px; padding: 0.6rem;">
                             <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                         </button>
                     </div>
@@ -286,7 +286,7 @@
                                             </td>
                                             <td class="text-end">
                                                 <a href="{{ route('admin.products.edit', $item->id) }}"
-                                                    class="btn btn-sm btn-outline-primary">
+                                                    class="btn btn-outline-primary" style="border-radius: 8px; padding: 0.25rem 0.75rem; font-size: 0.85rem;">
                                                     <i class="fa-solid fa-plus-circle me-1"></i> Restock
                                                 </a>
                                             </td>

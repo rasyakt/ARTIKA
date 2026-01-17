@@ -133,6 +133,11 @@
                     </table>
                 </div>
             </div>
+            @if($users->hasPages())
+                <div class="card-footer bg-white border-0 d-flex justify-content-end py-3">
+                    {{ $users->links('vendor.pagination.no-prevnext') }}
+                </div>
+            @endif
         </div>
     </div>
 

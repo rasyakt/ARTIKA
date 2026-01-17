@@ -4,7 +4,8 @@
     <div class="container-fluid py-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-user-friends me-2"></i>Customer Management</h2>
+                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-user-friends me-2"></i>Customer
+                    Management</h2>
                 <p class="text-muted mb-0">Manage customer database and loyalty</p>
             </div>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addCustomerModal"
@@ -14,7 +15,7 @@
         </div>
 
         @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
+            <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
                 <strong><i class="fa-solid fa-circle-check me-1"></i>Success!</strong> {{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -83,7 +84,8 @@
                             @empty
                                 <tr>
                                     <td colspan="6" class="text-center py-5">
-                                        <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-user-friends"></i></div>
+                                        <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-user-friends"></i>
+                                        </div>
                                         <p class="text-muted mb-0">No customers yet</p>
                                     </td>
                                 </tr>
@@ -93,8 +95,8 @@
                 </div>
             </div>
             @if($customers->hasPages())
-                <div class="card-footer bg-white border-0">
-                    {{ $customers->links() }}
+                <div class="card-footer bg-white border-0 d-flex justify-content-end">
+                    {{ $customers->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
         </div>
@@ -105,7 +107,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i> Add New Customer</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i> Add New
+                        Customer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form action="{{ route('admin.customers.store') }}" method="POST">
@@ -136,7 +139,8 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">Cancel</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i class="fa-solid fa-floppy-disk me-1"></i>
+                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i
+                                class="fa-solid fa-floppy-disk me-1"></i>
                             Save</button>
                     </div>
                 </form>
@@ -149,7 +153,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i> Edit Customer</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i> Edit
+                        Customer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form id="editCustomerForm" method="POST">
@@ -181,7 +186,8 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">Cancel</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i class="fa-solid fa-floppy-disk me-1"></i>
+                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i
+                                class="fa-solid fa-floppy-disk me-1"></i>
                             Update</button>
                     </div>
                 </form>

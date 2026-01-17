@@ -68,7 +68,7 @@ class WarehouseController extends Controller
         $lowStockItems = Stock::with(['product.category'])
             ->where('quantity', '<', 20)
             ->orderBy('quantity', 'asc')
-            ->paginate(20);
+            ->paginate(10);
 
         // Statistics
         $criticalCount = Stock::where('quantity', '<', 10)->count();
@@ -82,7 +82,7 @@ class WarehouseController extends Controller
     {
         $stocks = Stock::with(['product.category'])
             ->orderBy('quantity', 'asc')
-            ->get();
+            ->paginate(10);
 
         return view('warehouse.stock', compact('stocks'));
     }
@@ -91,7 +91,7 @@ class WarehouseController extends Controller
     {
         $movements = StockMovement::with(['product', 'user'])
             ->latest()
-            ->paginate(20);
+            ->paginate(10);
 
         // Statistics for today
         $today = now()->startOfDay();

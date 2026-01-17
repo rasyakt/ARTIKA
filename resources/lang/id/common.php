@@ -105,4 +105,6 @@ return [
     'printed_at' => 'Dicetak pada',
     'status' => 'Status',
     'adjust' => 'Sesuaikan',
+    'print' => 'Cetak',
+    'rank' => 'Peringkat',
 ];

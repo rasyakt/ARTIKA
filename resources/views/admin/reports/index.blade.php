@@ -37,8 +37,8 @@
                 <p class="text-muted mb-0">{{ __('admin.reports_hub_subtitle') }}</p>
             </div>
             <div>
-                <button class="btn btn-lg shadow-sm"
-                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 12px; transition: all 0.3s;"
+                <button class="btn shadow-sm"
+                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;"
                     data-bs-toggle="modal" data-bs-target="#printAllModal"
                     onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                     <i class="fa-solid fa-file-invoice me-2"></i> {{ __('admin.print_all_reports') }}
@@ -218,10 +218,11 @@
                         </div>
                     </div>
                     <div class="modal-footer bg-light border-top-0 rounded-bottom-4 px-4 pb-3">
-                        <button type="button" class="btn btn-light text-muted border-0"
+                        <button type="button" class="btn btn-light text-muted border-0 px-4"
+                            style="border-radius: 10px; padding: 0.6rem 1.25rem;"
                             data-bs-dismiss="modal">{{ __('admin.cancel') }}</button>
-                        <button type="submit" class="btn px-4 py-2 fw-bold"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 8px;">
+                        <button type="submit" class="btn px-4 fw-bold"
+                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 10px; padding: 0.6rem 1.25rem;">
                             <i class="fa-solid fa-print me-2"></i> {{ __('admin.generate_report') }}
                         </button>
                     </div>

@@ -29,7 +29,8 @@
                                 </th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.status') }}</th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('common.actions') }}</th>
+                                    {{ __('common.actions') }}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -75,6 +76,11 @@
                     </table>
                 </div>
             </div>
+            @if($stocks->hasPages())
+                <div class="card-footer bg-white border-0 d-flex justify-content-end py-3">
+                    {{ $stocks->links('vendor.pagination.no-prevnext') }}
+                </div>
+            @endif
         </div>
     </div>
 

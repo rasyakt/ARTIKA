@@ -62,7 +62,8 @@
             <span class="navbar-brand fw-bold mb-0 h1"><i
                     class="fa-solid fa-clipboard-list me-2"></i>{{ __('pos.my_activity_logs') }}</span>
             <div>
-                <a href="{{ route('pos.index') }}" class="btn btn-outline-light btn-sm">
+                <a href="{{ route('pos.index') }}" class="btn"
+                    style="border-radius: 10px; padding: 0.5rem 1.25rem; background: rgba(255, 255, 255, 0.15); border: none; color: white; font-weight: 600;">
                     <i class="fa-solid fa-arrow-left me-2"></i>{{ __('pos.back_to_pos') }}
                 </a>
             </div>
@@ -73,16 +74,18 @@
         <!-- Filters -->
         <div class="mb-4">
             <div class="btn-group" role="group">
-                <a href="{{ route('pos.logs') }}"
-                    class="btn btn-{{ !request('type') ? 'primary' : 'outline-primary' }}">
+                <a href="{{ route('pos.logs') }}" class="btn btn-{{ !request('type') ? 'primary' : 'outline-primary' }}"
+                    style="border-radius: 10px 0 0 10px; padding: 0.6rem 1.25rem;">
                     {{ __('pos.all') }}
                 </a>
                 <a href="{{ route('pos.logs', ['type' => 'login']) }}"
-                    class="btn btn-{{ request('type') == 'login' ? 'primary' : 'outline-primary' }}">
+                    class="btn btn-{{ request('type') == 'login' ? 'primary' : 'outline-primary' }}"
+                    style="padding: 0.6rem 1.25rem;">
                     <i class="fa-solid fa-sign-in-alt me-1"></i> {{ __('pos.login') }}
                 </a>
                 <a href="{{ route('pos.logs', ['type' => 'transaction']) }}"
-                    class="btn btn-{{ request('type') == 'transaction' ? 'primary' : 'outline-primary' }}">
+                    class="btn btn-{{ request('type') == 'transaction' ? 'primary' : 'outline-primary' }}"
+                    style="border-radius: 0 10px 10px 0; padding: 0.6rem 1.25rem;">
                     <i class="fa-solid fa-receipt me-1"></i> {{ __('pos.transactions') }}
                 </a>
             </div>
@@ -147,10 +150,8 @@
                 </div>
             </div>
             @if($logs->hasPages())
-                <div class="card-footer bg-white py-3">
-                    <div class="d-flex justify-content-center">
-                        {{ $logs->links() }}
-                    </div>
+                <div class="card-footer bg-white py-3 d-flex justify-content-end">
+                    {{ $logs->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
         </div>

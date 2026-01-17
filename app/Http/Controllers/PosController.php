@@ -46,7 +46,7 @@ class PosController extends Controller
         }
 
         $logs = $query->orderBy('created_at', 'desc')
-            ->paginate(20)
+            ->paginate(10)
             ->withQueryString();
 
         return view('pos.logs', compact('logs'));

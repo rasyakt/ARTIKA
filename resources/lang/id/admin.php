@@ -189,5 +189,9 @@ return [
     'no_cashier_activity' => 'Tidak ada aktivitas kasir untuk periode ini',
     'no_audit_logs_print' => 'Tidak ada log audit untuk periode ini',
     'computer_generated' => 'Laporan ini dibuat oleh komputer. Tidak perlu tanda tangan.',
-    'report_period' => 'Periode Laporan',
+    'total_movements' => 'Total Pergerakan',
+    'cashier_name' => 'Nama Kasir',
+    'device' => 'Perangkat',
+    'complete_report_footer' => 'ARTIKA POS SYSTEM - Laporan Performa Toko Lengkap',
+    'report_disclaimer' => 'Ini adalah laporan komprehensif yang dihasilkan sistem yang menggabungkan data Gudang, Kasir, dan Audit Sistem.',
 ];
