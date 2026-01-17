@@ -14,12 +14,6 @@
             </button>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
-                <strong><i class="fa-solid fa-circle-check me-1"></i>Success!</strong> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
 
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-body p-0">
@@ -68,10 +62,10 @@
                                                 </li>
                                                 <li>
                                                     <form action="{{ route('admin.customers.delete', $customer->id) }}"
-                                                        method="POST" onsubmit="return confirm('Delete this customer?');">
+                                                        method="POST" class="delete-form">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger"
+                                                        <button type="button" class="dropdown-item text-danger btn-delete"
                                                             style="border-radius: 8px; padding: 0.5rem 1rem;">
                                                             <i class="fa-solid fa-trash me-1"></i> Delete Customer
                                                         </button>
@@ -204,5 +198,23 @@
             document.getElementById('editCustomerForm').action = `/admin/customers/${customer.id}`;
             new bootstrap.Modal(document.getElementById('editCustomerModal')).show();
         }
+
+        // Handle delete confirmation
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.btn-delete');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const form = this.closest('form');
+                    confirmAction({
+                        text: "Delete this customer?",
+                        confirmButtonText: "Delete"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
     </script>
 @endsection

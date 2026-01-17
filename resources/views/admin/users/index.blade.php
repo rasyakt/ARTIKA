@@ -15,33 +15,6 @@
             </button>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
-                <strong><i class="fa-solid fa-circle-check me-1"></i>{{ __('common.success') }}!</strong>
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
-                <strong><i class="fa-solid fa-circle-exclamation me-1"></i>{{ __('common.error') }}!</strong>
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if($errors->any())
-            <div class="alert alert-danger alert-dismissible fade show shadow-sm" style="border-radius: 12px; border: none;">
-                <strong><i class="fa-solid fa-circle-exclamation me-1"></i>Error!</strong>
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
 
         <!-- Users Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
@@ -109,10 +82,10 @@
                                                 @if($user->role->name === 'cashier')
                                                     <li>
                                                         <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
-                                                            onsubmit="return confirm('{{ __('admin.delete_user_confirm') }}');">
+                                                            class="delete-form">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-danger"
+                                                            <button type="button" class="dropdown-item text-danger btn-delete"
                                                                 style="border-radius: 8px; padding: 0.5rem 1rem;">
                                                                 <i class="fa-solid fa-trash me-1"></i> {{ __('admin.delete_user') }}
                                                             </button>
@@ -342,5 +315,23 @@
                 icon.classList.add('fa-eye');
             }
         }
+
+        // Handle delete confirmation
+        document.addEventListener('DOMContentLoaded', function () {
+            const deleteButtons = document.querySelectorAll('.btn-delete');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const form = this.closest('form');
+                    confirmAction({
+                        text: "{{ __('admin.delete_user_confirm') }}",
+                        confirmButtonText: "{{ __('common.delete') }}"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
     </script>
 @endsection

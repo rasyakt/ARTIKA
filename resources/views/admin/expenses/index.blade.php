@@ -33,13 +33,16 @@
                             <thead style="background-color: #fdf8f6;">
                                 <tr>
                                     <th class="px-4 py-3 border-0" style="color: #6f5849; font-weight: 600; width: 15%;">
-                                        {{ __('admin.date') }}</th>
+                                        {{ __('admin.date') }}
+                                    </th>
                                     <th class="py-3 border-0" style="color: #6f5849; font-weight: 600; width: 15%;">
-                                        {{ __('admin.category') }}</th>
+                                        {{ __('admin.category') }}
+                                    </th>
                                     <th class="py-3 border-0" style="color: #6f5849; font-weight: 600;">{{ __('admin.notes') }}
                                     </th>
                                     <th class="py-3 border-0" style="color: #6f5849; font-weight: 600; width: 15%;">
-                                        {{ __('admin.amount') }}</th>
+                                        {{ __('admin.amount') }}
+                                    </th>
                                     <th class="py-3 border-0 text-end px-4"
                                         style="color: #6f5849; font-weight: 600; width: 10%;">{{ __('common.actions') }}</th>
                                 </tr>
@@ -88,11 +91,10 @@
                                                     </li>
                                                     <li>
                                                         <form action="{{ route('admin.expenses.delete', $expense->id) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('{{ __('admin.delete_expense_confirm') }}');">
+                                                            method="POST" class="delete-form">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="dropdown-item py-2 text-danger">
+                                                            <button type="button" class="dropdown-item py-2 text-danger btn-delete">
                                                                 <i class="fa-solid fa-trash me-2"></i> {{ __('common.delete') }}
                                                             </button>
                                                         </form>
@@ -280,7 +282,21 @@
                     document.getElementById('edit_amount').value = expense.amount;
                     document.getElementById('edit_notes').value = expense.notes || '';
                 });
-            }
-        });
+                // Handle delete confirmation
+                const deleteButtons = document.querySelectorAll('.btn-delete');
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        const form = this.closest('form');
+                        confirmAction({
+                            text: "{{ __('admin.delete_expense_confirm') }}",
+                            confirmButtonText: "{{ __('common.delete') }}"
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                form.submit();
+                            }
+                        });
+                    });
+                });
+            });
     </script>
 @endsection

@@ -37,6 +37,7 @@ return [
     'add_new' => 'Tambah Baru',
     'success' => 'Berhasil!',
     'category' => 'Kategori',
+    'ok'=> 'OK',
     'barcode' => 'Barcode',
     'cost_price' => 'Harga Modal',
     'sell_price' => 'Harga Jual',

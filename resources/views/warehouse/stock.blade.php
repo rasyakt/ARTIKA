@@ -177,7 +177,7 @@
             const reason = document.getElementById('adjustment_reason').value;
 
             if (!quantity || quantity <= 0) {
-                alert('{{ __('warehouse.enter_valid_quantity') }}');
+                showToast('warning', '{{ __('warehouse.enter_valid_quantity') }}');
                 return;
             }
 
@@ -202,16 +202,35 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        alert(data.message + '\n{{ __('warehouse.new_quantity') }}: ' + data.new_quantity + ' {{ __('warehouse.units') }}');
-                        location.reload();
+                        Swal.fire({
+                            icon: 'success',
+                            title: '{{ __('common.success') }}',
+                            text: data.message + '\n{{ __('warehouse.new_quantity') }}: ' + data.new_quantity + ' {{ __('warehouse.units') }}',
+                            customClass: {
+                                popup: 'artika-swal-popup',
+                                title: 'artika-swal-title',
+                                confirmButton: 'artika-swal-confirm-btn'
+                            },
+                            buttonsStyling: false
+                        }).then(() => {
+                            location.reload();
+                        });
                     } else {
-                        alert('{{ __('common.error') }}: ' + data.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: '{{ __('common.error') }}',
+                            text: data.message
+                        });
                         saveBtn.disabled = false;
                         saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> {{ __('warehouse.save_adjustment') }}';
                     }
                 })
                 .catch(error => {
-                    alert('{{ __('common.error') }}: ' + error.message);
+                    Swal.fire({
+                        icon: 'error',
+                        title: '{{ __('common.error') }}',
+                        text: error.message
+                    });
                     saveBtn.disabled = false;
                     saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> {{ __('warehouse.save_adjustment') }}';
                 });

@@ -13,19 +13,6 @@
             </button>
         </div>
 
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" style="border-radius: 8px; border: none;">
-                <i class="fa-solid fa-circle-check me-1"></i>{{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" style="border-radius: 8px; border: none;">
-                <i class="fa-solid fa-circle-exclamation me-1"></i>{{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
 
         <!-- Categories Table -->
         <div class="card shadow-sm" style="border-radius: 12px; border: none;">
@@ -36,10 +23,13 @@
                             <thead style="background-color: #f8f9fa;">
                                 <tr>
                                     <th class="px-4 py-3" style="border: none; color: #6f5849; font-weight: 600;">#</th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">{{ __('common.category_name') }}</th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">{{ __('common.products') }}</th>
+                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                        {{ __('common.category_name') }}</th>
+                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                        {{ __('common.products') }}</th>
                                     <th class="py-3 text-end px-4" style="border: none; color: #6f5849; font-weight: 600;">
-                                        {{ __('common.actions') }}</th>
+                                        {{ __('common.actions') }}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -70,21 +60,22 @@
                                                 <ul class="dropdown-menu dropdown-menu-end"
                                                     style="border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
                                                     <li>
-                                                        <button class="dropdown-item" 
-                                                            data-bs-toggle="modal" 
+                                                        <button class="dropdown-item" data-bs-toggle="modal"
                                                             data-bs-target="#editCategoryModal"
                                                             data-category-id="{{ $category->id }}"
                                                             data-category-name="{{ $category->name }}">
                                                             <i class="fa-solid fa-pen me-2"></i>{{ __('common.edit') }}
                                                         </button>
                                                     </li>
-                                                    <li><hr class="dropdown-divider my-1"></li>
                                                     <li>
-                                                        <form action="{{ route('admin.categories.delete', $category->id) }}" method="POST"
-                                                            onsubmit="return confirm('{{ __('admin.delete_category_confirm') }}');">
+                                                        <hr class="dropdown-divider my-1">
+                                                    </li>
+                                                    <li>
+                                                        <form action="{{ route('admin.categories.delete', $category->id) }}"
+                                                            method="POST" class="delete-form">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-danger">
+                                                            <button type="button" class="dropdown-item text-danger btn-delete">
                                                                 <i class="fa-solid fa-trash me-2"></i>{{ __('common.delete') }}
                                                             </button>
                                                         </form>
@@ -123,14 +114,16 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_category') }}</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i>
+                        {{ __('admin.add_category') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form action="{{ route('admin.categories.store') }}" method="POST">
                     @csrf
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label for="name" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.category_name') }} *</label>
+                            <label for="name" class="form-label fw-semibold"
+                                style="color: #6f5849;">{{ __('common.category_name') }} *</label>
                             <input type="text" class="form-control" id="name" name="name" required
                                 placeholder="{{ __('common.category_placeholder') }}"
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
@@ -154,7 +147,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i> {{ __('admin.edit_category') }}</h5>
+                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i>
+                        {{ __('admin.edit_category') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form id="editCategoryForm" method="POST">
@@ -162,7 +156,8 @@
                     @method('PUT')
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label for="edit_name" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.category_name') }} *</label>
+                            <label for="edit_name" class="form-label fw-semibold"
+                                style="color: #6f5849;">{{ __('common.category_name') }} *</label>
                             <input type="text" class="form-control" id="edit_name" name="name" required
                                 style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                         </div>
@@ -172,7 +167,8 @@
                             style="border-radius: 10px; padding: 0.6rem 1.25rem;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary px-4"
                             style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
-                            <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.update') }} {{ __('common.category') }}
+                            <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.update') }}
+                            {{ __('common.category') }}
                         </button>
                     </div>
                 </form>
@@ -187,19 +183,35 @@
                 editCategoryModal.addEventListener('show.bs.modal', function (event) {
                     // Button that triggered the modal
                     var button = event.relatedTarget;
-                    
+
                     // Extract info from data-* attributes
                     var id = button.getAttribute('data-category-id');
                     var name = button.getAttribute('data-category-name');
-                    
+
                     // Update the modal's content.
                     var modalForm = editCategoryModal.querySelector('#editCategoryForm');
                     var modalNameInput = editCategoryModal.querySelector('#edit_name');
-                    
+
                     modalForm.action = '/admin/categories/' + id;
                     modalNameInput.value = name;
                 });
             }
+
+            // Handle delete confirmation
+            const deleteButtons = document.querySelectorAll('.btn-delete');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const form = this.closest('form');
+                    confirmAction({
+                        text: "{{ __('admin.delete_category_confirm') }}",
+                        confirmButtonText: "{{ __('common.delete') }}"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
         });
     </script>
 @endsection

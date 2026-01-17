@@ -10,8 +10,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity=""
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <style>
+        /* SweetAlert2 Custom Theme ARTIKA */
+        .artika-swal-popup {
+            border-radius: 16px !important;
+            padding: 1.5rem !important;
+            border: 1px solid #f2e8e5 !important;
+            font-family: 'Inter', system-ui, sans-serif !important;
+        }
+
+        .artika-swal-title {
+            color: #4b382f !important;
+            font-weight: 700 !important;
+            font-size: 1.25rem !important;
+        }
+
+        .artika-swal-confirm-btn {
+            background: #6f5849 !important;
+            border-radius: 10px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-weight: 600 !important;
+            box-shadow: 0 4px 6px -1px rgba(111, 88, 73, 0.2) !important;
+        }
+
+        .artika-swal-cancel-btn {
+            background: #fdf8f6 !important;
+            color: #6f5849 !important;
+            border: 1px solid #f2e8e5 !important;
+            border-radius: 10px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-weight: 600 !important;
+        }
+
+        .artika-swal-toast {
+            border-radius: 12px !important;
+            background: #ffffff !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+        }
+
         body {
             background: #faf9f8;
             min-height: 100vh;
@@ -422,13 +461,6 @@
             @else
                     <div class="col-12 main-content">
                 @endif
-                    @if(session('status'))
-                        <div class="alert alert-success alert-dismissible fade show m-4 shadow-sm"
-                            style="border-radius: 12px; border: none;">
-                            <i class="fa-solid fa-circle-check me-2"></i> {{ session('status') }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    @endif
 
                     @yield('content')
                 </div>
@@ -477,6 +509,80 @@
         </script>
 
         @stack('scripts')
+
+        <script>
+            // Professional Notification Helpers
+            const ArtikaToast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                customClass: {
+                    popup: 'artika-swal-toast'
+                },
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+
+            function showToast(icon, title) {
+                ArtikaToast.fire({
+                    icon: icon,
+                    title: title
+                });
+            }
+
+            function confirmAction(options = {}) {
+                const defaults = {
+                    title: 'Apakah Anda yakin?',
+                    text: "Tindakan ini tidak dapat dibatalkan!",
+                    icon: 'warning',
+                    confirmButtonText: 'Ya, Lanjutkan!',
+                    cancelButtonText: 'Batal'
+                };
+
+                const settings = { ...defaults, ...options };
+
+                return Swal.fire({
+                    title: settings.title,
+                    text: settings.text,
+                    icon: settings.icon,
+                    showCancelButton: true,
+                    confirmButtonColor: '#6f5849',
+                    cancelButtonColor: '#f1f1f1',
+                    confirmButtonText: settings.confirmButtonText,
+                    cancelButtonText: settings.cancelButtonText,
+                    customClass: {
+                        popup: 'artika-swal-popup',
+                        title: 'artika-swal-title',
+                        confirmButton: 'artika-swal-confirm-btn',
+                        cancelButton: 'artika-swal-cancel-btn'
+                    },
+                    buttonsStyling: false
+                });
+            }
+
+            // Flash Message Handling
+            document.addEventListener('DOMContentLoaded', function () {
+                @if(session('success') || session('status'))
+                    showToast('success', "{{ session('success') ?: session('status') }}");
+                @endif
+
+                @if(session('error'))
+                    showToast('error', "{{ session('error') }}");
+                @endif
+
+                @if(session('warning'))
+                    showToast('warning', "{{ session('warning') }}");
+                @endif
+
+                @if($errors->any())
+                    showToast('error', "{{ $errors->first() }}");
+                @endif
+            });
+        </script>
 </body>
 
 </html>

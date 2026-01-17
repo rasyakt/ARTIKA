@@ -455,10 +455,18 @@
         }
 
         function confirmClear(type) {
-            if (confirm("{{ __('admin.clear_confirm') }}")) {
-                document.getElementById('clear_type').value = type;
-                document.getElementById('clearLogsForm').submit();
-            }
+            confirmAction({
+                title: "{{ __('admin.clear_logs') }}",
+                text: "{{ __('admin.clear_confirm') }}",
+                icon: 'warning',
+                confirmButtonText: "{{ __('admin.delete_logs') }}",
+                cancelButtonText: "{{ __('admin.cancel') }}"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('clear_type').value = type;
+                    document.getElementById('clearLogsForm').submit();
+                }
+            });
         }
     </script>
 

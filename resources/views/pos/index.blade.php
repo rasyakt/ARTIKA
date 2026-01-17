@@ -14,7 +14,46 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
+        /* SweetAlert2 Custom Theme ARTIKA */
+        .artika-swal-popup {
+            border-radius: 16px !important;
+            padding: 1.5rem !important;
+            border: 1px solid #f2e8e5 !important;
+            font-family: 'Segoe UI', system-ui, sans-serif !important;
+        }
+
+        .artika-swal-title {
+            color: #4b382f !important;
+            font-weight: 700 !important;
+            font-size: 1.25rem !important;
+        }
+
+        .artika-swal-confirm-btn {
+            background: #6f5849 !important;
+            border-radius: 10px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-weight: 600 !important;
+            color: white !important;
+        }
+
+        .artika-swal-cancel-btn {
+            background: #fdf8f6 !important;
+            color: #6f5849 !important;
+            border: 1px solid #f2e8e5 !important;
+            border-radius: 10px !important;
+            padding: 0.6rem 1.5rem !important;
+            font-weight: 600 !important;
+        }
+
+        .artika-swal-toast {
+            border-radius: 12px !important;
+            background: #ffffff !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+        }
+
         :root {
             --primary: #85695a;
             --primary-dark: #6f5849;
@@ -1204,10 +1243,9 @@
                     style="background: rgba(255, 255, 255, 0.25);">
                     <i class="fa-solid fa-clock-rotate-left me-1"></i> Logs
                 </a>
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;"
-                    onsubmit="return confirm('{{ __('pos.logout_confirmation_message') }}')">
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;" id="logoutForm">
                     @csrf
-                    <button type="submit" class="btn-logout" title="{{ __('pos.logout') }}">
+                    <button type="button" class="btn-logout" id="btnLogout" title="{{ __('pos.logout') }}">
                         <i class="fas fa-sign-out-alt"></i>
                     </button>
                 </form>
@@ -1396,6 +1434,52 @@
 
     @vite(['resources/js/app.js'])
     <script>
+        // Professional Notification Helpers
+        const ArtikaToast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            customClass: { popup: 'artika-swal-toast' },
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+
+        function showToast(icon, title) {
+            ArtikaToast.fire({ icon: icon, title: title });
+        }
+
+        function confirmAction(options = {}) {
+            const defaults = {
+                title: 'Apakah Anda yakin?',
+                text: "Tindakan ini tidak dapat dibatalkan!",
+                icon: 'warning',
+                confirmButtonText: 'Ya, Lanjutkan!',
+                cancelButtonText: 'Batal'
+            };
+            const settings = { ...defaults, ...options };
+            return Swal.fire({
+                title: settings.title,
+                text: settings.text,
+                icon: settings.icon,
+                showCancelButton: true,
+                confirmButtonColor: '#6f5849',
+                cancelButtonColor: '#f1f1f1',
+                confirmButtonText: settings.confirmButtonText,
+                cancelButtonText: settings.cancelButtonText,
+                customClass: {
+                    popup: 'artika-swal-popup',
+                    title: 'artika-swal-title',
+                    confirmButton: 'artika-swal-confirm-btn',
+                    cancelButton: 'artika-swal-cancel-btn'
+                },
+                buttonsStyling: false
+            });
+        }
+
         let cart = [];
         let selectedPaymentMethod = null;
         let scanner = null;
@@ -1525,9 +1609,16 @@
         }
 
         function clearCart() {
-            if (cart.length > 0 && confirm('{{ __('pos.confirm_clear_cart') }}')) {
-                cart = [];
-                updateCartDisplay();
+            if (cart.length > 0) {
+                confirmAction({
+                    text: '{{ __('pos.confirm_clear_cart') }}',
+                    confirmButtonText: '{{ __('common.delete') }}'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        cart = [];
+                        updateCartDisplay();
+                    }
+                });
             }
         }
 
@@ -1568,12 +1659,12 @@
 
         function checkout() {
             if (cart.length === 0) {
-                alert('{{ __('pos.cart_empty') }}');
+                showToast('warning', '{{ __('pos.cart_empty') }}');
                 return;
             }
 
             if (!selectedPaymentMethod) {
-                alert('{{ __('pos.select_payment_method') }}');
+                showToast('warning', '{{ __('pos.select_payment_method') }}');
                 return;
             }
 
@@ -1604,11 +1695,11 @@
                 if (isCash) {
                     const cashAmount = parseFloat(document.getElementById('keypadDisplay').value);
                     if (!cashAmount || cashAmount === 0) {
-                        alert('{{ __('pos.enter_cash_amount') }}');
+                        showToast('warning', '{{ __('pos.enter_cash_amount') }}');
                         return;
                     }
                     if (cashAmount < total) {
-                        alert(`{{ __('pos.insufficient_cash') }}Rp${formatCurrency(total - cashAmount)}`);
+                        showToast('error', `{{ __('pos.insufficient_cash') }}Rp${formatCurrency(total - cashAmount)}`);
                         return;
                     }
                     modal.hide();
@@ -1625,7 +1716,7 @@
                     }
 
                     if (!file) {
-                        alert('{{ __('pos.payment_proof_required') }}');
+                        showToast('warning', '{{ __('pos.payment_proof_required') }}');
                         return;
                     }
                     modal.hide();
@@ -1719,29 +1810,58 @@
 
                     if (result.success) {
                         const isCash = selectedPaymentMethod === 'cash';
-                        let alertMsg = `{{ __('pos.transaction_success') }}\n\n{{ __('pos.invoice') }} ${result.invoice_no}`;
+                        let swalOptions = {
+                            icon: 'success',
+                            title: '{{ __('pos.transaction_success') }}',
+                            confirmButtonText: '{{ __('common.ok') }} & Cetak Struk'
+                        };
 
-                        if (isCash && change > 0) {
-                            alertMsg += `\n{{ __('pos.cash_received') }} Rp${formatCurrency(cashAmount)}\n{{ __('pos.change') }} Rp${formatCurrency(change)}`;
+                        if (selectedPaymentMethod === 'cash') {
+                            swalOptions.html = `
+                                <div class="text-start mt-3">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>{{ __('pos.cash_received') }}:</span>
+                                        <span class="fw-bold">Rp${formatCurrency(cashAmount)}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between text-success h5 mb-0">
+                                        <span>{{ __('pos.change') }}:</span>
+                                        <span class="fw-bold">Rp${formatCurrency(change)}</span>
+                                    </div>
+                                </div>`;
                         }
 
-                        alert(alertMsg);
+                        Swal.fire({
+                            ...swalOptions,
+                            showCancelButton: true,
+                            cancelButtonText: '{{ __('common.close') }}',
+                            customClass: {
+                                popup: 'artika-swal-popup',
+                                title: 'artika-swal-title',
+                                confirmButton: 'artika-swal-confirm-btn',
+                                cancelButton: 'artika-swal-cancel-btn'
+                            },
+                            buttonsStyling: false
+                        }).then((result_swal) => {
+                            if (result_swal.isConfirmed && result.transaction_id) {
+                                window.open('{{ url("pos/receipt") }}/' + result.transaction_id, '_blank');
+                            }
+                        });
 
                         cart = [];
                         updateCartDisplay();
-
-                        if (result.transaction_id) {
-                            window.open('{{ url("pos/receipt") }}/' + result.transaction_id, '_blank');
-                        }
                     } else {
-                        alert('❌ {{ __('common.error') }}: ' + (result.message || '{{ __('pos.transaction_failed') }}'));
+                        Swal.fire({
+                            icon: 'error',
+                            title: '{{ __('common.error') }}',
+                            text: result.message || '{{ __('pos.transaction_failed') }}'
+                        });
                     }
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
                     checkoutBtn.innerHTML = originalText;
                     checkoutBtn.disabled = false;
-                    alert('❌ {{ __('common.error') }}: ' + error.message);
+                    showToast('error', error.message);
                 });
         }
 
@@ -1861,13 +1981,26 @@
                         return;
                     }
                 }
-                alert('{{ __('pos.product_not_found') }} ' + decodedText);
+                showToast('error', '{{ __('pos.product_not_found') }} ' + decodedText);
             }
         }
 
         function onScanFailure(error) {
             // Suppress error logs for failed reads
         }
+
+        // Handle logout confirmation
+        document.getElementById('btnLogout').addEventListener('click', function () {
+            confirmAction({
+                text: "{{ __('pos.logout_confirmation_message') }}",
+                confirmButtonText: "{{ __('pos.logout') }}",
+                icon: 'question'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('logoutForm').submit();
+                }
+            });
+        });
     </script>
 </body>
 

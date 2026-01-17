@@ -91,13 +91,6 @@
 			</div>
 		</div>
 
-		@if(session('success'))
-			<div class="alert alert-success alert-dismissible fade show shadow-sm" style="border-radius:12px; border:none;">
-				<strong><i class="fa-solid fa-circle-check me-1"></i>{{ __('common.success') }}</strong>
-				{{ session('success') }}
-				<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-			</div>
-		@endif
 
 		<div class="card card-table shadow-sm">
 			<div class="card-body p-0">
@@ -188,11 +181,10 @@
 												</li>
 												<li>
 													<form action="{{ route('admin.products.delete', $product->id) }}"
-														method="POST"
-														onsubmit="return confirm('{{ __('admin.delete_product_confirm') }}');">
+														method="POST" class="delete-form">
 														@csrf
 														@method('DELETE')
-														<button type="submit" class="dropdown-item text-danger"><i
+														<button type="button" class="dropdown-item text-danger btn-delete"><i
 																class="fa-solid fa-trash me-2"></i>{{ __('common.delete') }}</button>
 													</form>
 												</li>
@@ -250,6 +242,24 @@
 			if (input) input.addEventListener('input', () => { clearTimeout(timeout); timeout = setTimeout(filter, 150); });
 			if (category) category.addEventListener('change', filter);
 		})();
+
+		// Handle delete confirmation with SweetAlert2
+		document.addEventListener('DOMContentLoaded', function () {
+			const deleteButtons = document.querySelectorAll('.btn-delete');
+			deleteButtons.forEach(button => {
+				button.addEventListener('click', function () {
+					const form = this.closest('form');
+					confirmAction({
+						text: "{{ __('admin.delete_product_confirm') }}",
+						confirmButtonText: "{{ __('common.delete') }}"
+					}).then((result) => {
+						if (result.isConfirmed) {
+							form.submit();
+						}
+					});
+				});
+			});
+		});
 	</script>
 
 @endsection
