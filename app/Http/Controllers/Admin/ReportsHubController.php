@@ -5,19 +5,26 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Services\WarehouseReportService;
 use App\Services\CashierReportService;
+use App\Services\FinanceReportService;
 use App\Models\AuditLog;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ReportsHubController extends Controller
 {
     protected $warehouseService;
     protected $cashierService;
+    protected $financeService;
 
-    public function __construct(WarehouseReportService $warehouseService, CashierReportService $cashierService)
-    {
+    public function __construct(
+        WarehouseReportService $warehouseService,
+        CashierReportService $cashierService,
+        FinanceReportService $financeService
+    ) {
         $this->warehouseService = $warehouseService;
         $this->cashierService = $cashierService;
+        $this->financeService = $financeService;
     }
 
     /**
@@ -65,7 +72,7 @@ class ReportsHubController extends Controller
         // Warehouse Report Data
         $warehouseSummary = $this->warehouseService->getSummaryStats($startDate, $endDate);
         $topMovers = $this->warehouseService->getTopMovingItems($startDate, $endDate);
-        $lowStockItems = $this->warehouseService->getLowStockItems($startDate, $endDate);
+        $lowStockItems = $this->warehouseService->getLowStockItems();
         $stockMovements = $this->warehouseService->getStockMovements($startDate, $endDate)->take(10);
 
         // Cashier Report Data
@@ -81,6 +88,28 @@ class ReportsHubController extends Controller
             ->limit(20)
             ->get();
 
+        // Finance Report Data
+        $financeSummary = $this->financeService->getFinancialSummary($startDate, $endDate);
+
+        if ($request->input('format') === 'pdf') {
+            $pdf = Pdf::loadView('admin.reports.print-all', [
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'warehouseSummary' => $warehouseSummary,
+                'topMovers' => $topMovers,
+                'lowStockItems' => $lowStockItems,
+                'stockMovements' => $stockMovements,
+                'cashierSummary' => $cashierSummary,
+                'topProducts' => $topProducts,
+                'cashierPerformance' => $cashierPerformance,
+                'recentTransactions' => $recentTransactions,
+                'auditLogs' => $auditLogs,
+                'financeSummary' => $financeSummary,
+                'isPdf' => true
+            ]);
+            return $pdf->download('full-store-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
+        }
+
         return view('admin.reports.print-all', compact(
             'startDate',
             'endDate',
@@ -92,7 +121,8 @@ class ReportsHubController extends Controller
             'topProducts',
             'cashierPerformance',
             'recentTransactions',
-            'auditLogs'
+            'auditLogs',
+            'financeSummary'
         ));
     }
 }

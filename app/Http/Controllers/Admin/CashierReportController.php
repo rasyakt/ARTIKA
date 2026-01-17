@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\CashierReportService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CashierReportController extends Controller
 {
@@ -78,6 +79,21 @@ class CashierReportController extends Controller
         $cashierPerformance = $this->cashierReportService->getTransactionsByUser($startDate, $endDate);
         $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 50);
         $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate);
+
+        if ($request->input('format') === 'pdf') {
+            $pdf = Pdf::loadView('admin.reports.cashier.print', [
+                'summary' => $summary,
+                'paymentBreakdown' => $paymentBreakdown,
+                'topProducts' => $topProducts,
+                'cashierPerformance' => $cashierPerformance,
+                'recentTransactions' => $recentTransactions,
+                'auditLogs' => $auditLogs,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'isPdf' => true
+            ]);
+            return $pdf->download('cashier-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
+        }
 
         return view('admin.reports.cashier.print', compact(
             'summary',

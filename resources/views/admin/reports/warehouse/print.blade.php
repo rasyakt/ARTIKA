@@ -197,19 +197,21 @@
     </style>
 </head>
 
-<body onload="window.print()">
+<body @if(!isset($isPdf) || !$isPdf) onload="window.print()" @endif>
 
-    <div class="no-print"
-        style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); text-align: center; border-radius: 8px;">
-        <button onclick="window.print()"
-            style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: white; border: none; border-radius: 6px; font-weight: 600; margin-right: 10px; color: #6f5849;">
-            <i class="fa-solid fa-print"></i> {{ __('admin.print_report') }}
-        </button>
-        <button onclick="window.close()"
-            style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 6px; font-weight: 600;">
-            <i class="fa-solid fa-times"></i> {{ __('admin.close') }}
-        </button>
-    </div>
+    @if(!isset($isPdf) || !$isPdf)
+        <div class="no-print"
+            style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); text-align: center; border-radius: 8px;">
+            <button onclick="window.print()"
+                style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: white; border: none; border-radius: 6px; font-weight: 600; margin-right: 10px; color: #6f5849;">
+                <i class="fa-solid fa-print"></i> {{ __('admin.print_report') }}
+            </button>
+            <button onclick="window.close()"
+                style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 6px; font-weight: 600;">
+                <i class="fa-solid fa-times"></i> {{ __('admin.close') }}
+            </button>
+        </div>
+    @endif
 
     <div class="header">
         <h1><i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_report') }}</h1>
@@ -298,7 +300,8 @@
                 @empty
                     <tr>
                         <td colspan="4" class="text-center" style="padding: 20px; color: #16a34a;">✓
-                            {{ __('admin.all_well_stocked') }}</td>
+                            {{ __('admin.all_well_stocked') }}
+                        </td>
                     </tr>
                 @endforelse
             </tbody>

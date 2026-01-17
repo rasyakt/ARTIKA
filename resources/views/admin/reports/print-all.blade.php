@@ -274,20 +274,22 @@
     </style>
 </head>
 
-<body onload="window.print()">
+<body @if(!isset($isPdf) || !$isPdf) onload="window.print()" @endif>
 
-    <!-- Print Controls -->
-    <div class="no-print"
-        style="position: fixed; top: 10px; right: 10px; z-index: 1000; background: white; padding: 10px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
-        <button onclick="window.print()"
-            style="padding: 8px 16px; background: #6f5849; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px; font-weight: 600; display: inline-flex; align-items: center;">
-            <i class="fa-solid fa-print" style="margin-right: 8px;"></i> {{ __('common.print') }}
-        </button>
-        <button onclick="window.close()"
-            style="padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center;">
-            <i class="fa-solid fa-xmark" style="margin-right: 8px;"></i> {{ __('common.close') }}
-        </button>
-    </div>
+    @if(!isset($isPdf) || !$isPdf)
+        <!-- Print Controls -->
+        <div class="no-print"
+            style="position: fixed; top: 10px; right: 10px; z-index: 1000; background: white; padding: 10px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);">
+            <button onclick="window.print()"
+                style="padding: 8px 16px; background: #6f5849; color: white; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px; font-weight: 600; display: inline-flex; align-items: center;">
+                <i class="fa-solid fa-print" style="margin-right: 8px;"></i> {{ __('common.print') }}
+            </button>
+            <button onclick="window.close()"
+                style="padding: 8px 16px; background: #dc2626; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; display: inline-flex; align-items: center;">
+                <i class="fa-solid fa-xmark" style="margin-right: 8px;"></i> {{ __('common.close') }}
+            </button>
+        </div>
+    @endif
 
     <!-- Header -->
     <div class="report-header">
@@ -303,8 +305,47 @@
     </div>
 
     <!-- ============================================ -->
-    <!-- WAREHOUSE REPORT SECTION -->
+    <!-- FINANCIAL SUMMARY SECTION -->
     <!-- ============================================ -->
+    <div class="section-divider"><i class="fa-solid fa-file-invoice-dollar"
+            style="margin-right: 10px;"></i>{{ __('admin.finance_reports_title') }}</div>
+
+    <div class="summary-grid">
+        <div class="summary-box">
+            <i class="fa-solid fa-money-bill-trend-up"></i>
+            <h3>{{ __('admin.gross_revenue') }}</h3>
+            <div class="value" style="font-size: 14px;">Rp
+                {{ number_format($financeSummary['gross_revenue'], 0, ',', '.') }}
+            </div>
+            <div class="label">{{ __('admin.total_cash_non_cash') }}</div>
+        </div>
+        <div class="summary-box">
+            <i class="fa-solid fa-tags"></i>
+            <h3>{{ __('admin.cogs') }}</h3>
+            <div class="value" style="font-size: 14px;">Rp
+                {{ number_format($financeSummary['cogs'], 0, ',', '.') }}
+            </div>
+            <div class="label">{{ __('admin.cost_of_stock_sold') }}</div>
+        </div>
+        <div class="summary-box">
+            <i class="fa-solid fa-file-invoice-dollar"></i>
+            <h3>{{ __('admin.operational_expenses') }}</h3>
+            <div class="value" style="font-size: 14px; color: #dc2626;">Rp
+                {{ number_format($financeSummary['total_expenses'], 0, ',', '.') }}
+            </div>
+            <div class="label">{{ __('admin.store_operational_costs') }}</div>
+        </div>
+        <div class="summary-box">
+            <i class="fa-solid fa-wallet"></i>
+            <h3>{{ __('admin.net_profit') }}</h3>
+            <div class="value"
+                style="font-size: 14px; color: {{ $financeSummary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }};">Rp
+                {{ number_format($financeSummary['net_profit'], 0, ',', '.') }}
+            </div>
+            <div class="label">{{ __('admin.after_returns_and_expenses') }}
+                ({{ number_format($financeSummary['profit_margin'], 1) }}%)</div>
+        </div>
+    </div>
     <div class="section-divider"><i class="fa-solid fa-warehouse"
             style="margin-right: 10px;"></i>{{ __('admin.warehouse_management_report') }}</div>
 

@@ -48,19 +48,47 @@
 
         <!-- Report Cards -->
         <div class="row g-4 mb-4">
-            <!-- Warehouse Report -->
-            <div class="col-md-4">
-                <a href="{{ route('admin.reports.warehouse') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm"
+            <!-- Finance Report -->
+            <div class="col-md-3">
+                <a href="{{ route('admin.reports.finance') }}" class="text-decoration-none">
+                    <div class="card report-card shadow-sm h-100"
                         style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
-                        <div class="card-body text-center p-5">
+                        <div class="card-body text-center p-4">
+                            <div class="report-icon mx-auto"
+                                style="background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%); color: white;">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                            </div>
+                            <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.finance_report') }}</h5>
+                            <p class="text-muted mb-3 small">{{ __('admin.finance_report_desc') }}</p>
+                            <ul class="list-unstyled text-start small" style="color: #78716c; font-size: 0.75rem;">
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.gross_revenue') }}</li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.net_profit') }}</li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.profit_margin') }}</li>
+                                <li class="mb-1"><i
+                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.financial_trend') }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Warehouse Report -->
+            <div class="col-md-3">
+                <a href="{{ route('admin.reports.warehouse') }}" class="text-decoration-none">
+                    <div class="card report-card shadow-sm h-100"
+                        style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
+                        <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto"
                                 style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white;">
                                 <i class="fa-solid fa-warehouse"></i>
                             </div>
-                            <h4 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.warehouse_report') }}</h4>
-                            <p class="text-muted mb-3">{{ __('admin.warehouse_report_desc') }}</p>
-                            <ul class="list-unstyled text-start small" style="color: #78716c;">
+                            <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.warehouse_report') }}</h5>
+                            <p class="text-muted mb-3 small">{{ __('admin.warehouse_report_desc') }}</p>
+                            <ul class="list-unstyled text-start small" style="color: #78716c; font-size: 0.75rem;">
                                 <li class="mb-1"><i
                                         class="fa-solid fa-check text-success me-2"></i>{{ __('admin.total_valuation') }}
                                 </li>
@@ -79,18 +107,18 @@
             </div>
 
             <!-- Cashier Report -->
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <a href="{{ route('admin.reports.cashier') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm"
+                    <div class="card report-card shadow-sm h-100"
                         style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
-                        <div class="card-body text-center p-5">
+                        <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto"
                                 style="background: linear-gradient(135deg, #0284c7 0%, #075985 100%); color: white;">
                                 <i class="fa-solid fa-cash-register"></i>
                             </div>
-                            <h4 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.cashier_report') }}</h4>
-                            <p class="text-muted mb-3">{{ __('admin.cashier_report_desc') }}</p>
-                            <ul class="list-unstyled text-start small" style="color: #78716c;">
+                            <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.cashier_report') }}</h5>
+                            <p class="text-muted mb-3 small">{{ __('admin.cashier_report_desc') }}</p>
+                            <ul class="list-unstyled text-start small" style="color: #78716c; font-size: 0.75rem;">
                                 <li class="mb-1"><i
                                         class="fa-solid fa-check text-success me-2"></i>{{ __('admin.total_sales') }}</li>
                                 <li class="mb-1"><i
@@ -109,25 +137,25 @@
             </div>
 
             <!-- Audit Logs -->
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <a href="{{ route('admin.audit.index') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm"
+                    <div class="card report-card shadow-sm h-100"
                         style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
-                        <div class="card-body text-center p-5">
+                        <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto"
                                 style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white;">
                                 <i class="fa-solid fa-clipboard-list"></i>
                             </div>
-                            <h4 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.logs_report') }}</h4>
-                            <p class="text-muted mb-3">{{ __('admin.logs_report_desc') }}</p>
-                            <ul class="list-unstyled text-start small" style="color: #78716c;">
+                            <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.logs_report') }}</h5>
+                            <p class="text-muted mb-3 small">{{ __('admin.logs_report_desc') }}</p>
+                            <ul class="list-unstyled text-start small" style="color: #78716c; font-size: 0.75rem;">
                                 <li class="mb-1"><i
                                         class="fa-solid fa-check text-success me-2"></i>{{ __('admin.user_management') }}
                                 </li>
                                 <li class="mb-1"><i
                                         class="fa-solid fa-check text-success me-2"></i>{{ __('admin.ip_address') }}</li>
-                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>System Security</li>
-                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Username Tracking</li>
+                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Security</li>
+                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Tracking</li>
                             </ul>
                         </div>
                     </div>
@@ -218,12 +246,25 @@
                         </div>
                     </div>
                     <div class="modal-footer bg-light border-top-0 rounded-bottom-4 px-4 pb-3">
+                        <input type="hidden" name="format" id="exportFormat" value="">
+                        <input type="hidden" name="auto_print" id="autoPrint" value="">
+
                         <button type="button" class="btn btn-light text-muted border-0 px-4"
                             style="border-radius: 10px; padding: 0.6rem 1.25rem;"
                             data-bs-dismiss="modal">{{ __('admin.cancel') }}</button>
-                        <button type="submit" class="btn px-4 fw-bold"
+
+                        <button type="submit"
+                            onclick="document.getElementById('exportFormat').value='pdf'; document.getElementById('autoPrint').value='';"
+                            class="btn btn-outline-brown px-4 fw-bold"
+                            style="border-radius: 10px; padding: 0.6rem 1.25rem;">
+                            <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
+                        </button>
+
+                        <button type="submit"
+                            onclick="document.getElementById('exportFormat').value=''; document.getElementById('autoPrint').value='true';"
+                            class="btn px-4 fw-bold"
                             style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 10px; padding: 0.6rem 1.25rem;">
-                            <i class="fa-solid fa-print me-2"></i> {{ __('admin.generate_report') }}
+                            <i class="fa-solid fa-print me-2"></i> {{ __('admin.print_report') }}
                         </button>
                     </div>
                 </form>

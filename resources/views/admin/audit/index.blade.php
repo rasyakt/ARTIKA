@@ -3,24 +3,30 @@
 @section('content')
     <div class="container-fluid py-4">
         <div class="row mb-4">
-            <div class="col-md-8">
-                <h1>
-                    <a href="{{ route('admin.reports') }}" class="btn btn-light me-2 shadow-sm" style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
+            <div class="col-md-7">
+                <div class="d-flex align-items-center mb-1">
+                    <a href="{{ route('admin.reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
+                        style="border-radius: 10px; padding: 0.5rem 0.75rem;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
-                    <i class="fas fa-clipboard-list"></i> {{ __('admin.audit_log') }}
-                </h1>
-                <p class="text-muted">{{ __('admin.audit_log_desc') }}</p>
+                    <h1 class="fw-bold mb-0" style="color: #6f5849;">
+                        <i class="fas fa-clipboard-list me-2"></i>{{ __('admin.logs_report') }}
+                    </h1>
+                </div>
+                <p class="text-muted mb-0 ms-5 ps-3">{{ __('admin.audit_log_desc') }}</p>
             </div>
-            <div class="col-md-4 text-end">
-                <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#filterModal" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
-                    <i class="fas fa-filter"></i> {{ __('common.filter') }}
+            <div class="col-md-5 d-flex gap-2 justify-content-end align-items-center">
+                <button class="btn btn-outline-brown shadow-sm" data-bs-toggle="modal"
+                    data-bs-target="#filterModal" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                    <i class="fas fa-filter me-2"></i> {{ __('common.filter') }}
                 </button>
-                <button class="btn btn-success shadow-sm" onclick="downloadPdf()" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
-                    <i class="fas fa-file-pdf"></i> {{ __('admin.download_pdf') }}
+                <button class="btn btn-outline-brown shadow-sm" onclick="exportReport('pdf')"
+                    style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                    <i class="fas fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
                 </button>
-                <button class="btn btn-info shadow-sm text-white" onclick="exportCsv()" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
-                    <i class="fas fa-file-csv"></i> {{ __('admin.export_csv') }}
+                <button class="btn btn-brown shadow-sm" onclick="exportReport('print')"
+                    style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                    <i class="fas fa-print me-2"></i> {{ __('admin.print_report') }}
                 </button>
             </div>
         </div>
@@ -374,34 +380,60 @@
             modal.querySelector('#detail-changes').textContent = JSON.stringify(changes, null, 2);
         });
 
-        function downloadPdf() {
+        function exportReport(format) {
             const params = new URLSearchParams(window.location.search);
-            const url = "{{ route('admin.audit.download-pdf') }}?" + params.toString();
-            window.location.href = url;
-        }
-
-        function exportCsv() {
-            const params = new URLSearchParams(window.location.search);
-            const url = "{{ route('admin.audit.export-csv') }}?" + params.toString();
-            window.location.href = url;
+            params.set('format', format);
+            if (format === 'print') {
+                params.set('auto_print', 'true');
+                window.open("{{ route('admin.audit.export') }}?" + params.toString(), '_blank');
+            } else {
+                window.location.href = "{{ route('admin.audit.export') }}?" + params.toString();
+            }
         }
     </script>
 
     <style>
-        .border-left-primary {
-            border-left: 4px solid #007bff !important;
+        .no-print {
+            display: none !important;
         }
 
-        .border-left-success {
-            border-left: 4px solid #28a745 !important;
+        .btn-outline-brown {
+            color: #6f5849;
+            border-color: #6f5849;
         }
 
-        .border-left-info {
-            border-left: 4px solid #17a2b8 !important;
+        .btn-outline-brown:hover {
+            background-color: #6f5849;
+            color: white;
         }
 
-        .border-left-warning {
-            border-left: 4px solid #ffc107 !important;
+        .btn-brown {
+            background-color: #6f5849;
+            color: white;
+        }
+
+        .btn-brown:hover {
+            background-color: #5d4a3e;
+            color: white;
+        }
+
+        @media print {
+            .no-print-sidebar {
+                display: none !important;
+            }
+
+            .container-fluid {
+                padding: 0 !important;
+            }
+
+            .card {
+                border: 1px solid #dee2e6 !important;
+                box-shadow: none !important;
+            }
+            
+            .btn-outline-brown, .btn-brown, .modal, .pagination, footer, .navbar, .sidebar {
+                display: none !important;
+            }
         }
     </style>
 @endsection

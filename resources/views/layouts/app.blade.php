@@ -347,10 +347,42 @@
                             class="sidebar-link {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
                             <i class="fa-solid fa-truck"></i> {{ __('menu.suppliers') }}
                         </a>
+                        <a href="{{ route('admin.expenses.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.expenses*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-wallet"></i> {{ __('menu.operational_expenses') }}
+                        </a>
+                        <hr style="margin: 0.5rem 0; opacity: 0.1;">
                         <a href="{{ route('admin.reports') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.reports*') ? 'active' : '' }}">
+                            class="sidebar-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
                         </a>
+                        <div class="sidebar-submenu {{ request()->routeIs('admin.reports*') || request()->routeIs('admin.audit*') ? 'show' : '' }}"
+                            style="padding-left: 1.5rem;">
+                            <a href="{{ route('admin.reports.warehouse') }}"
+                                class="sidebar-link py-2 {{ request()->routeIs('admin.reports.warehouse*') ? 'active' : '' }}"
+                                style="font-size: 0.85rem; border-left: none;">
+                                <i class="fa-solid fa-warehouse" style="font-size: 0.9rem;"></i>
+                                {{ __('admin.warehouse_report') }}
+                            </a>
+                            <a href="{{ route('admin.reports.cashier') }}"
+                                class="sidebar-link py-2 {{ request()->routeIs('admin.reports.cashier*') ? 'active' : '' }}"
+                                style="font-size: 0.85rem; border-left: none;">
+                                <i class="fa-solid fa-cash-register" style="font-size: 0.9rem;"></i>
+                                {{ __('admin.cashier_report') }}
+                            </a>
+                            <a href="{{ route('admin.reports.finance') }}"
+                                class="sidebar-link py-2 {{ request()->routeIs('admin.reports.finance*') ? 'active' : '' }}"
+                                style="font-size: 0.85rem; border-left: none;">
+                                <i class="fa-solid fa-file-invoice-dollar" style="font-size: 0.9rem;"></i>
+                                {{ __('admin.finance_report') }}
+                            </a>
+                            <a href="{{ route('admin.audit.index') }}"
+                                class="sidebar-link py-2 {{ request()->routeIs('admin.audit.index*') ? 'active' : '' }}"
+                                style="font-size: 0.85rem; border-left: none;">
+                                <i class="fa-solid fa-clipboard-list" style="font-size: 0.9rem;"></i>
+                                {{ __('admin.logs_report') }}
+                            </a>
+                        </div>
                         <hr style="margin: 1rem 0; border-color: #f2e8e5;">
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                             @csrf

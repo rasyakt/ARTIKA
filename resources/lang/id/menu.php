@@ -12,6 +12,8 @@ return [
     'inventory' => 'Inventaris',
     'stock' => 'Stok',
     'reports' => 'Laporan',
+    'finance_report' => 'Laporan Keuangan',
+    'operational_expenses' => 'Biaya Operasional',
     'settings' => 'Pengaturan',
     'profile' => 'Profil',
     'admin' => 'Admin',

@@ -55,6 +55,12 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'update'])->name('suppliers.update');
         Route::delete('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->name('suppliers.delete');
 
+        // Expense Management
+        Route::get('/expenses', [\App\Http\Controllers\ExpenseController::class, 'index'])->name('expenses.index');
+        Route::post('/expenses', [\App\Http\Controllers\ExpenseController::class, 'store'])->name('expenses.store');
+        Route::put('/expenses/{expense}', [\App\Http\Controllers\ExpenseController::class, 'update'])->name('expenses.update');
+        Route::delete('/expenses/{expense}', [\App\Http\Controllers\ExpenseController::class, 'destroy'])->name('expenses.delete');
+
         // Reports
         // Reports Hub
         Route::get('/reports', [\App\Http\Controllers\Admin\ReportsHubController::class, 'index'])->name('reports');
@@ -68,10 +74,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports/cashier', [\App\Http\Controllers\Admin\CashierReportController::class, 'index'])->name('reports.cashier');
         Route::get('/reports/cashier/export', [\App\Http\Controllers\Admin\CashierReportController::class, 'export'])->name('reports.cashier.export');
 
+        // Finance Reports
+        Route::get('/reports/finance', [\App\Http\Controllers\Admin\FinanceReportController::class, 'index'])->name('reports.finance');
+        Route::get('/reports/finance/export', [\App\Http\Controllers\Admin\FinanceReportController::class, 'export'])->name('reports.finance.export');
+
         // Audit Logs
         Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])->name('audit.index');
-        Route::get('/audit/download-pdf', [\App\Http\Controllers\AuditController::class, 'downloadPdf'])->name('audit.download-pdf');
-        Route::get('/audit/export-csv', [\App\Http\Controllers\AuditController::class, 'exportCsv'])->name('audit.export-csv');
+        Route::get('/audit/export', [\App\Http\Controllers\AuditController::class, 'export'])->name('audit.export');
     });
 
     // Cashier Routes (POS)

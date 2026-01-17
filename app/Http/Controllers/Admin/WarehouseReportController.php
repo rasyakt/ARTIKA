@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\WarehouseReportService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class WarehouseReportController extends Controller
 {
@@ -75,6 +76,20 @@ class WarehouseReportController extends Controller
         $lowStockItems = $this->warehouseReportService->getLowStockItems();
         $topMovers = $this->warehouseReportService->getTopMovingItems($startDate, $endDate);
         $auditLogs = $this->warehouseReportService->getWarehouseAuditLogs($startDate, $endDate);
+
+        if ($request->input('format') === 'pdf') {
+            $pdf = Pdf::loadView('admin.reports.warehouse.print', [
+                'summary' => $summary,
+                'movements' => $movements,
+                'lowStockItems' => $lowStockItems,
+                'topMovers' => $topMovers,
+                'auditLogs' => $auditLogs,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'isPdf' => true
+            ]);
+            return $pdf->download('warehouse-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
+        }
 
         // For now, we return a print-optimized view
         return view('admin.reports.warehouse.print', compact(

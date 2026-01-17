@@ -191,24 +191,27 @@
     </style>
 </head>
 
-<body onload="window.print()">
+<body @if(!isset($isPdf) || !$isPdf) onload="window.print()" @endif>
 
-    <div class="no-print"
-        style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); text-align: center; border-radius: 8px;">
-        <button onclick="window.print()"
-            style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: white; border: none; border-radius: 6px; font-weight: 600; margin-right: 10px; color: #6f5849;">
-            <i class="fa-solid fa-print"></i> Print Report
-        </button>
-        <button onclick="window.close()"
-            style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 6px; font-weight: 600;">
-            <i class="fa-solid fa-times"></i> Close
-        </button>
-    </div>
+    @if(!isset($isPdf) || !$isPdf)
+        <div class="no-print"
+            style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); text-align: center; border-radius: 8px;">
+            <button onclick="window.print()"
+                style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: white; border: none; border-radius: 6px; font-weight: 600; margin-right: 10px; color: #6f5849;">
+                <i class="fa-solid fa-print"></i> Print Report
+            </button>
+            <button onclick="window.close()"
+                style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 6px; font-weight: 600;">
+                <i class="fa-solid fa-times"></i> Close
+            </button>
+        </div>
+    @endif
 
     <div class="header">
         <h1><i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_reports_title') }}</h1>
         <div class="subtitle">{{ __('admin.period') }}: {{ $startDate->format('d M Y') }} -
-            {{ $endDate->format('d M Y') }}</div>
+            {{ $endDate->format('d M Y') }}
+        </div>
         <div class="meta">{{ __('admin.generated') }}: {{ now()->format('d M Y H:i') }} | ARTIKA POS System</div>
     </div>
 

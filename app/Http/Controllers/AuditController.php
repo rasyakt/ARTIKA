@@ -58,9 +58,9 @@ class AuditController extends Controller
     }
 
     /**
-     * Download audit report as PDF
+     * Export audit report (PDF or Print)
      */
-    public function downloadPdf(Request $request)
+    public function export(Request $request)
     {
         $query = AuditLog::query();
 
@@ -101,11 +101,20 @@ class AuditController extends Controller
 
         $summary = $this->generateSummary($logs);
 
-        $pdf = Pdf::loadView('admin.audit.pdf', compact('logs', 'summary', 'startDate', 'endDate'));
+        if ($request->input('format') === 'pdf') {
+            $pdf = Pdf::loadView('admin.audit.print', [
+                'logs' => $logs,
+                'summary' => $summary,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+                'isPdf' => true
+            ]);
 
-        $filename = 'audit-report-' . now()->format('Y-m-d-H-i-s') . '.pdf';
+            $filename = 'audit-report-' . now()->format('Y-m-d-H-i-s') . '.pdf';
+            return $pdf->download($filename);
+        }
 
-        return $pdf->download($filename);
+        return view('admin.audit.print', compact('logs', 'summary', 'startDate', 'endDate'));
     }
 
     /**
@@ -139,97 +148,6 @@ class AuditController extends Controller
         ];
 
         return $summary;
-    }
-
-    /**
-     * Export audit logs to CSV
-     */
-    public function exportCsv(Request $request)
-    {
-        $query = AuditLog::query();
-
-        if ($request->filled('start_date') && $request->filled('end_date')) {
-            $query->whereBetween('created_at', [
-                $request->start_date . ' 00:00:00',
-                $request->end_date . ' 23:59:59'
-            ]);
-        }
-
-        if ($request->filled('action')) {
-            $query->where('action', $request->action);
-        }
-
-        if ($request->filled('role_id')) {
-            $query->whereHas('user', function ($q) use ($request) {
-                $q->where('role_id', $request->role_id);
-            });
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->whereHas('user', function ($q) use ($search) {
-                $q->where('nis', 'like', "%{$search}%")
-                    ->orWhere('username', 'like', "%{$search}%")
-                    ->orWhere('name', 'like', "%{$search}%");
-            });
-        }
-
-        $logs = $query->with('user.role')
-            ->latest()
-            ->get();
-
-        $filename = 'audit-logs-' . now()->format('Y-m-d-H-i-s') . '.csv';
-        $handle = fopen('php://memory', 'r+');
-
-        // Write CSV headers with new columns
-        fputcsv($handle, [
-            'Tanggal',
-            'User',
-            'Role',
-            'NIS',
-            'Username',
-            'Aksi',
-            'Model',
-            'Amount',
-            'Metode Pembayaran',
-            'IP Address',
-            'MAC Address',
-            'Device',
-            'User Agent',
-            'Catatan'
-        ]);
-
-        // Write data rows
-        foreach ($logs as $log) {
-            $user = $log->user;
-            $isCashier = $user && $user->role && $user->role->name === 'cashier';
-
-            fputcsv($handle, [
-                $log->created_at->format('Y-m-d H:i:s'),
-                $user?->name ?? 'System',
-                $user?->role->name ?? '',
-                $isCashier ? ($user->nis ?? '-') : '',
-                $isCashier ? ($user->username ?? '-') : '',
-                $log->action,
-                $log->model_type . ($log->model_id ? '#' . $log->model_id : ''),
-                $log->amount ? 'Rp' . number_format((float) $log->amount, 0, ',', '.') : '',
-                $log->payment_method ?? '',
-                $log->ip_address,
-                $log->mac_address ?? 'N/A',
-                $log->device_name ?? 'Unknown',
-                $log->user_agent,
-                $log->notes,
-            ]);
-        }
-
-        rewind($handle);
-        $csv = stream_get_contents($handle);
-        fclose($handle);
-
-        return response($csv, 200, [
-            'Content-Type' => 'text/csv',
-            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-        ]);
     }
 
     /**
