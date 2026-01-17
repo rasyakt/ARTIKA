@@ -146,8 +146,8 @@
         <!-- Header -->
         <div class="header">
             <div class="store-name">ARTIKA MINIMARKET</div>
-            <div class="store-info">Jl. Utama No. 1</div>
-            <div class="store-info">Telp: (021) 1234-5678</div>
+            <div class="store-info">Jl. Jendral Sudirman 269A</div>
+            <div class="store-info">Telp./Fax. (0265) 771204 Ciamis</div>
         </div>
 
         <!-- Transaction Info -->

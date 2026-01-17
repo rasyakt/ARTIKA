@@ -230,6 +230,7 @@ return [
     'units_available' => 'Unit Tersedia',
     'need_restock' => 'Perlu Restock',
     'in_out' => 'Masuk / Keluar',
+    'report_period' => 'Periode Laporan',
     'cashier_sales_report' => 'Laporan Kasir & Penjualan',
     'system_audit_logs' => 'Log Audit Sistem',
     'no_movement_data' => 'Tidak ada data pergerakan untuk periode ini',

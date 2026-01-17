@@ -108,6 +108,7 @@ class PosController extends Controller
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.price' => 'required|numeric|min:0',
             'subtotal' => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|min:0',
             'total_amount' => 'required|numeric|min:0',
             'payment_method' => 'required|string',
             'cash_amount' => 'nullable|numeric|min:0',
@@ -125,6 +126,7 @@ class PosController extends Controller
                 'cash_amount' => $validated['cash_amount'] ?? $validated['total_amount'],
                 'change_amount' => $validated['change_amount'] ?? 0,
                 'payment_proof' => null,
+                'status' => 'completed',
             ];
 
             // Handle Payment Proof for Non-Cash

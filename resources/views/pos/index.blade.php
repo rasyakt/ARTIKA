@@ -1798,7 +1798,9 @@
             fetch('{{ route("pos.checkout") }}', {
                 method: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
                     // Content-Type not set to let browser set boundary
                 },
                 body: formData
