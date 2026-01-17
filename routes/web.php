@@ -81,6 +81,7 @@ Route::middleware(['auth'])->group(function () {
         // Audit Logs
         Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])->name('audit.index');
         Route::get('/audit/export', [\App\Http\Controllers\AuditController::class, 'export'])->name('audit.export');
+        Route::post('/audit/clear', [\App\Http\Controllers\AuditController::class, 'clear'])->name('audit.clear');
     });
 
     // Cashier Routes (POS)

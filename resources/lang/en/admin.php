@@ -100,6 +100,10 @@ return [
     'finance_report' => 'Financial Report',
     'select_period' => 'Select Period',
     'today' => 'Today',
+    'yesterday' => 'Yesterday',
+    'month' => 'Month',
+    'year' => 'Year',
+    'week' => 'Week',
     'this_week' => 'This Week',
     'this_month' => 'This Month',
     'this_year' => 'This Year',
@@ -111,6 +115,13 @@ return [
     // 'apply_filter' => 'Apply Filter', // Removed duplicate
     'cancel' => 'Cancel',
     'close' => 'Close',
+    'delete_logs' => 'Delete Logs',
+    'clear_logs' => 'Clear Logs',
+    'clear_logs_desc' => 'This action will permanently delete Audit Log data.',
+    'clear_logs_all' => 'Delete All Logs',
+    'clear_logs_filtered' => 'Delete Logs Based on Current Filter',
+    'clear_confirm' => 'Are you sure you want to delete these logs?',
+    'logs_cleared' => 'Audit logs successfully cleared.',
 
     // Warehouse Report
     'warehouse_reports_title' => 'Warehouse Reports',

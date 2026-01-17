@@ -169,4 +169,43 @@ class AuditController extends Controller
             'Invoice: ' . $transaction->invoice_no
         );
     }
+
+    /**
+     * Clear audit logs (filtered or all)
+     */
+    public function clear(Request $request)
+    {
+        $query = AuditLog::query();
+
+        if ($request->filled('clear_type') && $request->clear_type === 'filtered') {
+            // Apply current filters to deletion
+            if ($request->filled('start_date') && $request->filled('end_date')) {
+                $query->whereBetween('created_at', [
+                    $request->start_date . ' 00:00:00',
+                    $request->end_date . ' 23:59:59'
+                ]);
+            }
+            if ($request->filled('action')) {
+                $query->where('action', $request->action);
+            }
+            if ($request->filled('role_id')) {
+                $query->whereHas('user', function ($q) use ($request) {
+                    $q->where('role_id', $request->role_id);
+                });
+            }
+            if ($request->filled('search')) {
+                $search = $request->search;
+                $query->whereHas('user', function ($q) use ($search) {
+                    $q->where('nis', 'like', "%{$search}%")
+                        ->orWhere('username', 'like', "%{$search}%")
+                        ->orWhere('name', 'like', "%{$search}%");
+                });
+            }
+        }
+
+        $query->delete();
+
+        return redirect()->route('admin.audit.index')
+            ->with('success', __('admin.logs_cleared'));
+    }
 }

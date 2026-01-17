@@ -16,18 +16,37 @@
                 <p class="text-muted mb-0 ms-5 ps-3">{{ __('admin.audit_log_desc') }}</p>
             </div>
             <div class="col-md-5 d-flex gap-2 justify-content-end align-items-center">
+                {{-- Maintenance Dropdown --}}
+                <div class="dropdown">
+                    <button class="btn btn-outline-danger shadow-sm d-flex align-items-center" type="button" id="maintenanceDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                        <i class="fas fa-tools me-2"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="maintenanceDropdown" style="border-radius: 12px; padding: 0.5rem;">
+                        <li>
+                            <button class="dropdown-item py-2 px-3 text-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#clearLogsModal" style="border-radius: 8px;">
+                                <i class="fas fa-trash-alt me-2"></i> {{ __('admin.clear_logs') }}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                {{-- Filter Button --}}
                 <button class="btn btn-outline-brown shadow-sm" data-bs-toggle="modal"
                     data-bs-target="#filterModal" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                     <i class="fas fa-filter me-2"></i> {{ __('common.filter') }}
                 </button>
-                <button class="btn btn-outline-brown shadow-sm" onclick="exportReport('pdf')"
-                    style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
-                    <i class="fas fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
-                </button>
-                <button class="btn btn-brown shadow-sm" onclick="exportReport('print')"
-                    style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
-                    <i class="fas fa-print me-2"></i> {{ __('admin.print_report') }}
-                </button>
+
+                {{-- Export Group --}}
+                <div class="btn-group shadow-sm" style="border-radius: 10px; overflow: hidden;">
+                    <button class="btn btn-outline-brown border-end-0" onclick="exportReport('pdf')"
+                        style="padding: 0.5rem 1rem; font-weight: 600; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                        <i class="fas fa-file-pdf me-2"></i> PDF
+                    </button>
+                    <button class="btn btn-brown" onclick="exportReport('print')"
+                        style="padding: 0.5rem 1rem; font-weight: 600; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                        <i class="fas fa-print me-2"></i> {{ __('common.print') }}
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -329,6 +348,50 @@
         </div>
     </div>
 
+    <!-- Clear Logs Modal -->
+    <div class="modal fade" id="clearLogsModal" tabindex="-1" aria-labelledby="clearLogsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 15px; border: none; overflow: hidden;">
+                <div class="modal-header bg-danger text-white border-bottom-0">
+                    <h5 class="modal-title fw-bold" id="clearLogsModalLabel">
+                        <i class="fas fa-exclamation-triangle me-2"></i>{{ __('admin.clear_logs') }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-3">
+                        <i class="fas fa-trash-alt fa-3x text-danger opacity-25"></i>
+                    </div>
+                    <p class="mb-4">{{ __('admin.clear_logs_desc') }}<br><strong>{{ __('admin.clear_confirm') }}</strong></p>
+                    
+                    <form action="{{ route('admin.audit.clear') }}" method="POST" id="clearLogsForm">
+                        @csrf
+                        {{-- Preserved filters for 'filtered' deletion --}}
+                        <input type="hidden" name="start_date" value="{{ request('start_date') }}">
+                        <input type="hidden" name="end_date" value="{{ request('end_date') }}">
+                        <input type="hidden" name="action" value="{{ request('action') }}">
+                        <input type="hidden" name="role_id" value="{{ request('role_id') }}">
+                        <input type="hidden" name="search" value="{{ request('search') }}">
+                        <input type="hidden" name="clear_type" id="clear_type" value="all">
+
+                        <div class="d-grid gap-2">
+                            <button type="button" class="btn btn-danger py-2 fw-bold" onclick="confirmClear('all')">
+                                <i class="fas fa-dumpster me-2"></i>{{ __('admin.clear_logs_all') }}
+                            </button>
+                            
+                            @if(request()->anyFilled(['start_date', 'end_date', 'action', 'role_id', 'search']))
+                                <button type="button" class="btn btn-outline-danger py-2 fw-bold" onclick="confirmClear('filtered')">
+                                    <i class="fas fa-filter me-2"></i>{{ __('admin.clear_logs_filtered') }}
+                                </button>
+                            @endif
+                            <button type="button" class="btn btn-light py-2" data-bs-dismiss="modal">{{ __('admin.cancel') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Handle detail modal button click
         document.getElementById('detailModal').addEventListener('show.bs.modal', function (e) {
@@ -388,6 +451,13 @@
                 window.open("{{ route('admin.audit.export') }}?" + params.toString(), '_blank');
             } else {
                 window.location.href = "{{ route('admin.audit.export') }}?" + params.toString();
+            }
+        }
+
+        function confirmClear(type) {
+            if (confirm("{{ __('admin.clear_confirm') }}")) {
+                document.getElementById('clear_type').value = type;
+                document.getElementById('clearLogsForm').submit();
             }
         }
     </script>

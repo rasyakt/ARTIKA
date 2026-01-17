@@ -113,6 +113,13 @@ return [
     'quick_period' => 'Periode Cepat',
     'cancel' => 'Batal',
     'close' => 'Tutup',
+    'delete_logs' => 'Hapus Log',
+    'clear_logs' => 'Kosongkan Log',
+    'clear_logs_desc' => 'Tindakan ini akan menghapus data Log Audit secara permanen.',
+    'clear_logs_all' => 'Hapus Semua Log',
+    'clear_logs_filtered' => 'Hapus Log Berdasarkan Filter Saat Ini',
+    'clear_confirm' => 'Apakah Anda yakin ingin menghapus log ini?',
+    'logs_cleared' => 'Log audit berhasil dihapus.',
     'quick_report' => 'Informasi Tambahan',
 
     // Warehouse Report
