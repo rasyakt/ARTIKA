@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuditLog;
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -28,25 +29,32 @@ class AuditController extends Controller
             $query->where('action', $request->action);
         }
 
-        // Filter by user
-        if ($request->filled('user_id')) {
-            $query->where('user_id', $request->user_id);
+        // Filter by role
+        if ($request->filled('role_id')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('role_id', $request->role_id);
+            });
+        }
+
+        // Search by NIS or Username
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('nis', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
+            });
         }
 
         $logs = $query->with('user')
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->appends($request->all());
 
         $actions = AuditLog::distinct()->pluck('action');
-        $users = AuditLog::distinct()
-            ->pluck('user_id')
-            ->map(function ($userId) {
-                return \App\Models\User::find($userId);
-            })
-            ->filter()
-            ->unique('id');
+        $roles = Role::all();
 
-        return view('admin.audit.index', compact('logs', 'actions', 'users'));
+        return view('admin.audit.index', compact('logs', 'actions', 'roles'));
     }
 
     /**
@@ -68,6 +76,23 @@ class AuditController extends Controller
         // Filter by action
         if ($request->filled('action')) {
             $query->where('action', $request->action);
+        }
+
+        // Filter by role
+        if ($request->filled('role_id')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('role_id', $request->role_id);
+            });
+        }
+
+        // Search by NIS or Username
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('nis', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
+            });
         }
 
         $logs = $query->with('user.role')
@@ -132,6 +157,21 @@ class AuditController extends Controller
 
         if ($request->filled('action')) {
             $query->where('action', $request->action);
+        }
+
+        if ($request->filled('role_id')) {
+            $query->whereHas('user', function ($q) use ($request) {
+                $q->where('role_id', $request->role_id);
+            });
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('nis', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
+            });
         }
 
         $logs = $query->with('user.role')

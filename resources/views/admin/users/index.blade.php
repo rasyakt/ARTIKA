@@ -106,17 +106,19 @@
                                                         <i class="fa-solid fa-pen-to-square me-1"></i> {{ __('common.edit') }}
                                                     </button>
                                                 </li>
-                                                <li>
-                                                    <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
-                                                        onsubmit="return confirm('{{ __('admin.delete_user_confirm') }}');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="dropdown-item text-danger"
-                                                            style="border-radius: 8px; padding: 0.5rem 1rem;">
-                                                            <i class="fa-solid fa-trash me-1"></i> {{ __('admin.delete_user') }}
-                                                        </button>
-                                                    </form>
-                                                </li>
+                                                @if($user->role->name === 'cashier')
+                                                    <li>
+                                                        <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
+                                                            onsubmit="return confirm('{{ __('admin.delete_user_confirm') }}');">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="dropdown-item text-danger"
+                                                                style="border-radius: 8px; padding: 0.5rem 1rem;">
+                                                                <i class="fa-solid fa-trash me-1"></i> {{ __('admin.delete_user') }}
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                @endif
                                             </ul>
                                         </div>
                                     </td>
@@ -141,7 +143,30 @@
         </div>
     </div>
 
-    <!-- Add User Modal -->
+    <style>
+        .password-field {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #a18072;
+            cursor: pointer;
+            z-index: 10;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-password:hover {
+            color: #85695a;
+        }
+    </style>
     <div class="modal fade" id="addUserModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
@@ -169,8 +194,14 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.password') }}
                                     *</label>
-                                <input type="password" class="form-control" name="password" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                <div class="password-field">
+                                    <input type="password" class="form-control" name="password" id="add_password" required
+                                        style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 2.5rem 0.75rem 1rem;">
+                                    <button type="button" class="toggle-password"
+                                        onclick="togglePasswordVisibility('add_password', this)">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.nis') }}
@@ -185,7 +216,9 @@
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     <option value="">{{ __('common.select_role') }}</option>
                                     @foreach($roles as $role)
-                                        <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                                        @if($role->name === 'cashier')
+                                            <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -233,8 +266,14 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.password') }}
                                     ({{ __('admin.password_leave_blank') }})</label>
-                                <input type="password" class="form-control" name="password"
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                <div class="password-field">
+                                    <input type="password" class="form-control" name="password" id="edit_password"
+                                        style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 2.5rem 0.75rem 1rem;">
+                                    <button type="button" class="toggle-password"
+                                        onclick="togglePasswordVisibility('edit_password', this)">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.nis') }}
@@ -248,7 +287,9 @@
                                 <select class="form-select" id="edit_role_id" name="role_id" required
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     @foreach($roles as $role)
-                                        <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                                        @if($role->name !== 'admin')
+                                            <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                                        @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -274,8 +315,32 @@
             document.getElementById('edit_username').value = user.username;
             document.getElementById('edit_nis').value = user.nis || '';
             document.getElementById('edit_role_id').value = user.role_id;
+
+            // Reset password field and toggle icon
+            const passwordInput = document.getElementById('edit_password');
+            passwordInput.value = '';
+            passwordInput.type = 'password';
+            const toggleIcon = passwordInput.parentElement.querySelector('.toggle-password i');
+            if (toggleIcon) {
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+
             document.getElementById('editUserForm').action = `/admin/users/${user.id}`;
-            new bootstrap.Modal(document.getElementById('editUserModal')).show();
+        }
+
+        function togglePasswordVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
         }
     </script>
 @endsection

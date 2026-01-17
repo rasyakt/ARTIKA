@@ -11,7 +11,14 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with(['role'])->latest()->paginate(10);
+        // Only show non-admin users
+        $users = User::with(['role'])
+            ->whereHas('role', function ($query) {
+                $query->where('name', '!=', 'admin');
+            })
+            ->latest()
+            ->paginate(10);
+
         $roles = Role::all();
 
         return view('admin.users.index', compact('users', 'roles'));
@@ -26,6 +33,12 @@ class UserController extends Controller
             'role_id' => 'required|exists:roles,id',
             'nis' => 'nullable|string|unique:users',
         ]);
+
+        // Security check: only cashier accounts can be created
+        $role = Role::findOrFail($request->role_id);
+        if ($role->name !== 'cashier') {
+            return redirect()->back()->with('error', 'Only cashier accounts can be added!');
+        }
 
         User::create([
             'name' => $request->name,
@@ -42,6 +55,11 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
+        // Security check: cannot edit an admin
+        if ($user->role->name === 'admin') {
+            return redirect()->route('admin.users')->with('error', 'Cannot edit administrator accounts!');
+        }
+
         $request->validate([
             'name' => 'required|string|max:255',
             'username' => 'required|string|max:255|unique:users,username,' . $id,
@@ -49,6 +67,12 @@ class UserController extends Controller
             'role_id' => 'required|exists:roles,id',
             'nis' => 'nullable|string|unique:users,nis,' . $id,
         ]);
+
+        // Security check: cannot change role to admin or warehouse (warehouse can be edited but not added or switched to)
+        $newRole = Role::findOrFail($request->role_id);
+        if ($newRole->name === 'admin' || ($newRole->name === 'warehouse' && $user->role->name !== 'warehouse')) {
+            return redirect()->back()->with('error', 'Invalid role selection!');
+        }
 
         $data = [
             'name' => $request->name,
@@ -72,6 +96,11 @@ class UserController extends Controller
 
         if ($user->id === auth()->id()) {
             return redirect()->route('admin.users')->with('error', 'Cannot delete your own account!');
+        }
+
+        // Security check: only cashier accounts can be deleted
+        if ($user->role->name !== 'cashier') {
+            return redirect()->route('admin.users')->with('error', 'Only cashier accounts can be deleted!');
         }
 
         $user->delete();

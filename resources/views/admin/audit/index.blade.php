@@ -177,6 +177,15 @@
                 <form method="GET" action="{{ route('admin.audit.index') }}">
                     <div class="modal-body">
                         <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label class="form-label">Search User (NIS / Username / Name)</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                    <input type="text" name="search" class="form-control" placeholder="Enter NIS or Username..." value="{{ request('search') }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">{{ __('admin.start_date') }}</label>
                                 <input type="date" name="start_date" class="form-control"
@@ -200,12 +209,12 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">{{ __('common.user') }}</label>
-                                <select name="user_id" class="form-control">
-                                    <option value="">-- {{ __('admin.all_users') }} --</option>
-                                    @foreach($users as $user)
-                                        <option value="{{ $user->id }}" @selected(request('user_id') == $user->id)>
-                                            {{ $user->name }}
+                                <label class="form-label">{{ __('common.role') }}</label>
+                                <select name="role_id" class="form-control">
+                                    <option value="">-- {{ __('admin.all_roles') ?? 'All Roles' }} --</option>
+                                    @foreach($roles as $role)
+                                        <option value="{{ $role->id }}" @selected(request('role_id') == $role->id)>
+                                            {{ ucfirst($role->name) }}
                                         </option>
                                     @endforeach
                                 </select>

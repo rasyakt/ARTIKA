@@ -54,7 +54,7 @@ return [
     'start_date' => 'Start Date',
     'end_date' => 'End Date',
     'all_actions' => 'All Actions',
-    'all_users' => 'All Users',
+    'all_roles' => 'All Roles',
     'apply_filter' => 'Apply Filter',
     'audit_log_detail' => 'Audit Log Detail',
     'model_type' => 'Model Type',

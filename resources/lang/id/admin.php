@@ -54,7 +54,7 @@ return [
     'start_date' => 'Tanggal Awal',
     'end_date' => 'Tanggal Akhir',
     'all_actions' => 'Semua Aksi',
-    'all_users' => 'Semua User',
+    'all_roles' => 'Semua Role',
     'apply_filter' => 'Terapkan Filter',
     'audit_log_detail' => 'Detail Log Audit',
     'model_type' => 'Tipe Model',
