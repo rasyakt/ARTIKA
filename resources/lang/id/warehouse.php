@@ -13,6 +13,7 @@ return [
     'adjustment_reason' => 'Alasan Penyesuaian',
     'stock_management' => 'Manajemen Stok',
     'stock_movements' => 'Pergerakan Stok',
+    'stock_adjusted_successfully' => 'Penyesuaian stok berhasil',
     'low_stock_alerts' => 'Peringatan Stok Menipis',
     'adjust_stock' => 'Sesuaikan Stok',
     'current_stock' => 'Stok Saat Ini',

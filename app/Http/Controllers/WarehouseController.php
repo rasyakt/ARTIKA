@@ -172,7 +172,7 @@ class WarehouseController extends Controller
         return response()->json([
             'success' => true,
             'new_quantity' => $stock->quantity,
-            'message' => 'Stock adjusted successfully'
+            'message' => __('warehouse.stock_adjusted_successfully')
         ]);
     }
 }
