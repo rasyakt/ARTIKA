@@ -197,8 +197,8 @@
             document.getElementById('edit_email').value = supplier.email || '';
             document.getElementById('edit_address').value = supplier.address || '';
             document.getElementById('editSupplierForm').action = `/admin/suppliers/${supplier.id}`;
-            new bootstrap.Modal(document.getElementById('editSupplierModal')).show();
         }
+
 
         // Handle delete confirmation
         document.addEventListener('DOMContentLoaded', function() {

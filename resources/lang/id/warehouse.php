@@ -44,7 +44,7 @@ return [
     'quantity' => 'Jumlah',
     'reason_optional' => 'Alasan (Opsional)',
     'reason_placeholder' => 'contoh: Restock, Barang rusak, dll.',
-    'adjustment_note' => 'Catatan: Selisih akan dicatat untuk keperluan audit.',
+    'adjustment_note' => 'Selisih akan dicatat untuk keperluan audit.',
     'save_adjustment' => 'Simpan Penyesuaian',
     'enter_valid_quantity' => 'Harap masukkan jumlah yang valid',
     'saving' => 'Menyimpan...',

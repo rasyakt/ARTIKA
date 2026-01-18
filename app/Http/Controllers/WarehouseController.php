@@ -7,6 +7,7 @@ use App\Models\Stock;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\StockMovement;
+use App\Models\AuditLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -158,16 +159,29 @@ class WarehouseController extends Controller
         $stock->save();
 
         // Log the movement
+        $moveType = ($request->type === 'add') ? 'in' : 'adjustment';
+
         StockMovement::create([
             'product_id' => $request->product_id,
             'user_id' => Auth::id(),
-            'type' => 'adjustment',
+            'type' => $moveType,
             'quantity_before' => $quantityBefore,
             'quantity_after' => $stock->quantity,
             'quantity_change' => $quantityChange,
-            'reason' => $request->reason ?? 'Manual adjustment',
-            'reference' => 'ADJ-' . date('YmdHis')
+            'reason' => $request->reason ?? ($request->type === 'add' ? 'Restock/Stock In' : 'Manual adjustment'),
+            'reference' => ($request->type === 'add' ? 'IN-' : 'ADJ-') . date('YmdHis')
         ]);
+
+        // Audit Log
+        AuditLog::log(
+            'stock_adjusted',
+            'Stock',
+            $stock->id,
+            $quantityBefore,
+            $stock->quantity,
+            ['type' => $request->type, 'change' => $quantityChange],
+            'Manual adjustment for ' . $stock->product->name
+        );
 
         return response()->json([
             'success' => true,

@@ -7,9 +7,11 @@ use App\Models\Transaction;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Stock;
+use App\Models\StockMovement;
 use App\Models\TransactionItem;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -145,6 +147,18 @@ class AdminController extends Controller
         Stock::create([
             'product_id' => $product->id,
             'quantity' => 0
+        ]);
+
+        // Log initial movement
+        StockMovement::create([
+            'product_id' => $product->id,
+            'user_id' => Auth::id(),
+            'type' => 'in',
+            'quantity_before' => 0,
+            'quantity_after' => 0,
+            'quantity_change' => 0,
+            'reason' => 'Product Created',
+            'reference' => 'NEW-' . $product->barcode
         ]);
 
         return redirect()->route('admin.products')->with('success', 'Product created successfully!');
