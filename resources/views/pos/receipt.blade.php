@@ -228,8 +228,25 @@
     </div>
 
     <script>
-        // Auto print on load (optional)
-        // window.onload = function() { window.print(); }
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('auto_print')) {
+                window.print();
+
+                // Optional: Close tab after printing
+                window.onafterprint = function () {
+                    window.close();
+                };
+
+                // Fallback for browsers that don't support onafterprint or if printing is cancelled
+                setTimeout(() => {
+                    // Only close if it seems to be an automated window
+                    if (window.opener) {
+                        // window.close(); 
+                    }
+                }, 3000);
+            }
+        }
     </script>
 </body>
 

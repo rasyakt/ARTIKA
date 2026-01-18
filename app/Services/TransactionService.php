@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Interfaces\TransactionRepositoryInterface;
 use App\Interfaces\ProductRepositoryInterface;
 use App\Models\Stock;
+use App\Models\Product;
 use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -25,6 +26,18 @@ class TransactionService
 
     public function processTransaction(array $data, array $items)
     {
+        // 0. Preliminary Stock Check (Prevent negative stock)
+        foreach ($items as $item) {
+            $stock = Stock::where('product_id', $item['product_id'])->first();
+            $available = $stock ? $stock->quantity : 0;
+
+            if ($available < $item['quantity']) {
+                $product = Product::find($item['product_id']);
+                $productName = $product ? $product->name : 'Unknown Product';
+                throw new \Exception(trans('pos.insufficient_stock') . " ({$productName}. Tersedia: {$available}, Diminta: {$item['quantity']})");
+            }
+        }
+
         return DB::transaction(function () use ($data, $items) {
             // 1. Create Transaction Header
             $data['invoice_no'] = 'INV-' . strtoupper(Str::random(10)); // Simple invoice gen

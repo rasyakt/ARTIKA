@@ -95,4 +95,7 @@ return [
     'logout_confirmation_cancel' => 'Batal',
     'logout_confirmation_confirm' => 'Keluar',
     'no_logs_found' => 'Tidak ada log aktivitas ditemukan untuk akun Anda.',
+    'insufficient_stock' => 'Stok tidak mencukupi!',
+    'stock_limit_reached' => 'Batas stok tercapai untuk produk ini.',
+    'available_stock' => 'Stok tersedia',
 ];

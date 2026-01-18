@@ -94,4 +94,7 @@ return [
     'logout_confirmation_cancel' => 'Cancel',
     'logout_confirmation_confirm' => 'Logout',
     'no_logs_found' => 'No activity logs found for your account.',
+    'insufficient_stock' => 'Insufficient stock!',
+    'stock_limit_reached' => 'Stock limit reached for this product.',
+    'available_stock' => 'Available stock',
 ];

@@ -10,7 +10,7 @@ class ProductRepository implements ProductRepositoryInterface
 {
     public function getAllProducts()
     {
-        return Product::all();
+        return Product::with('stocks')->get();
     }
 
     public function findProductByBarcode($barcode)

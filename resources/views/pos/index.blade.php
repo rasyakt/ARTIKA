@@ -1348,7 +1348,8 @@
                                     <h6 class="mb-0 fw-800 text-truncate">{{ Auth::user()->name }}</h6>
                                     <div class="small text-muted text-truncate">@ {{ Auth::user()->username }}</div>
                                     <div class="small fw-700 text-primary" style="font-size: 0.7rem;">NIS:
-                                        {{ Auth::user()->nis ?? '-' }}</div>
+                                        {{ Auth::user()->nis ?? '-' }}
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -1418,11 +1419,20 @@
                 <div class="products-grid-container">
                     <div class="products-grid" id="productsGrid">
                         @foreach($products as $product)
-                            <div class="product-card" data-product-id="{{ $product->id }}"
-                                data-category="{{ $product->category_id }}" data-name="{{ $product->name }}"
-                                data-price="{{ $product->price }}">
-                                <div class="product-name">{{ $product->name }}</div>
+                            @php
+                                $totalStock = $product->stocks->sum('quantity');
+                                $isOutOfStock = $totalStock <= 0;
+                            @endphp
+                            <div class="product-card {{ $isOutOfStock ? 'opacity-50' : '' }}"
+                                data-product-id="{{ $product->id }}" data-category="{{ $product->category_id }}"
+                                data-name="{{ $product->name }}" data-price="{{ $product->price }}"
+                                data-stock="{{ $totalStock }}" data-barcode="{{ $product->barcode }}">
+                                <div class="product-name text-truncate w-100 px-1">{{ $product->name }}</div>
                                 <div class="product-price">Rp{{ number_format($product->price, 0, ',', '.') }}</div>
+                                <div class="small mt-1 {{ $isOutOfStock ? 'text-danger fw-bold' : 'text-muted' }}"
+                                    style="font-size: 0.65rem;">
+                                    {{ __('pos.qty') }}: {{ $totalStock }}
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -1765,19 +1775,29 @@
             const productId = productCard.dataset.productId;
             const productName = productCard.dataset.name;
             const productPrice = parseFloat(productCard.dataset.price);
+            const productStock = parseInt(productCard.dataset.stock || 0);
 
             const existingItem = cart.find(item => item.product_id == productId);
 
             if (existingItem) {
+                if (existingItem.quantity + 1 > productStock) {
+                    showToast('error', '{{ __('pos.stock_limit_reached') }} (' + productStock + ')');
+                    return;
+                }
                 existingItem.quantity += 1;
                 existingItem.subtotal = existingItem.quantity * existingItem.price;
             } else {
+                if (productStock <= 0) {
+                    showToast('error', '{{ __('pos.insufficient_stock') }}');
+                    return;
+                }
                 cart.push({
                     product_id: productId,
                     name: productName,
                     price: productPrice,
                     quantity: 1,
-                    subtotal: productPrice
+                    subtotal: productPrice,
+                    stock: productStock
                 });
             }
 
@@ -1826,6 +1846,10 @@
         }
 
         function increaseQuantity(index) {
+            if (cart[index].quantity + 1 > cart[index].stock) {
+                showToast('error', '{{ __('pos.stock_limit_reached') }} (' + cart[index].stock + ')');
+                return;
+            }
             cart[index].quantity += 1;
             cart[index].subtotal = cart[index].quantity * cart[index].price;
             updateCartDisplay();
@@ -2086,8 +2110,10 @@
                             buttonsStyling: false
                         }).then((result_swal) => {
                             if (result_swal.isConfirmed && result.transaction_id) {
-                                window.open('{{ url("pos/receipt") }}/' + result.transaction_id, '_blank');
+                                window.open('{{ url("pos/receipt") }}/' + result.transaction_id + '?auto_print=true', '_blank');
                             }
+                            // Auto-refresh stock by reloading page
+                            window.location.reload();
                         });
 
                         cart = [];
