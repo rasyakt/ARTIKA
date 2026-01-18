@@ -12,8 +12,6 @@
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -130,25 +128,50 @@
             gap: 1.5rem;
         }
 
-        .navbar-user {
-            font-size: 0.85rem;
-            opacity: 0.95;
+        .profile-trigger {
+            transition: all 0.2s;
+            border-radius: 12px;
         }
 
-        .btn-logout {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
+        .profile-trigger:hover .profile-avatar {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.2s;
         }
 
-        .btn-logout:hover {
-            background: rgba(255, 255, 255, 0.25);
+        .dropdown-menu {
+            border: 1px solid rgba(133, 105, 90, 0.1);
+            animation: slideIn 0.2s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--brown-50);
+            color: var(--primary-dark);
         }
 
         /* MAIN LAYOUT */
@@ -890,6 +913,8 @@
                 flex-shrink: 0;
                 background: var(--primary);
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                z-index: 1000;
+                position: relative;
             }
 
             .navbar-brand {
@@ -901,29 +926,34 @@
                 gap: 0.35rem;
             }
 
-            .navbar-user {
-                display: none;
-                /* Hide username on mobile to save space */
+            .profile-trigger {
+                transition: transform 0.2s ease;
             }
 
-            .btn-logout {
-                width: 36px;
-                height: 36px;
-                padding: 0;
+            .profile-trigger:active {
+                transform: scale(0.92);
+            }
+
+            .profile-avatar {
+                width: 38px;
+                height: 38px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                border-radius: 10px;
-                font-size: 0.9rem;
+                color: white;
+                font-size: 1.4rem;
+                border: 1px solid rgba(255, 255, 255, 0.1);
             }
 
-            .btn-logout i {
-                margin: 0 !important;
+            .dropdown-item {
+                transition: all 0.2s ease;
             }
 
-            .btn-logout span {
-                display: none;
-                /* Hide text on mobile */
+            .dropdown-item:active {
+                background-color: var(--brown-50);
+                color: var(--primary-dark);
             }
 
             /* Main layout stays flexible */
@@ -1298,24 +1328,52 @@
                 <i class="fas fa-shopping-cart"></i> {{ __('pos.brand') }}
             </div>
             <div class="navbar-right">
-                <div class="navbar-user">
-                    {{ Auth::user()->name }}
-                </div>
-                <a href="{{ route('pos.history') }}" class="btn-logout text-decoration-none me-2"
-                    style="background: rgba(255, 255, 255, 0.25);" title="History">
-                    <i class="fa-solid fa-list-check me-1"></i> <span>History</span>
-                </a>
-                <a href="{{ route('pos.logs') }}" class="btn-logout text-decoration-none me-2"
-                    style="background: rgba(255, 255, 255, 0.25);" title="Logs">
-                    <i class="fa-solid fa-clock-rotate-left me-1"></i> <span>Logs</span>
-                </a>
-                <form action="{{ route('logout') }}" method="POST" style="display: inline;" id="logoutForm">
-                    @csrf
-                    <button type="button" class="btn-logout border-0" id="btnLogout"
-                        style="background: rgba(255, 255, 255, 0.25);" title="Logout">
-                        <i class="fas fa-sign-out-alt me-1"></i> <span>Logout</span>
+                <div class="dropdown">
+                    <button class="btn p-0 border-0 profile-trigger d-flex align-items-center" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <span class="ms-2 fw-600 text-white d-none d-lg-inline">{{ Auth::user()->name }}</span>
                     </button>
-                </form>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
+                        style="min-width: 240px; border-radius: 16px;">
+                        <li class="p-3 bg-light border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                    style="width: 42px; height: 42px; font-size: 1.2rem;">
+                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                </div>
+                                <div class="overflow-hidden">
+                                    <h6 class="mb-0 fw-800 text-truncate">{{ Auth::user()->name }}</h6>
+                                    <div class="small text-muted text-truncate">@ {{ Auth::user()->username }}</div>
+                                    <div class="small fw-700 text-primary" style="font-size: 0.7rem;">NIS:
+                                        {{ Auth::user()->nis ?? '-' }}</div>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 px-3 d-flex align-items-center"
+                                href="{{ route('pos.history') }}">
+                                <i class="fa-solid fa-clock-rotate-left me-3 text-primary opacity-75"></i>
+                                <span class="fw-600">Riwayat Transaksi</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ route('pos.logs') }}">
+                                <i class="fa-solid fa-list-check me-3 text-primary opacity-75"></i>
+                                <span class="fw-600">Log Aktivitas</span>
+                            </a>
+                        </li>
+                        <li class="border-top mt-1">
+                            <button type="button" class="dropdown-item py-3 px-3 d-flex align-items-center text-danger"
+                                id="btnLogout">
+                                <i class="fas fa-sign-out-alt me-3"></i>
+                                <span class="fw-700">Keluar Sistem</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -2187,6 +2245,10 @@
             });
         });
     </script>
+
+    <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
 </body>
 
 </html>
