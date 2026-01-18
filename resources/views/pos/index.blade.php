@@ -870,320 +870,386 @@
         /* MOBILE - SMALL SCREENS */
         @media (max-width: 576px) {
             body {
-                overflow: auto;
+                overflow: hidden !important;
             }
 
             html,
             body {
-                height: auto;
+                height: 100%;
             }
 
             .pos-container {
-                height: auto;
+                height: 100%;
+                display: flex;
                 flex-direction: column;
             }
 
             .pos-navbar {
-                padding: 0.5rem 1rem;
-                height: auto;
-                position: sticky;
-                top: 0;
-                z-index: 200;
+                padding: 0 1rem;
+                height: 52px;
+                flex-shrink: 0;
+                background: var(--primary);
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             }
 
             .navbar-brand {
-                font-size: 0.95rem;
+                font-size: 1rem;
+                font-weight: 700;
             }
 
             .navbar-right {
-                gap: 0.5rem;
+                gap: 0.35rem;
             }
 
             .navbar-user {
-                font-size: 0.7rem;
+                display: none;
+                /* Hide username on mobile to save space */
             }
 
             .btn-logout {
-                padding: 0.25rem 0.5rem;
-                font-size: 0.65rem;
+                width: 36px;
+                height: 36px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 10px;
+                font-size: 0.9rem;
             }
 
-            /* Stack layout vertically */
+            .btn-logout i {
+                margin: 0 !important;
+            }
+
+            .btn-logout span {
+                display: none;
+                /* Hide text on mobile */
+            }
+
+            /* Main layout stays flexible */
             .pos-main {
                 flex-direction: column;
-                height: auto;
-                overflow: visible;
+                flex: 1;
+                overflow: hidden;
+                position: relative;
             }
 
             .products-section {
                 width: 100%;
-                border-right: none;
-                border-bottom: 1px solid var(--gray-300);
-                min-height: 350px;
-                max-height: 60vh;
-                padding-bottom: 1rem;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                border: none;
+            }
+
+            /* View toggling */
+            #mobileCartView {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: white;
+                z-index: 150;
+                flex-direction: column;
+            }
+
+            #mobileCartView.active {
+                display: flex;
             }
 
             .cart-section {
                 width: 100%;
-                border-left: none;
-                border-top: 1px solid var(--gray-300);
-                min-height: auto;
-                position: relative;
+                height: 100%;
+                border: none;
+                display: flex;
+                flex-direction: column;
             }
 
             .search-section {
-                padding: 0.75rem;
-                position: sticky;
-                top: 0;
+                padding: 0.85rem 1rem;
                 background: white;
-                z-index: 40;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                border-bottom: 1px solid var(--gray-100);
+            }
+
+            .search-input-group {
+                background: #f1f3f5;
+                border: 1px solid rgba(0, 0, 0, 0.05);
+                border-radius: 50px;
+                padding: 0 1rem;
+                height: 44px;
+                transition: all 0.2s ease;
+            }
+
+            .search-input-group:focus-within {
+                background: white;
+                border-color: var(--primary-light);
+                box-shadow: 0 4px 12px rgba(133, 105, 90, 0.1);
             }
 
             .search-input {
-                padding: 0.6rem;
                 font-size: 1rem;
-                /* Prevent iOS zoom */
-                height: 44px;
+                height: 100%;
             }
 
             .category-filter {
                 position: sticky;
-                top: 68px;
+                top: 0;
                 z-index: 40;
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-                padding: 0.7rem 0.75rem;
-                gap: 0.45rem;
-                border-bottom: 2px solid var(--gray-300);
-                background: linear-gradient(to right, white 0%, white 95%, rgba(255, 255, 255, 0.8) 100%);
+                padding: 0.8rem 0.75rem;
+                border-bottom: 1px solid var(--gray-200);
+                background: rgba(255, 255, 255, 0.85);
+                backdrop-filter: blur(15px);
+                display: flex;
+                gap: 0.6rem;
+                overflow-x: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+
+            .category-filter::-webkit-scrollbar {
+                display: none;
             }
 
             .category-btn {
-                padding: 0.6rem 1.1rem;
-                font-size: 0.78rem;
-                min-height: 40px;
-                border-radius: 9px;
-                border: 2px solid var(--gray-300);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+                padding: 0.5rem 1.25rem;
+                font-size: 0.8rem;
+                border-radius: 50px;
+                border: 1px solid var(--gray-300);
+                background: white;
+                color: var(--gray-700);
+                white-space: nowrap;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+                font-weight: 500;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
                 flex-shrink: 0;
-            }
-
-            .category-btn:hover {
-                border-color: var(--primary-light);
-                box-shadow: 0 4px 12px rgba(133, 105, 90, 0.15);
-                color: var(--primary);
             }
 
             .category-btn.active {
-                box-shadow: 0 6px 16px rgba(133, 105, 90, 0.25);
-                border-color: transparent;
-                font-weight: 700;
-            }
-
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: 0.6rem;
+                background: var(--primary);
+                color: white;
+                border-color: var(--primary);
+                box-shadow: 0 4px 10px rgba(133, 105, 90, 0.3);
             }
 
             .products-grid-container {
-                padding: 0.75rem;
+                padding: 1rem 0.75rem;
+                flex: 1;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                background: #f8f9fa;
+            }
+
+            .products-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                background: white;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             }
 
             .product-card {
-                padding: 0.6rem;
-                min-height: 90px;
+                padding: 1.15rem 1rem;
+                min-height: auto;
+                border-radius: 0;
+                background: white;
+                border: none;
+                border-bottom: 1px solid var(--gray-100);
+                box-shadow: none;
+                transition: background 0.2s ease;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                text-align: left;
+                position: relative;
+                -webkit-tap-highlight-color: transparent;
             }
 
-            .product-icon {
-                font-size: 1.5rem;
-                margin-bottom: 0.3rem;
+            .product-card:last-child {
+                border-bottom: none;
+            }
+
+            .product-card:active {
+                background: #fdfaf8;
+                transform: none;
+            }
+
+            .product-icon,
+            .stock-badge {
+                display: none !important;
             }
 
             .product-name {
-                font-size: 0.7rem;
-                margin-bottom: 0.2rem;
+                font-size: 0.92rem;
+                font-weight: 600;
+                color: var(--gray-800);
+                margin-bottom: 0;
+                flex: 1;
+                line-height: 1.3;
+                padding-right: 1rem;
+                display: block;
+                overflow: visible;
+                text-overflow: unset;
+                -webkit-line-clamp: unset;
             }
 
             .product-price {
-                font-size: 0.75rem;
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: var(--primary);
+                white-space: nowrap;
             }
 
-            /* Cart Header */
-            .cart-header {
-                padding: 0.75rem;
+            /* Bottom Navigation */
+            .bottom-nav {
                 display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            .cart-title {
-                font-size: 0.9rem;
-                margin-bottom: 0;
-                flex: 1;
-            }
-
-            .summary-stats {
-                gap: 0.4rem;
+                height: 65px;
+                background: white;
+                border-top: 1px solid var(--gray-200);
+                padding-bottom: env(safe-area-inset-bottom);
                 flex-shrink: 0;
+                z-index: 200;
+                box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.06);
             }
 
-            .stat-item {
-                padding: 0.25rem 0.4rem;
+            .nav-item {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                color: var(--gray-700);
+                text-decoration: none;
+                font-size: 0.72rem;
+                font-weight: 600;
+                gap: 0.25rem;
+                opacity: 0.55;
+                transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             }
 
-            .stat-label {
-                font-size: 0.55rem;
+            .nav-item.active {
+                color: var(--primary);
+                opacity: 1;
             }
 
-            .stat-value {
-                font-size: 0.75rem;
+            .nav-item i {
+                font-size: 1.25rem;
             }
 
-            /* Cart Items - Scrollable */
+            /* Floating Cart Button */
+            .fab-cart {
+                position: absolute;
+                bottom: 85px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 6px 20px rgba(133, 105, 90, 0.45);
+                z-index: 100;
+                border: none;
+                transition: transform 0.2s, background 0.2s;
+            }
+
+            .fab-cart:active {
+                transform: scale(0.92);
+            }
+
+            .fab-badge {
+                position: absolute;
+                top: -5px;
+                right: -5px;
+                background: var(--danger);
+                color: white;
+                border-radius: 50%;
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                border: 2px solid white;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+
             .cart-items {
-                padding: 0.5rem;
-                max-height: 200px;
+                flex: 1;
+                max-height: none;
                 overflow-y: auto;
             }
 
-            .cart-item {
-                padding: 0.5rem;
-                margin-bottom: 0.4rem;
-            }
-
-            .cart-item-name {
-                font-size: 0.75rem;
-            }
-
-            .cart-item-price {
-                font-size: 0.75rem;
-            }
-
-            .qty-display {
-                width: 24px;
-                font-size: 0.7rem;
-            }
-
-            .qty-btn {
-                min-height: 32px;
-                min-width: 32px;
-            }
-
-            .cart-item-remove {
-                width: 32px;
-                height: 32px;
-                min-height: 32px;
-            }
-
-            /* Cart Footer - Optimized */
             .cart-footer {
-                padding: 0.75rem;
-                background: white;
-                border-top: 2px solid var(--gray-200);
-                box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
-            }
-
-            .totals-section {
-                margin-bottom: 0.75rem;
-                padding: 0.5rem;
-                border-radius: 6px;
-                background: var(--brown-50);
-            }
-
-            .total-row {
-                font-size: 0.8rem;
-                padding: 0.3rem 0;
-            }
-
-            .total-row.final {
-                font-size: 0.95rem;
-                margin-top: 0.3rem;
-            }
-
-            /* Payment Section - Full width on mobile */
-            .payment-section {
-                margin-bottom: 0.75rem;
-            }
-
-            .payment-label {
-                font-size: 0.75rem;
-                margin-bottom: 0.4rem;
-            }
-
-            .payment-methods {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 0.3rem;
-            }
-
-            .payment-method-btn {
-                padding: 0.4rem 0.25rem;
-                font-size: 0.65rem;
-                min-height: 40px;
-                transition: all 0.15s;
-            }
-
-            .payment-method-btn:active {
-                transform: scale(0.95);
-            }
-
-            /* Checkout Buttons - Large touch targets */
-            .checkout-buttons {
-                gap: 0.4rem;
+                padding: 1rem;
+                background: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(15px);
+                border-top: 1px solid var(--gray-200);
             }
 
             .btn-checkout {
-                padding: 0.65rem 0.5rem;
-                font-size: 0.8rem;
-                min-height: 48px;
-                border-radius: 8px;
-                font-weight: 600;
+                min-height: 54px;
+                border-radius: 14px;
+                font-size: 1.05rem;
             }
 
-            .btn-checkout i {
-                margin-right: 0.3rem;
+            .scanner-section {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: black;
+                z-index: 1000;
+                flex-direction: column;
             }
 
-            /* Scanner Section */
-            .btn-toggle-scanner {
-                padding: 0.4rem 0.75rem;
-                font-size: 0.75rem;
-                min-height: 40px;
+            .scanner-section.active {
+                display: flex;
+            }
+
+            .scanner-header {
+                padding: 1rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: white;
+                background: rgba(0, 0, 0, 0.5);
             }
 
             #reader {
-                max-height: 200px;
-                border-radius: 8px;
+                flex: 1;
+                width: 100% !important;
+                border: none !important;
+                border-radius: 0 !important;
+            }
+        }
+
+        /* Responsive Visibility Helpers */
+        @media (max-width: 576px) {
+            .pos-main>.cart-section {
+                display: none !important;
+            }
+        }
+
+        @media (min-width: 577px) {
+
+            .bottom-nav,
+            .fab-cart,
+            #mobileCartView {
+                display: none !important;
             }
 
-            /* Modal Keypad - Touch friendly */
-            .numeric-keypad {
-                gap: 0.4rem;
-                margin-bottom: 1rem;
-            }
-
-            .keypad-btn {
-                padding: 0.75rem 0.5rem;
-                font-size: 0.95rem;
-                border-radius: 8px;
-                min-height: 48px;
-                font-weight: 600;
-            }
-
-            .keypad-btn:active {
-                transform: scale(0.96);
-            }
-
-            /* Improve touch targets globally */
-            button:not(.qty-btn) {
-                min-height: 44px;
-            }
-
-            input[type="text"],
-            input[type="date"],
-            select {
-                min-height: 44px;
-                font-size: 1rem;
+            .pos-main>.cart-section {
+                display: flex !important;
             }
         }
 
@@ -1236,17 +1302,18 @@
                     {{ Auth::user()->name }}
                 </div>
                 <a href="{{ route('pos.history') }}" class="btn-logout text-decoration-none me-2"
-                    style="background: rgba(255, 255, 255, 0.25);">
-                    <i class="fa-solid fa-list-check me-1"></i> History
+                    style="background: rgba(255, 255, 255, 0.25);" title="History">
+                    <i class="fa-solid fa-list-check me-1"></i> <span>History</span>
                 </a>
                 <a href="{{ route('pos.logs') }}" class="btn-logout text-decoration-none me-2"
-                    style="background: rgba(255, 255, 255, 0.25);">
-                    <i class="fa-solid fa-clock-rotate-left me-1"></i> Logs
+                    style="background: rgba(255, 255, 255, 0.25);" title="Logs">
+                    <i class="fa-solid fa-clock-rotate-left me-1"></i> <span>Logs</span>
                 </a>
                 <form action="{{ route('logout') }}" method="POST" style="display: inline;" id="logoutForm">
                     @csrf
-                    <button type="button" class="btn-logout" id="btnLogout" title="{{ __('pos.logout') }}">
-                        <i class="fas fa-sign-out-alt"></i>
+                    <button type="button" class="btn-logout border-0" id="btnLogout"
+                        style="background: rgba(255, 255, 255, 0.25);" title="Logout">
+                        <i class="fas fa-sign-out-alt me-1"></i> <span>Logout</span>
                     </button>
                 </form>
             </div>
@@ -1296,7 +1363,6 @@
                             <div class="product-card" data-product-id="{{ $product->id }}"
                                 data-category="{{ $product->category_id }}" data-name="{{ $product->name }}"
                                 data-price="{{ $product->price }}">
-                                <div class="product-icon"><i class="fas fa-box"></i></div>
                                 <div class="product-name">{{ $product->name }}</div>
                                 <div class="product-price">Rp{{ number_format($product->price, 0, ',', '.') }}</div>
                             </div>
@@ -1313,17 +1379,17 @@
                     <div class="summary-stats">
                         <div class="stat-item">
                             <div class="stat-label">{{ __('pos.items') }}</div>
-                            <div class="stat-value" id="cartItemCount">0</div>
+                            <div class="stat-value cartItemCount">0</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-label">{{ __('pos.qty') }}</div>
-                            <div class="stat-value" id="cartQtyCount">0</div>
+                            <div class="stat-value cartQtyCount">0</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- CART ITEMS -->
-                <div class="cart-items" id="cartItems">
+                <div class="cart-items cartItemsContainer" id="cartItems">
                     <div class="cart-empty">{{ __('pos.cart_empty') }}</div>
                 </div>
 
@@ -1333,7 +1399,7 @@
                     <div class="totals-section">
                         <div class="total-row">
                             <span>{{ __('common.total') }}:</span>
-                            <span id="totalDisplay">Rp0</span>
+                            <span class="totalDisplay" id="totalDisplay">Rp0</span>
                         </div>
                     </div>
 
@@ -1342,23 +1408,88 @@
                         <label class="payment-label"><i class="fas fa-wallet"></i>
                             {{ __('pos.payment_method') }}</label>
                         <div class="payment-methods">
-                            <div class="payment-methods">
-                                <button class="payment-method-btn active"
-                                    data-method="cash">{{ __('pos.cash') }}</button>
-                                <button class="payment-method-btn"
-                                    data-method="non-cash">{{ __('pos.non_cash') }}</button>
-                            </div>
+                            <button class="payment-method-btn paymentMethodBtn active"
+                                data-method="cash">{{ __('pos.cash') }}</button>
+                            <button class="payment-method-btn paymentMethodBtn"
+                                data-method="non-cash">{{ __('pos.non_cash') }}</button>
                         </div>
                     </div>
 
                     <!-- BUTTONS -->
                     <div class="checkout-buttons">
-                        <button class="btn-checkout btn-cancel" id="clearBtn"><i class="fas fa-trash"></i></button>
-                        <button class="btn-checkout btn-finish" id="checkoutBtn" onclick="checkout()" disabled><i
-                                class="fas fa-check-circle"></i> {{ __('pos.checkout') }}</button>
+                        <button class="btn-checkout btn-cancel clearBtn" id="clearBtn"><i
+                                class="fas fa-trash"></i></button>
+                        <button class="btn-checkout btn-finish checkoutBtn" id="checkoutBtn" onclick="checkout()"
+                            disabled><i class="fas fa-check-circle"></i> {{ __('pos.checkout') }}</button>
                     </div>
                 </div>
             </div>
+
+            <!-- MOBILE CART VIEW (OVERLAY) -->
+            <div id="mobileCartView">
+                <div class="cart-header">
+                    <div class="cart-title" id="closeCartBtn">
+                        <i class="fas fa-arrow-left me-2"></i> {{ __('pos.cart') }}
+                    </div>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <div class="stat-label">{{ __('pos.items') }}</div>
+                            <div class="stat-value cartItemCount">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cart-items cartItemsContainer" id="cartItemsMobile">
+                    <div class="cart-empty">{{ __('pos.cart_empty') }}</div>
+                </div>
+                <div class="cart-footer">
+                    <div class="totals-section">
+                        <div class="total-row final">
+                            <span>{{ __('common.total') }}:</span>
+                            <span class="totalDisplay">Rp0</span>
+                        </div>
+                    </div>
+                    <div class="payment-section">
+                        <div class="payment-methods">
+                            <button class="payment-method-btn paymentMethodBtn active"
+                                data-method="cash">{{ __('pos.cash') }}</button>
+                            <button class="payment-method-btn paymentMethodBtn"
+                                data-method="non-cash">{{ __('pos.non_cash') }}</button>
+                        </div>
+                    </div>
+                    <div class="checkout-buttons">
+                        <button class="btn-checkout btn-cancel clearBtn"><i class="fas fa-trash"></i></button>
+                        <button class="btn-checkout btn-finish checkoutBtn" disabled>
+                            <i class="fas fa-check-circle me-2"></i> {{ __('pos.checkout') }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAB for Mobile -->
+        <button class="fab-cart" id="fabCart" style="display: none;">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="fab-badge cartQtyCount">0</span>
+        </button>
+
+        <!-- BOTTOM NAV for Mobile -->
+        <div class="bottom-nav">
+            <a href="#" class="nav-item active" id="navShop">
+                <i class="fas fa-th-large"></i>
+                <span>Produk</span>
+            </a>
+            <a href="#" class="nav-item" id="navCart">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Keranjang</span>
+            </a>
+            <a href="#" class="nav-item" id="navScannerMobile">
+                <i class="fas fa-barcode"></i>
+                <span>Scan</span>
+            </a>
+            <a href="{{ route('pos.history') }}" class="nav-item">
+                <i class="fas fa-history"></i>
+                <span>Riwayat</span>
+            </a>
         </div>
     </div>
 
@@ -1485,7 +1616,7 @@
         let scanner = null;
 
         document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.payment-method-btn').forEach((btn, idx) => {
+            document.querySelectorAll('.paymentMethodBtn').forEach((btn, idx) => {
                 if (idx === 0) {
                     btn.classList.add('active');
                     selectedPaymentMethod = btn.dataset.method;
@@ -1500,15 +1631,19 @@
                 btn.addEventListener('click', () => filterByCategory(btn));
             });
 
-            document.getElementById('clearBtn').addEventListener('click', clearCart);
-            document.getElementById('checkoutBtn').addEventListener('click', () => {
-                console.log('Checkout button clicked');
-                console.log('Cart items:', cart.length);
-                console.log('Selected payment method:', selectedPaymentMethod);
-                checkout();
+            document.querySelectorAll('.clearBtn').forEach(btn => {
+                btn.addEventListener('click', clearCart);
             });
-            document.querySelectorAll('.payment-method-btn').forEach(btn => {
-                btn.addEventListener('click', () => selectPaymentMethod(btn));
+
+            document.querySelectorAll('.checkoutBtn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    console.log('Checkout button clicked');
+                    checkout();
+                });
+            });
+
+            document.querySelectorAll('.paymentMethodBtn').forEach(btn => {
+                btn.addEventListener('click', () => selectPaymentMethod(btn.dataset.method));
             });
 
             document.getElementById('productSearch').addEventListener('keyup', searchProducts);
@@ -1516,6 +1651,42 @@
             // Scanner handlers
             document.getElementById('openScannerBtn').addEventListener('click', openScanner);
             document.getElementById('closeScannerBtn').addEventListener('click', closeScanner);
+            document.getElementById('navScannerMobile').addEventListener('click', (e) => {
+                e.preventDefault();
+                openScanner();
+            });
+
+            // Mobile Navigation and Cart logic
+            const mobileCartView = document.getElementById('mobileCartView');
+            const fabCart = document.getElementById('fabCart');
+            const navShop = document.getElementById('navShop');
+            const navCart = document.getElementById('navCart');
+            const closeCartBtn = document.getElementById('closeCartBtn');
+
+            function toggleMobileCart(show) {
+                if (show) {
+                    mobileCartView.classList.add('active');
+                    navCart.classList.add('active');
+                    if (navShop) navShop.classList.remove('active');
+                    fabCart.style.display = 'none';
+                } else {
+                    mobileCartView.classList.remove('active');
+                    navCart.classList.remove('active');
+                    if (navShop) navShop.classList.add('active');
+                    if (cart.length > 0) fabCart.style.display = 'flex';
+                }
+            }
+
+            if (navCart) navCart.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleMobileCart(true);
+            });
+            if (navShop) navShop.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleMobileCart(false);
+            });
+            if (fabCart) fabCart.addEventListener('click', () => toggleMobileCart(true));
+            if (closeCartBtn) closeCartBtn.addEventListener('click', () => toggleMobileCart(false));
 
             // Auto-focus payment input when modal opens
             const keypadModal = document.getElementById('keypadModal');
@@ -1553,16 +1724,24 @@
             }
 
             updateCartDisplay();
+
+            // Show FAB on mobile if we're not in cart view
+            if (window.innerWidth <= 576 && !document.getElementById('mobileCartView').classList.contains('active')) {
+                document.getElementById('fabCart').style.display = 'flex';
+            }
         }
 
         function updateCartDisplay() {
-            const cartItemsContainer = document.getElementById('cartItems');
+            const cartContainers = document.querySelectorAll('.cartItemsContainer');
+            const checkoutBtns = document.querySelectorAll('.checkoutBtn');
+            const fabCart = document.getElementById('fabCart');
 
             if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<div class="cart-empty">{{ __('pos.cart_empty') }}</div>';
-                document.getElementById('checkoutBtn').disabled = true;
+                cartContainers.forEach(c => c.innerHTML = '<div class="cart-empty">{{ __('pos.cart_empty') }}</div>');
+                checkoutBtns.forEach(b => b.disabled = true);
+                if (fabCart) fabCart.style.display = 'none';
             } else {
-                cartItemsContainer.innerHTML = cart.map((item, index) => `
+                const cartHtml = cart.map((item, index) => `
                     <div class="cart-item">
                         <div class="cart-item-header">
                             <span class="cart-item-name">${item.name}</span>
@@ -1581,7 +1760,8 @@
                     </div>
                 `).join('');
 
-                document.getElementById('checkoutBtn').disabled = false;
+                cartContainers.forEach(c => c.innerHTML = cartHtml);
+                checkoutBtns.forEach(b => b.disabled = false);
             }
 
             updateTotals();
@@ -1624,15 +1804,18 @@
 
         function updateTotals() {
             const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
-            document.getElementById('totalDisplay').textContent = 'Rp' + formatCurrency(subtotal);
-            document.getElementById('cartItemCount').textContent = cart.length;
-            document.getElementById('cartQtyCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const qtyCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            document.querySelectorAll('.totalDisplay').forEach(el => el.textContent = 'Rp' + formatCurrency(subtotal));
+            document.querySelectorAll('.cartItemCount').forEach(el => el.textContent = cart.length);
+            document.querySelectorAll('.cartQtyCount').forEach(el => el.textContent = qtyCount);
         }
 
-        function selectPaymentMethod(btn) {
-            document.querySelectorAll('.payment-method-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedPaymentMethod = btn.dataset.method;
+        function selectPaymentMethod(method) {
+            document.querySelectorAll('.paymentMethodBtn').forEach(b => {
+                b.dataset.method === method ? b.classList.add('active') : b.classList.remove('active');
+            });
+            selectedPaymentMethod = method;
         }
 
         function filterByCategory(btn) {
