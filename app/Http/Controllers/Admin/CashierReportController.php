@@ -22,6 +22,8 @@ class CashierReportController extends Controller
         $period = $request->input('period', 'month');
         $startDate = $request->input('start_date');
         $endDate = $request->input('end_date');
+        $search = $request->input('search');
+        $action = $request->input('action');
 
         if (!$startDate || !$endDate) {
             switch ($period) {
@@ -52,8 +54,10 @@ class CashierReportController extends Controller
         $paymentBreakdown = $this->cashierReportService->getPaymentMethodBreakdown($startDate, $endDate);
         $topProducts = $this->cashierReportService->getTopSellingProducts($startDate, $endDate);
         $cashierPerformance = $this->cashierReportService->getTransactionsByUser($startDate, $endDate);
-        $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate);
-        $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate);
+        $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 20, $search);
+        $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate, $search, $action);
+
+        $actions = \App\Models\AuditLog::distinct()->pluck('action');
 
         return view('admin.reports.cashier.index', compact(
             'summary',
@@ -64,7 +68,10 @@ class CashierReportController extends Controller
             'auditLogs',
             'startDate',
             'endDate',
-            'period'
+            'period',
+            'actions',
+            'search',
+            'action'
         ));
     }
 
@@ -72,13 +79,15 @@ class CashierReportController extends Controller
     {
         $startDate = $request->input('start_date') ? Carbon::parse($request->input('start_date')) : Carbon::now()->startOfMonth();
         $endDate = $request->input('end_date') ? Carbon::parse($request->input('end_date')) : Carbon::now()->endOfMonth();
+        $search = $request->input('search');
+        $action = $request->input('action');
 
         $summary = $this->cashierReportService->getSummaryStats($startDate, $endDate);
         $paymentBreakdown = $this->cashierReportService->getPaymentMethodBreakdown($startDate, $endDate);
         $topProducts = $this->cashierReportService->getTopSellingProducts($startDate, $endDate);
         $cashierPerformance = $this->cashierReportService->getTransactionsByUser($startDate, $endDate);
-        $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 50);
-        $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate);
+        $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 50, $search);
+        $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate, $search, $action);
 
         if ($request->input('format') === 'pdf') {
             $pdf = Pdf::loadView('admin.reports.cashier.print', [
@@ -90,7 +99,9 @@ class CashierReportController extends Controller
                 'auditLogs' => $auditLogs,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
-                'isPdf' => true
+                'isPdf' => true,
+                'search' => $search,
+                'action' => $action
             ]);
             return $pdf->download('cashier-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
         }
@@ -103,7 +114,9 @@ class CashierReportController extends Controller
             'recentTransactions',
             'auditLogs',
             'startDate',
-            'endDate'
+            'endDate',
+            'search',
+            'action'
         ));
     }
 }

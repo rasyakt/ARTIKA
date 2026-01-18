@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cashier Report - {{ $startDate->format('d M Y') }} to {{ $endDate->format('d M Y') }}</title>
     <style>
+        @page {
+            margin: 15mm;
+            size: A4;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -46,19 +51,22 @@
         }
 
         /* Summary Grid */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
+        .summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 12px 0;
+            margin: 0 -12px 30px -12px;
+            table-layout: fixed;
         }
 
         .summary-box {
-            border: 2px solid #e0cec7;
             padding: 15px;
+            border: 2px solid #e0cec7;
             background: #fdf8f6;
             border-radius: 8px;
+            vertical-align: top;
         }
+
 
         .summary-box h3 {
             font-size: 10px;
@@ -198,11 +206,11 @@
             style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); text-align: center; border-radius: 8px;">
             <button onclick="window.print()"
                 style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: white; border: none; border-radius: 6px; font-weight: 600; margin-right: 10px; color: #6f5849;">
-                <i class="fa-solid fa-print"></i> Print Report
+                <i class="fa-solid fa-print"></i> {{ __('admin.print_report') }}
             </button>
             <button onclick="window.close()"
                 style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 6px; font-weight: 600;">
-                <i class="fa-solid fa-times"></i> Close
+                <i class="fa-solid fa-times"></i> {{ __('admin.close') }}
             </button>
         </div>
     @endif
@@ -215,28 +223,31 @@
         <div class="meta">{{ __('admin.generated') }}: {{ now()->format('d M Y H:i') }} | ARTIKA POS System</div>
     </div>
 
-    <div class="summary-grid">
-        <div class="summary-box">
-            <h3>{{ __('admin.total_sales') }}</h3>
-            <div class="value">Rp {{ number_format($summary['total_sales'], 0, ',', '.') }}</div>
-            <div class="label">{{ number_format($summary['total_transactions']) }} {{ __('admin.transactions') }}</div>
-        </div>
-        <div class="summary-box">
-            <h3>{{ __('admin.avg_transaction') }}</h3>
-            <div class="value">Rp {{ number_format($summary['average_transaction'], 0, ',', '.') }}</div>
-            <div class="label">{{ __('admin.per_transaction') }}</div>
-        </div>
-        <div class="summary-box">
-            <h3>{{ __('admin.cash_sales') }}</h3>
-            <div class="value">Rp {{ number_format($summary['cash_sales'], 0, ',', '.') }}</div>
-            <div class="label">{{ $summary['cash_count'] }} {{ __('admin.transactions') }}</div>
-        </div>
-        <div class="summary-box">
-            <h3>{{ __('admin.non_cash_sales') }}</h3>
-            <div class="value">Rp {{ number_format($summary['non_cash_sales'], 0, ',', '.') }}</div>
-            <div class="label">{{ $summary['non_cash_count'] }} {{ __('admin.transactions') }}</div>
-        </div>
-    </div>
+    <table class="summary-table">
+        <tr>
+            <td class="summary-box">
+                <h3>{{ __('admin.total_sales') }}</h3>
+                <div class="value">Rp {{ number_format($summary['total_sales'], 0, ',', '.') }}</div>
+                <div class="label">{{ number_format($summary['total_transactions']) }} {{ __('admin.transactions') }}
+                </div>
+            </td>
+            <td class="summary-box">
+                <h3>{{ __('admin.avg_transaction') }}</h3>
+                <div class="value">Rp {{ number_format($summary['average_transaction'], 0, ',', '.') }}</div>
+                <div class="label">{{ __('admin.per_transaction') }}</div>
+            </td>
+            <td class="summary-box">
+                <h3>{{ __('admin.cash_sales') }}</h3>
+                <div class="value">Rp {{ number_format($summary['cash_sales'], 0, ',', '.') }}</div>
+                <div class="label">{{ $summary['cash_count'] }} {{ __('admin.transactions') }}</div>
+            </td>
+            <td class="summary-box">
+                <h3>{{ __('admin.non_cash_sales') }}</h3>
+                <div class="value">Rp {{ number_format($summary['non_cash_sales'], 0, ',', '.') }}</div>
+                <div class="label">{{ $summary['non_cash_count'] }} {{ __('admin.transactions') }}</div>
+            </td>
+        </tr>
+    </table>
 
     <div class="section">
         <h2>{{ __('admin.top_selling_products') }}</h2>

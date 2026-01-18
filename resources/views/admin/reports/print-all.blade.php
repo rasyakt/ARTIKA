@@ -96,21 +96,24 @@
         }
 
         /* Summary Grid */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 18px;
+        .summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 10px 0;
+            margin: 0 -10px 18px -10px;
+            table-layout: fixed;
             page-break-inside: avoid;
         }
 
         .summary-box {
-            border: 1.5px solid #d4c4bb;
             padding: 10px;
+            border: 1.5px solid #d4c4bb;
             background: #faf9f8;
             border-radius: 5px;
             text-align: center;
+            vertical-align: top;
         }
+
 
         .summary-box h3 {
             font-size: 8px;
@@ -310,76 +313,80 @@
     <div class="section-divider"><i class="fa-solid fa-file-invoice-dollar"
             style="margin-right: 10px;"></i>{{ __('admin.finance_reports_title') }}</div>
 
-    <div class="summary-grid">
-        <div class="summary-box">
-            <i class="fa-solid fa-money-bill-trend-up"></i>
-            <h3>{{ __('admin.gross_revenue') }}</h3>
-            <div class="value" style="font-size: 14px;">Rp
-                {{ number_format($financeSummary['gross_revenue'], 0, ',', '.') }}
-            </div>
-            <div class="label">{{ __('admin.total_cash_non_cash') }}</div>
-        </div>
-        <div class="summary-box">
-            <i class="fa-solid fa-tags"></i>
-            <h3>{{ __('admin.cogs') }}</h3>
-            <div class="value" style="font-size: 14px;">Rp
-                {{ number_format($financeSummary['cogs'], 0, ',', '.') }}
-            </div>
-            <div class="label">{{ __('admin.cost_of_stock_sold') }}</div>
-        </div>
-        <div class="summary-box">
-            <i class="fa-solid fa-file-invoice-dollar"></i>
-            <h3>{{ __('admin.operational_expenses') }}</h3>
-            <div class="value" style="font-size: 14px; color: #dc2626;">Rp
-                {{ number_format($financeSummary['total_expenses'], 0, ',', '.') }}
-            </div>
-            <div class="label">{{ __('admin.store_operational_costs') }}</div>
-        </div>
-        <div class="summary-box">
-            <i class="fa-solid fa-wallet"></i>
-            <h3>{{ __('admin.net_profit') }}</h3>
-            <div class="value"
-                style="font-size: 14px; color: {{ $financeSummary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }};">Rp
-                {{ number_format($financeSummary['net_profit'], 0, ',', '.') }}
-            </div>
-            <div class="label">{{ __('admin.after_returns_and_expenses') }}
-                ({{ number_format($financeSummary['profit_margin'], 1) }}%)</div>
-        </div>
-    </div>
+    <table class="summary-table">
+        <tr>
+            <td class="summary-box">
+                <i class="fa-solid fa-money-bill-trend-up"></i>
+                <h3>{{ __('admin.gross_revenue') }}</h3>
+                <div class="value" style="font-size: 14px;">Rp
+                    {{ number_format($financeSummary['gross_revenue'], 0, ',', '.') }}
+                </div>
+                <div class="label">{{ __('admin.total_cash_non_cash') }}</div>
+            </td>
+            <td class="summary-box">
+                <i class="fa-solid fa-tags"></i>
+                <h3>{{ __('admin.cogs') }}</h3>
+                <div class="value" style="font-size: 14px;">Rp
+                    {{ number_format($financeSummary['cogs'], 0, ',', '.') }}
+                </div>
+                <div class="label">{{ __('admin.cost_of_stock_sold') }}</div>
+            </td>
+            <td class="summary-box">
+                <i class="fa-solid fa-file-invoice-dollar"></i>
+                <h3>{{ __('admin.operational_expenses') }}</h3>
+                <div class="value" style="font-size: 14px; color: #dc2626;">Rp
+                    {{ number_format($financeSummary['total_expenses'], 0, ',', '.') }}
+                </div>
+                <div class="label">{{ __('admin.store_operational_costs') }}</div>
+            </td>
+            <td class="summary-box">
+                <i class="fa-solid fa-wallet"></i>
+                <h3>{{ __('admin.net_profit') }}</h3>
+                <div class="value"
+                    style="font-size: 14px; color: {{ $financeSummary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }};">Rp
+                    {{ number_format($financeSummary['net_profit'], 0, ',', '.') }}
+                </div>
+                <div class="label">{{ __('admin.after_returns_and_expenses') }}
+                    ({{ number_format($financeSummary['profit_margin'], 1) }}%)</div>
+            </td>
+        </tr>
+    </table>
     <div class="section-divider"><i class="fa-solid fa-warehouse"
             style="margin-right: 10px;"></i>{{ __('admin.warehouse_management_report') }}</div>
 
-    <div class="summary-grid">
-        <div class="summary-box">
-            <i class="fa-solid fa-coins"></i>
-            <h3>{{ __('admin.total_valuation') }}</h3>
-            <div class="value" style="font-size: 14px;">Rp
-                {{ number_format($warehouseSummary['total_valuation'], 0, ',', '.') }}
-            </div>
-            <div class="label">{{ __('admin.inventory_value') }}</div>
-        </div>
-        <div class="summary-box">
-            <i class="fa-solid fa-boxes-stacked"></i>
-            <h3>{{ __('admin.total_stock') }}</h3>
-            <div class="value">{{ number_format($warehouseSummary['total_items']) }}</div>
-            <div class="label">{{ __('admin.units_available') }}</div>
-        </div>
-        <div class="summary-box">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <h3>{{ __('admin.low_stock_items') }}</h3>
-            <div class="value">{{ number_format($warehouseSummary['low_stock_count']) }}</div>
-            <div class="label">{{ __('admin.need_restock') }}</div>
-        </div>
-        <div class="summary-box">
-            <i class="fa-solid fa-arrows-rotate"></i>
-            <h3>{{ __('admin.movements') }}</h3>
-            <div class="value" style="font-size: 14px;">
-                <span style="color: #16a34a;">{{ $warehouseSummary['movements_in'] }}↓</span>
-                <span style="color: #dc2626;">{{ $warehouseSummary['movements_out'] }}↑</span>
-            </div>
-            <div class="label">{{ __('admin.in_out') }}</div>
-        </div>
-    </div>
+    <table class="summary-table">
+        <tr>
+            <td class="summary-box">
+                <i class="fa-solid fa-coins"></i>
+                <h3>{{ __('admin.total_valuation') }}</h3>
+                <div class="value" style="font-size: 14px;">Rp
+                    {{ number_format($warehouseSummary['total_valuation'], 0, ',', '.') }}
+                </div>
+                <div class="label">{{ __('admin.inventory_value') }}</div>
+            </td>
+            <td class="summary-box">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <h3>{{ __('admin.total_stock') }}</h3>
+                <div class="value">{{ number_format($warehouseSummary['total_items']) }}</div>
+                <div class="label">{{ __('admin.units_available') }}</div>
+            </td>
+            <td class="summary-box">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <h3>{{ __('admin.low_stock_items') }}</h3>
+                <div class="value">{{ number_format($warehouseSummary['low_stock_count']) }}</div>
+                <div class="label">{{ __('admin.need_restock') }}</div>
+            </td>
+            <td class="summary-box">
+                <i class="fa-solid fa-arrows-rotate"></i>
+                <h3>{{ __('admin.movements') }}</h3>
+                <div class="value" style="font-size: 14px;">
+                    <span style="color: #16a34a;">{{ $warehouseSummary['movements_in'] }}↓</span>
+                    <span style="color: #dc2626;">{{ $warehouseSummary['movements_out'] }}↑</span>
+                </div>
+                <div class="label">{{ __('admin.in_out') }}</div>
+            </td>
+        </tr>
+    </table>
 
     <div class="subsection-title"><i
             class="fa-solid fa-arrow-trend-up report-icon"></i>{{ __('admin.top_moving_items') }}</div>
@@ -455,40 +462,42 @@
     <div class="section-divider"><i class="fa-solid fa-cash-register"
             style="margin-right: 10px;"></i>{{ __('admin.cashier_sales_report') }}</div>
 
-    <div class="summary-grid">
-        <div class="summary-box">
-            <i class="fa-solid fa-money-bill-wave"></i>
-            <h3>{{ __('admin.total_sales') }}</h3>
-            <div class="value" style="font-size: 14px;">Rp
-                {{ number_format($cashierSummary['total_sales'], 0, ',', '.') }}
-            </div>
-            <div class="label">{{ $cashierSummary['total_transactions'] }} {{ __('admin.transactions') }}</div>
-        </div>
-        <div class="summary-box">
-            <i class="fa-solid fa-chart-line"></i>
-            <h3>{{ __('admin.avg_transaction') }}</h3>
-            <div class="value" style="font-size: 14px;">Rp
-                {{ number_format($cashierSummary['average_transaction'], 0, ',', '.') }}
-            </div>
-            <div class="label">{{ __('admin.per_transaction') }}</div>
-        </div>
-        <div class="summary-box">
-            <i class="fa-solid fa-cash-register"></i>
-            <h3>{{ __('admin.cash_sales') }}</h3>
-            <div class="value" style="font-size: 14px;">Rp
-                {{ number_format($cashierSummary['cash_sales'], 0, ',', '.') }}
-            </div>
-            <div class="label">{{ $cashierSummary['cash_count'] }} {{ __('admin.transactions') }}</div>
-        </div>
-        <div class="summary-box">
-            <i class="fa-solid fa-credit-card"></i>
-            <h3>{{ __('admin.non_cash_sales') }}</h3>
-            <div class="value" style="font-size: 14px;">Rp
-                {{ number_format($cashierSummary['non_cash_sales'], 0, ',', '.') }}
-            </div>
-            <div class="label">{{ $cashierSummary['non_cash_count'] }} {{ __('admin.transactions') }}</div>
-        </div>
-    </div>
+    <table class="summary-table">
+        <tr>
+            <td class="summary-box">
+                <i class="fa-solid fa-money-bill-wave"></i>
+                <h3>{{ __('admin.total_sales') }}</h3>
+                <div class="value" style="font-size: 14px;">Rp
+                    {{ number_format($cashierSummary['total_sales'], 0, ',', '.') }}
+                </div>
+                <div class="label">{{ $cashierSummary['total_transactions'] }} {{ __('admin.transactions') }}</div>
+            </td>
+            <td class="summary-box">
+                <i class="fa-solid fa-chart-line"></i>
+                <h3>{{ __('admin.avg_transaction') }}</h3>
+                <div class="value" style="font-size: 14px;">Rp
+                    {{ number_format($cashierSummary['average_transaction'], 0, ',', '.') }}
+                </div>
+                <div class="label">{{ __('admin.per_transaction') }}</div>
+            </td>
+            <td class="summary-box">
+                <i class="fa-solid fa-cash-register"></i>
+                <h3>{{ __('admin.cash_sales') }}</h3>
+                <div class="value" style="font-size: 14px;">Rp
+                    {{ number_format($cashierSummary['cash_sales'], 0, ',', '.') }}
+                </div>
+                <div class="label">{{ $cashierSummary['cash_count'] }} {{ __('admin.transactions') }}</div>
+            </td>
+            <td class="summary-box">
+                <i class="fa-solid fa-credit-card"></i>
+                <h3>{{ __('admin.non_cash_sales') }}</h3>
+                <div class="value" style="font-size: 14px;">Rp
+                    {{ number_format($cashierSummary['non_cash_sales'], 0, ',', '.') }}
+                </div>
+                <div class="label">{{ $cashierSummary['non_cash_count'] }} {{ __('admin.transactions') }}</div>
+            </td>
+        </tr>
+    </table>
 
     <div class="subsection-title"><i class="fa-solid fa-star report-icon"></i>{{ __('admin.top_selling_products') }}
     </div>

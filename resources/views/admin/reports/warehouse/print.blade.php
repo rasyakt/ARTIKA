@@ -7,6 +7,11 @@
     <title>{{ __('admin.warehouse_report') }} - {{ $startDate->format('d M Y') }} to {{ $endDate->format('d M Y') }}
     </title>
     <style>
+        @page {
+            margin: 15mm;
+            size: A4;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -47,19 +52,22 @@
         }
 
         /* Summary Grid */
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
+        .summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 12px 0;
+            margin: 0 -12px 30px -12px;
+            table-layout: fixed;
         }
 
         .summary-box {
-            border: 2px solid #e0cec7;
             padding: 15px;
+            border: 2px solid #e0cec7;
             background: #fdf8f6;
             border-radius: 8px;
+            vertical-align: top;
         }
+
 
         .summary-box h3 {
             font-size: 10px;
@@ -219,31 +227,33 @@
         <div class="meta">{{ __('admin.generated') }}: {{ now()->format('d M Y H:i') }} | ARTIKA POS System</div>
     </div>
 
-    <div class="summary-grid">
-        <div class="summary-box">
-            <h3>{{ __('admin.total_valuation') }}</h3>
-            <div class="value">Rp {{ number_format($summary['total_valuation'], 0, ',', '.') }}</div>
-            <div class="label">{{ __('admin.based_on_cost') }}</div>
-        </div>
-        <div class="summary-box">
-            <h3>{{ __('admin.total_stock') }}</h3>
-            <div class="value">{{ number_format($summary['total_items']) }}</div>
-            <div class="label">{{ __('admin.units_in_warehouse') }}</div>
-        </div>
-        <div class="summary-box">
-            <h3>{{ __('admin.low_stock_alerts') }}</h3>
-            <div class="value">{{ number_format($summary['low_stock_count']) }}</div>
-            <div class="label">{{ __('admin.items_need_restocking') }}</div>
-        </div>
-        <div class="summary-box">
-            <h3>{{ __('admin.movements') }}</h3>
-            <div class="value">
-                <span style="color: #16a34a;">↓{{ $summary['movements_in'] }}</span> /
-                <span style="color: #dc2626;">↑{{ $summary['movements_out'] }}</span>
-            </div>
-            <div class="label">{{ __('admin.in_out_period') }}</div>
-        </div>
-    </div>
+    <table class="summary-table">
+        <tr>
+            <td class="summary-box">
+                <h3>{{ __('admin.total_valuation') }}</h3>
+                <div class="value">Rp {{ number_format($summary['total_valuation'], 0, ',', '.') }}</div>
+                <div class="label">{{ __('admin.based_on_cost') }}</div>
+            </td>
+            <td class="summary-box">
+                <h3>{{ __('admin.total_stock') }}</h3>
+                <div class="value">{{ number_format($summary['total_items']) }}</div>
+                <div class="label">{{ __('admin.units_in_warehouse') }}</div>
+            </td>
+            <td class="summary-box">
+                <h3>{{ __('admin.low_stock_alerts') }}</h3>
+                <div class="value">{{ number_format($summary['low_stock_count']) }}</div>
+                <div class="label">{{ __('admin.items_need_restocking') }}</div>
+            </td>
+            <td class="summary-box">
+                <h3>{{ __('admin.movements') }}</h3>
+                <div class="value">
+                    <span style="color: #16a34a;">↓{{ $summary['movements_in'] }}</span> /
+                    <span style="color: #dc2626;">↑{{ $summary['movements_out'] }}</span>
+                </div>
+                <div class="label">{{ __('admin.in_out_period') }}</div>
+            </td>
+        </tr>
+    </table>
 
     <div class="section">
         <h2>{{ __('admin.top_moving_items') }}</h2>

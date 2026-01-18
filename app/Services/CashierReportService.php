@@ -14,19 +14,31 @@ class CashierReportService
     /**
      * Get cashier audit logs for the period (only cashier role).
      */
-    public function getCashierAuditLogs($startDate = null, $endDate = null)
+    public function getCashierAuditLogs($startDate = null, $endDate = null, $search = null, $action = null)
     {
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
 
-        return AuditLog::with('user.role')
+        $query = AuditLog::with('user.role')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->whereIn('model_type', ['Transaction', 'User'])
             ->whereHas('user.role', function ($query) {
                 $query->where('name', 'cashier');
-            })
-            ->latest()
-            ->get();
+            });
+
+        if ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('nis', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
+            });
+        }
+
+        if ($action) {
+            $query->where('action', $action);
+        }
+
+        return $query->latest()->get();
     }
 
     /**
@@ -118,14 +130,23 @@ class CashierReportService
     /**
      * Get recent transactions.
      */
-    public function getRecentTransactions($startDate = null, $endDate = null, $limit = 20)
+    public function getRecentTransactions($startDate = null, $endDate = null, $limit = 20, $search = null)
     {
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
 
-        return Transaction::with('user')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->latest()
+        $query = Transaction::with('user')
+            ->whereBetween('created_at', [$startDate, $endDate]);
+
+        if ($search) {
+            $query->whereHas('user', function ($q) use ($search) {
+                $q->where('nis', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->latest()
             ->limit($limit)
             ->get();
     }

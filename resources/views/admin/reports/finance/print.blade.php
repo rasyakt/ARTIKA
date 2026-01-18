@@ -8,6 +8,11 @@
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        @page {
+            margin: 15mm;
+            size: A4;
+        }
+
         body {
             font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
             color: #333;
@@ -52,18 +57,20 @@
             color: #6f5849;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-bottom: 30px;
+        .summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 12px 0;
+            margin: 0 -12px 30px -12px;
+            table-layout: fixed;
         }
 
-        .stat-box {
-            border: 1px solid #f2e8e5;
+        .summary-table td {
             padding: 15px;
+            border: 1px solid #f2e8e5;
             border-radius: 8px;
             background: white;
+            vertical-align: top;
         }
 
         .stat-label {
@@ -75,10 +82,13 @@
         }
 
         .stat-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             color: #4b382f;
+            white-space: nowrap;
         }
+
+
 
         .stat-value.success {
             color: #16a34a;
@@ -218,38 +228,49 @@
         </div>
     </div>
 
-    <div class="stats-grid">
-        <div class="stat-box">
-            <div class="stat-label">{{ __('admin.gross_revenue') }}</div>
-            <div class="stat-value">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-label">{{ __('admin.cogs') }}</div>
-            <div class="stat-value">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-label">{{ __('admin.gross_profit') }}</div>
-            <div class="stat-value success">Rp {{ number_format($summary['gross_profit'], 0, ',', '.') }}</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-label">{{ __('admin.returns_refunds') }}</div>
-            <div class="stat-value danger">Rp {{ number_format($summary['total_returns'], 0, ',', '.') }}</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-label">{{ __('admin.operational_expenses') }}</div>
-            <div class="stat-value danger">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-label">{{ __('admin.net_profit') }}</div>
-            <div class="stat-value {{ $summary['net_profit'] >= 0 ? 'success' : 'danger' }}">
-                Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
-            </div>
-        </div>
-        <div class="stat-box">
-            <div class="stat-label">{{ __('admin.profit_margin') }}</div>
-            <div class="stat-value">{{ number_format($summary['profit_margin'], 2) }}%</div>
-        </div>
-    </div>
+    <table class="summary-table">
+        <tr>
+            <td>
+                <div class="stat-label">{{ __('admin.gross_revenue') }}</div>
+                <div class="stat-value">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</div>
+            </td>
+            <td>
+                <div class="stat-label">{{ __('admin.cogs') }}</div>
+                <div class="stat-value">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</div>
+            </td>
+            <td>
+                <div class="stat-label">{{ __('admin.gross_profit') }}</div>
+                <div class="stat-value success">Rp {{ number_format($summary['gross_profit'], 0, ',', '.') }}</div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding-top: 12px;">
+                <div class="stat-label">{{ __('admin.returns_refunds') }}</div>
+                <div class="stat-value danger">Rp {{ number_format($summary['total_returns'], 0, ',', '.') }}</div>
+            </td>
+            <td style="padding-top: 12px;">
+                <div class="stat-label">{{ __('admin.operational_expenses') }}</div>
+                <div class="stat-value danger">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</div>
+            </td>
+            <td style="padding-top: 12px;">
+                <div class="stat-label">{{ __('admin.net_profit') }}</div>
+                <div class="stat-value {{ $summary['net_profit'] >= 0 ? 'success' : 'danger' }}">
+                    Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="summary-table" style="margin-top: -12px;">
+        <tr>
+            <td>
+                <div class="stat-label">{{ __('admin.profit_margin') }}</div>
+                <div class="stat-value text-center">{{ number_format($summary['profit_margin'], 2) }}%</div>
+            </td>
+            <td style="border: none; background: transparent;"></td>
+            <td style="border: none; background: transparent;"></td>
+        </tr>
+    </table>
 
     <h3 style="color: #6f5849; margin-bottom: 15px;">{{ __('admin.daily_profit') }}</h3>
     <table>

@@ -47,20 +47,21 @@
             margin-bottom: 3px;
         }
 
-        .summary-grid {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 20px;
+        .summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 12px 0;
+            margin: 0 -12px 20px -12px;
+            table-layout: fixed;
         }
 
         .summary-box {
-            flex: 1;
-            border: 1px solid #d4c4bb;
             padding: 10px;
+            border: 1px solid #d4c4bb;
             background: #faf9f8;
             border-radius: 6px;
             text-align: center;
+            vertical-align: top;
         }
 
         .summary-box h3 {
@@ -212,24 +213,26 @@
         <div class="text-muted">Generated: {{ now()->format('d M Y H:i:s') }} | ARTIKA POS System</div>
     </div>
 
-    <div class="summary-grid">
-        <div class="summary-box">
-            <h3>Total Logs</h3>
-            <div class="value">{{ number_format($summary['total_logs']) }}</div>
-        </div>
-        <div class="summary-box">
-            <h3>Transactions</h3>
-            <div class="value">{{ number_format($summary['total_transactions']) }}</div>
-        </div>
-        <div class="summary-box">
-            <h3>Total Amount</h3>
-            <div class="value">Rp{{ number_format($summary['total_amount'], 0, ',', '.') }}</div>
-        </div>
-        <div class="summary-box">
-            <h3>Unique Users</h3>
-            <div class="value">{{ count($summary['by_user']) }}</div>
-        </div>
-    </div>
+    <table class="summary-table">
+        <tr>
+            <td class="summary-box">
+                <h3>Total Logs</h3>
+                <div class="value">{{ number_format($summary['total_logs']) }}</div>
+            </td>
+            <td class="summary-box">
+                <h3>Transactions</h3>
+                <div class="value">{{ number_format($summary['total_transactions']) }}</div>
+            </td>
+            <td class="summary-box">
+                <h3>Total Amount</h3>
+                <div class="value">Rp {{ number_format($summary['total_amount'], 0, ',', '.') }}</div>
+            </td>
+            <td class="summary-box">
+                <h3>Unique Users</h3>
+                <div class="value">{{ count($summary['by_user']) }}</div>
+            </td>
+        </tr>
+    </table>
 
     <table>
         <thead>
