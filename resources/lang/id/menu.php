@@ -12,8 +12,6 @@ return [
     'inventory' => 'Inventaris',
     'stock' => 'Stok',
     'reports' => 'Laporan',
-    'finance_report' => 'Laporan Keuangan',
-    'operational_expenses' => 'Biaya Operasional',
     'settings' => 'Pengaturan',
     'profile' => 'Profil',
     'admin' => 'Admin',
@@ -27,4 +25,5 @@ return [
     'low_stock_alerts' => 'Peringatan Stok Rendah',
     'stock_movements' => 'Pergerakan Stok',
     'menu' => 'Menu',
+    'operational_expenses'=> 'Biaya Operasional',
 ];

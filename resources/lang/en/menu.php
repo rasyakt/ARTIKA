@@ -12,8 +12,6 @@ return [
     'inventory' => 'Inventory',
     'stock' => 'Stock',
     'reports' => 'Reports',
-    'finance_report' => 'Financial Report',
-    'operational_expenses' => 'Operating Expenses',
     'settings' => 'Settings',
     'profile' => 'Profile',
     'admin' => 'Admin',
@@ -27,4 +25,5 @@ return [
     'low_stock_alerts' => 'Low Stock Alerts',
     'stock_movements' => 'Stock Movements',
     'menu' => 'Menu',
+    'operational_expenses'=> 'Operational Expenses',
 ];
