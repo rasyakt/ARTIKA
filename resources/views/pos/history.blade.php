@@ -298,9 +298,11 @@
                 <i class="fa-solid fa-clock-rotate-left me-2"></i>History
             </span>
             <div class="d-flex align-items-center">
-                <a href="{{ route('pos.index') }}" class="btn me-3 d-none d-sm-flex align-items-center"
-                    style="border-radius: 12px; padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.2); border: none; color: white; font-weight: 600; font-size: 0.85rem;">
-                    <i class="fa-solid fa-arrow-left me-2"></i>Back to POS
+                <a href="{{ route('pos.index') }}"
+                    class="btn me-2 me-md-3 d-flex align-items-center justify-content-center"
+                    style="border-radius: 10px; padding: 0.4rem 0.8rem; background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); color: white; font-weight: 600; font-size: 0.75rem; transition: all 0.2s;">
+                    <i class="fa-solid fa-arrow-left me-1 me-md-2"></i><span class="d-none d-md-inline">Back to
+                        POS</span><span class="d-inline d-md-none">POS</span>
                 </a>
 
                 <div class="dropdown">
@@ -323,7 +325,8 @@
                                     <h6 class="mb-0 fw-800 text-truncate">{{ Auth::user()->name }}</h6>
                                     <div class="small text-muted text-truncate">@ {{ Auth::user()->username }}</div>
                                     <div class="small fw-700 text-primary" style="font-size: 0.7rem;">NIS:
-                                        {{ Auth::user()->nis ?? '-' }}</div>
+                                        {{ Auth::user()->nis ?? '-' }}
+                                    </div>
                                 </div>
                             </div>
                         </li>
