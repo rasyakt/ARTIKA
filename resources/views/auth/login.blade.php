@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - ARTIKA POS</title>
+    <title>{{ $title ?? 'Login' }} - ARTIKA POS</title>
     <!-- Using inline SVG icons for reliability and theme control (removed external CDN) -->
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <style>
@@ -106,13 +106,22 @@
         }
 
         .brand-logo {
-            font-size: 2.5rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             position: relative;
             z-index: 1;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+        }
+
+        .brand-logo img {
+            max-width: 260px;
+            height: auto;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            transition: transform 0.3s ease;
+        }
+
+        .brand-logo img:hover {
+            transform: scale(1.05);
         }
 
         .brand-subtitle {
@@ -512,14 +521,18 @@
     <div class="login-container">
         <div class="card login-card">
             <div class="card-header">
-                <h1 class="brand-logo mb-2">ARTIKA</h1>
-                <p class="brand-subtitle mb-0">{{ $title ?? 'Smart Point of Sale System' }}</p>
+                <div class="brand-logo">
+                    <img src="{{ asset('img/logo.png') }}" alt="ARTIKA Logo">
+                </div>
+                <p class="brand-subtitle mb-0">Smart Point of Sale System</p>
             </div>
             <div class="card-body">
-                @if(isset($role) && $role !== 'cashier')
-                    <div class="alert alert-light border text-center mb-4">
-                        <small class="text-muted text-uppercase fw-bold">Login Sebagai</small>
-                        <h5 class="fw-bold mb-0 text-primary">{{ ucfirst($role) }}</h5>
+                @if(isset($role))
+                    <div class="alert alert-light border text-center mb-4 py-2">
+                        <small class="text-muted text-uppercase fw-bold"
+                            style="font-size: 0.7rem; letter-spacing: 1px;">Login Sebagai</small>
+                        <h5 class="fw-bold mb-0 text-brown" style="color: #6f5849;">
+                            {{ $role === 'cashier' ? 'CASHIER' : strtoupper($role) }}</h5>
                     </div>
                 @endif
                 @if($errors->any())
