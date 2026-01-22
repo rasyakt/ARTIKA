@@ -14,9 +14,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-font-smoothing: antialiased;
         }
 
         /* Animated background pattern */
@@ -136,6 +138,9 @@
         .card-body {
             padding: 2.5rem 2rem;
             background: white;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
         .form-label {
@@ -173,7 +178,7 @@
 
         .form-control:focus {
             border-color: #85695a;
-            box-shadow: 0 0 0 4px rgba(133, 105, 90, 0.1);
+            box-shadow: 0 0 0 4px rgba(133, 105, 90, 0.15);
             background: white;
             outline: none;
         }
@@ -182,46 +187,39 @@
             color: #bfa094;
         }
 
+        .login-btn-container {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
         .btn-login {
-            border-radius: 12px;
-            padding: 14px;
+            display: block;
+            width: 100%;
+            border-radius: 14px;
+            padding: 16px;
             font-weight: 700;
             background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);
             border: none;
             color: white;
             font-size: 1.1rem;
             letter-spacing: 1px;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(133, 105, 90, 0.3);
-        }
-
-        .btn-login::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn-login:hover::before {
-            width: 300px;
-            height: 300px;
+            box-shadow: 0 8px 20px rgba(133, 105, 90, 0.3);
+            text-align: center;
+            cursor: pointer;
+            -webkit-appearance: none;
         }
 
         .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(133, 105, 90, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(133, 105, 90, 0.4);
+            filter: brightness(1.1);
         }
 
         .btn-login:active {
-            transform: translateY(0);
+            transform: translateY(-1px);
         }
 
         .alert {
@@ -254,9 +252,9 @@
         }
 
         .card-footer {
-            background: linear-gradient(135deg, #f5f5f4 0%, #e7e5e4 100%);
-            border-top: 1px solid #e0cec7;
-            padding: 1.25rem;
+            background: #fdfaf8;
+            border-top: 1px solid #f2e8e5;
+            padding: 1.5rem;
             text-align: center;
         }
 
@@ -388,6 +386,33 @@
             padding-right: 50px;
         }
 
+        /* Role Badge Styling */
+        .role-preview-container {
+            background: #fdf8f6;
+            border: 1px solid #f2e8e5;
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .role-label {
+            display: block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: #a18072;
+            letter-spacing: 1.5px;
+            margin-bottom: 2px;
+        }
+
+        .role-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #6f5849;
+            margin: 0;
+        }
+
         /* Decorative icons */
         .login-decorative {
             position: fixed;
@@ -442,7 +467,17 @@
             }
 
             .card-body {
-                padding: 1.5rem;
+                padding: 2rem 1.5rem;
+                gap: 1.25rem;
+            }
+
+            .form-control {
+                padding: 12px 16px;
+                font-size: 16px; /* Best for mobile zoom */
+            }
+
+            .btn-login {
+                padding: 14px;
             }
         }
 
@@ -528,11 +563,11 @@
             </div>
             <div class="card-body">
                 @if(isset($role))
-                    <div class="alert alert-light border text-center mb-4 py-2">
-                        <small class="text-muted text-uppercase fw-bold"
-                            style="font-size: 0.7rem; letter-spacing: 1px;">Login Sebagai</small>
-                        <h5 class="fw-bold mb-0 text-brown" style="color: #6f5849;">
-                            {{ $role === 'cashier' ? 'CASHIER' : strtoupper($role) }}</h5>
+                    <div class="role-preview-container">
+                        <span class="role-label">Login Sebagai</span>
+                        <h5 class="role-value">
+                            {{ $role === 'cashier' ? 'CASHIER' : strtoupper($role) }}
+                        </h5>
                     </div>
                 @endif
                 @if($errors->any())
@@ -608,8 +643,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-login" id="loginBtn">
+                    <div class="login-btn-container">
+                        <button type="submit" class="btn-login" id="loginBtn">
                             <span>LOGIN</span>
                         </button>
                     </div>
@@ -657,6 +692,18 @@
             // Auto-focus on username field
             const username = document.getElementById('username');
             if (username) username.focus();
+
+            // Mobile keyboard focus fix: scroll element into view when focused
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function () {
+                    if (window.innerWidth <= 768) {
+                        setTimeout(() => {
+                            this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 300); // Delay to allow keyboard to appear
+                    }
+                });
+            });
         });
     </script>
 
