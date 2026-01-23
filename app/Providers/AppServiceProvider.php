@@ -7,6 +7,8 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -22,6 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if (str_contains(request()->getHost(), 'ngrok-free.dev')) {
+            URL::forceScheme('https');
+        }
+
         \Illuminate\Support\Facades\Event::listen(
             \Illuminate\Auth\Events\Login::class,
             \App\Listeners\LogSuccessfulLogin::class,
