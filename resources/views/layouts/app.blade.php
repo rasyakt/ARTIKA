@@ -318,7 +318,9 @@
                 </button>
             @endif
 
-            <a class="navbar-brand" href="{{ route('dashboard') }}">ARTIKA POS</a>
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}">
+                <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 35px; width: auto;">
+            </a>
 
             <div class="ms-auto d-flex align-items-center">
                 <!-- Language Switcher -->

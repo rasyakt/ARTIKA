@@ -473,7 +473,8 @@
 
             .form-control {
                 padding: 12px 16px;
-                font-size: 16px; /* Best for mobile zoom */
+                font-size: 16px;
+                /* Best for mobile zoom */
             }
 
             .btn-login {
@@ -651,7 +652,7 @@
                 </form>
             </div>
             <div class="card-footer">
-                <p class="footer-text mb-0">© {{ date('Y') }} RPL_Sentinel.ofc. All rights reserved.</p>
+                <p class="footer-text mb-0">© {{ date('Y') }} RPL_Sentinel. All rights reserved.</p>
             </div>
         </div>
     </div>

@@ -59,8 +59,9 @@
 <body>
     <nav class="navbar navbar-dark mb-4">
         <div class="container-fluid px-4">
-            <span class="navbar-brand fw-bold mb-0 h1"><i
-                    class="fa-solid fa-clipboard-list me-2"></i>{{ __('pos.my_activity_logs') }}</span>
+            <a class="navbar-brand d-flex align-items-center mb-0 h1" href="{{ route('pos.index') }}">
+                <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 38px; width: auto;">
+            </a>
             <div>
                 <a href="{{ route('pos.index') }}" class="btn"
                     style="border-radius: 10px; padding: 0.5rem 1.25rem; background: rgba(255, 255, 255, 0.15); border: none; color: white; font-weight: 600;">

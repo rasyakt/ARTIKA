@@ -670,7 +670,7 @@
         let scannedItems = [];
         let lastScannedBarcode = '';
         let lastScanTime = 0;
-        const SCAN_COOLDOWN = 1000; // 1 second cooldown to prevent duplicate scans
+        const SCAN_COOLDOWN = 2500; // Increased to 2.5 seconds to prevent accidental double-scans
 
         // Initialize scanner on page load
         document.addEventListener('DOMContentLoaded', function () {
@@ -853,7 +853,33 @@
             }, 2000);
         }
 
-        // Trigger success effects (flash + vibration)
+        // Professional Scanner Beep using Web Audio API
+        function playBeep() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime); // Frequency in hertz
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.2);
+            } catch (e) {
+                console.warn('Audio feedback failed:', e);
+            }
+        }
+
+        // Trigger success effects (flash + vibration + beep)
         function triggerSuccessEffects() {
             // Flash effect
             const flash = document.getElementById('successFlash');
@@ -867,8 +893,8 @@
                 navigator.vibrate(100); // Vibrate for 100ms
             }
 
-            // Audio feedback (optional - can be enabled)
-            // playBeep();
+            // Audio feedback
+            playBeep();
         }
 
         // Trigger error effects

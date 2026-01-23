@@ -294,9 +294,9 @@
 <body>
     <nav class="navbar navbar-dark mb-4">
         <div class="container-fluid px-4">
-            <span class="navbar-brand fw-bold mb-0">
-                <i class="fa-solid fa-clock-rotate-left me-2"></i>History
-            </span>
+            <a class="navbar-brand d-flex align-items-center" href="{{ route('pos.index') }}">
+                <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 38px; width: auto;">
+            </a>
             <div class="d-flex align-items-center">
                 <a href="{{ route('pos.index') }}"
                     class="btn me-2 me-md-3 d-flex align-items-center justify-content-center"

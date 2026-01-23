@@ -1324,8 +1324,8 @@
     <div class="pos-container">
         <!-- NAVBAR -->
         <div class="pos-navbar">
-            <div class="navbar-brand">
-                <i class="fas fa-shopping-cart"></i> {{ __('pos.brand') }}
+            <div class="navbar-brand d-flex align-items-center">
+                <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 38px; width: auto;">
             </div>
             <div class="navbar-right">
                 <div class="dropdown">
@@ -2204,6 +2204,37 @@
             return Math.round(value).toLocaleString('id-ID');
         }
 
+        // SCANNER STATE
+        let lastScannedBarcode = '';
+        let lastScanTime = 0;
+        const SCAN_COOLDOWN = 2500;
+
+        // Professional Scanner Beep using Web Audio API
+        function playBeep() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.2);
+            } catch (e) {
+                console.warn('Audio feedback failed:', e);
+            }
+        }
+
         // SCANNER FUNCTIONS
         function openScanner() {
             const scannerSection = document.getElementById('scannerSection');
@@ -2235,18 +2266,32 @@
         }
 
         function onScanSuccess(decodedText, decodedResult) {
+            const currentTime = Date.now();
+
+            // Prevent spamming
+            if (decodedText === lastScannedBarcode && (currentTime - lastScanTime) < SCAN_COOLDOWN) {
+                return;
+            }
+
+            lastScannedBarcode = decodedText;
+            lastScanTime = currentTime;
+
             const product = document.querySelector(`[data-product-id="${decodedText}"]`) ||
                 document.querySelector(`[data-barcode="${decodedText}"]`);
 
             if (product) {
                 addToCart(product);
+                playBeep();
+                showToast('success', '✓ ' + product.dataset.name);
                 console.log('Scanned:', decodedText);
             } else {
                 // Try to find by barcode in data attribute
                 const allProducts = document.querySelectorAll('.product-card');
                 for (let prod of allProducts) {
-                    if (prod.dataset.productId === decodedText) {
+                    if (prod.dataset.productId === decodedText || prod.dataset.barcode === decodedText) {
                         addToCart(prod);
+                        playBeep();
+                        showToast('success', '✓ ' + prod.dataset.name);
                         return;
                     }
                 }
