@@ -23,6 +23,11 @@
 			border: 1px solid #e9e2df;
 		}
 
+		.category-select {
+			min-width: 200px;
+			border-radius: 12px;
+		}
+
 		.card-table {
 			border-radius: 16px;
 			border: none;
@@ -54,6 +59,10 @@
 				min-width: 140px;
 			}
 
+			.category-select {
+				min-width: 140px;
+			}
+
 			.page-header {
 				flex-direction: column;
 				align-items: flex-start;
@@ -71,18 +80,22 @@
 			</div>
 
 			<div class="d-flex align-items-center">
-				<div class="search-filter me-3">
-					<input id="productSearch" class="search-input" type="text"
-						placeholder="{{ __('common.search_placeholder') }}">
-					@if(isset($categories) && $categories->count())
-						<select id="filterCategory" class="form-select" style="border-radius:12px;">
-							<option value="">{{ __('common.all_categories') }}</option>
-							@foreach($categories as $cat)
-								<option value="{{ $cat->name }}">{{ $cat->name }}</option>
-							@endforeach
-						</select>
-					@endif
-				</div>
+				<form action="{{ route('admin.products') }}" method="GET" class="search-filter me-3">
+					<div class="position-relative">
+						<i class="fa-solid fa-magnifying-glass position-absolute"
+							style="left: 1rem; top: 50%; transform: translateY(-50%); opacity: 0.5;"></i>
+						<input name="search" class="search-input ps-5" type="text"
+							placeholder="{{ __('common.search_placeholder') }}" value="{{ request('search') }}">
+					</div>
+					<select name="category_id" class="form-select category-select" onchange="this.form.submit()">
+						<option value="">{{ __('common.all_categories') }}</option>
+						@foreach($categories as $cat)
+							<option value="{{ $cat->id }}" {{ request('category_id') == $cat->id ? 'selected' : '' }}>
+								{{ $cat->name }}
+							</option>
+						@endforeach
+					</select>
+				</form>
 
 				<a href="{{ route('admin.products.create') }}" class="btn btn-primary shadow-sm"
 					style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); border:none; border-radius:12px; padding:0.6rem 1rem;">
@@ -216,32 +229,27 @@
 	</div>
 
 	<script>
-		// Client-side search & category filter (simple, non-destructive)
-		(function () {
-			const input = document.getElementById('productSearch');
-			const category = document.getElementById('filterCategory');
-			const tbody = document.getElementById('productsTableBody');
-			if (!tbody) return;
-
-			function filter() {
-				const q = input ? input.value.trim().toLowerCase() : '';
-				const cat = category ? category.value : '';
-				Array.from(tbody.querySelectorAll('tr')).forEach(row => {
-					// ignore placeholder/empty rows
-					if (!row.dataset) return;
-					const name = (row.dataset.name || '').toLowerCase();
-					const barcode = (row.dataset.barcode || '').toLowerCase();
-					const rowCat = (row.dataset.category || '');
-					const matchQ = q === '' || name.includes(q) || barcode.includes(q);
-					const matchCat = !cat || rowCat === cat;
-					row.style.display = (matchQ && matchCat) ? '' : 'none';
+		// Auto-submit search form on typing (with debounce)
+		document.addEventListener('DOMContentLoaded', function () {
+			const searchInput = document.querySelector('input[name="search"]');
+			if (searchInput) {
+				let timeout = null;
+				searchInput.addEventListener('input', function () {
+					clearTimeout(timeout);
+					timeout = setTimeout(() => {
+						this.form.submit();
+					}, 500);
 				});
-			}
 
-			let timeout = null;
-			if (input) input.addEventListener('input', () => { clearTimeout(timeout); timeout = setTimeout(filter, 150); });
-			if (category) category.addEventListener('change', filter);
-		})();
+				// Place cursor at the end of the text if focused
+				if (searchInput.value) {
+					searchInput.focus();
+					const val = searchInput.value;
+					searchInput.value = '';
+					searchInput.value = val;
+				}
+			}
+		});
 
 		// Handle delete confirmation with SweetAlert2
 		document.addEventListener('DOMContentLoaded', function () {

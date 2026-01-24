@@ -119,10 +119,28 @@ class AdminController extends Controller
         ];
     }
 
-    public function products()
+    public function products(Request $request)
     {
-        $products = Product::with('category')->latest()->paginate(10);
-        return view('admin.products.index', compact('products'));
+        $query = Product::with(['category', 'stocks']);
+
+        // Search Filter (Name or Barcode)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('barcode', 'like', "%{$search}%");
+            });
+        }
+
+        // Category Filter
+        if ($request->filled('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        $products = $query->latest()->paginate(10)->withQueryString();
+        $categories = \App\Models\Category::all();
+
+        return view('admin.products.index', compact('products', 'categories'));
     }
 
     public function createProduct()
