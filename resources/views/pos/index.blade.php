@@ -35,6 +35,7 @@
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
             color: white !important;
+            margin: 0.5rem !important;
         }
 
         .artika-swal-cancel-btn {
@@ -44,6 +45,7 @@
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
+            margin: 0.5rem !important;
         }
 
         .artika-swal-toast {
@@ -1548,7 +1550,7 @@
                         <button class="btn-checkout btn-cancel clearBtn" id="clearBtn"><i
                                 class="fas fa-trash"></i></button>
                         <button class="btn-checkout btn-finish checkoutBtn" id="checkoutBtn" onclick="checkout()"
-                            disabled><i class="fas fa-check-circle"></i> {{ __('pos.checkout') }}</button>
+                            disabled><i class="fas fa-check-circle me-2"></i> {{ __('pos.checkout') }}</button>
                     </div>
                 </div>
             </div>
@@ -2079,7 +2081,7 @@
                             <span class="cart-item-name">${item.name}</span>
                             <span class="cart-item-price">Rp${formatCurrency(item.subtotal)}</span>
                         </div>
-                        <div class="cart-item-details">
+                        <div class="cart-item-details" style="margin-top: 0.5rem;">
                             <div class="quantity-control">
                                 <button class="qty-btn" onclick="decreaseQuantity(${index})">-</button>
                                 <span class="qty-display">${item.quantity}</span>
