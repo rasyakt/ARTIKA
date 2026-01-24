@@ -337,8 +337,17 @@
                                     <td class="text-muted">{{ $transaction->created_at->format('d M Y H:i') }}</td>
                                     <td>{{ $transaction->user->name }}</td>
                                     <td class="text-center">
-                                        @if(strtolower($transaction->payment_method) == 'tunai' || strtolower($transaction->payment_method) == 'cash')
+                                        @php
+                                            $method = strtolower($transaction->payment_method);
+                                        @endphp
+                                        @if($method == 'tunai' || $method == 'cash')
                                             <span class="badge bg-success">{{ __('admin.cash') }}</span>
+                                        @elseif($method == 'qris')
+                                            <span class="badge bg-info text-white">QRIS</span>
+                                        @elseif($method == 'transfer')
+                                            <span class="badge bg-primary">Transfer</span>
+                                        @elseif($method == 'debit')
+                                            <span class="badge bg-warning text-dark">Debit</span>
                                         @else
                                             <span class="badge" style="background: #0284c7; color: white;">{{ __('admin.non_cash') }}</span>
                                         @endif

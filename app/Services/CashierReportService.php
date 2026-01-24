@@ -60,16 +60,35 @@ class CashierReportService
             ->select('payment_method', DB::raw('COUNT(*) as count'), DB::raw('SUM(total_amount) as total'))
             ->groupBy('payment_method')
             ->get()
-            ->keyBy('payment_method');
+            ->mapWithKeys(function ($item) {
+                return [strtolower($item->payment_method) => $item];
+            });
+
+        $cashKeys = ['cash', 'tunai'];
+        $nonCashKeys = ['non-cash', 'non-tunai', 'qris', 'transfer', 'debit'];
+
+        $cashSales = 0;
+        $cashCount = 0;
+        foreach ($cashKeys as $key) {
+            $cashSales += $paymentBreakdown->get($key)->total ?? 0;
+            $cashCount += $paymentBreakdown->get($key)->count ?? 0;
+        }
+
+        $nonCashSales = 0;
+        $nonCashCount = 0;
+        foreach ($nonCashKeys as $key) {
+            $nonCashSales += $paymentBreakdown->get($key)->total ?? 0;
+            $nonCashCount += $paymentBreakdown->get($key)->count ?? 0;
+        }
 
         return [
             'total_sales' => $totalSales,
             'total_transactions' => $totalTransactions,
             'average_transaction' => $averageTransaction,
-            'cash_sales' => ($paymentBreakdown->get('Cash')->total ?? 0) + ($paymentBreakdown->get('tunai')->total ?? 0),
-            'non_cash_sales' => ($paymentBreakdown->get('non-cash')->total ?? 0) + ($paymentBreakdown->get('non-tunai')->total ?? 0),
-            'cash_count' => ($paymentBreakdown->get('Cash')->count ?? 0) + ($paymentBreakdown->get('tunai')->count ?? 0),
-            'non_cash_count' => ($paymentBreakdown->get('non-cash')->count ?? 0) + ($paymentBreakdown->get('non-tunai')->count ?? 0),
+            'cash_sales' => $cashSales,
+            'non_cash_sales' => $nonCashSales,
+            'cash_count' => $cashCount,
+            'non_cash_count' => $nonCashCount,
         ];
     }
 
