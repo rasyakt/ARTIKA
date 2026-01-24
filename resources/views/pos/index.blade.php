@@ -775,11 +775,12 @@
             padding: 1rem;
             border: 1px solid var(--gray-200);
             background: white;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             transition: all 0.2s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .keypad-btn:hover {
@@ -1341,9 +1342,23 @@
         }
 
         /* EXTRA SMALL SCREENS */
-        @media (max-width: 380px) {
+        @media (max-width: 768px) {
             .navbar-brand {
                 font-size: 0.85rem;
+            }
+
+            /* Center and Tidy Keypad Modal on Mobile */
+            #keypadModal .modal-dialog {
+                margin: 0.5rem auto;
+                display: flex;
+                align-items: center;
+                min-height: calc(100% - 1rem);
+            }
+
+            #keypadModal .modal-content {
+                border-radius: 24px;
+                border: none;
+                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             }
 
             .products-grid {
@@ -1649,7 +1664,7 @@
                     <!-- Cash Input Section -->
                     <div id="cashInputSection">
                         <input type="text" id="keypadDisplay" class="form-control"
-                            style="font-size: 1.2rem; font-weight: bold; text-align: right; margin-bottom: 1rem; padding: 10px;"
+                            style="font-size: 1.2rem; font-weight: bold; text-align: center; margin-bottom: 1rem; padding: 10px;"
                             placeholder="0" autocomplete="off" inputmode="decimal">
                         <div class="numeric-keypad">
                             <button class="keypad-btn" data-key="1">1</button>
@@ -2420,6 +2435,30 @@
             const display = document.getElementById('keypadDisplay');
             const keypadBtns = document.querySelectorAll('.keypad-btn[data-key]');
             console.log('Found keypad buttons:', keypadBtns.length);
+
+            // [NEW] Auto-scroll and modal repositioning on focus for mobile
+            if (display) {
+                display.addEventListener('focus', function () {
+                    if (window.innerWidth < 768) {
+                        // Scroll page to top
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                        // Shift modal up slightly to ensure bottom buttons are clear of keyboard
+                        const modalDialog = document.querySelector('#keypadModal .modal-dialog');
+                        if (modalDialog) {
+                            modalDialog.style.transform = 'translateY(-25%)';
+                            modalDialog.style.transition = 'transform 0.3s ease';
+                        }
+                    }
+                });
+
+                display.addEventListener('blur', function () {
+                    const modalDialog = document.querySelector('#keypadModal .modal-dialog');
+                    if (modalDialog) {
+                        modalDialog.style.transform = 'translateY(0)';
+                    }
+                });
+            }
 
             // Button click handlers
             keypadBtns.forEach(btn => {
