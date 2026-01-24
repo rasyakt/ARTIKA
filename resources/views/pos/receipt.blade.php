@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('pos.receipt') }} - {{ $transaction->invoice_no }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @media print {
             body {
@@ -120,10 +121,10 @@
             font-size: 10px;
         }
 
-        .print-button {
+        .print-button,
+        .back-button {
             position: fixed;
             top: 10px;
-            right: 10px;
             padding: 10px 20px;
             background: #85695a;
             color: white;
@@ -131,6 +132,25 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .print-button {
+            right: 10px;
+        }
+
+        .back-button {
+            left: 10px;
+            background: #6c757d;
+        }
+
+        .print-button:hover {
+            background: #6f5849;
+        }
+
+        .back-button:hover {
+            background: #5a6268;
         }
 
         .print-button:hover {
@@ -140,6 +160,9 @@
 </head>
 
 <body>
+    <a href="{{ route('pos.index') }}" class="back-button no-print">
+        <i class="fas fa-arrow-left"></i> Kembali ke POS
+    </a>
     <button class="print-button no-print" onclick="window.print()">{{ __('pos.print_receipt') }}</button>
 
     <div class="receipt">

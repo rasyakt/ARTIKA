@@ -256,6 +256,7 @@
                 grid-template-columns: 1fr;
                 gap: 0.5rem;
             }
+
             .barcode-input-group {
                 display: none !important;
             }
@@ -2370,7 +2371,10 @@
                             buttonsStyling: false
                         }).then((result_swal) => {
                             if (result_swal.isConfirmed && result.transaction_id) {
-                                window.open('{{ url("pos/receipt") }}/' + result.transaction_id + '?auto_print=true', '_blank');
+                                // Only auto-print if NOT on mobile (width >= 768px)
+                                const isMobile = window.innerWidth < 768;
+                                const printUrl = '{{ url("pos/receipt") }}/' + result.transaction_id + (isMobile ? '' : '?auto_print=true');
+                                window.open(printUrl, '_blank');
                             }
                             // Auto-refresh stock by reloading page
                             window.location.reload();
