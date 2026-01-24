@@ -658,8 +658,12 @@
 
         .payment-methods {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 0.4rem;
+        }
+
+        .payment-method-btn.full-width {
+            grid-column: span 2;
         }
 
         .payment-method-btn {
@@ -1570,7 +1574,13 @@
                             <button class="payment-method-btn paymentMethodBtn active"
                                 data-method="cash">{{ __('pos.cash') }}</button>
                             <button class="payment-method-btn paymentMethodBtn"
-                                data-method="non-cash">{{ __('pos.non_cash') }}</button>
+                                data-method="qris">{{ __('pos.qris') }}</button>
+                            <button class="payment-method-btn paymentMethodBtn"
+                                data-method="transfer">{{ __('pos.transfer') }}</button>
+                            <button class="payment-method-btn paymentMethodBtn"
+                                data-method="debit">{{ __('pos.debit') }}</button>
+                            <button class="payment-method-btn paymentMethodBtn full-width"
+                                data-method="non-cash">{{ __('pos.non_cash') }} (Lainnya)</button>
                         </div>
                     </div>
 
@@ -1612,7 +1622,13 @@
                             <button class="payment-method-btn paymentMethodBtn active"
                                 data-method="cash">{{ __('pos.cash') }}</button>
                             <button class="payment-method-btn paymentMethodBtn"
-                                data-method="non-cash">{{ __('pos.non_cash') }}</button>
+                                data-method="qris">{{ __('pos.qris') }}</button>
+                            <button class="payment-method-btn paymentMethodBtn"
+                                data-method="transfer">{{ __('pos.transfer') }}</button>
+                            <button class="payment-method-btn paymentMethodBtn"
+                                data-method="debit">{{ __('pos.debit') }}</button>
+                            <button class="payment-method-btn paymentMethodBtn full-width"
+                                data-method="non-cash">{{ __('pos.non_cash') }} (Lainnya)</button>
                         </div>
                     </div>
                     <div class="checkout-buttons">
@@ -1685,8 +1701,8 @@
                     <!-- Non-Cash Upload Section -->
                     <div id="nonCashInputSection" style="display: none;">
                         <div class="text-center mb-3">
-                            <label class="form-label fw-bold">{{ __('pos.upload_proof') }} <span
-                                    class="text-danger">*</span></label>
+                            <label class="form-label fw-bold">{{ __('pos.upload_proof') }} <small
+                                    class="text-muted">{{ __('pos.optional') }}</small></label>
 
                             <!-- Preview Area -->
                             <div id="previewContainer" class="d-none mb-3">
@@ -2182,7 +2198,7 @@
             document.querySelectorAll('.paymentMethodBtn').forEach(b => {
                 b.dataset.method === method ? b.classList.add('active') : b.classList.remove('active');
             });
-            selectedPaymentMethod = method;
+            selectedPaymentMethod = method; // Track the specific method (cash, qris, transfer, etc.)
         }
 
         function filterByCategory(btn) {
@@ -2233,7 +2249,13 @@
             // Toggle sections
             document.getElementById('cashInputSection').style.display = isCash ? 'block' : 'none';
             document.getElementById('nonCashInputSection').style.display = isCash ? 'none' : 'block';
-            document.querySelector('.modal-title').textContent = isCash ? '{{ __('pos.cash_amount') }}' : '{{ __('pos.non_cash') }}';
+
+            // Set modal title based on specific method
+            let methodLabel = selectedPaymentMethod.charAt(0).toUpperCase() + selectedPaymentMethod.slice(1);
+            if (selectedPaymentMethod === 'non-cash') methodLabel = '{{ __('pos.non_cash') }}';
+            else if (selectedPaymentMethod === 'transfer') methodLabel = 'Transfer Bank';
+
+            document.querySelector('.modal-title').textContent = isCash ? '{{ __('pos.cash_amount') }}' : methodLabel;
 
             if (isCash) {
                 document.getElementById('keypadDisplay').value = '';
@@ -2272,10 +2294,7 @@
                         file = inputGallery.files[0];
                     }
 
-                    if (!file) {
-                        showToast('warning', '{{ __('pos.payment_proof_required') }}');
-                        return;
-                    }
+                    // Optional: We no longer require payment proof strictly
                     modal.hide();
                     processCheckout(cart, subtotal, total, total, file);
                 }
