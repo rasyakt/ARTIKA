@@ -437,6 +437,13 @@
             font-size: 0.75rem;
         }
 
+        .product-info-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
         /* CART */
         .cart-section {
             width: 340px;
@@ -1179,6 +1186,11 @@
                 white-space: nowrap;
             }
 
+            .product-info-stack {
+                align-items: flex-end;
+                text-align: right;
+            }
+
             /* Bottom Navigation */
             .bottom-nav {
                 display: flex;
@@ -1490,10 +1502,12 @@
                                 data-name="{{ $product->name }}" data-price="{{ $product->price }}"
                                 data-stock="{{ $totalStock }}" data-barcode="{{ $product->barcode }}">
                                 <div class="product-name text-truncate w-100 px-1">{{ $product->name }}</div>
-                                <div class="product-price">Rp{{ number_format($product->price, 0, ',', '.') }}</div>
-                                <div class="small mt-1 {{ $isOutOfStock ? 'text-danger fw-bold' : 'text-muted' }}"
-                                    style="font-size: 0.65rem;">
-                                    {{ __('pos.qty') }}: {{ $totalStock }}
+                                <div class="product-info-stack">
+                                    <div class="product-price">Rp{{ number_format($product->price, 0, ',', '.') }}</div>
+                                    <div class="small {{ $isOutOfStock ? 'text-danger fw-bold' : 'text-muted' }}"
+                                        style="font-size: 0.65rem;">
+                                        {{ __('pos.qty') }}: {{ $totalStock }}
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
