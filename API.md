@@ -35,6 +35,7 @@ ARTIKA POS menggunakan **web routes** (session-based authentication) dengan role
 **Description:** Authenticate user dengan username atau NIS
 
 **Request:**
+
 ```http
 POST /login HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
@@ -49,6 +50,7 @@ login=admin&password=password
 | password | string | Yes | User password |
 
 **Response (Success):**
+
 ```http
 HTTP/1.1 302 Found
 Location: /admin/dashboard  (atau /pos, /warehouse/dashboard based on role)
@@ -56,13 +58,16 @@ Set-Cookie: laravel_session=...
 ```
 
 **Response (Error):**
+
 ```http
 HTTP/1.1 302 Found
 Location: /login
 ```
+
 With error message: "Invalid credentials"
 
 **Example cURL:**
+
 ```bash
 curl -X POST http://localhost:8000/login \
   -d "login=admin&password=password" \
@@ -78,6 +83,7 @@ curl -X POST http://localhost:8000/login \
 **Authentication:** Required
 
 **Request:**
+
 ```http
 POST /logout HTTP/1.1
 Cookie: laravel_session=...
@@ -85,6 +91,7 @@ X-CSRF-TOKEN: {token}
 ```
 
 **Response:**
+
 ```http
 HTTP/1.1 302 Found
 Location: /login
@@ -139,6 +146,7 @@ Location: /login
 **Authentication:** Required (Admin only)
 
 **Request:**
+
 ```http
 POST /admin/products HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
@@ -161,6 +169,7 @@ barcode=899999999999
 | cost_price | decimal | Yes | Cost price |
 
 **Validation Rules:**
+
 ```php
 'barcode' => 'required|unique:products',
 'name' => 'required|string|max:255',
@@ -170,10 +179,12 @@ barcode=899999999999
 ```
 
 **Response (Success):**
+
 ```http
 HTTP/1.1 302 Found
 Location: /admin/products
 ```
+
 With success message: "Product created successfully"
 
 ---
@@ -185,6 +196,7 @@ With success message: "Product created successfully"
 **Authentication:** Required (Admin only)
 
 **URL Parameters:**
+
 - `id` - Product ID
 
 **Response:** HTML form dengan product data
@@ -198,6 +210,7 @@ With success message: "Product created successfully"
 **Authentication:** Required (Admin only)
 
 **Request:**
+
 ```http
 PUT /admin/products/1 HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
@@ -211,6 +224,7 @@ barcode=899999999999
 ```
 
 **Response (Success):**
+
 ```http
 HTTP/1.1 302 Found
 Location: /admin/products
@@ -225,12 +239,14 @@ Location: /admin/products
 **Authentication:** Required (Admin only)
 
 **Request:**
+
 ```http
 DELETE /admin/products/1 HTTP/1.1
 X-CSRF-TOKEN: {token}
 ```
 
 **Response (Success):**
+
 ```http
 HTTP/1.1 302 Found
 Location: /admin/products
@@ -257,6 +273,7 @@ Location: /admin/products
 **Authentication:** Required (Admin only)
 
 **Request:**
+
 ```http
 POST /admin/categories HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
@@ -272,6 +289,7 @@ name=Electronics&slug=electronics
 | slug | string | Yes | URL-friendly slug (unique) |
 
 **Response (Success):**
+
 ```http
 HTTP/1.1 302 Found
 Location: /admin/categories
@@ -286,6 +304,7 @@ Location: /admin/categories
 **Authentication:** Required (Admin only)
 
 **Request:**
+
 ```http
 PUT /admin/categories/1 HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
@@ -303,6 +322,7 @@ name=Updated Category&slug=updated-category
 **Authentication:** Required (Admin only)
 
 **Request:**
+
 ```http
 DELETE /admin/categories/1 HTTP/1.1
 X-CSRF-TOKEN: {token}
@@ -329,6 +349,7 @@ X-CSRF-TOKEN: {token}
 **Authentication:** Required (Admin only)
 
 **Request:**
+
 ```http
 POST /admin/users HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
@@ -387,6 +408,7 @@ name=John Doe
 **Authentication:** Required (Admin only)
 
 **Request:**
+
 ```http
 POST /admin/customers HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
@@ -453,6 +475,7 @@ name=Jane Doe
 **Response:** HTML POS interface dengan product grid, cart, scanner
 
 **Features:**
+
 - Product search
 - Barcode scanner
 - Shopping cart
@@ -480,68 +503,68 @@ name=Jane Doe
 **Authentication:** Required (Cashier only)
 
 **Request:**
-```http
-POST /pos/checkout HTTP/1.1
-Content-Type: application/json
-X-CSRF-TOKEN: {token}
 
+```http
 {
   "items": [
-    {
-      "product_id": 1,
-      "quantity": 2,
-      "price": 15000
-    },
-    {
-      "product_id": 2,
-      "quantity": 1,
-      "price": 18000
-    }
+    { "product_id": 1, "quantity": 2, "price": 15000 },
+    { "product_id": 2, "quantity": 1, "price": 18000 }
   ],
+  "subtotal": 48000,
+  "total_amount": 48000,
   "payment_method": "cash",
   "cash_amount": 50000,
+  "change_amount": 2000,
+  "payment_proof": null,
   "customer_id": null,
   "discount": 0,
-  "tax": 0,
   "note": ""
 }
 ```
 
-**Request Body:**
+**Request Format:** `multipart/form-data` (required for payment proof file)
+
+**Request Body Fields:**
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | items | array | Yes | Array of cart items |
 | items[].product_id | integer | Yes | Product ID |
 | items[].quantity | integer | Yes | Quantity |
 | items[].price | decimal | Yes | Price per unit |
-| payment_method | string | Yes | Payment method (cash, qris, debit, credit, ewallet) |
-| cash_amount | decimal | Conditional | Required if payment_method is cash |
-| customer_id | integer | No | Customer ID (optional) |
-| discount | decimal | No | Discount amount |
-| tax | decimal | No | Tax amount |
+| subtotal | decimal | Yes | Cart subtotal |
+| total_amount | decimal | Yes | Final payable amount |
+| payment_method | string | Yes | `cash` or `non-cash` |
+| cash_amount | decimal | No | Amount paid by customer |
+| change_amount | decimal | No | Surplus turned back to customer |
+| payment_proof | file | No | Image file of payment proof (max 5MB) |
+| customer_id | integer | No | Customer ID |
+| discount | decimal | No | Total discount applied |
 | note | string | No | Transaction note |
 
 **Response (Success):**
+
 ```json
 {
-  "success": true,
-  "transaction_id": 123,
-  "invoice_no": "INV-20260109-0001",
-  "total_amount": 48000,
-  "change": 2000,
-  "receipt_url": "/pos/receipt/123"
+    "success": true,
+    "transaction_id": 123,
+    "invoice_no": "INV-20260109-0001",
+    "total_amount": 48000,
+    "change": 2000,
+    "receipt_url": "/pos/receipt/123"
 }
 ```
 
 **Response (Error):**
+
 ```json
 {
-  "success": false,
-  "message": "Insufficient stock for product: Product Name"
+    "success": false,
+    "message": "Insufficient stock for product: Product Name"
 }
 ```
 
 **Business Logic:**
+
 1. Validate all items have sufficient stock
 2. Begin database transaction
 3. Create `transactions` record dengan auto-generated invoice_no
@@ -563,6 +586,7 @@ X-CSRF-TOKEN: {token}
 **Authentication:** Required (Cashier only)
 
 **Request:**
+
 ```json
 {
   "items": [...],
@@ -571,11 +595,12 @@ X-CSRF-TOKEN: {token}
 ```
 
 **Response (Success):**
+
 ```json
 {
-  "success": true,
-  "held_transaction_id": 5,
-  "message": "Transaction saved successfully"
+    "success": true,
+    "held_transaction_id": 5,
+    "message": "Transaction saved successfully"
 }
 ```
 
@@ -588,16 +613,17 @@ X-CSRF-TOKEN: {token}
 **Authentication:** Required (Cashier only)
 
 **Response:**
+
 ```json
 {
-  "held_transactions": [
-    {
-      "id": 5,
-      "subtotal": 48000,
-      "note": "Customer will return",
-      "created_at": "2026-01-09 10:30:00"
-    }
-  ]
+    "held_transactions": [
+        {
+            "id": 5,
+            "subtotal": 48000,
+            "note": "Customer will return",
+            "created_at": "2026-01-09 10:30:00"
+        }
+    ]
 }
 ```
 
@@ -610,6 +636,7 @@ X-CSRF-TOKEN: {token}
 **Authentication:** Required (Cashier only)
 
 **URL Parameters:**
+
 - `id` - Held transaction ID
 
 **Response:** Redirect ke POS dengan cart loaded
@@ -623,16 +650,18 @@ X-CSRF-TOKEN: {token}
 **Authentication:** Required (Cashier only)
 
 **Request:**
+
 ```http
 DELETE /pos/held/5 HTTP/1.1
 X-CSRF-TOKEN: {token}
 ```
 
 **Response (Success):**
+
 ```json
 {
-  "success": true,
-  "message": "Held transaction deleted"
+    "success": true,
+    "message": "Held transaction deleted"
 }
 ```
 
@@ -647,6 +676,7 @@ X-CSRF-TOKEN: {token}
 **Authentication:** Required (Cashier only)
 
 **URL Parameters:**
+
 - `id` - Transaction ID
 
 **Response:** HTML receipt view (print-friendly)
@@ -682,6 +712,7 @@ X-CSRF-TOKEN: {token}
 **Response:** HTML view dengan stock list untuk all products
 
 **Features:**
+
 - View current stock levels
 - Adjust stock
 - Search products
@@ -708,6 +739,7 @@ X-CSRF-TOKEN: {token}
 **Response:** HTML view dengan stock movement history
 
 **Features:**
+
 - Filter by date range
 - Filter by product
 - Filter by movement type (in/out/adjustment/transfer)
@@ -721,6 +753,7 @@ X-CSRF-TOKEN: {token}
 **Authentication:** Required (Warehouse only)
 
 **Request:**
+
 ```http
 POST /warehouse/stock/adjust HTTP/1.1
 Content-Type: application/json
@@ -746,15 +779,17 @@ X-CSRF-TOKEN: {token}
 | notes | text | No | Adjustment notes |
 
 **Response (Success):**
+
 ```json
 {
-  "success": true,
-  "message": "Stock adjusted successfully",
-  "new_quantity": 150
+    "success": true,
+    "message": "Stock adjusted successfully",
+    "new_quantity": 150
 }
 ```
 
 **Business Logic:**
+
 1. Validate product exists
 2. Get current stock for branch
 3. Calculate new quantity
@@ -771,6 +806,7 @@ X-CSRF-TOKEN: {token}
 **HTTP Status:** 200 OK (atau 302 Found untuk redirects)
 
 **JSON Response:**
+
 ```json
 {
   "success": true,
@@ -788,27 +824,30 @@ X-CSRF-TOKEN: {token}
 **HTTP Status:** 4xx atau 5xx
 
 **Validation Error (422):**
+
 ```json
 {
-  "message": "The given data was invalid.",
-  "errors": {
-    "barcode": ["The barcode has already been taken."],
-    "price": ["The price must be at least 0."]
-  }
+    "message": "The given data was invalid.",
+    "errors": {
+        "barcode": ["The barcode has already been taken."],
+        "price": ["The price must be at least 0."]
+    }
 }
 ```
 
 **Unauthorized (403):**
+
 ```json
 {
-  "message": "Unauthorized Access"
+    "message": "Unauthorized Access"
 }
 ```
 
 **Not Found (404):**
+
 ```json
 {
-  "message": "Resource not found"
+    "message": "Resource not found"
 }
 ```
 
@@ -818,26 +857,28 @@ X-CSRF-TOKEN: {token}
 
 ### Common HTTP Status Codes
 
-| Code | Meaning | Description |
-|------|---------|-------------|
-| 200 | OK | Request successful |
-| 302 | Found | Redirect (after successful form submission) |
-| 401 | Unauthorized | User not authenticated |
-| 403 | Forbidden | User doesn't have required role |
-| 404 | Not Found | Resource doesn't exist |
-| 422 | Unprocessable Entity | Validation failed |
-| 500 | Internal Server Error | Server error |
+| Code | Meaning               | Description                                 |
+| ---- | --------------------- | ------------------------------------------- |
+| 200  | OK                    | Request successful                          |
+| 302  | Found                 | Redirect (after successful form submission) |
+| 401  | Unauthorized          | User not authenticated                      |
+| 403  | Forbidden             | User doesn't have required role             |
+| 404  | Not Found             | Resource doesn't exist                      |
+| 422  | Unprocessable Entity  | Validation failed                           |
+| 500  | Internal Server Error | Server error                                |
 
 ### CSRF Protection
 
 All POST/PUT/DELETE requests require CSRF token:
 
 **In Blade:**
+
 ```blade
 @csrf
 ```
 
 **In JavaScript:**
+
 ```javascript
 headers: {
     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
@@ -862,5 +903,5 @@ Laravel default rate limiting: **60 requests per minute** per IP/user
 
 ---
 
-**Last Updated:** 2026-01-09  
-**API Version:** 2.0
+**Last Updated:** 2026-01-23  
+**API Version:** 2.5

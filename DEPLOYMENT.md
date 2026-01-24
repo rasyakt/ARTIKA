@@ -51,6 +51,7 @@ Ubuntu 22.04 LTS
 ### 1. Provision Server
 
 **Cloud Providers:**
+
 - DigitalOcean
 - AWS EC2
 - Google Cloud Platform
@@ -157,6 +158,7 @@ nano .env
 ```
 
 **Production .env:**
+
 ```env
 APP_NAME="ARTIKA POS"
 APP_ENV=production
@@ -274,6 +276,7 @@ server {
 ```
 
 Enable site:
+
 ```bash
 sudo ln -s /etc/nginx/sites-available/artika /etc/nginx/sites-enabled/
 sudo nginx -t
@@ -307,6 +310,7 @@ pm.max_requests = 500
 ```
 
 Restart PHP-FPM:
+
 ```bash
 sudo systemctl restart php8.2-fpm
 ```
@@ -506,6 +510,7 @@ tar -czf artika_app_$(date +%Y%m%d).tar.gz /var/www/artika
 ### 3. Backup Verification
 
 Test restore monthly:
+
 ```bash
 gunzip < artika_20260109.sql.gz | mysql -u root -p artika_test
 ```
@@ -555,6 +560,7 @@ dep deploy production
 ```
 
 Symlink strategy:
+
 ```
 /var/www/artika
 ├── current -> releases/20260109_120000
@@ -626,5 +632,5 @@ sudo systemctl reload php8.2-fpm
 
 **Deploy with Confidence! 🚀**
 
-**Version:** 2.0  
-**Last Updated:** 2026-01-09
+**Version:** 2.5  
+**Last Updated:** 2026-01-23

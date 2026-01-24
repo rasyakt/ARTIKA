@@ -22,6 +22,7 @@ Panduan development untuk developers yang akan maintain atau extend ARTIKA POS s
 ### Prerequisites
 
 Install the following tools:
+
 - PHP 8.2+
 - Composer 2.x
 - Node.js 18+
@@ -89,19 +90,21 @@ class ExampleController extends Controller
     public function index(): View
     {
         $items = Item::all();
-        
+
         return view('items.index', compact('items'));
     }
 }
 ```
 
 **Key Rules:**
+
 - Use 4 spaces untuk indentation (no tabs)
 - Opening braces `{` on same line untuk methods
 - Type hints untuk parameters dan return types
 - DocBlocks untuk methods
 
 **Check with Pint:**
+
 ```bash
 ./vendor/bin/pint
 ```
@@ -142,6 +145,7 @@ main (production)
 ```
 
 **Branch Naming:**
+
 - `feature/add-discount-system`
 - `bugfix/fix-stock-calculation`
 - `hotfix/critical-payment-bug`
@@ -149,41 +153,45 @@ main (production)
 ### Workflow Steps
 
 1. **Create Feature Branch**
-   ```bash
-   git checkout develop
-   git pull origin develop
-   git checkout -b feature/new-feature
-   ```
+
+    ```bash
+    git checkout develop
+    git pull origin develop
+    git checkout -b feature/new-feature
+    ```
 
 2. **Make Changes**
-   ```bash
-   # Make code changes
-   # Test locally
-   ```
+
+    ```bash
+    # Make code changes
+    # Test locally
+    ```
 
 3. **Commit**
-   ```bash
-   git add .
-   git commit -m "Add new feature: description"
-   ```
+
+    ```bash
+    git add .
+    git commit -m "Add new feature: description"
+    ```
 
 4. **Push & Create PR**
-   ```bash
-   git push origin feature/new-feature
-   # Create Pull Request on GitHub
-   ```
+
+    ```bash
+    git push origin feature/new-feature
+    # Create Pull Request on GitHub
+    ```
 
 5. **Code Review**
-   - Wait for review
-   - Address feedback
-   - Merge to develop
+    - Wait for review
+    - Address feedback
+    - Merge to develop
 
 6. **Deploy to Production**
-   ```bash
-   git checkout main
-   git merge develop
-   git push origin main
-   ```
+    ```bash
+    git checkout main
+    git merge develop
+    git push origin main
+    ```
 
 ### Commit Message Format
 
@@ -196,6 +204,7 @@ footer (optional)
 ```
 
 **Types:**
+
 - `feat:` New feature
 - `fix:` Bug fix
 - `docs:` Documentation only
@@ -205,6 +214,7 @@ footer (optional)
 - `chore:` Build/config changes
 
 **Examples:**
+
 ```
 feat(pos): add hold transaction feature
 
@@ -249,20 +259,20 @@ class PosTest extends TestCase
     {
         $cashierRole = Role::where('name', 'cashier')->first();
         $user = User::factory()->create(['role_id' => $cashierRole->id]);
-        
+
         $response = $this->actingAs($user)->get('/pos');
-        
+
         $response->assertStatus(200);
         $response->assertSee('Point of Sale');
     }
-    
+
     public function test_admin_cannot_access_pos()
     {
         $adminRole = Role::where('name', 'admin')->first();
         $user = User::factory()->create(['role_id' => $adminRole->id]);
-        
+
         $response = $this->actingAs($user)->get('/pos');
-        
+
         $response->assertStatus(403);
     }
 }
@@ -283,7 +293,7 @@ class ProductTest extends TestCase
     public function test_formatted_price_accessor()
     {
         $product = new Product(['price' => 15000]);
-        
+
         $this->assertEquals('Rp 15.000', $product->formatted_price);
     }
 }
@@ -312,6 +322,7 @@ Log::error('Payment failed', ['transaction_id' => $id]);
 ```
 
 View logs:
+
 ```bash
 tail -f storage/logs/laravel.log
 ```
@@ -439,13 +450,13 @@ public function store(Request $request)
         'discount_amount' => 'nullable|numeric|min:0',
         'discount_type' => 'nullable|in:fixed,percentage',
     ]);
-    
+
     $transaction = Transaction::create([
         // ...
         'discount_amount' => $validated['discount_amount'] ?? 0,
         'discount_type' => $validated['discount_type'] ?? null,
     ]);
-    
+
     // ...
 }
 ```
@@ -468,20 +479,22 @@ public function store(Request $request)
 
 ```javascript
 // Calculate discount
-document.getElementById('discountAmount').addEventListener('input', function() {
-    const type = document.getElementById('discountType').value;
-    const amount = parseFloat(this.value) || 0;
-    const subtotal = calculateSubtotal();
-    
-    let discount = 0;
-    if (type === 'percentage') {
-        discount = subtotal * (amount / 100);
-    } else {
-        discount = amount;
-    }
-    
-    updateTotal(subtotal - discount);
-});
+document
+    .getElementById("discountAmount")
+    .addEventListener("input", function () {
+        const type = document.getElementById("discountType").value;
+        const amount = parseFloat(this.value) || 0;
+        const subtotal = calculateSubtotal();
+
+        let discount = 0;
+        if (type === "percentage") {
+            discount = subtotal * (amount / 100);
+        } else {
+            discount = amount;
+        }
+
+        updateTotal(subtotal - discount);
+    });
 ```
 
 #### 6. Write Tests
@@ -495,7 +508,7 @@ public function test_discount_applied_correctly()
         'discount_type' => 'fixed',
         // ...
     ]);
-    
+
     $response->assertStatus(200);
     $this->assertDatabaseHas('transactions', [
         'discount_amount' => 5000,
@@ -514,6 +527,7 @@ Update `API.md` dan `USER_GUIDE_CASHIER.md` dengan discount feature.
 ### Database Query Optimization
 
 **Bad (N+1 Problem):**
+
 ```php
 $products = Product::all();
 foreach ($products as $product) {
@@ -522,6 +536,7 @@ foreach ($products as $product) {
 ```
 
 **Good (Eager Loading):**
+
 ```php
 $products = Product::with('category')->get();
 foreach ($products as $product) {
@@ -575,6 +590,7 @@ php artisan optimize:clear
 ```
 
 This clears:
+
 - Application cache
 - Route cache
 - Config cache
@@ -639,5 +655,5 @@ composer require phpstan/phpstan --dev
 
 **Happy Coding! 👨‍💻**
 
-**Version:** 2.0  
-**Last Updated:** 2026-01-09
+**Version:** 2.5  
+**Last Updated:** 2026-01-23

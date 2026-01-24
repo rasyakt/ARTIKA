@@ -43,27 +43,27 @@ Total: 19 migration files di `database/migrations/`
 ```mermaid
 erDiagram
     ROLES ||--o{ USERS : "has"
-    
+
     USERS ||--o{ TRANSACTIONS : "creates"
     USERS ||--o{ SHIFTS : "operates"
-    
+
     CATEGORIES ||--o{ PRODUCTS : "contains"
     PRODUCTS ||--o{ STOCKS : "tracked_in"
     PRODUCTS ||--o{ TRANSACTION_ITEMS : "sold_as"
-    
+
     TRANSACTIONS ||--o{ TRANSACTION_ITEMS : "contains"
     TRANSACTIONS }o--|| PAYMENT_METHODS : "uses"
     TRANSACTIONS }o--o| CUSTOMERS : "belongs_to"
     TRANSACTIONS ||--o{ JOURNALS : "generates"
-    
+
     PRODUCTS ||--o{ STOCK_MOVEMENTS : "moved"
     USERS ||--o{ STOCK_MOVEMENTS : "recorded_by"
-    
+
     CUSTOMERS ||--o{ RETURNS : "makes"
     TRANSACTIONS ||--o| RETURNS : "returned_from"
-    
+
     USERS ||--o{ HELD_TRANSACTIONS : "saves"
-    
+
     PRODUCTS }o--o| PROMOS : "has"
 
     ROLES {
@@ -146,6 +146,7 @@ erDiagram
         decimal tax
         decimal discount
         string payment_method
+        string payment_proof
         decimal cash_amount
         decimal change_amount
         enum status
@@ -261,15 +262,16 @@ erDiagram
 
 **Purpose:** User role definitions untuk role-based access control
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| name | VARCHAR(255) | NO | - | Role name (admin, cashier, warehouse) |
-| description | VARCHAR(255) | YES | NULL | Role description |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column      | Type            | Nullable | Default        | Description                           |
+| ----------- | --------------- | -------- | -------------- | ------------------------------------- |
+| id          | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key                           |
+| name        | VARCHAR(255)    | NO       | -              | Role name (admin, cashier, warehouse) |
+| description | VARCHAR(255)    | YES      | NULL           | Role description                      |
+| created_at  | TIMESTAMP       | YES      | NULL           | Created timestamp                     |
+| updated_at  | TIMESTAMP       | YES      | NULL           | Updated timestamp                     |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 
 ---
@@ -278,20 +280,21 @@ erDiagram
 
 **Purpose:** User accounts dengan multi-field authentication (username/NIS)
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| name | VARCHAR(255) | NO | - | User full name |
-| username | VARCHAR(255) | NO | - | Login username |
-| nis | VARCHAR(255) | YES | NULL | NIS untuk siswa/kasir (unique) |
-| password | VARCHAR(255) | NO | - | Bcrypt hashed password |
-| role_id | BIGINT UNSIGNED | YES | NULL | Foreign key ke roles |
-| branch_id | BIGINT UNSIGNED | YES | NULL | Foreign key ke branches |
-| remember_token | VARCHAR(100) | YES | NULL | Remember me token |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column         | Type            | Nullable | Default        | Description                    |
+| -------------- | --------------- | -------- | -------------- | ------------------------------ |
+| id             | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key                    |
+| name           | VARCHAR(255)    | NO       | -              | User full name                 |
+| username       | VARCHAR(255)    | NO       | -              | Login username                 |
+| nis            | VARCHAR(255)    | YES      | NULL           | NIS untuk siswa/kasir (unique) |
+| password       | VARCHAR(255)    | NO       | -              | Bcrypt hashed password         |
+| role_id        | BIGINT UNSIGNED | YES      | NULL           | Foreign key ke roles           |
+| branch_id      | BIGINT UNSIGNED | YES      | NULL           | Foreign key ke branches        |
+| remember_token | VARCHAR(100)    | YES      | NULL           | Remember me token              |
+| created_at     | TIMESTAMP       | YES      | NULL           | Created timestamp              |
+| updated_at     | TIMESTAMP       | YES      | NULL           | Updated timestamp              |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - UNIQUE KEY (`username`)
 - UNIQUE KEY (`nis`)
@@ -304,15 +307,16 @@ erDiagram
 
 **Purpose:** Store branches/cabang toko
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| name | VARCHAR(255) | NO | - | Branch name |
-| address | TEXT | YES | NULL | Branch address |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column     | Type            | Nullable | Default        | Description       |
+| ---------- | --------------- | -------- | -------------- | ----------------- |
+| id         | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key       |
+| name       | VARCHAR(255)    | NO       | -              | Branch name       |
+| address    | TEXT            | YES      | NULL           | Branch address    |
+| created_at | TIMESTAMP       | YES      | NULL           | Created timestamp |
+| updated_at | TIMESTAMP       | YES      | NULL           | Updated timestamp |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 
 ---
@@ -321,15 +325,16 @@ erDiagram
 
 **Purpose:** Product categories
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| name | VARCHAR(255) | NO | - | Category name |
-| slug | VARCHAR(255) | NO | - | URL-friendly slug |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column     | Type            | Nullable | Default        | Description       |
+| ---------- | --------------- | -------- | -------------- | ----------------- |
+| id         | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key       |
+| name       | VARCHAR(255)    | NO       | -              | Category name     |
+| slug       | VARCHAR(255)    | NO       | -              | URL-friendly slug |
+| created_at | TIMESTAMP       | YES      | NULL           | Created timestamp |
+| updated_at | TIMESTAMP       | YES      | NULL           | Updated timestamp |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - UNIQUE KEY (`slug`)
 
@@ -339,18 +344,19 @@ erDiagram
 
 **Purpose:** Product catalog dengan barcode
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| barcode | VARCHAR(255) | NO | - | Product barcode (unique) |
-| name | VARCHAR(255) | NO | - | Product name |
-| category_id | BIGINT UNSIGNED | NO | - | Foreign key ke categories |
-| price | DECIMAL(15,2) | NO | - | Selling price |
-| cost_price | DECIMAL(15,2) | NO | - | Cost/purchase price |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column      | Type            | Nullable | Default        | Description               |
+| ----------- | --------------- | -------- | -------------- | ------------------------- |
+| id          | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key               |
+| barcode     | VARCHAR(255)    | NO       | -              | Product barcode (unique)  |
+| name        | VARCHAR(255)    | NO       | -              | Product name              |
+| category_id | BIGINT UNSIGNED | NO       | -              | Foreign key ke categories |
+| price       | DECIMAL(15,2)   | NO       | -              | Selling price             |
+| cost_price  | DECIMAL(15,2)   | NO       | -              | Cost/purchase price       |
+| created_at  | TIMESTAMP       | YES      | NULL           | Created timestamp         |
+| updated_at  | TIMESTAMP       | YES      | NULL           | Updated timestamp         |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - UNIQUE KEY (`barcode`)
 - FOREIGN KEY (`category_id`) REFERENCES `categories(id)` ON DELETE CASCADE
@@ -361,22 +367,24 @@ erDiagram
 
 **Purpose:** Inventory tracking per branch
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| product_id | BIGINT UNSIGNED | NO | - | Foreign key ke products |
-| branch_id | BIGINT UNSIGNED | NO | - | Foreign key ke branches |
-| quantity | INTEGER | NO | 0 | Current stock quantity |
-| min_stock | INTEGER | NO | 10 | Minimum stock threshold |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column     | Type            | Nullable | Default        | Description             |
+| ---------- | --------------- | -------- | -------------- | ----------------------- |
+| id         | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key             |
+| product_id | BIGINT UNSIGNED | NO       | -              | Foreign key ke products |
+| branch_id  | BIGINT UNSIGNED | NO       | -              | Foreign key ke branches |
+| quantity   | INTEGER         | NO       | 0              | Current stock quantity  |
+| min_stock  | INTEGER         | NO       | 10             | Minimum stock threshold |
+| created_at | TIMESTAMP       | YES      | NULL           | Created timestamp       |
+| updated_at | TIMESTAMP       | YES      | NULL           | Updated timestamp       |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - FOREIGN KEY (`product_id`) REFERENCES `products(id)` ON DELETE CASCADE
 - FOREIGN KEY (`branch_id`) REFERENCES `branches(id)` ON DELETE CASCADE
 
 **Business Logic:**
+
 - Low stock alert when `quantity <= min_stock`
 
 ---
@@ -385,19 +393,20 @@ erDiagram
 
 **Purpose:** Customer database dengan loyalty points
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| name | VARCHAR(255) | NO | - | Customer name |
-| phone | VARCHAR(20) | NO | - | Phone number (unique) |
-| email | VARCHAR(255) | YES | NULL | Email address |
-| address | TEXT | YES | NULL | Customer address |
-| points | INTEGER | NO | 0 | Loyalty points |
-| member_since | DATE | YES | NULL | Member registration date |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column       | Type            | Nullable | Default        | Description              |
+| ------------ | --------------- | -------- | -------------- | ------------------------ |
+| id           | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key              |
+| name         | VARCHAR(255)    | NO       | -              | Customer name            |
+| phone        | VARCHAR(20)     | NO       | -              | Phone number (unique)    |
+| email        | VARCHAR(255)    | YES      | NULL           | Email address            |
+| address      | TEXT            | YES      | NULL           | Customer address         |
+| points       | INTEGER         | NO       | 0              | Loyalty points           |
+| member_since | DATE            | YES      | NULL           | Member registration date |
+| created_at   | TIMESTAMP       | YES      | NULL           | Created timestamp        |
+| updated_at   | TIMESTAMP       | YES      | NULL           | Updated timestamp        |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - UNIQUE KEY (`phone`)
 
@@ -407,26 +416,28 @@ erDiagram
 
 **Purpose:** Sales transactions
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| invoice_no | VARCHAR(255) | NO | - | Auto-generated invoice number |
-| user_id | BIGINT UNSIGNED | YES | NULL | Cashier/user who created |
-| branch_id | BIGINT UNSIGNED | YES | NULL | Branch where transaction occurred |
-| customer_id | BIGINT UNSIGNED | YES | NULL | Customer (optional) |
-| subtotal | DECIMAL(15,2) | NO | - | Subtotal before tax/discount |
-| total_amount | DECIMAL(15,2) | NO | - | Final total amount |
-| tax | DECIMAL(15,2) | NO | 0 | Tax amount |
-| discount | DECIMAL(15,2) | NO | 0 | Discount amount |
-| payment_method | VARCHAR(255) | NO | - | Payment method used |
-| cash_amount | DECIMAL(15,2) | YES | NULL | Cash received (for cash payments) |
-| change_amount | DECIMAL(15,2) | YES | NULL | Change returned |
-| status | ENUM | NO | pending | pending, completed, canceled |
-| note | TEXT | YES | NULL | Transaction notes |
-| created_at | TIMESTAMP | YES | NULL | Transaction timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column         | Type            | Nullable | Default        | Description                                |
+| -------------- | --------------- | -------- | -------------- | ------------------------------------------ |
+| id             | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key                                |
+| invoice_no     | VARCHAR(255)    | NO       | -              | Auto-generated invoice number              |
+| user_id        | BIGINT UNSIGNED | YES      | NULL           | Cashier/user who created                   |
+| branch_id      | BIGINT UNSIGNED | YES      | NULL           | Branch where transaction occurred          |
+| customer_id    | BIGINT UNSIGNED | YES      | NULL           | Customer (optional)                        |
+| subtotal       | DECIMAL(15,2)   | NO       | -              | Subtotal before tax/discount               |
+| total_amount   | DECIMAL(15,2)   | NO       | -              | Final total amount                         |
+| tax            | DECIMAL(15,2)   | NO       | 0              | Tax amount                                 |
+| discount       | DECIMAL(15,2)   | NO       | 0              | Discount amount                            |
+| payment_method | VARCHAR(255)    | NO       | -              | Payment method used                        |
+| payment_proof  | VARCHAR(255)    | YES      | NULL           | Path to payment proof image (for non-cash) |
+| cash_amount    | DECIMAL(15,2)   | YES      | NULL           | Cash received (for cash payments)          |
+| change_amount  | DECIMAL(15,2)   | YES      | NULL           | Change returned                            |
+| status         | ENUM            | NO       | pending        | pending, completed, canceled               |
+| note           | TEXT            | YES      | NULL           | Transaction notes                          |
+| created_at     | TIMESTAMP       | YES      | NULL           | Transaction timestamp                      |
+| updated_at     | TIMESTAMP       | YES      | NULL           | Updated timestamp                          |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - UNIQUE KEY (`invoice_no`)
 - FOREIGN KEY (`user_id`) REFERENCES `users(id)` ON DELETE SET NULL
@@ -441,18 +452,19 @@ erDiagram
 
 **Purpose:** Line items for each transaction
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| transaction_id | BIGINT UNSIGNED | NO | - | Foreign key ke transactions |
-| product_id | BIGINT UNSIGNED | NO | - | Foreign key ke products |
-| quantity | INTEGER | NO | - | Quantity sold |
-| price | DECIMAL(15,2) | NO | - | Price per unit at time of sale |
-| subtotal | DECIMAL(15,2) | NO | - | Line subtotal (quantity × price) |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column         | Type            | Nullable | Default        | Description                      |
+| -------------- | --------------- | -------- | -------------- | -------------------------------- |
+| id             | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key                      |
+| transaction_id | BIGINT UNSIGNED | NO       | -              | Foreign key ke transactions      |
+| product_id     | BIGINT UNSIGNED | NO       | -              | Foreign key ke products          |
+| quantity       | INTEGER         | NO       | -              | Quantity sold                    |
+| price          | DECIMAL(15,2)   | NO       | -              | Price per unit at time of sale   |
+| subtotal       | DECIMAL(15,2)   | NO       | -              | Line subtotal (quantity × price) |
+| created_at     | TIMESTAMP       | YES      | NULL           | Created timestamp                |
+| updated_at     | TIMESTAMP       | YES      | NULL           | Updated timestamp                |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - FOREIGN KEY (`transaction_id`) REFERENCES `transactions(id)` ON DELETE CASCADE
 - FOREIGN KEY (`product_id`) REFERENCES `products(id)` ON DELETE CASCADE
@@ -463,15 +475,16 @@ erDiagram
 
 **Purpose:** Available payment methods
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| name | VARCHAR(255) | NO | - | Payment method name |
-| slug | VARCHAR(255) | NO | - | URL-friendly slug |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column     | Type            | Nullable | Default        | Description         |
+| ---------- | --------------- | -------- | -------------- | ------------------- |
+| id         | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key         |
+| name       | VARCHAR(255)    | NO       | -              | Payment method name |
+| slug       | VARCHAR(255)    | NO       | -              | URL-friendly slug   |
+| created_at | TIMESTAMP       | YES      | NULL           | Created timestamp   |
+| updated_at | TIMESTAMP       | YES      | NULL           | Updated timestamp   |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - UNIQUE KEY (`slug`)
 
@@ -483,18 +496,19 @@ erDiagram
 
 **Purpose:** Temporarily saved/parked transactions
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| user_id | BIGINT UNSIGNED | NO | - | User who saved the transaction |
-| branch_id | BIGINT UNSIGNED | NO | - | Branch where saved |
-| cart_data | JSON | NO | - | Serialized cart items |
-| subtotal | DECIMAL(15,2) | NO | - | Cart subtotal |
-| note | VARCHAR(255) | YES | NULL | Note/reason for holding |
-| created_at | TIMESTAMP | YES | NULL | When transaction was held |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column     | Type            | Nullable | Default        | Description                    |
+| ---------- | --------------- | -------- | -------------- | ------------------------------ |
+| id         | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key                    |
+| user_id    | BIGINT UNSIGNED | NO       | -              | User who saved the transaction |
+| branch_id  | BIGINT UNSIGNED | NO       | -              | Branch where saved             |
+| cart_data  | JSON            | NO       | -              | Serialized cart items          |
+| subtotal   | DECIMAL(15,2)   | NO       | -              | Cart subtotal                  |
+| note       | VARCHAR(255)    | YES      | NULL           | Note/reason for holding        |
+| created_at | TIMESTAMP       | YES      | NULL           | When transaction was held      |
+| updated_at | TIMESTAMP       | YES      | NULL           | Updated timestamp              |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - FOREIGN KEY (`user_id`) REFERENCES `users(id)` ON DELETE CASCADE
 - FOREIGN KEY (`branch_id`) REFERENCES `branches(id)` ON DELETE CASCADE
@@ -505,21 +519,22 @@ erDiagram
 
 **Purpose:** Return/refund transactions
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| return_no | VARCHAR(255) | NO | - | Auto-generated return number |
-| transaction_id | BIGINT UNSIGNED | YES | NULL | Original transaction |
-| customer_id | BIGINT UNSIGNED | YES | NULL | Customer making return |
-| processed_by | BIGINT UNSIGNED | YES | NULL | User who processed return |
-| total_amount | DECIMAL(15,2) | NO | - | Refund amount |
-| reason | ENUM | NO | - | defective, wrong_item, other |
-| notes | TEXT | YES | NULL | Return notes |
-| status | ENUM | NO | pending | pending, approved, rejected |
-| created_at | TIMESTAMP | YES | NULL | Return timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column         | Type            | Nullable | Default        | Description                  |
+| -------------- | --------------- | -------- | -------------- | ---------------------------- |
+| id             | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key                  |
+| return_no      | VARCHAR(255)    | NO       | -              | Auto-generated return number |
+| transaction_id | BIGINT UNSIGNED | YES      | NULL           | Original transaction         |
+| customer_id    | BIGINT UNSIGNED | YES      | NULL           | Customer making return       |
+| processed_by   | BIGINT UNSIGNED | YES      | NULL           | User who processed return    |
+| total_amount   | DECIMAL(15,2)   | NO       | -              | Refund amount                |
+| reason         | ENUM            | NO       | -              | defective, wrong_item, other |
+| notes          | TEXT            | YES      | NULL           | Return notes                 |
+| status         | ENUM            | NO       | pending        | pending, approved, rejected  |
+| created_at     | TIMESTAMP       | YES      | NULL           | Return timestamp             |
+| updated_at     | TIMESTAMP       | YES      | NULL           | Updated timestamp            |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - UNIQUE KEY (`return_no`)
 - FOREIGN KEY (`transaction_id`) REFERENCES `transactions(id)` ON DELETE SET NULL
@@ -532,21 +547,22 @@ erDiagram
 
 **Purpose:** Cashier shift management
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| user_id | BIGINT UNSIGNED | NO | - | Cashier user |
-| branch_id | BIGINT UNSIGNED | NO | - | Branch |
-| opening_cash | DECIMAL(15,2) | NO | - | Cash at shift open |
-| closing_cash | DECIMAL(15,2) | YES | NULL | Cash at shift close |
-| expected_cash | DECIMAL(15,2) | YES | NULL | Expected cash based on transactions |
-| variance | DECIMAL(15,2) | YES | NULL | Difference (closing - expected) |
-| opened_at | DATETIME | NO | - | Shift open time |
-| closed_at | DATETIME | YES | NULL | Shift close time |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column        | Type            | Nullable | Default        | Description                         |
+| ------------- | --------------- | -------- | -------------- | ----------------------------------- |
+| id            | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key                         |
+| user_id       | BIGINT UNSIGNED | NO       | -              | Cashier user                        |
+| branch_id     | BIGINT UNSIGNED | NO       | -              | Branch                              |
+| opening_cash  | DECIMAL(15,2)   | NO       | -              | Cash at shift open                  |
+| closing_cash  | DECIMAL(15,2)   | YES      | NULL           | Cash at shift close                 |
+| expected_cash | DECIMAL(15,2)   | YES      | NULL           | Expected cash based on transactions |
+| variance      | DECIMAL(15,2)   | YES      | NULL           | Difference (closing - expected)     |
+| opened_at     | DATETIME        | NO       | -              | Shift open time                     |
+| closed_at     | DATETIME        | YES      | NULL           | Shift close time                    |
+| created_at    | TIMESTAMP       | YES      | NULL           | Created timestamp                   |
+| updated_at    | TIMESTAMP       | YES      | NULL           | Updated timestamp                   |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - FOREIGN KEY (`user_id`) REFERENCES `users(id)` ON DELETE CASCADE
 - FOREIGN KEY (`branch_id`) REFERENCES `branches(id)` ON DELETE CASCADE
@@ -557,19 +573,20 @@ erDiagram
 
 **Purpose:** Accounting journal entries (double-entry bookkeeping)
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| transaction_id | BIGINT UNSIGNED | YES | NULL | Related transaction |
-| account_code | VARCHAR(50) | NO | - | Chart of accounts code |
-| account_name | VARCHAR(255) | NO | - | Account name |
-| debit | DECIMAL(15,2) | NO | 0 | Debit amount |
-| credit | DECIMAL(15,2) | NO | 0 | Credit amount |
-| description | TEXT | YES | NULL | Entry description |
-| created_at | TIMESTAMP | YES | NULL | Entry timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column         | Type            | Nullable | Default        | Description            |
+| -------------- | --------------- | -------- | -------------- | ---------------------- |
+| id             | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key            |
+| transaction_id | BIGINT UNSIGNED | YES      | NULL           | Related transaction    |
+| account_code   | VARCHAR(50)     | NO       | -              | Chart of accounts code |
+| account_name   | VARCHAR(255)    | NO       | -              | Account name           |
+| debit          | DECIMAL(15,2)   | NO       | 0              | Debit amount           |
+| credit         | DECIMAL(15,2)   | NO       | 0              | Credit amount          |
+| description    | TEXT            | YES      | NULL           | Entry description      |
+| created_at     | TIMESTAMP       | YES      | NULL           | Entry timestamp        |
+| updated_at     | TIMESTAMP       | YES      | NULL           | Updated timestamp      |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - FOREIGN KEY (`transaction_id`) REFERENCES `transactions(id)` ON DELETE SET NULL
 
@@ -579,20 +596,21 @@ erDiagram
 
 **Purpose:** Promotions and discounts
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| name | VARCHAR(255) | NO | - | Promo name |
-| product_id | BIGINT UNSIGNED | YES | NULL | Specific product (null = all) |
-| type | ENUM | NO | - | percentage, fixed_amount |
-| value | DECIMAL(15,2) | NO | - | Discount value |
-| valid_from | DATE | NO | - | Start date |
-| valid_to | DATE | NO | - | End date |
-| is_active | BOOLEAN | NO | 1 | Active status |
-| created_at | TIMESTAMP | YES | NULL | Created timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column     | Type            | Nullable | Default        | Description                   |
+| ---------- | --------------- | -------- | -------------- | ----------------------------- |
+| id         | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key                   |
+| name       | VARCHAR(255)    | NO       | -              | Promo name                    |
+| product_id | BIGINT UNSIGNED | YES      | NULL           | Specific product (null = all) |
+| type       | ENUM            | NO       | -              | percentage, fixed_amount      |
+| value      | DECIMAL(15,2)   | NO       | -              | Discount value                |
+| valid_from | DATE            | NO       | -              | Start date                    |
+| valid_to   | DATE            | NO       | -              | End date                      |
+| is_active  | BOOLEAN         | NO       | 1              | Active status                 |
+| created_at | TIMESTAMP       | YES      | NULL           | Created timestamp             |
+| updated_at | TIMESTAMP       | YES      | NULL           | Updated timestamp             |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - FOREIGN KEY (`product_id`) REFERENCES `products(id)` ON DELETE CASCADE
 
@@ -602,22 +620,23 @@ erDiagram
 
 **Purpose:** Track all stock changes (audit trail)
 
-| Column | Type | Nullable | Default | Description |
-|--------|------|----------|---------|-------------|
-| id | BIGINT UNSIGNED | NO | AUTO_INCREMENT | Primary key |
-| product_id | BIGINT UNSIGNED | NO | - | Product |
-| branch_id | BIGINT UNSIGNED | NO | - | Branch |
-| user_id | BIGINT UNSIGNED | YES | NULL | User who made change |
-| type | ENUM | NO | - | in, out, adjustment, transfer |
-| quantity | INTEGER | NO | - | Quantity changed (positive/negative) |
-| quantity_before | INTEGER | NO | - | Stock before movement |
-| quantity_after | INTEGER | NO | - | Stock after movement |
-| reference_no | VARCHAR(255) | YES | NULL | Reference (e.g., PO number) |
-| notes | TEXT | YES | NULL | Movement notes |
-| created_at | TIMESTAMP | YES | NULL | Movement timestamp |
-| updated_at | TIMESTAMP | YES | NULL | Updated timestamp |
+| Column          | Type            | Nullable | Default        | Description                          |
+| --------------- | --------------- | -------- | -------------- | ------------------------------------ |
+| id              | BIGINT UNSIGNED | NO       | AUTO_INCREMENT | Primary key                          |
+| product_id      | BIGINT UNSIGNED | NO       | -              | Product                              |
+| branch_id       | BIGINT UNSIGNED | NO       | -              | Branch                               |
+| user_id         | BIGINT UNSIGNED | YES      | NULL           | User who made change                 |
+| type            | ENUM            | NO       | -              | in, out, adjustment, transfer        |
+| quantity        | INTEGER         | NO       | -              | Quantity changed (positive/negative) |
+| quantity_before | INTEGER         | NO       | -              | Stock before movement                |
+| quantity_after  | INTEGER         | NO       | -              | Stock after movement                 |
+| reference_no    | VARCHAR(255)    | YES      | NULL           | Reference (e.g., PO number)          |
+| notes           | TEXT            | YES      | NULL           | Movement notes                       |
+| created_at      | TIMESTAMP       | YES      | NULL           | Movement timestamp                   |
+| updated_at      | TIMESTAMP       | YES      | NULL           | Updated timestamp                    |
 
 **Indexes:**
+
 - PRIMARY KEY (`id`)
 - FOREIGN KEY (`product_id`) REFERENCES `products(id)` ON DELETE CASCADE
 - FOREIGN KEY (`branch_id`) REFERENCES `branches(id)` ON DELETE CASCADE
@@ -673,6 +692,7 @@ erDiagram
 ### Foreign Key Constraints
 
 All foreign keys use:
+
 - `ON DELETE CASCADE` - For dependent records (e.g., transaction_items)
 - `ON DELETE SET NULL` - For references that can be orphaned (e.g., user_id in transactions)
 
@@ -683,6 +703,7 @@ All foreign keys use:
 Data yang di-seed oleh `DatabaseSeeder.php`:
 
 ### Roles (3)
+
 ```
 - Admin (Full access)
 - Cashier (POS access)
@@ -690,6 +711,7 @@ Data yang di-seed oleh `DatabaseSeeder.php`:
 ```
 
 ### Users (3)
+
 ```
 - admin / password    (Admin)
 - kasir1 / password   (Cashier, NIS: 12345)
@@ -697,12 +719,14 @@ Data yang di-seed oleh `DatabaseSeeder.php`:
 ```
 
 ### Branches (2)
+
 ```
 - Pusat
 - Cabang 1
 ```
 
 ### Categories (5)
+
 ```
 - Snack
 - Drink
@@ -712,11 +736,13 @@ Data yang di-seed oleh `DatabaseSeeder.php`:
 ```
 
 ### Products (20)
+
 Sample products across all categories dengan barcode format `899999XXXXXX`
 
 Stock: Random 50-200 per product
 
 ### Customers (3)
+
 ```
 - John Doe (100 points)
 - Jane Smith (250 points)
@@ -724,6 +750,7 @@ Stock: Random 50-200 per product
 ```
 
 ### Payment Methods (5)
+
 ```
 - Cash
 - QRIS
@@ -739,6 +766,7 @@ Stock: Random 50-200 per product
 ### Common Queries
 
 **Get low stock products:**
+
 ```sql
 SELECT p.name, s.quantity, s.min_stock, b.name as branch
 FROM stocks s
@@ -748,6 +776,7 @@ WHERE s.quantity <= s.min_stock;
 ```
 
 **Get sales by date range:**
+
 ```sql
 SELECT DATE(created_at) as date, COUNT(*) as transactions, SUM(total_amount) as total_sales
 FROM transactions
@@ -756,6 +785,7 @@ GROUP BY DATE(created_at);
 ```
 
 **Get top selling products:**
+
 ```sql
 SELECT p.name, SUM(ti.quantity) as total_sold
 FROM transaction_items ti
@@ -800,5 +830,5 @@ OPTIMIZE TABLE products, stocks, transactions, transaction_items;
 
 ---
 
-**Last Updated:** 2026-01-09  
-**Schema Version:** 2.0
+**Last Updated:** 2026-01-23  
+**Schema Version:** 2.5

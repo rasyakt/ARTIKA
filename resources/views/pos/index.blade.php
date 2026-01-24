@@ -219,6 +219,48 @@
             outline: none;
         }
 
+        .dual-search-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .barcode-input-group {
+            display: flex;
+            align-items: center;
+            background: #fff4f0;
+            border: 2px solid var(--primary-light);
+            border-radius: 8px;
+            padding: 0 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .barcode-input-group:focus-within {
+            box-shadow: 0 0 0 3px rgba(161, 128, 114, 0.2);
+            border-color: var(--primary);
+        }
+
+        .barcode-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 0.6rem;
+            font-size: 0.9rem;
+            outline: none;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        @media (max-width: 768px) {
+            .dual-search-container {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            .barcode-input-group {
+                display: none !important;
+            }
+        }
+
         /* CATEGORIES */
         .category-filter {
             display: flex;
@@ -1317,6 +1359,16 @@
                 min-width: 60px;
             }
         }
+
+        /* MOBILE ONLY SCANNER UI */
+        @media (min-width: 768px) {
+
+            #openScannerBtn,
+            #navScannerMobile,
+            #scannerSection {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -1382,12 +1434,19 @@
         <div class="pos-main">
             <!-- PRODUCTS -->
             <div class="products-section">
-                <!-- SEARCH -->
+                <!-- SEARCH & BARCODE -->
                 <div class="search-section">
-                    <div class="search-input-group">
-                        <span class="search-icon"><i class="fas fa-search"></i></span>
-                        <input type="text" id="productSearch" class="search-input"
-                            placeholder="{{ __('pos.search_placeholder') }}">
+                    <div class="dual-search-container">
+                        <div class="search-input-group">
+                            <span class="search-icon"><i class="fas fa-search"></i></span>
+                            <input type="text" id="productSearch" class="search-input" placeholder="Cari Nama Produk..."
+                                autocomplete="off">
+                        </div>
+                        <div class="barcode-input-group">
+                            <span class="search-icon"><i class="fas fa-barcode"></i></span>
+                            <input type="text" id="barcodeScannerInput" class="barcode-input"
+                                placeholder="Scan Barcode Di Sini..." autofocus autocomplete="off">
+                        </div>
                     </div>
                 </div>
 
@@ -1714,7 +1773,174 @@
                 btn.addEventListener('click', () => selectPaymentMethod(btn.dataset.method));
             });
 
-            document.getElementById('productSearch').addEventListener('keyup', searchProducts);
+            if (productSearch) {
+                productSearch.addEventListener('keyup', searchProducts);
+            }
+
+            const barcodeInput = document.getElementById('barcodeScannerInput');
+            if (barcodeInput) {
+                barcodeInput.addEventListener('input', function () {
+                    const value = this.value.trim();
+                    if (value.length >= 3) {
+                        // Attempt instant match exactly like global listener
+                        const product = document.querySelector(`.product-card[data-barcode="${value}"]`) ||
+                            document.querySelector(`.product-card[data-product-id="${value}"]`);
+
+                        if (product) {
+                            console.log(`[Input Instant] Match found: ${value}`);
+                            this.value = '';
+                            handleScannedBarcode(value);
+                        }
+                    }
+                });
+
+                // Periodic Focus Enforcement (Faster 1s check)
+                setInterval(() => {
+                    const barcodeInput = document.getElementById('barcodeScannerInput');
+                    if (barcodeInput &&
+                        document.activeElement.tagName !== 'INPUT' &&
+                        document.activeElement.tagName !== 'TEXTAREA' &&
+                        !document.querySelector('.modal.show')) {
+                        barcodeInput.focus();
+                    }
+                }, 1000);
+            }
+
+            // Global Barcode Scanner Listener (Take 4 - True Instant)
+            let barcodeBuffer = '';
+            let lastKeyTime = Date.now();
+            const SCAN_THRESHOLD = 200; // Increased to 200ms for maximum compatibility
+            const MIN_BARCODE_LENGTH = 3;
+
+            document.addEventListener('keydown', function (e) {
+                // Ignore modifier keys and other non-data keys
+                if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape'].includes(e.key)) {
+                    return;
+                }
+
+                // Ignore if in keypad modal, unless it's Enter 
+                const keypadModal = document.getElementById('keypadModal');
+                if (keypadModal && keypadModal.classList.contains('show')) {
+                    if (e.key !== 'Enter') return;
+                }
+
+                const currentTime = Date.now();
+                const timeDiff = currentTime - lastKeyTime;
+                lastKeyTime = currentTime;
+
+                const isNumeric = /^[0-9]$/.test(e.key);
+                const isAlpha = /^[a-zA-Z]$/.test(e.key);
+                const isSpecial = /^[._\-\/]$/.test(e.key);
+                const isEnter = e.key === 'Enter';
+
+                // Case 1: Scanner is dumping data rapidly
+                if (timeDiff < SCAN_THRESHOLD) {
+                    if (isNumeric || isAlpha || isSpecial) {
+                        barcodeBuffer += e.key;
+
+                        // [NEW] True Instant Match - check on every key press
+                        if (barcodeBuffer.length >= MIN_BARCODE_LENGTH) {
+                            const instantMatch = document.querySelector(`.product-card[data-barcode="${barcodeBuffer}"]`) ||
+                                document.querySelector(`.product-card[data-product-id="${barcodeBuffer}"]`);
+
+                            if (instantMatch) {
+                                console.log(`[Global Instant] Match found: ${barcodeBuffer}`);
+                                handleScannedBarcode(barcodeBuffer);
+                                barcodeBuffer = ''; // Clear after match
+                                return; // Stop processing this key
+                            }
+                        }
+
+                        // Prevent characters from being typed elsewhere if we're clearly in a scan
+                        if (document.activeElement !== barcodeInput && barcodeBuffer.length > 1) {
+                            e.preventDefault();
+                        }
+
+                        // Show progress visually in the dedicated box
+                        if (barcodeInput) barcodeInput.value = barcodeBuffer;
+                    } else if (isEnter && barcodeBuffer.length >= MIN_BARCODE_LENGTH) {
+                        e.preventDefault();
+                        console.log(`[Scanner] Barcode Detected (Enter): ${barcodeBuffer}`);
+                        handleScannedBarcode(barcodeBuffer.trim());
+                        barcodeBuffer = '';
+                    }
+                } else {
+                    // Case 2: New potential scan sequence
+                    if (isNumeric || isAlpha || isSpecial) {
+                        barcodeBuffer = e.key;
+
+                        // Check for instant match on single char ID (if length >= 3)
+                        if (barcodeBuffer.length >= MIN_BARCODE_LENGTH) {
+                            const singleCharMatch = document.querySelector(`.product-card[data-product-id="${barcodeBuffer}"]`);
+                            if (singleCharMatch) {
+                                handleScannedBarcode(barcodeBuffer);
+                                barcodeBuffer = '';
+                            }
+                        }
+                    } else {
+                        // Reset if it's not a data key and not rapid
+                        barcodeBuffer = '';
+                    }
+                }
+
+                // Case 3: Focused manual entry with Enter (Fallback)
+                if (isEnter && document.activeElement === barcodeInput) {
+                    const manualBarcode = barcodeInput.value.trim();
+                    if (manualBarcode) {
+                        e.preventDefault();
+                        console.log(`[Manual] Barcode Entered: ${manualBarcode}`);
+                        handleScannedBarcode(manualBarcode);
+                        barcodeInput.value = '';
+                    }
+                }
+            });
+
+            function handleScannedBarcode(barcode) {
+                if (!barcode) return;
+                barcode = barcode.trim();
+                console.log(`[Diagnostic] Processing barcode: "${barcode}"`);
+
+                // Show a very brief toast so user knows SOMETHING was captured
+                showToast('info', 'Mencari: ' + barcode);
+
+                // More robust matching: Iterate through all product cards
+                let product = null;
+                const cards = document.querySelectorAll('.product-card');
+
+                for (let card of cards) {
+                    const cardBarcode = (card.dataset.barcode || '').trim();
+                    const cardId = (card.dataset.productId || '').trim();
+
+                    if (cardBarcode === barcode || cardId === barcode) {
+                        product = card;
+                        break;
+                    }
+                }
+
+                if (product) {
+                    console.log(`[Success] Match found! Adding ${product.dataset.name} to cart.`);
+                    const wasAdded = addToCart(product);
+
+                    if (wasAdded) {
+                        playBeep();
+                        showToast('success', '✓ ' + product.dataset.name);
+                    }
+
+                    if (productSearch) {
+                        productSearch.value = '';
+                        searchProducts();
+                    }
+                } else {
+                    console.warn(`[Fail] No product matches barcode: "${barcode}"`);
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Barcode Terdeteksi',
+                        text: 'Barcode: ' + barcode + ' tidak terdaftar di sistem ARTIKA.',
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+                }
+            }
 
             // Scanner handlers
             document.getElementById('openScannerBtn').addEventListener('click', openScanner);
@@ -1766,30 +1992,50 @@
                         display.focus();
                     }
                 });
+
+                // [NEW] Refocus search bar after modal is closed
+                // [NEW] Refocus barcode input after modal is closed
+                keypadModal.addEventListener('hidden.bs.modal', function () {
+                    const barcodeInput = document.getElementById('barcodeScannerInput');
+                    if (barcodeInput) barcodeInput.focus();
+                });
             }
 
             initializeKeypad();
         });
 
         function addToCart(productCard) {
+            console.log('[Cart] addToCart called for:', productCard.dataset.name);
             const productId = productCard.dataset.productId;
             const productName = productCard.dataset.name;
             const productPrice = parseFloat(productCard.dataset.price);
             const productStock = parseInt(productCard.dataset.stock || 0);
 
+            console.log(`[Cart] Params: ID=${productId}, Name=${productName}, Price=${productPrice}, Stock=${productStock}`);
+
             const existingItem = cart.find(item => item.product_id == productId);
 
             if (existingItem) {
+                console.log('[Cart] Item exists, increasing quantity');
                 if (existingItem.quantity + 1 > productStock) {
-                    showToast('error', '{{ __('pos.stock_limit_reached') }} (' + productStock + ')');
-                    return;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Stok Terbatas',
+                        text: `Hanya tersedia ${productStock} unit.`
+                    });
+                    return false;
                 }
                 existingItem.quantity += 1;
                 existingItem.subtotal = existingItem.quantity * existingItem.price;
             } else {
+                console.log('[Cart] New item, adding to array');
                 if (productStock <= 0) {
-                    showToast('error', '{{ __('pos.insufficient_stock') }}');
-                    return;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Stok Kosong',
+                        text: `Produk "${productName}" tidak memiliki stok di gudang.`
+                    });
+                    return false;
                 }
                 cart.push({
                     product_id: productId,
@@ -1801,12 +2047,15 @@
                 });
             }
 
+            console.log('[Cart] Current state:', JSON.stringify(cart));
             updateCartDisplay();
 
             // Show FAB on mobile if we're not in cart view
             if (window.innerWidth <= 576 && !document.getElementById('mobileCartView').classList.contains('active')) {
                 document.getElementById('fabCart').style.display = 'flex';
             }
+
+            return true;
         }
 
         function updateCartDisplay() {
@@ -1814,11 +2063,15 @@
             const checkoutBtns = document.querySelectorAll('.checkoutBtn');
             const fabCart = document.getElementById('fabCart');
 
+            console.log(`[Display] Found ${cartContainers.length} cart containers.`);
+
             if (cart.length === 0) {
+                console.log('[Display] Cart is empty, rendering empty state');
                 cartContainers.forEach(c => c.innerHTML = '<div class="cart-empty">{{ __('pos.cart_empty') }}</div>');
                 checkoutBtns.forEach(b => b.disabled = true);
                 if (fabCart) fabCart.style.display = 'none';
             } else {
+                console.log(`[Display] Rendering ${cart.length} items`);
                 const cartHtml = cart.map((item, index) => `
                     <div class="cart-item">
                         <div class="cart-item-header">
@@ -1918,7 +2171,14 @@
             const searchTerm = document.getElementById('productSearch').value.toLowerCase();
             document.querySelectorAll('.product-card').forEach(card => {
                 const name = card.dataset.name.toLowerCase();
-                card.style.display = name.includes(searchTerm) ? '' : 'none';
+                const barcode = (card.dataset.barcode || '').toLowerCase();
+                const id = (card.dataset.productId || '').toLowerCase();
+
+                if (name.includes(searchTerm) || barcode.includes(searchTerm) || id === searchTerm) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
             });
         }
 

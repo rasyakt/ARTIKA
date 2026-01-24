@@ -21,6 +21,7 @@ Panduan lengkap untuk Administrator mengelola sistem ARTIKA POS.
 ## Overview
 
 Sebagai **Administrator**, Anda memiliki full access ke sistem ARTIKA POS dengan responsibilities:
+
 - Mengelola master data (products, categories, users)
 - Monitoring sales dan inventory
 - Generating reports
@@ -67,6 +68,7 @@ Admin dashboard menampilkan:
 **Path:** Admin → Products
 
 **Features:**
+
 - List semua products dengan pagination
 - Search by name atau barcode
 - Filter by category
@@ -80,20 +82,22 @@ Admin dashboard menampilkan:
 
 1. Klik **Add New Product**
 2. Fill in product details:
-   - **Barcode:** Unique barcode (e.g., `899999999999`)
-   - **Product Name:** Nama produk
-   - **Category:** Pilih category dari dropdown
-   - **Price:** Harga jual ke customer
-   - **Cost Price:** Harga beli/cost
+    - **Barcode:** Unique barcode (e.g., `899999999999`)
+    - **Product Name:** Nama produk
+    - **Category:** Pilih category dari dropdown
+    - **Price:** Harga jual ke customer
+    - **Cost Price:** Harga beli/cost
 
 3. Klik **Save**
 
 **Validation:**
+
 - Barcode must be unique
 - Price dan cost price harus ≥ 0
 - All fields required
 
 **Tips:**
+
 - Gunakan barcode standard (EAN-13, UPC)
 - Pastikan barcode belum terpakai
 - Set reasonable profit margin (Price > Cost Price)
@@ -108,6 +112,7 @@ Admin dashboard menampilkan:
 4. Klik **Update**
 
 **Notes:**
+
 - Barcode bisa diubah jika belum ada transaksi
 - Price changes tidak affect transaksi existing
 
@@ -119,7 +124,8 @@ Admin dashboard menampilkan:
 2. Pilih **Delete**
 3. Konfirmasi delete
 
-> **WARNING:** 
+> **WARNING:**
+>
 > - Delete product akan menghapus semua stock records
 > - Tidak bisa delete jika produk sudah ada di transaksi
 > - Pertimbangkan "archive" daripada delete
@@ -133,6 +139,7 @@ Admin dashboard menampilkan:
 **Path:** Admin → Categories
 
 **Features:**
+
 - List semua categories
 - Edit/delete inline
 - Add new category
@@ -143,11 +150,12 @@ Admin dashboard menampilkan:
 
 1. Klik **Add Category**
 2. Masukkan:
-   - **Name:** Nama category (e.g., "Electronics")
-   - **Slug:** URL-friendly slug (e.g., "electronics")
+    - **Name:** Nama category (e.g., "Electronics")
+    - **Slug:** URL-friendly slug (e.g., "electronics")
 3. Klik **Save**
 
 **Tips:**
+
 - Slug harus lowercase, no spaces (use dash)
 - Slug must be unique
 
@@ -173,6 +181,7 @@ Admin dashboard menampilkan:
 **Path:** Admin → Users
 
 **Displayed Info:**
+
 - Name
 - Username
 - NIS (if applicable)
@@ -185,23 +194,24 @@ Admin dashboard menampilkan:
 
 1. Klik **Add New User**
 2. Fill in details:
-   - **Name:** Full name
-   - **Username:** Unique username untuk login
-   - **NIS:** (Optional) Untuk cashier/student
-   - **Password:** Minimum 8 characters
-   - **Role:** Pilih Admin/Cashier/Warehouse
+    - **Name:** Full name
+    - **Username:** Unique username untuk login
+    - **NIS:** (Optional) Untuk cashier/student
+    - **Password:** Minimum 8 characters
+    - **Role:** Pilih Admin/Cashier/Warehouse
 
 3. Klik **Create User**
 
 **Role Descriptions:**
 
-| Role | Access | Use Case |
-|------|--------|----------|
-| **Admin** | Full access | System administrator |
-| **Cashier** | POS only | Kasir/front counter |
-| **Warehouse** | Stock management | Staff gudang |
+| Role          | Access           | Use Case             |
+| ------------- | ---------------- | -------------------- |
+| **Admin**     | Full access      | System administrator |
+| **Cashier**   | POS only         | Kasir/front counter  |
+| **Warehouse** | Stock management | Staff gudang         |
 
 **Password Policy:**
+
 - Minimum 8 characters
 - Recommended: kombinasi huruf + angka + symbol
 - User should change password after first login
@@ -216,6 +226,7 @@ Admin dashboard menampilkan:
 4. Save changes
 
 **Notes:**
+
 - Username tidak bisa diubah setelah created
 - Untuk reset password, set new password di edit form
 
@@ -236,6 +247,7 @@ Admin dashboard menampilkan:
 **Path:** Admin → Customers
 
 **Features:**
+
 - List all registered customers
 - View customer details (name, phone, email, points)
 - Edit customer info
@@ -247,14 +259,15 @@ Admin dashboard menampilkan:
 
 1. Klik **Add Customer**
 2. Fill in:
-   - **Name:** Customer full name
-   - **Phone:** Phone number (unique)
-   - **Email:** (Optional)
-   - **Address:** (Optional)
+    - **Name:** Customer full name
+    - **Phone:** Phone number (unique)
+    - **Email:** (Optional)
+    - **Address:** (Optional)
 
 3. Klik **Save**
 
 **Loyalty Points:**
+
 - Points automatically calculated based on purchases
 - Default: Rp 10,000 spending = 1 point
 - Points dapat ditukar untuk discount (future feature)
@@ -283,28 +296,39 @@ Admin dashboard menampilkan:
 **Available Reports:**
 
 1. **Daily Sales**
-   - Total sales per day
-   - Transaction count
-   - Average transaction value
+    - Total sales per day
+    - Transaction count
+    - Average transaction value
 
 2. **Monthly Sales**
-   - Sales trend per month
-   - Top selling products
-   - Revenue analysis
+    - Sales trend per month
+    - Top selling products
+    - Revenue analysis
 
 3. **Sales by Cashier**
-   - Kasir performance
-   - Transaction speed metrics
+    - Kasir performance
+    - Transaction speed metrics
 
 **Filters:**
-- Date range
+
+- Date range (Dari - Sampai)
 - Product category
-- Payment method
+- Payment method (Cash / Non-Cash)
+- User / Cashier
 
 **Export Options:**
-- PDF
-- Excel (CSV)
-- Print
+
+- **PDF**: Format cetak profesional
+- **Excel (CSV)**: Untuk pengolahan data lanjut
+- **Print**: Cetak langsung ke printer laser/thermal
+
+### 4. Audit Logs
+
+**Path:** Admin → Audit Logs
+
+- Melihat riwayat aktivitas penting (Login, Create/Update Product, Delete User).
+- Memantau siapa melakukan apa dan kapan.
+- Export audit trail untuk kebutuhan kepatuhan/security.
 
 ### Inventory Report
 
@@ -313,16 +337,16 @@ Admin dashboard menampilkan:
 **Available Reports:**
 
 1. **Stock Level**
-   - Current stock per product
-   - Stock value (cost × quantity)
+    - Current stock per product
+    - Stock value (cost × quantity)
 
 2. **Low Stock Alert**
-   - Products below minimum stock
-   - Reorder recommendations
+    - Products below minimum stock
+    - Reorder recommendations
 
 3. **Stock Movement**
-   - In/out transactions
-   - Stock adjustment history
+    - In/out transactions
+    - Stock adjustment history
 
 ### Financial Report (Future)
 
@@ -337,6 +361,7 @@ Admin dashboard menampilkan:
 ### Product Management
 
 ✅ **DO:**
+
 - Set realistic prices (cover cost + reasonable margin)
 - Use standard barcode formats
 - Organize products into proper categories
@@ -344,6 +369,7 @@ Admin dashboard menampilkan:
 - Archive instead of delete old products
 
 ❌ **DON'T:**
+
 - Duplicate barcodes
 - Set price below cost price (unless clearance sale)
 - Delete products with transaction history
@@ -352,6 +378,7 @@ Admin dashboard menampilkan:
 ### User Management
 
 ✅ **DO:**
+
 - Assign users to correct roles
 - Enforce strong passwords
 - Review user access regularly
@@ -359,6 +386,7 @@ Admin dashboard menampilkan:
 - Train users on their role
 
 ❌ **DON'T:**
+
 - Share admin credentials
 - Use default passwords in production
 - Give excessive permissions
@@ -367,12 +395,14 @@ Admin dashboard menampilkan:
 ### Data Management
 
 ✅ **DO:**
+
 - Regular database backups (daily)
 - Export reports periodically
 - Clean up old data (archive strategy)
 - Monitor system performance
 
 ❌ **DON'T:**
+
 - Delete data without backup
 - Ignore low stock alerts
 - Skip regular backups
@@ -404,18 +434,21 @@ Admin dashboard menampilkan:
 **Reason:** Product memiliki transaction history atau stock records
 
 **Solution:**
+
 - Archive product instead (set inactive flag)
 - Atau clear transaction history dulu (dangerous!)
 
 ### User Cannot Login
 
 **Check:**
+
 1. Username/password correct?
 2. User active?
 3. Role assigned?
 4. Browser cookies enabled?
 
 **Solution:**
+
 - Reset user password dari admin panel
 - Check role assignment
 - Clear browser cache
@@ -423,10 +456,12 @@ Admin dashboard menampilkan:
 ### Reports Not Loading
 
 **Possible Causes:**
+
 - Database query timeout (too much data)
 - Server resource issue
 
 **Solution:**
+
 - Reduce date range for report
 - Filter by category untuk smaller dataset
 - Contact system administrator
@@ -439,25 +474,25 @@ Admin dashboard menampilkan:
 
 1. **Change default passwords immediately**
 2. Use strong passwords:
-   - Minimum 12 characters
-   - Mix uppercase, lowercase, numbers, symbols
+    - Minimum 12 characters
+    - Mix uppercase, lowercase, numbers, symbols
 3. Don't share admin credentials
 4. Rotate passwords every 90 days
 
 ### Access Control
 
 1. Follow **principle of least privilege**
-   - Cashier = POS only
-   - Warehouse = Stock only
-   - Admin = Full access
+    - Cashier = POS only
+    - Warehouse = Stock only
+    - Admin = Full access
 
 2. Regular access audits
-   - Review user list monthly
-   - Disable terminated employees immediately
+    - Review user list monthly
+    - Disable terminated employees immediately
 
 3. Session management
-   - Auto logout after inactivity
-   - Single session per user
+    - Auto logout after inactivity
+    - Single session per user
 
 ### Data Backup
 
@@ -487,5 +522,5 @@ Admin dashboard menampilkan:
 
 **Manage Wisely! 👨‍💼**
 
-**Version:** 2.0  
-**Last Updated:** 2026-01-09
+**Version:** 2.5  
+**Last Updated:** 2026-01-23

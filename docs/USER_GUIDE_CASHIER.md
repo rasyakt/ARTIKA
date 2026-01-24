@@ -21,6 +21,7 @@ Panduan lengkap untuk Kasir/Cashier menggunakan sistem POS ARTIKA.
 ## Getting Started
 
 Sebagai **Kasir/Cashier**, tugas utama Anda adalah:
+
 - Melayani pelanggan di POS terminal
 - Memproses transaksi penjualan
 - Menerima pembayaran (cash, QRIS, card, dll)
@@ -40,6 +41,7 @@ Jika Anda adalah siswa/pelajar yang bekerja sebagai kasir:
 4. Klik **Login**
 
 **Contoh:**
+
 ```
 NIS: 12345
 Password: password
@@ -53,6 +55,7 @@ Password: password
 4. Klik **Login**
 
 **Contoh:**
+
 ```
 Username: kasir1
 Password: password
@@ -74,20 +77,20 @@ Interface POS terdiri dari beberapa bagian utama:
 
 - Menampilkan semua produk dalam bentuk card/grid
 - Setiap card menampilkan:
-  - Nama produk
-  - Harga
-  - Kategori
-  - Stok tersedia
+    - Nama produk
+    - Harga
+    - Kategori
+    - Stok tersedia
 - **Search bar** di atas untuk mencari produk
 
 ### 2. Shopping Cart (Kanan)
 
 - Menampilkan item yang sudah ditambahkan
 - Untuk setiap item, ditampilkan:
-  - Nama produk
-  - Harga satuan
-  - Quantity
-  - Subtotal
+    - Nama produk
+    - Harga satuan
+    - Quantity
+    - Subtotal
 - Tombol **+/-** untuk adjust quantity
 - Tombol **Remove** (🗑️) untuk hapus item
 
@@ -161,22 +164,23 @@ Interface POS terdiri dari beberapa bagian utama:
 Pilih salah satu payment method:
 
 - **Cash** (Tunai)
-- **QRIS**
-- **Debit Card**
-- **Credit Card**
-- **E-Wallet**
+- **Non-Cash** (QRIS, Debit, Credit, E-Wallet) - _Requires payment proof upload_
 
 #### Step 7: Enter Payment Details
 
 **Jika Cash:**
+
 1. Masukkan jumlah uang yang diterima di field "Cash Amount"
 2. Sistem otomatis menghitung kembalian
 3. Kembalian ditampilkan di field "Change"
 
 **Jika Non-Cash:**
-1. Klik payment method (QRIS/Debit/Credit/E-Wallet)
-2. Proses sesuai instruksi payment method
-3. Konfirmasi pembayaran berhasil
+
+1. Klik payment method **Non-Cash**
+2. Gunakan kamera HP atau pilih dari galeri untuk mengunggah **Bukti Pembayaran** (Payment Proof)
+3. Tunggu hingga preview gambar muncul
+4. Konfirmasi pembayaran berhasil (klik Confirm)
+5. Sistem akan menyimpan file bukti tersebut sebagai referensi audit.
 
 #### Step 8: Complete Transaction
 
@@ -202,11 +206,13 @@ Pilih salah satu payment method:
 ### USB Barcode Scanner
 
 **Setup:**
+
 1. Pastikan USB scanner terhubung ke komputer
 2. Test scanner dengan scan produk
 3. Barcode akan otomatis ter-input dan produk ditambahkan ke cart
 
 **Tips:**
+
 - USB scanner bekerja seperti keyboard, langsung input barcode
 - Tidak perlu klik field apapun, cukup scan
 - Sangat cepat untuk transaksi dengan banyak item
@@ -214,22 +220,26 @@ Pilih salah satu payment method:
 ### Camera Scanner
 
 **Setup:**
+
 1. Klik tombol **Toggle Scanner** di POS interface
 2. Izinkan akses kamera jika diminta browser
 3. Scanner camera akan muncul
 
 **Using Camera Scanner:**
+
 1. Arahkan kamera ke barcode produk
 2. Tunggu hingga scanner mengenali barcode (biasanya 1-2 detik)
 3. Produk otomatis ditambahkan ke cart setelah barcode terdeteksi
 
 **Tips:**
-- Pastikan pencahayaan cukup
-- Jaga jarak kamera 10-20cm dari barcode
-- Posisikan barcode horizontal di tengah frame
-- Jika gagal, coba adjust angle/jarak
+
+- Sistem memiliki **Smart Cooldown** selama 2.5 detik. Jika barcode yang sama tertahan di depan kamera, item tidak akan "spamming" berkali-kali.
+- Dengarkan suara **Beep** sebagai indikasi scan berhasil.
+- Lihat notifikasi **Toast** (pojok layar) yang mengonfirmasi nama produk yang baru discan.
+- Pastikan pencahayaan cukup dan jarak 15-20cm.
 
 **Close Camera Scanner:**
+
 - Klik tombol **Toggle Scanner** lagi untuk hide scanner
 
 ---
@@ -239,6 +249,7 @@ Pilih salah satu payment method:
 ### When to Use Hold Transaction
 
 Gunakan fitur **Hold Transaction** ketika:
+
 - Pelanggan perlu mengambil barang tambahan
 - Pelanggan belum siap bayar
 - Ada antrian dan perlu serve pelanggan lain dulu
@@ -275,14 +286,15 @@ Gunakan fitur **Hold Transaction** ketika:
 
 Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 
-| Shortcut | Action | Description |
-|----------|--------|-------------|
-| **F2** | Open Checkout | Membuka modal checkout |
-| **F4** | Hold Transaction | Simpan transaksi untuk nanti |
-| **F8** | Clear Cart | Kosongkan seluruh cart |
-| **Esc** | Cancel | Cancel/close modal yang terbuka |
+| Shortcut | Action           | Description                     |
+| -------- | ---------------- | ------------------------------- |
+| **F2**   | Open Checkout    | Membuka modal checkout          |
+| **F4**   | Hold Transaction | Simpan transaksi untuk nanti    |
+| **F8**   | Clear Cart       | Kosongkan seluruh cart          |
+| **Esc**  | Cancel           | Cancel/close modal yang terbuka |
 
 **Tips Menggunakan Shortcuts:**
+
 - Setelah scan semua produk, langsung tekan **F2** untuk checkout
 - Jika pelanggan cancel, tekan **F8** untuk clear cart
 - Hold transaction dengan **F4** tanpa perlu klik mouse
@@ -294,6 +306,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### 1. Cash (Tunai)
 
 **Process:**
+
 1. Pilih payment method **Cash**
 2. Masukkan nominal uang yang diterima dari pelanggan
 3. Sistem otomatis hitung kembalian
@@ -302,6 +315,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 6. Berikan kembalian ke pelanggan
 
 **Tips:**
+
 - Pastikan nominal cash yang diinput benar
 - Cek kembalian sebelum complete
 - Jika salah input, edit di field "Cash Amount"
@@ -309,6 +323,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### 2. QRIS
 
 **Process:**
+
 1. Pilih payment method **QRIS**
 2. Tampilkan QR code ke pelanggan (dari payment terminal/app)
 3. Tunggu pelanggan scan dan bayar
@@ -318,6 +333,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### 3. Debit Card
 
 **Process:**
+
 1. Pilih payment method **Debit Card**
 2. Swipe/insert/tap kartu debit pelanggan di EDC machine
 3. Pelanggan input PIN
@@ -328,6 +344,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### 4. Credit Card
 
 **Process:**
+
 1. Pilih payment method **Credit Card**
 2. Swipe/insert/tap kartu kredit di EDC machine
 3. Pelanggan input PIN atau tanda tangan
@@ -338,6 +355,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### 5. E-Wallet (GoPay, OVO, Dana, etc.)
 
 **Process:**
+
 1. Pilih payment method **E-Wallet**
 2. Tampilkan QR code atau buka app e-wallet
 3. Pelanggan scan/transfer
@@ -378,19 +396,19 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 **Use Hold Transaction:**
 
 1. Serve customer A:
-   - Add items to cart
-   - Customer A belum siap bayar
-   - Tekan **F4** to hold
-   - Note: "Customer A - Baju Merah"
+    - Add items to cart
+    - Customer A belum siap bayar
+    - Tekan **F4** to hold
+    - Note: "Customer A - Baju Merah"
 
 2. Serve customer B:
-   - Add items untuk customer B
-   - Complete transaction customer B
+    - Add items untuk customer B
+    - Complete transaction customer B
 
 3. Resume customer A:
-   - Click **Held Transactions**
-   - Resume "Customer A - Baju Merah"
-   - Complete transaction
+    - Click **Held Transactions**
+    - Resume "Customer A - Baju Merah"
+    - Complete transaction
 
 ### Scenario 4: Wrong Item Added
 
@@ -412,6 +430,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### Problem: Barcode Scanner Tidak Bekerja
 
 **Solution:**
+
 1. Cek koneksi USB scanner
 2. Test di notepad - scan barcode, apakah muncul?
 3. Jika muncul di notepad tapi tidak di POS, refresh page
@@ -420,6 +439,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### Problem: Product Not Found
 
 **Solution:**
+
 1. Cek apakah barcode benar
 2. Coba manual search dengan nama produk
 3. Jika produk tidak muncul, kemungkinan stok habis atau belum di-input
@@ -430,6 +450,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 **Error:** "Stok tidak mencukupi untuk produk: [Nama Produk]"
 
 **Solution:**
+
 1. Kurangi quantity item di cart
 2. Atau remove item tersebut
 3. Inform pelanggan bahwa stok limited
@@ -438,6 +459,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### Problem: Payment Failed
 
 **Solution:**
+
 1. Coba payment method lain
 2. Jika cash, pastikan nominal cukup
 3. Jika card, coba swipe ulang atau gunakan card lain
@@ -446,6 +468,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### Problem: Printer Not Working
 
 **Solution:**
+
 1. Cek koneksi printer
 2. Cek kertas struk masih ada
 3. Restart printer
@@ -455,6 +478,7 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 ### Problem: Forgot to Give Receipt
 
 **Solution:**
+
 1. Note invoice number dari layar
 2. Buka menu **Transaction History** (jika ada akses)
 3. Search by invoice number
@@ -504,5 +528,5 @@ Untuk mempercepat workflow, gunakan keyboard shortcuts berikut:
 
 **Happy Serving Customers! 🛒**
 
-**Version:** 2.0  
-**Last Updated:** 2026-01-09
+**Version:** 2.5  
+**Last Updated:** 2026-01-23

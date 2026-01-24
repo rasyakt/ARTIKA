@@ -12,16 +12,18 @@
 ## ✨ Fitur Utama
 
 ### 🎯 Point of Sale (POS)
-- **Barcode Scanner** - USB scanner & camera scanner dengan html5-qrcode
-- **Product Search** - Pencarian produk real-time berdasarkan nama atau barcode
-- **Cart Management** - Kelola keranjang belanja dengan mudah (add, remove, adjust quantity)
-- **Multiple Payment Methods** - Cash, QRIS, Debit Card, Credit Card, E-Wallet
-- **Hold Transaction** - Simpan transaksi untuk dilanjutkan kemudian
+
+- **Smart Barcode Scanner** - Anti-spam cooldown (2.5s) & audio-visual feedback
+- **Product Search** - Real-time search by name, barcode, or category
+- **Cart Management** - Mobile-optimized carts with quantity controls
+- **Unified Payment Flow** - Cash & Non-Cash methods with file upload proof
+- **Hold Transaction** - Park/resume transactions easily
 - **Keyboard Shortcuts** - Workflow cepat dengan shortcut (F2, F4, F8, Esc)
 - **Auto Calculation** - Perhitungan otomatis subtotal, diskon, pajak, kembalian
 - **Receipt Printing** - Cetak struk transaksi
 
 ### 👨‍💼 Admin Dashboard
+
 - **Product Management** - CRUD produk dengan barcode
 - **Category Management** - Kelola kategori produk
 - **User Management** - Kelola user dengan role-based access
@@ -29,12 +31,15 @@
 - **Sales Reports** - Laporan penjualan dan analitik
 
 ### 📦 Warehouse Management
+
 - **Stock Management** - Monitoring dan kelola stok produk
 - **Low Stock Alerts** - Notifikasi stok menipis
-- **Stock Movements** - Tracking pergerakan stok (in/out)
-- **Stock Adjustment** - Penyesuaian stok manual
+- **Stock Movements** - Tracking pergerakan stok detail (in/out)
+- **Advanced Reports** - PDF/CSV export for Warehouse, Cashier, and Audit logs
+- **Stock Adjustment** - Penyesuaian stok manual dengan pencatatan log
 
 ### 🔐 Authentication & Security
+
 - **Dual Login System** - Login dengan Username atau NIS (untuk kasir/siswa)
 - **Role-Based Access Control** - 3 role: Admin, Cashier, Warehouse
 - **Secure Password** - Bcrypt password hashing
@@ -45,6 +50,7 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - PHP 8.2 atau lebih tinggi
 - Composer
 - MySQL 5.7+
@@ -88,11 +94,11 @@ Akses aplikasi di `http://localhost:8000`
 
 ### Default Login Credentials
 
-| Role | Username | NIS | Password | Dashboard |
-|------|----------|-----|----------|-----------|
-| **Admin** | `admin` | - | `password` | `/admin/dashboard` |
-| **Cashier** | `kasir1` | `12345` | `password` | `/pos` |
-| **Warehouse** | `gudang` | - | `password` | `/warehouse/dashboard` |
+| Role          | Username | NIS     | Password   | Dashboard              |
+| ------------- | -------- | ------- | ---------- | ---------------------- |
+| **Admin**     | `admin`  | -       | `password` | `/admin/dashboard`     |
+| **Cashier**   | `kasir1` | `12345` | `password` | `/pos`                 |
+| **Warehouse** | `gudang` | -       | `password` | `/warehouse/dashboard` |
 
 > **Note:** Cashier dapat login dengan Username (`kasir1`) atau NIS (`12345`)
 
@@ -103,24 +109,29 @@ Akses aplikasi di `http://localhost:8000`
 Dokumentasi lengkap tersedia dalam file-file berikut:
 
 ### 🔧 Setup & Installation
+
 - **[INSTALLATION.md](file:///c:/laragon/www/ARTIKA/INSTALLATION.md)** - Panduan instalasi lengkap untuk Windows, Linux, dan macOS
 - **[DEPLOYMENT.md](file:///c:/laragon/www/ARTIKA/DEPLOYMENT.md)** - Panduan deployment ke production server
 
 ### 🏗️ Technical Documentation
+
 - **[ARCHITECTURE.md](file:///c:/laragon/www/ARTIKA/ARCHITECTURE.md)** - Arsitektur sistem dan design patterns
 - **[DATABASE.md](file:///c:/laragon/www/ARTIKA/DATABASE.md)** - Database schema dan Entity Relationship Diagram
 - **[API.md](file:///c:/laragon/www/ARTIKA/API.md)** - API routes dan endpoint documentation
 
 ### 📖 User Guides
+
 - **[Admin Guide](file:///c:/laragon/www/ARTIKA/docs/USER_GUIDE_ADMIN.md)** - Panduan lengkap untuk Admin
 - **[Cashier Guide](file:///c:/laragon/www/ARTIKA/docs/USER_GUIDE_CASHIER.md)** - Panduan lengkap untuk Kasir/Cashier
 - **[Warehouse Guide](file:///c:/laragon/www/ARTIKA/docs/USER_GUIDE_WAREHOUSE.md)** - Panduan lengkap untuk Staff Gudang
 
 ### 👨‍💻 Developer Documentation
+
 - **[DEVELOPMENT.md](file:///c:/laragon/www/ARTIKA/DEVELOPMENT.md)** - Development environment setup dan coding standards
 - **[CONTRIBUTING.md](file:///c:/laragon/www/ARTIKA/CONTRIBUTING.md)** - Panduan kontribusi untuk developer
 
 ### 📋 Additional Resources
+
 - **[CHANGELOG.md](file:///c:/laragon/www/ARTIKA/CHANGELOG.md)** - Version history dan release notes
 - **[FAQ.md](file:///c:/laragon/www/ARTIKA/FAQ.md)** - Frequently Asked Questions dan troubleshooting
 
@@ -179,12 +190,12 @@ Lihat [DATABASE.md](file:///c:/laragon/www/ARTIKA/DATABASE.md) untuk detail leng
 
 ## ⌨️ Keyboard Shortcuts (POS)
 
-| Shortcut | Action |
-|----------|--------|
-| `F2` | Open checkout modal |
-| `F4` | Hold current transaction |
-| `F8` | Clear cart |
-| `Esc` | Cancel/close modal |
+| Shortcut | Action                   |
+| -------- | ------------------------ |
+| `F2`     | Open checkout modal      |
+| `F4`     | Hold current transaction |
+| `F8`     | Clear cart               |
+| `Esc`    | Cancel/close modal       |
 
 ---
 
@@ -233,10 +244,10 @@ Jika menemukan bug atau memiliki pertanyaan, silakan buat issue di repository in
 
 ---
 
-**Version:** 2.0  
-**Last Updated:** 2026-01-09  
-**Status:** ✅ Production Ready
+**Version:** 2.5  
+**Last Updated:** 2026-01-23  
+**Status:** ✅ Production Ready & Mobile Optimized
 
 ---
 
-Made with ❤️ using Laravel & Bootstrap
+Made with Laravel & Bootstrap

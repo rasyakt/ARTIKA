@@ -97,7 +97,7 @@ sequenceDiagram
     AuthController->>AuthController: Detect login type (username vs NIS)
     AuthController->>User: Create session
     AuthController->>Dashboard: Redirect to role-based dashboard
-    
+
     Dashboard->>AuthMiddleware: Check authentication
     AuthMiddleware->>RoleMiddleware: Check role permissions
     RoleMiddleware->>Dashboard: Grant access
@@ -203,6 +203,7 @@ ARTIKA/
 - **Controllers:** Handle HTTP requests dan coordinate antara Models dan Views
 
 **Example:**
+
 ```php
 // Controller
 class PosController extends Controller {
@@ -237,7 +238,7 @@ class ProductRepository implements ProductRepositoryInterface {
 // Usage in Controller
 class PosController extends Controller {
     protected $productRepo;
-    
+
     public function __construct(ProductRepositoryInterface $productRepo) {
         $this->productRepo = $productRepo;
     }
@@ -245,6 +246,7 @@ class PosController extends Controller {
 ```
 
 **Benefits:**
+
 - Decoupling dari Eloquent
 - Easier testing (dapat mock repository)
 - Centralized data access logic
@@ -262,17 +264,17 @@ class TransactionService {
         try {
             // Create transaction
             $transaction = Transaction::create([...]);
-            
+
             // Create transaction items
             foreach ($cartItems as $item) {
                 TransactionItem::create([...]);
                 // Update stock
                 $this->updateStock($item);
             }
-            
+
             // Create journal entry
             $this->createJournalEntry($transaction);
-            
+
             DB::commit();
             return $transaction;
         } catch (Exception $e) {
@@ -284,6 +286,7 @@ class TransactionService {
 ```
 
 **Benefits:**
+
 - Thin controllers
 - Reusable business logic
 - Transaction management
@@ -307,6 +310,7 @@ class RoleMiddleware {
 ```
 
 **Usage in Routes:**
+
 ```php
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'index']);
@@ -325,21 +329,21 @@ ARTIKA POS supports **dual login** menggunakan `username` atau `NIS` (untuk kasi
 // AuthController.php
 public function login(Request $request) {
     $loginField = is_numeric($request->login) ? 'nis' : 'username';
-    
+
     $credentials = [
         $loginField => $request->login,
         'password' => $request->password
     ];
-    
+
     if (Auth::attempt($credentials)) {
         // Role-based redirection
         $role = Auth::user()->role->name;
-        
+
         if ($role === 'admin') return redirect()->route('admin.dashboard');
         if ($role === 'cashier') return redirect()->route('pos.index');
         if ($role === 'warehouse') return redirect()->route('warehouse.dashboard');
     }
-    
+
     return back()->withErrors(['login' => 'Invalid credentials']);
 }
 ```
@@ -353,7 +357,7 @@ flowchart TD
     CheckAuth -->|Yes| CheckRole{Has Required Role?}
     CheckRole -->|No| Error403[403 Unauthorized]
     CheckRole -->|Yes| GrantAccess[Grant Access to Route]
-    
+
     RedirectLogin --> LoginForm[Display Login Form]
     LoginForm --> SubmitCreds[Submit Credentials]
     SubmitCreds --> DetectField{Numeric Input?}
@@ -383,28 +387,36 @@ sequenceDiagram
 
     Cashier->>Browser: Scan barcode / Add product
     Browser->>Browser: Update cart (client-side)
-    
+
     Cashier->>Browser: Click checkout
     Browser->>POSController: POST /pos/checkout
-    
+
     POSController->>POSController: Validate cart data
     POSController->>TransactionService: createTransaction(cart, payment)
-    
+
     TransactionService->>Database: BEGIN TRANSACTION
     TransactionService->>TransactionRepo: create(transactionData)
     TransactionRepo->>Database: INSERT transactions
-    
+
     loop For each cart item
         TransactionService->>Database: INSERT transaction_items
         TransactionService->>Database: UPDATE stocks (decrease quantity)
     end
-    
+
     TransactionService->>Database: INSERT journals (accounting entry)
     TransactionService->>Database: COMMIT
-    
+
     TransactionService-->>POSController: Return transaction
     POSController-->>Browser: Return success + receipt
     Browser-->>Cashier: Display receipt / Print
+
+### Smart Scanner Implementation Logic
+
+Sistem menggunakan `html5-qrcode` dengan logika tambahan untuk meningkatkan user experience:
+
+1. **Anti-Spam Cooldown**: Menggunakan variabel `lastScannedBarcode` dan `lastScanTime`. Jika barcode yang sama terdeteksi dalam waktu < 2500ms, request diabaikan.
+2. **Audio Feedback**: Menggunakan Web Audio API untuk generate `sine` wave frequency (1200Hz) sebagai suara "beep" sukses tanpa dependensi aset audio eksternal.
+3. **Visual Feedback**: Kombinasi `flash` effect pada scanner overlay dan SweetAlert2 toast notification.
 ```
 
 ---
@@ -423,20 +435,20 @@ class Product extends Model {
     public function category() {
         return $this->belongsTo(Category::class);
     }
-    
+
     public function stocks() {
         return $this->hasMany(Stock::class);
     }
-    
+
     public function transactionItems() {
         return $this->hasMany(TransactionItem::class);
     }
-    
+
     // Accessors
     public function getFormattedPriceAttribute() {
         return 'Rp ' . number_format($this->price, 0, ',', '.');
     }
-    
+
     // Scopes
     public function scopeInStock($query) {
         return $query->whereHas('stocks', function($q) {
@@ -479,7 +491,7 @@ $products = Product::with('category', 'stocks')->get(); // 2 queries total
 </head>
 <body>
     @include('layouts.sidebar')
-    
+
     <main class="content">
         @yield('content')
     </main>
@@ -502,17 +514,17 @@ $products = Product::with('category', 'stocks')->get(); // 2 queries total
 
 ```javascript
 export default defineConfig({
-    plugins: [laravel({
-        input: [
-            'resources/css/app.css',
-            'resources/js/app.js'
-        ],
-        refresh: true
-    })]
+    plugins: [
+        laravel({
+            input: ["resources/css/app.css", "resources/js/app.js"],
+            refresh: true,
+        }),
+    ],
 });
 ```
 
 **Benefits:**
+
 - Hot Module Replacement (HMR)
 - Fast build times
 - Modern JavaScript support (ES modules)
@@ -613,6 +625,7 @@ $products = Product::with(['category', 'stocks'])->get();
 ### Adding New Features
 
 **1. Add New Role:**
+
 ```php
 // Seeder
 Role::create(['name' => 'manager', 'description' => 'Store Manager']);
@@ -624,19 +637,21 @@ Route::middleware(['role:manager'])->group(function () {
 ```
 
 **2. Add New Payment Method:**
+
 ```php
 // Seeder
 PaymentMethod::create(['name' => 'Bank Transfer', 'slug' => 'bank-transfer']);
 ```
 
 **3. Add New Report:**
+
 ```php
 // Controller
 public function salesReport(Request $request) {
     $sales = Transaction::whereBetween('created_at', [$start, $end])
         ->with('items.product')
         ->get();
-    
+
     return view('admin.reports.sales', compact('sales'));
 }
 ```
@@ -648,6 +663,7 @@ public function salesReport(Request $request) {
 ### Code Organization
 
 ✅ **DO:**
+
 - Keep controllers thin, move logic to services
 - Use repositories untuk complex queries
 - Use form requests untuk validation
@@ -655,6 +671,7 @@ public function salesReport(Request $request) {
 - Use type hints dan return types
 
 ❌ **DON'T:**
+
 - Put business logic in controllers
 - Use raw queries tanpa bindings
 - Hardcode values (use config/env)
@@ -666,13 +683,13 @@ public function salesReport(Request $request) {
 // Feature test example
 public function test_cashier_can_create_transaction() {
     $user = User::factory()->create(['role_id' => Role::CASHIER]);
-    
+
     $response = $this->actingAs($user)
         ->post('/pos/checkout', [
             'items' => [...],
             'payment_method' => 'cash',
         ]);
-    
+
     $response->assertStatus(200);
     $this->assertDatabaseHas('transactions', [...]);
 }
@@ -688,5 +705,5 @@ public function test_cashier_can_create_transaction() {
 
 ---
 
-**Last Updated:** 2026-01-09  
-**Architecture Version:** 2.0
+**Last Updated:** 2026-01-23  
+**Architecture Version:** 2.5
