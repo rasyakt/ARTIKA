@@ -7,12 +7,12 @@
     <title>{{ __('pos.receipt') }} - {{ $transaction->invoice_no }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @media print {
-            body {
-                margin: 0;
-                padding: 0;
-            }
+        @page {
+            size: 58mm auto;
+            margin: 0;
+        }
 
+        @media print {
             .no-print {
                 display: none;
             }
@@ -20,11 +20,11 @@
 
         body {
             font-family: 'Courier New', monospace;
-            width: 80mm;
+            width: 58mm;
             margin: 0 auto;
-            padding: 10px;
-            font-size: 12px;
-            line-height: 1.4;
+            padding: 5px;
+            font-size: 11px;
+            line-height: 1.2;
         }
 
         .receipt {
@@ -39,7 +39,7 @@
         }
 
         .store-name {
-            font-size: 18px;
+            font-size: 14px;
             font-weight: bold;
             margin-bottom: 5px;
         }
@@ -100,7 +100,7 @@
         }
 
         .total-row.grand-total {
-            font-size: 16px;
+            font-size: 13px;
             font-weight: bold;
             border-top: 2px solid #000;
             padding-top: 8px;
