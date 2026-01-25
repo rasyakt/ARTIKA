@@ -55,8 +55,8 @@ class SupplierController extends Controller
     {
         $query = $request->get('q');
 
-        $suppliers = Supplier::where('name', 'like', "%{$query}%")
-            ->orWhere('phone', 'like', "%{$query}%")
+        $suppliers = Supplier::where('name', 'ilike', "%{$query}%")
+            ->orWhere('phone', 'ilike', "%{$query}%")
             ->limit(10)
             ->get();
 

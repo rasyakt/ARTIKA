@@ -76,7 +76,7 @@ class FinanceReportService
                 DB::raw('DATE(created_at) as date'),
                 DB::raw('SUM(total_amount) as revenue')
             )
-            ->groupBy('date')
+            ->groupBy(DB::raw('DATE(created_at)'))
             ->get()
             ->keyBy('date');
 
@@ -89,7 +89,7 @@ class FinanceReportService
                 DB::raw('DATE(transactions.created_at) as date'),
                 DB::raw('SUM(transaction_items.quantity * products.cost_price) as cogs')
             )
-            ->groupBy('date')
+            ->groupBy(DB::raw('DATE(transactions.created_at)'))
             ->get()
             ->keyBy('date');
 
@@ -99,7 +99,7 @@ class FinanceReportService
                 DB::raw('DATE(date) as date'),
                 DB::raw('SUM(amount) as cost')
             )
-            ->groupBy('date')
+            ->groupBy(DB::raw('DATE(date)'))
             ->get()
             ->keyBy('date');
 

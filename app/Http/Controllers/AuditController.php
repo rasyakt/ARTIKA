@@ -40,9 +40,9 @@ class AuditController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->whereHas('user', function ($q) use ($search) {
-                $q->where('nis', 'like', "%{$search}%")
-                    ->orWhere('username', 'like', "%{$search}%")
-                    ->orWhere('name', 'like', "%{$search}%");
+                $q->where('nis', 'ilike', "%{$search}%")
+                    ->orWhere('username', 'ilike', "%{$search}%")
+                    ->orWhere('name', 'ilike', "%{$search}%");
             });
         }
 
@@ -89,9 +89,9 @@ class AuditController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->whereHas('user', function ($q) use ($search) {
-                $q->where('nis', 'like', "%{$search}%")
-                    ->orWhere('username', 'like', "%{$search}%")
-                    ->orWhere('name', 'like', "%{$search}%");
+                $q->where('nis', 'ilike', "%{$search}%")
+                    ->orWhere('username', 'ilike', "%{$search}%")
+                    ->orWhere('name', 'ilike', "%{$search}%");
             });
         }
 
@@ -196,9 +196,9 @@ class AuditController extends Controller
             if ($request->filled('search')) {
                 $search = $request->search;
                 $query->whereHas('user', function ($q) use ($search) {
-                    $q->where('nis', 'like', "%{$search}%")
-                        ->orWhere('username', 'like', "%{$search}%")
-                        ->orWhere('name', 'like', "%{$search}%");
+                    $q->where('nis', 'ilike', "%{$search}%")
+                        ->orWhere('username', 'ilike', "%{$search}%")
+                        ->orWhere('name', 'ilike', "%{$search}%");
                 });
             }
         }
