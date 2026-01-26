@@ -38,6 +38,7 @@ class TransactionService
             }
         }
 
+        // Control Transaction
         return DB::transaction(function () use ($data, $items) {
             // 1. Create Transaction Header
             $data['invoice_no'] = 'INV-' . strtoupper(Str::random(10)); // Simple invoice gen
