@@ -25,43 +25,18 @@
 
 ## Tech Stack
 
-<<<<<<< HEAD
 - **Backend**: Laravel 12 (PHP 8.2+)
 - **Frontend**: Blade, Tailwind CSS 4, Bootstrap 5, Vite 7
-- **Database**: MySQL / MariaDB / PostgreeSQL
+- **Database**: MySQL / MariaDB / PostgreSQL
 - **Reporting**: Barryvdh Laravel DomPDF
 - **Icons & UI**: FontAwesome 6, SweetAlert2, Google Fonts (Inter/Outfit)
-=======
+
 ### Prasyarat
 
 - PHP 8.2 atau lebih tinggi
 - Composer
-- MySQL 5.7+ atau PostgreeSQl
+- MySQL 5.7+ atau PostgreSQL
 - Node.js & NPM
-
-### Langkah Instalasi
-
-```bash
-# Clone repository
-git clone https://github.com/username/artika-pos.git
-cd artika-pos
-
-# Install dependensi
-composer install
-npm install
-
-# Setup environment
-cp .env.example .env
-php artisan key:generate
-
-# Konfigurasi database di file .env Anda, kemudian:
-php artisan migrate --seed
-
-# Compile asset & jalankan server
-npm run build
-php artisan serve
-```
->>>>>>> 140d1e583c50961f7b2697822b4fc01b889acf13
 
 ---
 
@@ -82,12 +57,12 @@ Ikuti langkah-langkah ini untuk menjalankan proyek di lokal Anda:
     php artisan key:generate
     ```
 3. **Database & Seeding**:
-   _Pastikan database sudah dibuat di MySQL._
+   _Pastikan database sudah dibuat di server (MySQL/PostgreSQL)._
     ```bash
     php artisan migrate --seed
     ```
 4. **Jalankan Aplikasi**:
-   _Terminal 1:_ `npm run dev`
+   _Terminal 1:_ `npm run build`
    _Terminal 2:_ `php artisan serve`
 
 Akses di: `http://localhost:8000`
