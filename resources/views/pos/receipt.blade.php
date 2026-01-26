@@ -16,109 +16,164 @@
             .no-print {
                 display: none;
             }
+
+            body {
+                width: 58mm !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
+            }
+
+            .receipt {
+                width: 48mm !important;
+                margin: 0 auto !important;
+                box-shadow: none !important;
+                padding: 4mm 0 !important;
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
             font-family: 'Courier New', monospace;
-            width: 58mm;
+            width: 100%;
+            max-width: 58mm;
             margin: 0 auto;
-            padding: 5px;
-            font-size: 11px;
+            padding: 20px 0;
+            font-size: 9.5px;
+            font-weight: 600;
+            /* Increased base weight */
             line-height: 1.2;
+            background: #f0f1f2;
+            overflow-x: hidden;
+            word-break: break-word;
+            color: #000;
         }
 
         .receipt {
             width: 100%;
+            background: white;
+            padding: 8mm 5mm;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            min-height: 100vh;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 15px;
-            border-bottom: 2px dashed #000;
-            padding-bottom: 10px;
+            margin-bottom: 12px;
+            border-bottom: 1px dashed #000;
+            padding-bottom: 8px;
         }
 
         .store-name {
             font-size: 14px;
             font-weight: bold;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
+            text-transform: uppercase;
         }
 
         .store-info {
             font-size: 10px;
-            margin: 2px 0;
+            margin-bottom: 2px;
         }
 
         .transaction-info {
             margin: 10px 0;
             font-size: 11px;
+            font-weight: 700;
+            border-bottom: 1.5px dashed #000;
+            padding-bottom: 8px;
         }
 
         .transaction-info div {
             display: flex;
             justify-content: space-between;
-            margin: 3px 0;
+            margin: 2px 0;
         }
 
         .items-table {
             width: 100%;
             margin: 10px 0;
-            border-top: 1px dashed #000;
-            border-bottom: 1px dashed #000;
-            padding: 10px 0;
         }
 
         .item-row {
+            margin-bottom: 8px;
+            width: 100%;
+        }
+
+        .item-main {
             display: flex;
             justify-content: space-between;
-            margin: 5px 0;
+            font-weight: 800;
+            /* Extra bold for items */
+            width: 100%;
         }
 
         .item-name {
             flex: 1;
-            font-weight: bold;
+            padding-right: 5px;
+        }
+
+        .item-subtotal {
+            white-space: nowrap;
         }
 
         .item-details {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            color: #666;
-            margin-left: 10px;
+            font-size: 9px;
+            color: #000;
+            font-weight: 600;
+            margin-top: 1px;
+        }
+
+        .divider {
+            border-top: 1.5px dashed #000;
+            /* Thicker dashes */
+            margin: 10px 0;
+            width: 100%;
         }
 
         .totals {
-            margin: 10px 0;
-            border-top: 2px solid #000;
-            padding-top: 10px;
+            margin: 8px 0;
         }
 
         .total-row {
             display: flex;
             justify-content: space-between;
-            margin: 5px 0;
+            margin: 3px 0;
         }
 
         .total-row.grand-total {
-            font-size: 13px;
-            font-weight: bold;
-            border-top: 2px solid #000;
-            padding-top: 8px;
-            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            border-top: 1.5px solid #000;
+            padding-top: 6px;
+            margin-top: 6px;
         }
 
         .payment-info {
             margin: 10px 0;
-            border-top: 1px dashed #000;
-            padding-top: 10px;
+            padding-top: 5px;
+            font-weight: 700;
         }
 
         .footer {
             text-align: center;
             margin-top: 15px;
-            border-top: 2px dashed #000;
+            border-top: 1.5px dashed #000;
             padding-top: 10px;
-            font-size: 10px;
+            font-size: 9px;
+            font-weight: 700;
         }
 
         .print-button,
@@ -149,12 +204,19 @@
             background: #6f5849;
         }
 
-        .back-button:hover {
-            background: #5a6268;
+        .logo-container {
+            text-align: center;
+            margin-bottom: 5px;
         }
 
-        .print-button:hover {
-            background: #6f5849;
+        .logo {
+            max-width: 100px;
+            height: auto;
+            filter: grayscale(100%);
+        }
+
+        .back-button:hover {
+            background: #5a6268;
         }
     </style>
 </head>
@@ -168,6 +230,9 @@
     <div class="receipt">
         <!-- Header -->
         <div class="header">
+            <div class="logo-container">
+                <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
+            </div>
             <div class="store-name">ARTIKA MINIMARKET</div>
             <div class="store-info">Jl. Jendral Sudirman 269A</div>
             <div class="store-info">Telp./Fax. (0265) 771204 Ciamis</div>
@@ -194,34 +259,39 @@
         <div class="items-table">
             @foreach($transaction->items as $item)
                 <div class="item-row">
-                    <div style="flex: 1;">
-                        <div class="item-name">{{ $item->product->name }}</div>
-                        <div class="item-details">
-                            <span>{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</span>
-                            <span>Rp {{ number_format($item->quantity * $item->price, 0, ',', '.') }}</span>
-                        </div>
+                    <div class="item-main">
+                        <span class="item-name">{{ $item->product->name }}</span>
+                        <span
+                            class="item-subtotal">Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</span>
+                    </div>
+                    <div class="item-details">
+                        {{ $item->quantity }} x {{ number_format($item->price, 0, ',', '.') }}
                     </div>
                 </div>
             @endforeach
         </div>
 
+        <div class="divider"></div>
+
         <!-- Totals -->
         <div class="totals">
             <div class="total-row">
                 <span>{{ __('pos.subtotal') }}:</span>
-                <span>Rp {{ number_format($transaction->subtotal, 0, ',', '.') }}</span>
+                <span>Rp{{ number_format($transaction->subtotal, 0, ',', '.') }}</span>
             </div>
             @if($transaction->discount > 0)
                 <div class="total-row">
                     <span>{{ __('pos.discount') }}:</span>
-                    <span>- Rp {{ number_format($transaction->discount, 0, ',', '.') }}</span>
+                    <span>-Rp{{ number_format($transaction->discount, 0, ',', '.') }}</span>
                 </div>
             @endif
             <div class="total-row grand-total">
                 <span>{{ __('pos.total') }}:</span>
-                <span>Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</span>
+                <span>Rp{{ number_format($transaction->total_amount, 0, ',', '.') }}</span>
             </div>
         </div>
+
+        <div class="divider"></div>
 
         <!-- Payment Info -->
         <div class="payment-info">
@@ -232,12 +302,11 @@
             @if(strtolower($transaction->payment_method) === 'cash')
                 <div class="total-row">
                     <span>{{ __('pos.cash_received_label') }}:</span>
-                    <span>Rp {{ number_format($transaction->cash_amount, 0, ',', '.') }}</span>
+                    <span>Rp{{ number_format($transaction->cash_amount, 0, ',', '.') }}</span>
                 </div>
-                <div class="total-row"
-                    style="border-top: 1px solid #000; padding-top: 5px; margin-top: 5px; font-weight: bold; font-size: 13px;">
+                <div class="total-row" style="font-weight: bold; font-size: 13px; margin-top: 5px;">
                     <span>{{ __('pos.change_label') }}:</span>
-                    <span>Rp {{ number_format($transaction->change_amount, 0, ',', '.') }}</span>
+                    <span>Rp{{ number_format($transaction->change_amount, 0, ',', '.') }}</span>
                 </div>
             @endif
         </div>

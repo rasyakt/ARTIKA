@@ -71,4 +71,7 @@ return [
     'no_movements' => 'Belum ada pergerakan stok',
     'no_movements_desc' => 'Pergerakan stok akan muncul di sini saat produk disesuaikan',
     'by' => 'Oleh',
+    'low' => 'Rendah',
+    'medium' => 'Sedang',
+    'high' => 'Tinggi',
 ];

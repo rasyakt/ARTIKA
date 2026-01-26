@@ -1826,42 +1826,29 @@
             }
 
             const barcodeInput = document.getElementById('barcodeScannerInput');
-            if (barcodeInput) {
-                barcodeInput.addEventListener('input', function () {
-                    const value = this.value.trim();
-                    if (value.length >= 3) {
-                        // Attempt instant match exactly like global listener
-                        const product = document.querySelector(`.product-card[data-barcode="${value}"]`) ||
-                            document.querySelector(`.product-card[data-product-id="${value}"]`);
+            // Periodic Focus Enforcement (Faster 1s check)
+            setInterval(() => {
+                const barcodeInput = document.getElementById('barcodeScannerInput');
+                if (barcodeInput &&
+                    document.activeElement.tagName !== 'INPUT' &&
+                    document.activeElement.tagName !== 'TEXTAREA' &&
+                    !document.querySelector('.modal.show')) {
+                    barcodeInput.focus();
+                }
+            }, 1000);
 
-                        if (product) {
-                            console.log(`[Input Instant] Match found: ${value}`);
-                            this.value = '';
-                            handleScannedBarcode(value);
-                        }
-                    }
-                });
-
-                // Periodic Focus Enforcement (Faster 1s check)
-                setInterval(() => {
-                    const barcodeInput = document.getElementById('barcodeScannerInput');
-                    if (barcodeInput &&
-                        document.activeElement.tagName !== 'INPUT' &&
-                        document.activeElement.tagName !== 'TEXTAREA' &&
-                        !document.querySelector('.modal.show')) {
-                        barcodeInput.focus();
-                    }
-                }, 1000);
-            }
-
-            // Global Barcode Scanner Listener (Take 4 - True Instant)
+            // Global Barcode Scanner Listener (Take 5 - Consolidated & Safe)
             let barcodeBuffer = '';
             let lastKeyTime = Date.now();
-            const SCAN_THRESHOLD = 200; // Increased to 200ms for maximum compatibility
+            let isProcessing = false; // Flag to prevent double triggers
+            const SCAN_THRESHOLD = 200;
             const MIN_BARCODE_LENGTH = 3;
 
             document.addEventListener('keydown', function (e) {
-                // Ignore modifier keys and other non-data keys
+                // Ignore if currently processing a scan
+                if (isProcessing) return;
+
+                // Ignore modifier keys
                 if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape'].includes(e.key)) {
                     return;
                 }
@@ -1881,64 +1868,68 @@
                 const isSpecial = /^[._\-\/]$/.test(e.key);
                 const isEnter = e.key === 'Enter';
 
-                // Case 1: Scanner is dumping data rapidly
-                if (timeDiff < SCAN_THRESHOLD) {
-                    if (isNumeric || isAlpha || isSpecial) {
-                        barcodeBuffer += e.key;
+                const isFocused = document.activeElement === barcodeInput;
 
-                        // [NEW] True Instant Match - check on every key press
-                        if (barcodeBuffer.length >= MIN_BARCODE_LENGTH) {
-                            const instantMatch = document.querySelector(`.product-card[data-barcode="${barcodeBuffer}"]`) ||
-                                document.querySelector(`.product-card[data-product-id="${barcodeBuffer}"]`);
-
-                            if (instantMatch) {
-                                console.log(`[Global Instant] Match found: ${barcodeBuffer}`);
-                                handleScannedBarcode(barcodeBuffer);
-                                barcodeBuffer = ''; // Clear after match
-                                return; // Stop processing this key
-                            }
-                        }
-
-                        // Prevent characters from being typed elsewhere if we're clearly in a scan
-                        if (document.activeElement !== barcodeInput && barcodeBuffer.length > 1) {
-                            e.preventDefault();
-                        }
-
-                        // Show progress visually in the dedicated box
-                        if (barcodeInput) barcodeInput.value = barcodeBuffer;
-                    } else if (isEnter && barcodeBuffer.length >= MIN_BARCODE_LENGTH) {
+                // Case 1: Handle Enter key (Final Search)
+                if (isEnter) {
+                    const finalBarcode = isFocused ? barcodeInput.value.trim() : barcodeBuffer.trim();
+                    if (finalBarcode.length >= MIN_BARCODE_LENGTH) {
                         e.preventDefault();
-                        console.log(`[Scanner] Barcode Detected (Enter): ${barcodeBuffer}`);
-                        handleScannedBarcode(barcodeBuffer.trim());
-                        barcodeBuffer = '';
-                    }
-                } else {
-                    // Case 2: New potential scan sequence
-                    if (isNumeric || isAlpha || isSpecial) {
-                        barcodeBuffer = e.key;
+                        console.log(`[Scanner] Processing final barcode: ${finalBarcode}`);
+                        isProcessing = true;
+                        handleScannedBarcode(finalBarcode);
 
-                        // Check for instant match on single char ID (if length >= 3)
-                        if (barcodeBuffer.length >= MIN_BARCODE_LENGTH) {
-                            const singleCharMatch = document.querySelector(`.product-card[data-product-id="${barcodeBuffer}"]`);
-                            if (singleCharMatch) {
-                                handleScannedBarcode(barcodeBuffer);
-                                barcodeBuffer = '';
-                            }
-                        }
-                    } else {
-                        // Reset if it's not a data key and not rapid
+                        // Cleanup
                         barcodeBuffer = '';
+                        if (barcodeInput) barcodeInput.value = '';
+
+                        // Reset flag after a short delay
+                        setTimeout(() => { isProcessing = false; }, 500);
+                    } else {
+                        barcodeBuffer = '';
+                        if (barcodeInput && isFocused) barcodeInput.value = '';
                     }
+                    return;
                 }
 
-                // Case 3: Focused manual entry with Enter (Fallback)
-                if (isEnter && document.activeElement === barcodeInput) {
-                    const manualBarcode = barcodeInput.value.trim();
-                    if (manualBarcode) {
-                        e.preventDefault();
-                        console.log(`[Manual] Barcode Entered: ${manualBarcode}`);
-                        handleScannedBarcode(manualBarcode);
-                        barcodeInput.value = '';
+                // Case 2: Accumulate Data
+                if (isNumeric || isAlpha || isSpecial) {
+                    if (timeDiff < SCAN_THRESHOLD) {
+                        // Rapid sequence (Scanner)
+                        if (!isFocused) {
+                            barcodeBuffer += e.key;
+                            if (barcodeInput) barcodeInput.value = barcodeBuffer;
+                        } else {
+                            // If focused, the browser adds the key to input natively.
+                            // We just sync the buffer to be safe for non-Enter triggers.
+                            barcodeBuffer = barcodeInput.value + e.key;
+                        }
+                    } else {
+                        // New sequence (Manual or start of scan)
+                        barcodeBuffer = e.key;
+                        if (!isFocused && barcodeInput) {
+                            barcodeInput.value = barcodeBuffer;
+                        }
+                    }
+
+                    // [NEW] Consolidated Instant Match - only if length matches common barcode patterns
+                    // We check both the buffer and the input value
+                    const currentVal = isFocused ? (barcodeInput.value + e.key) : barcodeBuffer;
+                    if (currentVal.length >= 8) { // Only instant match for long barcodes to avoid partials
+                        const instantMatch = document.querySelector(`.product-card[data-barcode="${currentVal}"]`) ||
+                            document.querySelector(`.product-card[data-product-id="${currentVal}"]`);
+
+                        if (instantMatch) {
+                            console.log(`[Instant] Match found: ${currentVal}`);
+                            e.preventDefault();
+                            isProcessing = true;
+                            handleScannedBarcode(currentVal);
+
+                            barcodeBuffer = '';
+                            if (barcodeInput) barcodeInput.value = '';
+
+                            setTimeout(() => { isProcessing = false; }, 500);
+                        }
                     }
                 }
             });
@@ -1980,12 +1971,23 @@
                     }
                 } else {
                     console.warn(`[Fail] No product matches barcode: "${barcode}"`);
+                    playErrorBeep();
                     Swal.fire({
-                        icon: 'info',
-                        title: 'Barcode Terdeteksi',
+                        icon: 'error',
+                        title: 'Produk Tidak Ditemukan',
                         text: 'Barcode: ' + barcode + ' tidak terdaftar di sistem ARTIKA.',
-                        timer: 2500,
-                        showConfirmButton: false
+                        timer: 2000,
+                        showConfirmButton: false,
+                        customClass: {
+                            popup: 'artika-swal-popup',
+                            title: 'artika-swal-title'
+                        }
+                    }).then(() => {
+                        const barcodeInput = document.getElementById('barcodeScannerInput');
+                        if (barcodeInput) {
+                            barcodeInput.value = '';
+                            barcodeInput.focus();
+                        }
                     });
                 }
             }
@@ -2573,6 +2575,39 @@
             }
         }
 
+        function playErrorBeep() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.01);
+                gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3);
+
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.3);
+
+                // Add a second low tone for "buzz" effect
+                const osc2 = audioCtx.createOscillator();
+                osc2.type = 'sawtooth';
+                osc2.frequency.setValueAtTime(100, audioCtx.currentTime);
+                osc2.connect(gainNode);
+                osc2.start(audioCtx.currentTime);
+                osc2.stop(audioCtx.currentTime + 0.3);
+            } catch (e) {
+                console.warn('Audio feedback failed:', e);
+            }
+        }
+
         // SCANNER FUNCTIONS
         function openScanner() {
             const scannerSection = document.getElementById('scannerSection');
@@ -2633,7 +2668,18 @@
                         return;
                     }
                 }
-                showToast('error', '{{ __('pos.product_not_found') }} ' + decodedText);
+                playErrorBeep();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Barcode Tidak Dikenal',
+                    text: 'ID/Barcode: ' + decodedText + ' tidak terdaftar.',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    customClass: {
+                        popup: 'artika-swal-popup',
+                        title: 'artika-swal-title'
+                    }
+                });
             }
         }
 
