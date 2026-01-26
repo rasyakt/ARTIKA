@@ -21,8 +21,7 @@ class AdminController extends Controller
         $totalSales = Transaction::where('status', 'completed')->sum('total_amount');
         $totalTransactions = Transaction::where('status', 'completed')->count();
         $totalProducts = Product::count();
-        // customer feature removed; keep placeholder
-        $totalCustomers = 0;
+
         // Supplier metrics (fallback to 0 if Supplier model/table doesn't exist yet)
         try {
             $totalSuppliers = \App\Models\Supplier::count();

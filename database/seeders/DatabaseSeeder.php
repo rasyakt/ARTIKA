@@ -44,10 +44,10 @@ class DatabaseSeeder extends Seeder
         ]);
         // Categories
         $catSnack = \App\Models\Category::create(['name' => 'Snack', 'slug' => 'snack']);
-        $catDrink = \App\Models\Category::create(['name' => 'Drink', 'slug' => 'drink']);
-        $catFood = \App\Models\Category::create(['name' => 'Food', 'slug' => 'food']);
+        $catDrink = \App\Models\Category::create(['name' => 'Minuman', 'slug' => 'drink']);
+        $catFood = \App\Models\Category::create(['name' => 'Makanan', 'slug' => 'food']);
         $catDairy = \App\Models\Category::create(['name' => 'Dairy', 'slug' => 'dairy']);
-        $catHousehold = \App\Models\Category::create(['name' => 'Household', 'slug' => 'household']);
+        $catHousehold = \App\Models\Category::create(['name' => 'Peralatan', 'slug' => 'household']);
 
         // Products - Snacks
         $products = [

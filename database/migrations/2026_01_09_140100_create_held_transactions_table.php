@@ -13,7 +13,6 @@ return new class extends Migration {
         Schema::create('held_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            // customer_id removed — held transactions no longer linked to customers
             $table->json('items'); // Store cart items as JSON
             $table->decimal('subtotal', 15, 2);
             $table->decimal('discount', 15, 2)->default(0);

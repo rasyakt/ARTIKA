@@ -50,10 +50,6 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * Get the customer for this transaction
-     */
-    // Customer relation removed — customers replaced by suppliers in admin.
 
     /**
      * Get all items for this transaction
