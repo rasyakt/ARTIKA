@@ -25,7 +25,6 @@
 
 ## Tech Stack
 
-<<<<<<< HEAD
 - **Backend**: Laravel 12 (PHP 8.2+)
 - **Frontend**: Blade, Tailwind CSS 4, Bootstrap 5, Vite 7
 - **Database**: MySQL / MariaDB / PostgreeSQL
@@ -61,9 +60,6 @@ php artisan migrate --seed
 npm run build
 php artisan serve
 ```
->>>>>>> 140d1e583c50961f7b2697822b4fc01b889acf13
-
----
 
 ## Instalasi Cepat
 
