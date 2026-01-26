@@ -44,7 +44,7 @@
 
 - PHP 8.2 atau lebih tinggi
 - Composer
-- MySQL 5.7+
+- MySQL 5.7+ atau PostgreeSQl
 - Node.js & NPM
 
 ### Langkah Instalasi
