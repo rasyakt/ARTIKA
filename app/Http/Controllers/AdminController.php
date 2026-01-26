@@ -67,7 +67,7 @@ class AdminController extends Controller
             'totalSales',
             'totalTransactions',
             'totalProducts',
-            'totalCustomers',
+            // 'totalCustomers',
             'totalSuppliers',
             'recentSuppliers',
             'salesChartData',

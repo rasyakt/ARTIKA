@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dashboard_title' => 'Dasbor Admin',
+    'dashboard_title' => 'Dashboard Admin',
     'dashboard_subtitle' => 'Ringkasan performa toko',
     'audit_log' => 'Log Audit',
     'product_management' => 'Manajemen Produk',
@@ -111,6 +111,7 @@ return [
     'generate_report' => 'Buat Laporan',
     'export_report' => 'Ekspor Laporan',
     'quick_period' => 'Periode Cepat',
+    'period' => 'Periode',
     'cancel' => 'Batal',
     'close' => 'Tutup',
     'delete_logs' => 'Hapus Log',

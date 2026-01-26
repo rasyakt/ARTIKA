@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'dashboard' => 'Dasbor',
+    'dashboard' => 'Dashboard',
     'overview' => 'Ringkasan',
     'last_updated' => 'Terakhir diperbarui',
     'total_sales' => 'Total Penjualan',

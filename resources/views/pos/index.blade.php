@@ -1680,7 +1680,7 @@
                     <!-- Cash Input Section -->
                     <div id="cashInputSection">
                         <input type="text" id="keypadDisplay" class="form-control"
-                            style="font-size: 1.2rem; font-weight: bold; text-align: center; margin-bottom: 1rem; padding: 10px;"
+                            style="font-size: 1.2rem; font-weight: bold; text-align: right; margin-bottom: 1rem; padding: 10px;"
                             placeholder="0" autocomplete="off" inputmode="decimal">
                         <div class="numeric-keypad">
                             <button class="keypad-btn" data-key="1">1</button>
