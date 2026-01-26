@@ -5,7 +5,6 @@
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Database-4479A1?style=flat&logo=postgresql)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=flat&logo=bootstrap)
 ![Vite](https://img.shields.io/badge/Vite-7.x-purple.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
 
 **ARTIKA POS** adalah sistem kasir (Point of Sale) modern, ringan, dan responsif yang dirancang khusus untuk efisiensi transaksi, manajemen stok real-time, dan transparansi laporan keuangan. Dibangun dengan teknologi terbaru untuk memberikan pengalaman pengguna yang cepat dan stabil.
 
@@ -116,10 +115,4 @@ Kontribusi selalu terbuka! Jika Anda ingin meningkatkan ARTIKA POS:
 
 ---
 
-## Lisensi
-
-Proyek ini dilisensikan di bawah **MIT License**. Lihat file [LICENSE](LICENSE) untuk detail lebih lanjut.
-
----
-
-**Dibuat oleh Tim RPL Sentinel 2026**
+**Dibuat oleh © Tim RPL Sentinel 2026**
