@@ -389,8 +389,13 @@
                             <i class="fa-solid fa-truck"></i> {{ __('menu.suppliers') }}
                         </a>
                         <a href="{{ route('admin.expenses.index') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.expenses*') ? 'active' : '' }}">
+                            class="sidebar-link {{ request()->routeIs('admin.expenses.index') ? 'active' : '' }}">
                             <i class="fa-solid fa-wallet"></i> {{ __('menu.operational_expenses') }}
+                        </a>
+                        <a href="{{ route('admin.expense-categories.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.expense-categories.index') ? 'active' : '' }}"
+                            style="padding-left: 2.5rem; font-size: 0.9rem; opacity: 0.8;">
+                            <i class="fa-solid fa-tags" style="font-size: 0.8rem;"></i> {{ __('menu.expense_categories') }}
                         </a>
                         <hr style="margin: 0.5rem 0; opacity: 0.1;">
                         <a href="{{ route('admin.reports') }}"

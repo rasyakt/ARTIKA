@@ -57,7 +57,7 @@
                                         <td class="py-3">
                                             <span class="badge"
                                                 style="background: #e0cec7; color: #6f5849; padding: 0.5rem 0.8rem; border-radius: 8px;">
-                                                {{ $expense->category }}
+                                                {{ $expense->category->name }}
                                             </span>
                                         </td>
                                         <td class="py-3">
@@ -148,12 +148,11 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.category') }}</label>
-                            <select name="category" class="form-select custom-input" required>
+                            <select name="expense_category_id" class="form-select custom-input" required>
                                 <option value="" disabled selected>{{ __('admin.select_category') }}</option>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat }}">{{ $cat }}</option>
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                 @endforeach
-                                <!-- <option value="Lainnya">{{ __('admin.other') }}</option> -->
                             </select>
                         </div>
                         <div class="mb-3">
@@ -202,9 +201,9 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.category') }}</label>
-                            <select name="category" id="edit_category" class="form-select custom-input" required>
+                            <select name="expense_category_id" id="edit_category" class="form-select custom-input" required>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat }}">{{ $cat }}</option>
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -278,7 +277,7 @@
                     form.action = `/admin/expenses/${expense.id}`;
 
                     document.getElementById('edit_date').value = expense.date.split('T')[0];
-                    document.getElementById('edit_category').value = expense.category;
+                    document.getElementById('edit_category').value = expense.expense_category_id;
                     document.getElementById('edit_amount').value = expense.amount;
                     document.getElementById('edit_notes').value = expense.notes || '';
                 });

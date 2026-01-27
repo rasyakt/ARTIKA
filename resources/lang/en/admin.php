@@ -209,6 +209,23 @@ return [
     'store_operational_costs' => 'Store operational costs',
     'after_returns_and_expenses' => 'After returns & expenses',
 
+    // Expense Categories
+    'expense_categories' => 'Expense Categories',
+    'manage_expense_categories_subtitle' => 'Manage store operational cost categories',
+    'category_name' => 'Category Name',
+    'category_name_placeholder' => 'e.g. Electricity, Salary, Rent...',
+    'category_description_placeholder' => 'Additional description for this category...',
+    'usage_count' => 'Usage Count',
+    'no_expense_categories_found' => 'No expense categories found',
+    'add_first_expense_category' => 'Add First Category',
+    'update_category' => 'Update Category',
+    'delete_expense_category_confirm' => 'Delete this expense category? Make sure no expense records are using this category.',
+    'category_created_success' => 'Expense category created successfully',
+    'category_updated_success' => 'Expense category updated successfully',
+    'category_deleted_success' => 'Expense category deleted successfully',
+    'category_has_expenses_error' => 'Cannot delete category because it is still used by expense records.',
+    'cannot_delete_category_with_expenses' => 'Category is currently in use',
+
     // Print
     'generated' => 'Generated',
     'print_report' => 'Print Report',

@@ -211,6 +211,25 @@ return [
     'store_operational_costs' => 'Biaya operasional toko',
     'after_returns_and_expenses' => 'Setelah retur & biaya operasional',
 
+    // Expense Categories
+    'expense_categories' => 'Kategori Biaya',
+    'manage_expense_categories_subtitle' => 'Kelola kategori pengeluaran operasional toko',
+    'category_name' => 'Nama Kategori',
+    'category_name_placeholder' => 'Contoh: Biaya Tak Terduga, Perbaikan...',
+    'category_description_placeholder' => 'Keterangan tambahan mengenai kategori ini...',
+    'usage_count' => 'Jumlah Penggunaan',
+    'no_expense_categories_found' => 'Belum ada kategori biaya',
+    'add_first_expense_category' => 'Tambah Katagori Biaya Pertama',
+    'update_category' => 'Perbarui Kategori',
+    'delete_expense_category_confirm' => 'Hapus kategori biaya ini? Pastikan tidak ada data biaya yang menggunakan kategori ini.',
+    'category_created_success' => 'Kategori biaya berhasil dibuat',
+    'category_updated_success' => 'Kategori biaya berhasil diperbarui',
+    'category_deleted_success' => 'Kategori biaya berhasil dihapus',
+    'category_has_expenses_error' => 'Kategori tidak bisa dihapus karena masih digunakan oleh data biaya.',
+    'cannot_delete_category_with_expenses' => 'Kategori ini masih digunakan',
+    'expenses' => 'Biaya',
+    'description' => 'Deskripsi',
+
     // Print
     'generated' => 'Dibuat',
     'print_report' => 'Cetak Laporan',
