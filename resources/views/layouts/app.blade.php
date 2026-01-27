@@ -584,6 +584,28 @@
                     showToast('error', "{{ $errors->first() }}");
                 @endif
             });
+
+            // Global Numeric Input Validation
+            document.addEventListener('keydown', function (e) {
+                if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                    // Block 'e', 'E', '-', '+', '.', ','
+                    const blockedKeys = ['e', 'E', '-', '+', '.', ','];
+                    if (blockedKeys.includes(e.key)) {
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            // Prevent paste of non-numeric characters
+            document.addEventListener('paste', function (e) {
+                if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                    const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                    if (!/^\d+$/.test(pasteData)) {
+                        e.preventDefault();
+                        showToast('warning', 'Hanya angka bulat yang diperbolehkan');
+                    }
+                }
+            });
         </script>
 </body>
 

@@ -2688,16 +2688,43 @@
         }
 
         // Handle logout confirmation
-        document.getElementById('btnLogout').addEventListener('click', function () {
-            confirmAction({
-                text: "{{ __('pos.logout_confirmation_message') }}",
-                confirmButtonText: "{{ __('pos.logout') }}",
-                icon: 'question'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('logoutForm').submit();
-                }
+        const btnLogout = document.getElementById('btnLogout');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', function () {
+                confirmAction({
+                    text: "{{ __('pos.logout_confirmation_message') }}",
+                    confirmButtonText: "{{ __('pos.logout') }}",
+                    icon: 'question'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('logoutForm').submit();
+                    }
+                });
             });
+        }
+
+        // Global Numeric Input Validation for POS
+        document.addEventListener('keydown', function (e) {
+            if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                // Block 'e', 'E', '-', '+', '.', ','
+                const blockedKeys = ['e', 'E', '-', '+', '.', ','];
+                if (blockedKeys.includes(e.key)) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Prevent paste of non-numeric characters for POS
+        document.addEventListener('paste', function (e) {
+            if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                if (!/^\d+$/.test(pasteData)) {
+                    e.preventDefault();
+                    if (typeof showToast === 'function') {
+                        showToast('warning', 'Hanya angka bulat yang diperbolehkan');
+                    }
+                }
+            }
         });
     </script>
 

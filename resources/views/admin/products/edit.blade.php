@@ -79,7 +79,7 @@
                                     <input type="number" class="form-control @error('cost_price') is-invalid @enderror"
                                         id="cost_price" name="cost_price"
                                         value="{{ old('cost_price', $product->cost_price) }}"
-                                        placeholder="{{ __('common.cost_price_placeholder') }}" min="0" step="100" required
+                                        placeholder="{{ __('common.cost_price_placeholder') }}" min="0" step="1" required
                                         style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     @error('cost_price')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -93,7 +93,7 @@
                                         (Rp) *</label>
                                     <input type="number" class="form-control @error('price') is-invalid @enderror"
                                         id="price" name="price" value="{{ old('price', $product->price) }}"
-                                        placeholder="{{ __('common.sell_price_placeholder') }}" min="0" step="100" required
+                                        placeholder="{{ __('common.sell_price_placeholder') }}" min="0" step="1" required
                                         style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     @error('price')
                                         <div class="invalid-feedback">{{ $message }}</div>

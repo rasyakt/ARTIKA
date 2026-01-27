@@ -117,7 +117,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('warehouse.quantity') }}</label>
-                        <input type="number" class="form-control" id="adjustment_qty" min="0"
+                        <input type="number" class="form-control" id="adjustment_qty" min="0" step="1"
                             style="border-radius: 12px; border: 2px solid #e0cec7;">
                     </div>
                     <div class="mb-3">
