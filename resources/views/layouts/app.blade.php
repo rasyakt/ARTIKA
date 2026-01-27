@@ -34,6 +34,7 @@
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
             box-shadow: 0 4px 6px -1px rgba(111, 88, 73, 0.2) !important;
+            margin: 0.25rem !important;
         }
 
         .artika-swal-cancel-btn {
@@ -43,6 +44,7 @@
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
+            margin: 0.25rem !important;
         }
 
         .artika-swal-toast {

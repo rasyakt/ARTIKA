@@ -94,7 +94,7 @@
                                                             @csrf
                                                             @method('DELETE')
                                                             <button type="button" class="dropdown-item py-2 text-danger btn-delete"
-                                                                {{ $category->expenses_count > 0 ? 'disabled' : '' }}
+                                                                data-in-use="{{ $category->expenses_count > 0 ? 'true' : 'false' }}"
                                                                 title="{{ $category->expenses_count > 0 ? __('admin.cannot_delete_category_with_expenses') : '' }}">
                                                                 <i class="fa-solid fa-trash me-2"></i> {{ __('common.delete') }}
                                                             </button>
@@ -154,7 +154,7 @@
                                 placeholder="{{ __('admin.category_description_placeholder') }}"></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer border-0 pb-4 px-4">
+                    <div class="modal-footer border-0 pb-4 px-4 d-flex gap-2">
                         <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal"
                             style="border-radius: 10px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-brown px-4 shadow-sm" style="border-radius: 10px;">
@@ -192,7 +192,7 @@
                                 rows="3"></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer border-0 pb-4 px-4">
+                    <div class="modal-footer border-0 pb-4 px-4 d-flex gap-2">
                         <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal"
                             style="border-radius: 10px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-brown px-4 shadow-sm" style="border-radius: 10px;">
@@ -245,9 +245,18 @@
             }
 
             // Handle delete confirmation
-            const deleteButtons = document.querySelectorAll('.btn-delete:not([disabled])');
+            const deleteButtons = document.querySelectorAll('.btn-delete');
             deleteButtons.forEach(button => {
                 button.addEventListener('click', function () {
+                    if (this.dataset.inUse === 'true') {
+                        if (typeof showToast === 'function') {
+                            showToast('error', "{{ __('admin.category_has_expenses_error') }}");
+                        } else {
+                            alert("{{ __('admin.category_has_expenses_error') }}");
+                        }
+                        return;
+                    }
+
                     const form = this.closest('form');
                     confirmAction({
                         text: "{{ __('admin.delete_expense_category_confirm') }}",
