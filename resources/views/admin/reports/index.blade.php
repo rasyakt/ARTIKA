@@ -8,7 +8,6 @@
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             cursor: pointer;
-            background: #fff !important;
         }
 
         .report-card:hover {
@@ -45,7 +44,7 @@
             </div>
             <div>
                 <button class="btn shadow-sm"
-                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;"
+                    style="background: #6f5849; color: white; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;"
                     data-bs-toggle="modal" data-bs-target="#printAllModal"
                     onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                     <i class="fa-solid fa-file-invoice me-2"></i> {{ __('admin.print_all_reports') }}
@@ -163,8 +162,8 @@
         </div>
 
         <!-- Quick Stats -->
-        <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-            <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+        <div class="card shadow-sm">
+            <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                 <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                     <i class="fa-solid fa-info-circle me-2"></i>{{ __('admin.quick_report') }}
                 </h5>
@@ -193,8 +192,7 @@
     <div class="modal fade" id="printAllModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 16px;">
-                <div class="modal-header"
-                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 16px 16px 0 0;">
+                <div class="modal-header" style="background: #6f5849; color: white; border-radius: 16px 16px 0 0;">
                     <h5 class="modal-title">
                         <i class="fa-solid fa-file-invoice me-2"></i>{{ __('admin.print_all_reports') }}
                     </h5>

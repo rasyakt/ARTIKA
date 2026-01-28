@@ -9,7 +9,7 @@
                 <p class="text-muted mb-0">{{ __('admin.manage_suppliers_contacts') }}</p>
             </div>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addSupplierModal"
-                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
+                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
                 <span style="font-size: 1.25rem;">+</span> {{ __('admin.add_supplier') }}
             </button>
         </div>
@@ -94,7 +94,7 @@
                 </div>
             </div>
             @if($suppliers->hasPages())
-                <div class="card-footer bg-white border-0 d-flex justify-content-end">
+                <div class="card-footer border-0 d-flex justify-content-end">
                     {{ $suppliers->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
@@ -138,7 +138,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i
+                            style="background: #6f5849; border: none; border-radius: 12px;"><i
                                 class="fa-solid fa-floppy-disk me-1"></i>
                             {{ __('common.save') }}</button>
                     </div>
@@ -185,7 +185,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i
+                            style="background: #6f5849; border: none; border-radius: 12px;"><i
                                 class="fa-solid fa-floppy-disk me-1"></i>
                             {{ __('common.update') }}</button>
                     </div>

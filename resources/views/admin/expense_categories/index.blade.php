@@ -11,7 +11,7 @@
                 <p class="text-muted mb-0 small">{{ __('admin.manage_expense_categories_subtitle') }}</p>
             </div>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addCategoryModal"
-                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
+                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
                 <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_category') }}
             </button>
         </div>
@@ -33,7 +33,7 @@
         @endif
 
         <!-- Categories Table -->
-        <div class="card shadow-sm border-0" style="border-radius: 16px;">
+        <div class="card shadow-sm">
             <div class="card-body p-0">
                 @if($categories->count() > 0)
                     <div class="table-responsive">
@@ -121,7 +121,7 @@
                 @endif
             </div>
             @if($categories->hasPages())
-                <div class="card-footer bg-white border-0 d-flex justify-content-end py-3 px-4">
+                <div class="card-footer border-0 d-flex justify-content-end py-3 px-4">
                     {{ $categories->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
@@ -206,7 +206,7 @@
 
     <style>
         .btn-brown {
-            background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);
+            background: #6f5849;
             color: white;
             border: none;
         }

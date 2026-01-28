@@ -9,7 +9,7 @@
                 <p class="text-muted mb-0">Manage customer database and loyalty</p>
             </div>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addCustomerModal"
-                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
+                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
                 <span style="font-size: 1.25rem;">+</span> Add Customer
             </button>
         </div>
@@ -89,7 +89,7 @@
                 </div>
             </div>
             @if($customers->hasPages())
-                <div class="card-footer bg-white border-0 d-flex justify-content-end">
+                <div class="card-footer border-0 d-flex justify-content-end">
                     {{ $customers->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
@@ -133,7 +133,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">Cancel</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i
+                            style="background: #6f5849; border: none; border-radius: 12px;"><i
                                 class="fa-solid fa-floppy-disk me-1"></i>
                             Save</button>
                     </div>
@@ -180,7 +180,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">Cancel</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;"><i
+                            style="background: #6f5849; border: none; border-radius: 12px;"><i
                                 class="fa-solid fa-floppy-disk me-1"></i>
                             Update</button>
                     </div>

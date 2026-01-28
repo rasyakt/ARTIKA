@@ -8,7 +8,7 @@
                 <i class="fa-solid fa-folder me-2"></i>{{ __('common.categories') }}
             </h4>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal"
-                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
+                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
                 <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_category') }}
             </button>
         </div>
@@ -39,7 +39,7 @@
                                         <td class="py-3 align-middle">
                                             <div class="d-flex align-items-center">
                                                 <div class="me-3"
-                                                    style="width: 40px; height: 40px; background: linear-gradient(135deg, #f2e8e5 0%, #e0cec7 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                                    style="width: 40px; height: 40px; background: #f2e8e5; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
                                                     <i class="fa-solid fa-folder" style="color: #6f5849; font-size: 1.2rem;"></i>
                                                 </div>
                                                 <span class="fw-semibold" style="color: #2c3e50;">{{ $category->name }}</span>
@@ -95,14 +95,14 @@
                         </div>
                         <p class="text-muted mb-3">{{ __('admin.no_categories') }}</p>
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600;">
+                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600;">
                             <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_first_category') }}
                         </button>
                     </div>
                 @endif
             </div>
             @if($categories->hasPages())
-                <div class="card-footer bg-white border-0 d-flex justify-content-end py-3">
+                <div class="card-footer border-0 d-flex justify-content-end py-3">
                     {{ $categories->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
@@ -133,7 +133,7 @@
                         <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal"
                             style="border-radius: 10px; padding: 0.6rem 1.25rem;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary px-4"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
+                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
                             <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.save') }} {{ __('common.category') }}
                         </button>
                     </div>
@@ -166,7 +166,7 @@
                         <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal"
                             style="border-radius: 10px; padding: 0.6rem 1.25rem;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary px-4"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
+                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
                             <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.update') }}
                             {{ __('common.category') }}
                         </button>

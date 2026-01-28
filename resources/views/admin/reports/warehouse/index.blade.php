@@ -40,7 +40,7 @@
             </div>
 
             <!-- Filters -->
-            <div class="card shadow-sm mb-4" style="border: 1px solid #f2e8e5 !important;">
+            <div class="card shadow-sm mb-4">
                 <div class="card-body p-4">
                     <form action="{{ route('admin.reports.warehouse') }}" method="GET" class="row g-3 align-items-end">
                         <!-- Date Row -->
@@ -112,7 +112,7 @@
 
                         <!-- Search Row -->
                         <div class="col-12 mt-3">
-                            <div class="input-group shadow-sm" style="border-radius: 10px; overflow: hidden; border: 1px solid #e0cec7;">
+                            <div class="input-group shadow-sm" style="border-radius: 10px; overflow: hidden;">
                                 <span class="input-group-text bg-white border-0">
                                     <i class="fa-solid fa-magnifying-glass" style="color: #c17a5c;"></i>
                                 </span>
@@ -221,8 +221,8 @@
             <div class="row g-4 mb-4">
                 <!-- Top Movers -->
                 <div class="col-lg-6">
-                    <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-                        <div class="card-header bg-white"
+                    <div class="card shadow-sm">
+                        <div class="card-header"
                             style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                             <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                                 <i class="fa-solid fa-trophy me-2"></i>{{ __('admin.top_moving_items') }}
@@ -247,7 +247,7 @@
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <div class="me-3"
-                                                            style="width: 30px; height: 30px; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
+                                                            style="width: 30px; height: 30px; background: #6f5849; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
                                                             {{ $index + 1 }}
                                                         </div>
                                                         <div>
@@ -282,8 +282,8 @@
 
                 <!-- Low Stock Alerts -->
                 <div class="col-lg-6" id="low-stock-section">
-                    <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-                        <div class="card-header bg-white"
+                    <div class="card shadow-sm">
+                        <div class="card-header"
                             style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                             <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                                 <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ __('admin.low_stock_items') }}
@@ -337,7 +337,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
+                        <div class="px-3 py-2 border-top d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
                             {{ $lowStockItems->fragment('low-stock-section')->links('vendor.pagination.no-prevnext') }}
                         </div>
                     </div>
@@ -345,8 +345,8 @@
             </div>
 
             <!-- Recent Movements Table -->
-            <div class="card shadow-sm mb-4" id="movements-section" style="border-radius: 16px; border: none;">
-                <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+            <div class="card shadow-sm mb-4" id="movements-section">
+                <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                     <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                         <i class="fa-solid fa-arrows-rotate me-2"></i>{{ __('admin.recent_stock_movements') }}
                     </h5>
@@ -411,8 +411,8 @@
             </div>
 
             <!-- Audit Logs Section -->
-            <div class="card shadow-sm mb-4" id="audit-section" style="border-radius: 16px; border: none;">
-                <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+            <div class="card shadow-sm mb-4" id="audit-section">
+                <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                     <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                         <i class="fa-solid fa-clipboard-list me-2"></i>{{ __('admin.audit_log') }}
                     </h5>

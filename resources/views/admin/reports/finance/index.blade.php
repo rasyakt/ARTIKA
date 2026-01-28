@@ -49,77 +49,80 @@
         <div class="row g-3 mb-4">
             <!-- Gross Revenue -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm border-0"
-                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid #6f5849 !important;">
+                <div class="card h-100 shadow-sm accent-brown">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="p-2 rounded-3 me-2" style="background: #fdf8f6; color: #6f5849;">
+                            <div class="icon-box-premium bg-brown-soft me-2"
+                                style="width: 35px; height: 35px; font-size: 1rem;">
                                 <i class="fa-solid fa-money-bill-trend-up"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.gross_revenue')) }}</p>
                         </div>
                         <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
-                            {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</h5>
+                            {{ number_format($summary['gross_revenue'], 0, ',', '.') }}
+                        </h5>
                     </div>
                 </div>
             </div>
 
             <!-- Total Cost (COGS) -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm border-0"
-                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid #c17a5c !important;">
+                <div class="card h-100 shadow-sm accent-sienna">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="p-2 rounded-3 me-2" style="background: #fff5f2; color: #c17a5c;">
+                            <div class="icon-box-premium bg-sienna-soft me-2"
+                                style="width: 35px; height: 35px; font-size: 1rem;">
                                 <i class="fa-solid fa-tags"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.cogs')) }}</p>
                         </div>
                         <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
-                            {{ number_format($summary['cogs'], 0, ',', '.') }}</h5>
+                            {{ number_format($summary['cogs'], 0, ',', '.') }}
+                        </h5>
                     </div>
                 </div>
             </div>
 
             <!-- Operating Expenses -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm border-0"
-                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid #ca8a04 !important;">
+                <div class="card h-100 shadow-sm accent-gold">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="p-2 rounded-3 me-2" style="background: #fef9c3; color: #a16207;">
+                            <div class="icon-box-premium bg-gold-soft me-2"
+                                style="width: 35px; height: 35px; font-size: 1rem;">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.operational_expenses')) }}
                             </p>
                         </div>
                         <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
-                            {{ number_format($summary['total_expenses'], 0, ',', '.') }}</h5>
+                            {{ number_format($summary['total_expenses'], 0, ',', '.') }}
+                        </h5>
                     </div>
                 </div>
             </div>
 
             <!-- Stock Procurement -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm border-0"
-                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid #7e22ce !important;">
+                <div class="card h-100 shadow-sm accent-purple">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="p-2 rounded-3 me-2" style="background: #f3e8ff; color: #7e22ce;">
+                            <div class="icon-box-premium bg-purple-soft me-2"
+                                style="width: 35px; height: 35px; font-size: 1rem;">
                                 <i class="fa-solid fa-truck-ramp-box"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.stock_procurement')) }}</p>
                         </div>
                         <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
-                            {{ number_format($summary['total_procurement'], 0, ',', '.') }}</h5>
+                            {{ number_format($summary['total_procurement'], 0, ',', '.') }}
+                        </h5>
                     </div>
                 </div>
             </div>
 
             <!-- Net Profit -->
             <div class="col-md-3 col-sm-12">
-                <div class="card h-100 shadow-sm border-0"
-                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }} !important;">
+                <div class="card h-100 shadow-sm {{ $summary['net_profit'] >= 0 ? 'accent-success' : 'accent-danger' }}">
                     <div class="card-body p-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -129,9 +132,9 @@
                                     Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
                                 </h4>
                             </div>
-                            <div class="p-2 rounded-4"
-                                style="background: {{ $summary['net_profit'] >= 0 ? '#f0fdf4' : '#fef2f2' }}; color: {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }};">
-                                <i class="fa-solid fa-wallet fa-lg"></i>
+                            <div class="icon-box-premium {{ $summary['net_profit'] >= 0 ? 'bg-success-soft' : 'bg-danger-soft' }}"
+                                style="width: 45px; height: 45px; font-size: 1.2rem;">
+                                <i class="fa-solid fa-wallet"></i>
                             </div>
                         </div>
                     </div>
@@ -142,7 +145,7 @@
         <div class="row g-4 mb-4">
             <!-- Profit Margin & Returns -->
             <div class="col-md-4">
-                <div class="card shadow-sm border-0 h-100" style="border-radius: 15px;">
+                <div class="card shadow-sm h-100">
                     <div class="card-body">
                         <h6 class="fw-bold mb-4" style="color: #6f5849;">{{ __('admin.quick_info') }}</h6>
 
@@ -188,8 +191,8 @@
 
             <!-- Trend Chart -->
             <div class="col-md-8">
-                <div class="card shadow-sm border-0 h-100" style="border-radius: 15px;">
-                    <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
                         <h6 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.financial_trend') }}</h6>
                         <div id="chart-controls" class="btn-group btn-group-sm">
                             <!-- Toggle buttons will be injected or managed via CSS/JS -->
@@ -205,15 +208,15 @@
         </div>
 
         <!-- Detailed Daily Data -->
-        <div class="card shadow-sm border-0" id="daily-profit-section" style="border-radius: 15px;">
-            <div class="card-header bg-white border-0 pt-4 px-4">
+        <div class="card shadow-sm" id="daily-profit-section">
+            <div class="card-header border-0 pt-4 px-4">
                 <h6 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.daily_profit') }}</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead>
-                            <tr class="table-earth">
+                            <tr style="background: #fdf8f6;">
                                 <th>{{ __('admin.date') }}</th>
                                 <th class="text-end">{{ __('admin.gross_revenue') }}</th>
                                 <th class="text-end">{{ __('admin.cogs') }}</th>
@@ -517,14 +520,14 @@
                 btn.style.backgroundColor = dataset.borderColor;
                 btn.style.fontWeight = '600';
                 btn.style.transition = 'all 0.2s';
-                
+
                 btn.innerHTML = `<i class="fa-solid fa-eye me-1"></i> ${dataset.label}`;
-                
+
                 btn.onclick = () => {
                     const meta = chart.getDatasetMeta(i);
                     meta.hidden = meta.hidden === null ? !chart.data.datasets[i].hidden : null;
                     chart.update();
-                    
+
                     if (meta.hidden) {
                         btn.style.backgroundColor = 'transparent';
                         btn.style.color = dataset.borderColor;

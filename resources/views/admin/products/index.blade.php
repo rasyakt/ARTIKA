@@ -30,10 +30,7 @@
 
 		.card-table {
 			border-radius: 16px;
-			border: 1px solid #f2e8e5 !important;
 			overflow: hidden;
-			background: #fff;
-			box-shadow: 0 1px 3px rgba(133, 105, 90, 0.1) !important;
 		}
 
 		.product-badge {
@@ -100,7 +97,7 @@
 				</form>
 
 				<a href="{{ route('admin.products.create') }}" class="btn btn-primary shadow-sm"
-					style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); border:none; border-radius:12px; padding:0.6rem 1rem;">
+					style="background: #6f5849; border:none; border-radius:12px; padding:0.6rem 1rem;">
 					<i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_product') }}
 				</a>
 			</div>
@@ -111,7 +108,7 @@
 			<div class="card-body p-0">
 				<div class="table-responsive">
 					<table class="table table-hover align-middle mb-0">
-						<thead style="background: var(--color-primary-light);">
+						<thead style="background: #f2e8e5;">
 							<tr>
 								<th class="ps-4 border-0 fw-semibold" style="color:var(--color-primary-dark);">
 									{{ __('common.product') }}
@@ -223,7 +220,7 @@
 			</div>
 
 			@if(method_exists($products, 'links'))
-				<div class="card-footer bg-white border-0 d-flex justify-content-end">
+				<div class="card-footer border-0 d-flex justify-content-end">
 					{{ $products->links('vendor.pagination.no-prevnext') }}
 				</div>
 			@endif

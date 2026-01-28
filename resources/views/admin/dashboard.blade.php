@@ -107,8 +107,8 @@
         <div class="row g-4 mb-4">
             <!-- Sales Chart -->
             <div class="col-md-8">
-                <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-                    <div class="card-header bg-white"
+                <div class="card shadow-sm h-100">
+                    <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-chart-line me-2"></i>{{ __('common.sales_overview') }}</h5>
@@ -132,8 +132,8 @@
 
             <!-- Top Products -->
             <div class="col-md-4">
-                <div class="card shadow-sm" style="border-radius: 16px; border: none; height: 100%;">
-                    <div class="card-header bg-white"
+                <div class="card shadow-sm h-100">
+                    <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-trophy me-2"></i>{{ __('common.top_products') }}</h5>
                     </div>
@@ -172,8 +172,8 @@
         <div class="row g-4">
             <!-- Recent Transactions -->
             <div class="col-md-7">
-                <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-                    <div class="card-header bg-white"
+                <div class="card shadow-sm">
+                    <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-receipt me-2"></i>{{ __('common.recent_transactions') }}</h5>
                     </div>
@@ -215,8 +215,8 @@
 
             <!-- Low Stock Alerts -->
             <div class="col-md-5">
-                <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-                    <div class="card-header bg-white"
+                <div class="card shadow-sm">
+                    <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-triangle-exclamation me-2"></i>{{ __('common.low_stock_alerts') }}</h5>
                     </div>

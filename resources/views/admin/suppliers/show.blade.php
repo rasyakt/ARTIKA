@@ -29,7 +29,7 @@
         <div class="row g-4">
             <!-- Supplier Info Card -->
             <div class="col-md-4">
-                <div class="card shadow-sm border-0 h-100" style="border-radius: 16px;">
+                <div class="card shadow-sm h-100">
                     <div class="card-body p-4">
                         <h5 class="fw-bold mb-4" style="color: #6f5849;">{{ __('admin.supplier_info') }}</h5>
                         
@@ -65,7 +65,7 @@
             <div class="col-md-8">
                 <div class="row g-3 h-100">
                     <div class="col-sm-6">
-                        <div class="card shadow-sm border-0 h-100" style="border-radius: 16px; background: linear-gradient(135deg, #fdf8f6 0%, #fff 100%);">
+                        <div class="card shadow-sm ">
                             <div class="card-body p-4 d-flex align-items-center">
                                 <div class="bg-white shadow-sm rounded-circle p-3 me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; color: #85695a;">
                                     <i class="fa-solid fa-clipboard-list fa-lg"></i>
@@ -78,7 +78,7 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <div class="card shadow-sm border-0 h-100" style="border-radius: 16px; background: linear-gradient(135deg, #fdf8f6 0%, #fff 100%);">
+                        <div class="card shadow-sm h-100">
                             <div class="card-body p-4 d-flex align-items-center">
                                 <div class="bg-white shadow-sm rounded-circle p-3 me-3" style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; color: #85695a;">
                                     <i class="fa-solid fa-money-bill-transfer fa-lg"></i>
@@ -95,8 +95,8 @@
 
             <!-- Purchase History -->
             <div class="col-12 mb-4">
-                <div class="card shadow-sm border-0" style="border-radius: 16px;">
-                    <div class="card-header bg-white border-0 py-4 px-4">
+                <div class="card shadow-sm">
+                    <div class="card-header border-0 py-4 px-4">
                         <h5 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.purchase_history') }}</h5>
                     </div>
                     <div class="card-body p-0">
@@ -156,7 +156,7 @@
                         @endif
                     </div>
                     @if($purchases->hasPages())
-                        <div class="card-footer bg-white border-0 d-flex justify-content-end py-3 px-4">
+                        <div class="card-footer border-0 d-flex justify-content-end py-3 px-4">
                             {{ $purchases->links('vendor.pagination.no-prevnext') }}
                         </div>
                     @endif
@@ -165,8 +165,8 @@
 
             <!-- Sales Performance Section -->
             <div class="col-12">
-                <div class="card shadow-sm border-0" style="border-radius: 16px;">
-                    <div class="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
+                <div class="card shadow-sm">
+                    <div class="card-header border-0 py-4 px-4 d-flex justify-content-between align-items-center">
                         <h5 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.sales_performance') }}</h5>
                         <div class="badge" style="background: #fdf8f6; color: #85695a; border: 1px solid #f2e8e5;">
                             {{ __('admin.product_sales_summary') }}
@@ -383,7 +383,7 @@
 
     <style>
         .btn-brown {
-            background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);
+            background: #6f5849;
             color: white;
             border: none;
         }

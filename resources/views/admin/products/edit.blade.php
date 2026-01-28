@@ -15,7 +15,7 @@
                 </div>
 
                 <!-- Form Card -->
-                <div class="card shadow-sm" style="border-radius: 16px; border: none;">
+                <div class="card shadow-sm">
                     <div class="card-body p-4">
                         <form action="{{ route('admin.products.update', $product->id) }}" method="POST">
                             @csrf
@@ -132,7 +132,7 @@
                                     {{ __('common.cancel') }}
                                 </a>
                                 <button type="submit" class="btn btn-primary shadow-sm"
-                                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600;">
+                                    style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600;">
                                     <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.update') }}
                                     {{ __('common.product') }}
                                 </button>
