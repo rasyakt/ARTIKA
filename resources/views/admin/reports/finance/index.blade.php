@@ -46,66 +46,93 @@
         </div>
 
         <!-- Financial KPI Cards -->
-        <div class="row g-4 mb-4">
+        <div class="row g-3 mb-4">
             <!-- Gross Revenue -->
-            <div class="col-md-2 col-sm-4">
+            <div class="col-md col-sm-6">
                 <div class="card h-100 shadow-sm border-0"
-                    style="background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%); border-radius: 15px;">
-                    <div class="card-body text-white p-3">
-                        <div class="stats-icon-small mb-2"><i class="fa-solid fa-money-bill-trend-up"></i></div>
-                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.gross_revenue')) }}</p>
-                        <h5 class="fw-bold mb-0">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</h5>
+                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid #6f5849 !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="p-2 rounded-3 me-2" style="background: #fdf8f6; color: #6f5849;">
+                                <i class="fa-solid fa-money-bill-trend-up"></i>
+                            </div>
+                            <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.gross_revenue')) }}</p>
+                        </div>
+                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                            {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</h5>
                     </div>
                 </div>
             </div>
 
             <!-- Total Cost (COGS) -->
-            <div class="col-md-2 col-sm-4">
+            <div class="col-md col-sm-6">
                 <div class="card h-100 shadow-sm border-0"
-                    style="background: linear-gradient(135deg, #c17a5c 0%, #a18072 100%); border-radius: 15px;">
-                    <div class="card-body text-white p-3">
-                        <div class="stats-icon-small mb-2"><i class="fa-solid fa-tags"></i></div>
-                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.cogs')) }}</p>
-                        <h5 class="fw-bold mb-0">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</h5>
+                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid #c17a5c !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="p-2 rounded-3 me-2" style="background: #fff5f2; color: #c17a5c;">
+                                <i class="fa-solid fa-tags"></i>
+                            </div>
+                            <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.cogs')) }}</p>
+                        </div>
+                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                            {{ number_format($summary['cogs'], 0, ',', '.') }}</h5>
                     </div>
                 </div>
             </div>
 
             <!-- Operating Expenses -->
-            <div class="col-md-2 col-sm-4">
+            <div class="col-md col-sm-6">
                 <div class="card h-100 shadow-sm border-0"
-                    style="background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%); border-radius: 15px;">
-                    <div class="card-body text-white p-3">
-                        <div class="stats-icon-small mb-2"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.operational_expenses')) }}</p>
-                        <h5 class="fw-bold mb-0">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</h5>
+                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid #ca8a04 !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="p-2 rounded-3 me-2" style="background: #fef9c3; color: #a16207;">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                            </div>
+                            <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.operational_expenses')) }}
+                            </p>
+                        </div>
+                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                            {{ number_format($summary['total_expenses'], 0, ',', '.') }}</h5>
                     </div>
                 </div>
             </div>
 
             <!-- Stock Procurement -->
-            <div class="col-md-2 col-sm-6">
+            <div class="col-md col-sm-6">
                 <div class="card h-100 shadow-sm border-0"
-                    style="background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%); border-radius: 15px;">
-                    <div class="card-body text-white p-3">
-                        <div class="stats-icon-small mb-2"><i class="fa-solid fa-truck-ramp-box"></i></div>
-                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.stock_procurement')) }}</p>
-                        <h5 class="fw-bold mb-0">Rp {{ number_format($summary['total_procurement'], 0, ',', '.') }}</h5>
+                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid #7e22ce !important;">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="p-2 rounded-3 me-2" style="background: #f3e8ff; color: #7e22ce;">
+                                <i class="fa-solid fa-truck-ramp-box"></i>
+                            </div>
+                            <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.stock_procurement')) }}</p>
+                        </div>
+                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                            {{ number_format($summary['total_procurement'], 0, ',', '.') }}</h5>
                     </div>
                 </div>
             </div>
 
             <!-- Net Profit -->
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-3 col-sm-12">
                 <div class="card h-100 shadow-sm border-0"
-                    style="background: linear-gradient(135deg, {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }} 0%, {{ $summary['net_profit'] >= 0 ? '#15803d' : '#991b1b' }} 100%); border-radius: 15px;">
-                    <div class="card-body text-white p-3">
+                    style="border-radius: 16px; background: #fff; border: 1px solid #f2e8e5 !important; border-left: 5px solid {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }} !important;">
+                    <div class="card-body p-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.net_profit')) }}</p>
-                                <h4 class="fw-bold mb-0">Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}</h4>
+                                <p class="text-muted small mb-1 fw-semibold">{{ strtoupper(__('admin.net_profit')) }}</p>
+                                <h4 class="fw-bold mb-0"
+                                    style="color: {{ $summary['net_profit'] >= 0 ? '#15803d' : '#991b1b' }}; font-size: 1.3rem;">
+                                    Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
+                                </h4>
                             </div>
-                            <div class="stats-icon-small"><i class="fa-solid fa-wallet"></i></div>
+                            <div class="p-2 rounded-4"
+                                style="background: {{ $summary['net_profit'] >= 0 ? '#f0fdf4' : '#fef2f2' }}; color: {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }};">
+                                <i class="fa-solid fa-wallet fa-lg"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -162,11 +189,16 @@
             <!-- Trend Chart -->
             <div class="col-md-8">
                 <div class="card shadow-sm border-0 h-100" style="border-radius: 15px;">
-                    <div class="card-header bg-white border-0 pt-4 px-4">
+                    <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
                         <h6 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.financial_trend') }}</h6>
+                        <div id="chart-controls" class="btn-group btn-group-sm">
+                            <!-- Toggle buttons will be injected or managed via CSS/JS -->
+                        </div>
                     </div>
                     <div class="card-body px-4">
-                        <canvas id="financeChart" height="250"></canvas>
+                        <div style="height: 300px;">
+                            <canvas id="financeChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -372,7 +404,7 @@
             const profitData = dailyData.map(d => d.profit);
 
             const ctx = document.getElementById('financeChart').getContext('2d');
-            new Chart(ctx, {
+            const chart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
@@ -435,12 +467,7 @@
                     },
                     plugins: {
                         legend: {
-                            position: 'top',
-                            labels: {
-                                usePointStyle: true,
-                                padding: 20,
-                                font: { size: 12, family: 'Inter' }
-                            }
+                            display: false // Hide default legend to use custom buttons
                         },
                         tooltip: {
                             padding: 12,
@@ -474,6 +501,41 @@
                         }
                     }
                 }
+            });
+
+            // Handle custom legend / toggle buttons
+            const controls = document.getElementById('chart-controls');
+            chart.data.datasets.forEach((dataset, i) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'btn btn-sm py-1 px-2';
+                btn.style.fontSize = '0.75rem';
+                btn.style.borderRadius = '8px';
+                btn.style.margin = '2px';
+                btn.style.border = `1px solid ${dataset.borderColor}`;
+                btn.style.color = 'white';
+                btn.style.backgroundColor = dataset.borderColor;
+                btn.style.fontWeight = '600';
+                btn.style.transition = 'all 0.2s';
+                
+                btn.innerHTML = `<i class="fa-solid fa-eye me-1"></i> ${dataset.label}`;
+                
+                btn.onclick = () => {
+                    const meta = chart.getDatasetMeta(i);
+                    meta.hidden = meta.hidden === null ? !chart.data.datasets[i].hidden : null;
+                    chart.update();
+                    
+                    if (meta.hidden) {
+                        btn.style.backgroundColor = 'transparent';
+                        btn.style.color = dataset.borderColor;
+                        btn.innerHTML = `<i class="fa-solid fa-eye-slash me-1"></i> ${dataset.label}`;
+                    } else {
+                        btn.style.backgroundColor = dataset.borderColor;
+                        btn.style.color = 'white';
+                        btn.innerHTML = `<i class="fa-solid fa-eye me-1"></i> ${dataset.label}`;
+                    }
+                };
+                controls.appendChild(btn);
             });
         });
     </script>
