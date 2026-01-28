@@ -30,8 +30,10 @@
 
 		.card-table {
 			border-radius: 16px;
-			border: none;
+			border: 1px solid #f2e8e5 !important;
 			overflow: hidden;
+			background: #fff;
+			box-shadow: 0 1px 3px rgba(133, 105, 90, 0.1) !important;
 		}
 
 		.product-badge {

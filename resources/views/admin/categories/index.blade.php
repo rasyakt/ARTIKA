@@ -15,7 +15,7 @@
 
 
         <!-- Categories Table -->
-        <div class="card shadow-sm" style="border-radius: 12px; border: none;">
+        <div class="card shadow-sm">
             <div class="card-body p-0">
                 @if($categories->count() > 0)
                     <div class="table-responsive">

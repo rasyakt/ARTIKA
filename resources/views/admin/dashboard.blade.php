@@ -2,28 +2,6 @@
 
 @section('content')
     <style>
-        .stats-card {
-            border-radius: 16px;
-            border: none;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(133, 105, 90, 0.15) !important;
-        }
-
-        .stats-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-        }
-
         .chart-container {
             position: relative;
             height: 350px;
@@ -50,17 +28,16 @@
         <div class="row g-4 mb-4">
             <!-- Total Sales -->
             <div class="col-md-3">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm accent-brown">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.total_sales') }}</p>
-                                <h3 class="fw-bold mb-0">Rp {{ number_format($totalSales, 0, ',', '.') }}</h3>
-                                <small class="opacity-75">{{ __('common.this_month') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($totalSales, 0, ',', '.') }}</h3>
+                                <small class="text-muted">{{ __('common.this_month') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-money-bill-wave"></i>
                             </div>
                         </div>
@@ -70,17 +47,16 @@
 
             <!-- Total Transactions -->
             <div class="col-md-3">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm accent-success">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.transactions') }}</p>
-                                <h3 class="fw-bold mb-0">{{ number_format($totalTransactions) }}</h3>
-                                <small class="opacity-75">{{ __('common.completed') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($totalTransactions) }}</h3>
+                                <small class="text-muted">{{ __('common.completed') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-success-soft">
                                 <i class="fa-solid fa-chart-pie"></i>
                             </div>
                         </div>
@@ -90,17 +66,16 @@
 
             <!-- Total Products -->
             <div class="col-md-3">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #c17a5c 0%, #a18072 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm accent-sienna">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.products') }}</p>
-                                <h3 class="fw-bold mb-0">{{ $totalProducts }}</h3>
-                                <small class="opacity-75">{{ __('common.in_catalog') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalProducts }}</h3>
+                                <small class="text-muted">{{ __('common.in_catalog') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-sienna-soft">
                                 <i class="fa-solid fa-box"></i>
                             </div>
                         </div>
@@ -110,17 +85,16 @@
 
             <!-- Total Suppliers -->
             <div class="col-md-3">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #0284c7 0%, #075985 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm accent-info">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.suppliers') }}</p>
-                                <h3 class="fw-bold mb-0">{{ $totalSuppliers ?? $totalCustomers ?? 0 }}</h3>
-                                <small class="opacity-75">{{ __('common.registered_suppliers') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalSuppliers ?? $totalCustomers ?? 0 }}</h3>
+                                <small class="text-muted">{{ __('common.registered_suppliers') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-info-soft">
                                 <i class="fa-solid fa-truck"></i>
                             </div>
                         </div>

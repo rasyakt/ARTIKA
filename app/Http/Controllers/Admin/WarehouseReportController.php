@@ -48,11 +48,17 @@ class WarehouseReportController extends Controller
             $endDate = Carbon::parse($endDate);
         }
 
-        $summary = $this->warehouseReportService->getSummaryStats($startDate, $endDate);
-        $movements = $this->warehouseReportService->getStockMovements($startDate, $endDate, null, 10, 'movements_page');
-        $lowStockItems = $this->warehouseReportService->getLowStockItems(10, 'low_stock_page');
-        $topMovers = $this->warehouseReportService->getTopMovingItems($startDate, $endDate);
+        $filters = $request->only(['search', 'category_id', 'stock_status']);
+
+        $summary = $this->warehouseReportService->getSummaryStats($startDate, $endDate, $filters);
+        $movements = $this->warehouseReportService->getStockMovements($startDate, $endDate, null, 10, 'movements_page', $filters);
+        $lowStockItems = $this->warehouseReportService->getLowStockItems(10, 'low_stock_page', $filters);
+        $topMovers = $this->warehouseReportService->getTopMovingItems($startDate, $endDate, 5, $filters);
         $auditLogs = $this->warehouseReportService->getWarehouseAuditLogs($startDate, $endDate, 10, 'audit_page');
+        $categories = \App\Models\Category::orderBy('name')->get();
+        $categoryId = $request->input('category_id');
+        $stockStatus = $request->input('stock_status');
+        $search = $request->input('search');
 
         return view('admin.reports.warehouse.index', compact(
             'summary',
@@ -62,7 +68,11 @@ class WarehouseReportController extends Controller
             'auditLogs',
             'startDate',
             'endDate',
-            'period'
+            'period',
+            'categories',
+            'categoryId',
+            'stockStatus',
+            'search'
         ));
     }
 

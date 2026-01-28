@@ -2,36 +2,14 @@
 
 @section('content')
     <style>
-        .stats-card {
-                border-radius: 16px;
-                border: none;
-                overflow: hidden;
-                transition: all 0.3s;
-            }
+        .table-hover tbody tr:hover {
+            background-color: #fdf8f6;
+        }
 
-            .stats-card:hover {
-                transform: translateY(-4px);
-                box-shadow: 0 12px 24px rgba(133, 105, 90, 0.15) !important;
-            }
-
-            .stats-icon {
-                width: 60px;
-                height: 60px;
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.75rem;
-            }
-
-            .table-hover tbody tr:hover {
-                background-color: #fdf8f6;
-            }
-
-            html {
-                scroll-behavior: auto !important;
-            }
-        </style>
+        html {
+            scroll-behavior: auto !important;
+        }
+    </style>
 
         <div class="container-fluid py-4">
             <!-- Header -->
@@ -62,40 +40,85 @@
             </div>
 
             <!-- Filters -->
-            <div class="card shadow-sm mb-4"
-                style="border-radius: 16px; border: none; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);">
+            <div class="card shadow-sm mb-4" style="border: 1px solid #f2e8e5 !important;">
                 <div class="card-body p-4">
                     <form action="{{ route('admin.reports.warehouse') }}" method="GET" class="row g-3 align-items-end">
-                        <div class="col-lg-3 col-md-6">
-                            <label for="period" class="form-label text-white fw-semibold">
-                                <i class="fa-solid fa-calendar me-1"></i> {{ __('admin.quick_period') }}
+                        <!-- Date Row -->
+                        <div class="col-lg-2 col-md-4">
+                            <label for="period" class="form-label text-dark fw-semibold">
+                                <i class="fa-solid fa-calendar me-1" style="color: #c17a5c;"></i> {{ __('admin.quick_period') }}
                             </label>
                             <select name="period" id="period" class="form-select" onchange="this.form.submit()">
                                 <option value="today" {{ $period == 'today' ? 'selected' : '' }}>{{ __('admin.today') }}</option>
-                                <option value="week" {{ $period == 'week' ? 'selected' : '' }}>{{ __('admin.this_week') }}
-                                </option>
-                                <option value="month" {{ $period == 'month' ? 'selected' : '' }}>{{ __('admin.this_month') }}
-                                </option>
-                                <option value="year" {{ $period == 'year' ? 'selected' : '' }}>{{ __('admin.this_year') }}
-                                </option>
+                                <option value="week" {{ $period == 'week' ? 'selected' : '' }}>{{ __('admin.this_week') }}</option>
+                                <option value="month" {{ $period == 'month' ? 'selected' : '' }}>{{ __('admin.this_month') }}</option>
+                                <option value="year" {{ $period == 'year' ? 'selected' : '' }}>{{ __('admin.this_year') }}</option>
                             </select>
                         </div>
-                        <div class="col-lg-3 col-md-6">
-                            <label for="start_date" class="form-label text-white fw-semibold">
-                                <i class="fa-solid fa-calendar-days me-1"></i> {{ __('admin.start_date') }}
+                        <div class="col-lg-2 col-md-4">
+                            <label for="start_date" class="form-label text-dark fw-semibold">
+                                <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.start_date') }}
                             </label>
                             <input type="date" class="form-select" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                         </div>
-                        <div class="col-lg-3 col-md-6">
-                            <label for="end_date" class="form-label text-white fw-semibold">
-                                <i class="fa-solid fa-calendar-days me-1"></i> {{ __('admin.end_date') }}
+                        <div class="col-lg-2 col-md-4">
+                            <label for="end_date" class="form-label text-dark fw-semibold">
+                                <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.end_date') }}
                             </label>
                             <input type="date" class="form-select" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
                         </div>
-                        <div class="col-lg-3 col-md-6">
-                            <button type="submit" class="btn btn-light w-100 fw-bold" style="border-radius: 8px; padding: 0.6rem;">
+
+                        <!-- Info Row -->
+                        <div class="col-lg-2 col-md-4">
+                            <label for="category_id" class="form-label text-dark fw-semibold">
+                                <i class="fa-solid fa-list me-1" style="color: #c17a5c;"></i> {{ __('common.category') }}
+                            </label>
+                            <select name="category_id" id="category_id" class="form-select">
+                                <option value="">-- {{ __('admin.all_categories') }} --</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}"
+                                        {{ $categoryId == $category->id ? 'selected' : '' }}>
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4">
+                            <label for="stock_status" class="form-label text-dark fw-semibold">
+                                <i class="fa-solid fa-layer-group me-1" style="color: #c17a5c;"></i> {{ __('admin.stock_status') }}
+                            </label>
+                            <select name="stock_status" id="stock_status" class="form-select">
+                                <option value="">-- {{ __('admin.all_status') }} --</option>
+                                <option value="low" {{ $stockStatus == 'low' ? 'selected' : '' }}>
+                                    {{ __('admin.low_stock') }}</option>
+                                <option value="out" {{ $stockStatus == 'out' ? 'selected' : '' }}>
+                                    {{ __('admin.out_of_stock') }}</option>
+                                <option value="available" {{ $stockStatus == 'available' ? 'selected' : '' }}>
+                                    {{ __('admin.available') }}</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 col-md-4 d-flex gap-2">
+                            <button type="submit" class="btn btn-brown flex-grow-1 fw-bold"
+                                style="border-radius: 8px; padding: 0.6rem;">
                                 <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                             </button>
+                            @if ($categoryId || $stockStatus || $search || request('start_date'))
+                                <a href="{{ route('admin.reports.warehouse') }}" class="btn btn-outline-brown"
+                                    style="border-radius: 8px; padding: 0.6rem;">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </a>
+                            @endif
+                        </div>
+
+                        <!-- Search Row -->
+                        <div class="col-12 mt-3">
+                            <div class="input-group shadow-sm" style="border-radius: 10px; overflow: hidden; border: 1px solid #e0cec7;">
+                                <span class="input-group-text bg-white border-0">
+                                    <i class="fa-solid fa-magnifying-glass" style="color: #c17a5c;"></i>
+                                </span>
+                                <input type="text" name="search" class="form-control border-0"
+                                    placeholder="{{ __('admin.search_placeholder') }}" value="{{ $search }}">
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -104,20 +127,19 @@
             <!-- Summary Cards -->
             <div class="row g-4 mb-4">
                 <div class="col-md-3">
-                    <div class="card stats-card shadow-sm"
-                        style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);">
-                        <div class="card-body text-white">
+                    <div class="card shadow-sm accent-brown">
+                        <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1 me-3">
-                                    <p class="mb-2 opacity-75 text-uppercase"
+                                    <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.total_valuation') }}</p>
-                                    <h4 class="fw-bold mb-0" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <h4 class="fw-bold mb-0" style="color: #4b382f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         Rp {{ number_format($summary['total_valuation'], 0, ',', '.') }}
                                     </h4>
-                                    <small class="opacity-75">{{ __('admin.based_on_cost') }}</small>
+                                    <small class="text-muted">{{ __('admin.based_on_cost') }}</small>
                                 </div>
-                                <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                                <div class="icon-box-premium bg-brown-soft">
                                     <i class="fa-solid fa-money-bill-wave"></i>
                                 </div>
                             </div>
@@ -126,18 +148,17 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card stats-card shadow-sm"
-                        style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);">
-                        <div class="card-body text-white">
+                    <div class="card shadow-sm accent-success">
+                        <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1 me-3">
-                                    <p class="mb-2 opacity-75 text-uppercase"
+                                    <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.total_items') }}</p>
-                                    <h4 class="fw-bold mb-0">{{ number_format($summary['total_items']) }}</h4>
-                                    <small class="opacity-75">{{ __('admin.units_in_stock') }}</small>
+                                    <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['total_items']) }}</h4>
+                                    <small class="text-muted">{{ __('admin.units_in_stock') }}</small>
                                 </div>
-                                <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                                <div class="icon-box-premium bg-success-soft">
                                     <i class="fa-solid fa-box"></i>
                                 </div>
                             </div>
@@ -146,19 +167,18 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card stats-card shadow-sm"
-                        style="background: linear-gradient(135deg, #c17a5c 0%, #a18072 100%);">
-                        <div class="card-body text-white">
+                    <div class="card shadow-sm accent-danger">
+                        <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1 me-3">
-                                    <p class="mb-2 opacity-75 text-uppercase"
+                                    <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.low_stock_alerts') }}
                                     </p>
-                                    <h4 class="fw-bold mb-0">{{ number_format($summary['low_stock_count']) }}</h4>
-                                    <small class="opacity-75">{{ __('admin.items_need_restocking') }}</small>
+                                    <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['low_stock_count']) }}</h4>
+                                    <small class="text-muted">{{ __('admin.items_need_restocking') }}</small>
                                 </div>
-                                <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                                <div class="icon-box-premium bg-danger-soft">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                 </div>
                             </div>
@@ -167,29 +187,28 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card stats-card shadow-sm"
-                        style="background: linear-gradient(135deg, #0284c7 0%, #075985 100%);">
-                        <div class="card-body text-white">
+                    <div class="card shadow-sm accent-info">
+                        <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
-                                    <p class="mb-2 opacity-75 text-uppercase"
+                                    <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.movements') }}</p>
                                     <div class="mt-2">
-                                        <span class="badge" style="background: rgba(255, 255, 255, 0.2); padding: 6px 10px;">
+                                        <span class="badge" style="background: var(--color-primary-light); color: white; padding: 6px 10px;">
                                             <i class="fa-solid fa-arrow-down me-1"></i> {{ $summary['movements_in'] }} IN
                                         </span>
                                         <span class="badge ms-2"
-                                            style="background: rgba(255, 255, 255, 0.2); padding: 6px 10px;">
+                                            style="background: var(--color-primary-light); color: white; padding: 6px 10px;">
                                             <i class="fa-solid fa-arrow-up me-1"></i> {{ $summary['movements_out'] }} OUT
                                         </span>
                                         <span class="badge ms-2"
-                                            style="background: rgba(255, 255, 255, 0.2); padding: 6px 10px;">
+                                            style="background: var(--color-primary-light); color: white; padding: 6px 10px;">
                                             <i class="fa-solid fa-gear me-1"></i> {{ $summary['movements_adjustment'] }} ADJ
                                         </span>
                                     </div>
                                 </div>
-                                <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                                <div class="icon-box-premium bg-info-soft">
                                     <i class="fa-solid fa-arrows-rotate"></i>
                                 </div>
                             </div>
