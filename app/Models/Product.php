@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -42,6 +43,14 @@ class Product extends Model
     }
 
     /**
+     * Get the first stock record (singular)
+     */
+    public function stock(): HasOne
+    {
+        return $this->hasOne(Stock::class);
+    }
+
+    /**
      * Get total stock
      */
     public function getTotalStockAttribute()
@@ -57,6 +66,13 @@ class Product extends Model
         if ($this->cost_price == 0)
             return 0;
         return (($this->price - $this->cost_price) / $this->cost_price) * 100;
+    }
+    /**
+     * Get all purchases from suppliers for this product
+     */
+    public function supplierPurchases(): HasMany
+    {
+        return $this->hasMany(SupplierPurchase::class);
     }
 }
 

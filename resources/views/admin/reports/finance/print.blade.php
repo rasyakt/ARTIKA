@@ -1,302 +1,211 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('admin.finance_report') }} - {{ $startDate->format('d/m/Y') }}</title>
-    <!-- Fonts & Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="utf-8">
+    <title>{{ __('admin.finance_report') }} - ARTIKA</title>
     <style>
-        @page {
-            margin: 15mm;
-            size: A4;
-        }
-
         body {
-            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            font-family: 'Helvetica', sans-serif;
             color: #333;
-            line-height: 1.5;
+            line-height: 1.4;
+            font-size: 11px;
             margin: 0;
             padding: 20px;
-            font-size: 12px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #6f5849;
-            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #85695a;
+            padding-bottom: 10px;
         }
 
         .header h1 {
-            margin: 0;
+            font-size: 18px;
             color: #6f5849;
-            font-size: 24px;
+            margin: 0;
             text-transform: uppercase;
         }
 
         .header p {
-            margin: 5px 0 0;
+            margin: 5px 0 0 0;
+            font-size: 12px;
             color: #85695a;
+        }
+
+        .report-meta {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .report-meta td {
+            padding: 2px 0;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin: 15px 0 10px 0;
+            color: #6f5849;
+            text-transform: uppercase;
+            border-left: 4px solid #85695a;
+            padding-left: 10px;
+            background-color: #fdf8f6;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .summary-grid {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+
+        .summary-box {
+            border: 1px solid #e0cec7;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .summary-box h3 {
+            margin: 0 0 5px 0;
+            font-size: 9px;
+            color: #78716c;
+            text-transform: uppercase;
+        }
+
+        .summary-box .value {
             font-size: 14px;
-        }
-
-        .report-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            background: #fdf8f6;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid #f2e8e5;
-        }
-
-        .report-info div span {
             font-weight: bold;
             color: #6f5849;
         }
 
-        .summary-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 12px 0;
-            margin: 0 -12px 30px -12px;
-            table-layout: fixed;
-        }
-
-        .summary-table td {
-            padding: 15px;
-            border: 1px solid #f2e8e5;
-            border-radius: 8px;
-            background: white;
-            vertical-align: top;
-        }
-
-        .stat-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #85695a;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .stat-value {
-            font-size: 16px;
-            font-weight: bold;
-            color: #4b382f;
-            white-space: nowrap;
-        }
-
-
-
-        .stat-value.success {
-            color: #16a34a;
-        }
-
-        .stat-value.danger {
-            color: #dc2626;
-        }
-
-        table {
+        table.data {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
-        th {
-            background: #fdf8f6;
+        table.data th {
+            background-color: #fdf8f6;
             color: #6f5849;
             text-align: left;
-            padding: 10px;
-            border-bottom: 2px solid #f2e8e5;
+            padding: 8px;
+            border: 1px solid #f2e8e5;
             font-weight: bold;
             text-transform: uppercase;
             font-size: 10px;
         }
 
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #f2e8e5;
+        table.data td {
+            padding: 8px;
+            border: 1px solid #f2e8e5;
         }
 
-        .text-end {
+        .text-right {
             text-align: right;
         }
 
-        .footer {
-            margin-top: 50px;
+        .text-center {
             text-align: center;
-            font-size: 10px;
-            color: #85695a;
-            border-top: 1px solid #f2e8e5;
-            padding-top: 20px;
         }
 
-        .profit-pos {
-            color: #16a34a;
-            font-weight: bold;
-        }
-
-        .profit-neg {
+        .text-danger {
             color: #dc2626;
-            font-weight: bold;
         }
 
-        @media print {
-            body {
-                padding: 0;
-            }
-
-            .no-print {
-                display: none !important;
-            }
-
-            .page-break {
-                page-break-before: always;
-            }
+        .text-success {
+            color: #16a34a;
         }
 
-        /* Controls Panel */
-        .no-print-panel {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-print {
-            background-color: #6f5849;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-close {
-            background-color: #dc2626;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 9px;
+            color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
         }
     </style>
 </head>
 
 <body>
-    @if(!isset($isPdf) || !$isPdf)
-        <!-- Controls Panel -->
-        <div class="no-print-panel no-print">
-            <button onclick="window.print()" class="btn-print">
-                <i class="fa-solid fa-print"></i> {{ __('common.print') }}
-            </button>
-            <button onclick="window.close()" class="btn-close">
-                <i class="fa-solid fa-xmark"></i> {{ __('common.close') }}
-            </button>
-        </div>
-    @endif
     <div class="header">
-        <h1>ARTIKA POS</h1>
-        <p>{{ __('admin.finance_report') }}</p>
+        <h1>{{ __('admin.finance_report') }}</h1>
+        <p>ARTIKA POS SYSTEM</p>
     </div>
 
-    <div class="report-info">
-        <div>
-            <span>{{ __('admin.select_period') }}:</span> {{ $startDate->format('d M Y') }} -
-            {{ $endDate->format('d M Y') }}
-        </div>
-        <div>
-            <span>{{ __('admin.generated') }}:</span> {{ now()->format('d/m/Y H:i') }}
-        </div>
-    </div>
-
-    <table class="summary-table">
+    <table class="report-meta">
         <tr>
-            <td>
-                <div class="stat-label">{{ __('admin.gross_revenue') }}</div>
-                <div class="stat-value">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</div>
+            <td width="15%"><strong>{{ __('admin.period') }}</strong></td>
+            <td width="35%">: {{ $startDate->format('d/m/Y') }} - {{ $endDate->format('d/m/Y') }}</td>
+            <td width="15%"><strong>{{ __('admin.generated') }}</strong></td>
+            <td width="35%">: {{ now()->format('d/m/Y H:i') }}</td>
+        </tr>
+    </table>
+
+    <table class="summary-grid">
+        <tr>
+            <td class="summary-box" width="33.33%">
+                <h3>{{ __('admin.gross_revenue') }}</h3>
+                <div class="value">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</div>
             </td>
-            <td>
-                <div class="stat-label">{{ __('admin.cogs') }}</div>
-                <div class="stat-value">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</div>
+            <td class="summary-box" width="33.33%">
+                <h3>{{ __('admin.cogs') }}</h3>
+                <div class="value">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</div>
             </td>
-            <td>
-                <div class="stat-label">{{ __('admin.gross_profit') }}</div>
-                <div class="stat-value success">Rp {{ number_format($summary['gross_profit'], 0, ',', '.') }}</div>
+            <td class="summary-box" width="33.33%">
+                <h3>{{ __('admin.gross_profit') }}</h3>
+                <div class="value text-success">Rp {{ number_format($summary['gross_profit'], 0, ',', '.') }}</div>
             </td>
         </tr>
         <tr>
-            <td style="padding-top: 12px;">
-                <div class="stat-label">{{ __('admin.returns_refunds') }}</div>
-                <div class="stat-value danger">Rp {{ number_format($summary['total_returns'], 0, ',', '.') }}</div>
+            <td class="summary-box">
+                <h3>{{ __('admin.operational_expenses') }}</h3>
+                <div class="value text-danger">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</div>
             </td>
-            <td style="padding-top: 12px;">
-                <div class="stat-label">{{ __('admin.operational_expenses') }}</div>
-                <div class="stat-value danger">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</div>
+            <td class="summary-box">
+                <h3>{{ __('admin.stock_procurement') }}</h3>
+                <div class="value text-danger">Rp {{ number_format($summary['total_procurement'], 0, ',', '.') }}</div>
             </td>
-            <td style="padding-top: 12px;">
-                <div class="stat-label">{{ __('admin.net_profit') }}</div>
-                <div class="stat-value {{ $summary['net_profit'] >= 0 ? 'success' : 'danger' }}">
+            <td class="summary-box">
+                <h3>{{ __('admin.net_profit') }}</h3>
+                <div class="value {{ $summary['net_profit'] >= 0 ? 'text-success' : 'text-danger' }}">
                     Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
                 </div>
             </td>
         </tr>
-    </table>
-
-    <table class="summary-table" style="margin-top: -12px;">
         <tr>
-            <td>
-                <div class="stat-label">{{ __('admin.profit_margin') }}</div>
-                <div class="stat-value text-center">{{ number_format($summary['profit_margin'], 2) }}%</div>
+            <td class="summary-box" colspan="3">
+                <h3>{{ __('admin.profit_margin') }}</h3>
+                <div class="value">{{ number_format($summary['profit_margin'], 2) }}%</div>
             </td>
-            <td style="border: none; background: transparent;"></td>
-            <td style="border: none; background: transparent;"></td>
         </tr>
     </table>
 
-    <h3 style="color: #6f5849; margin-bottom: 15px;">{{ __('admin.daily_profit') }}</h3>
-    <table>
+    <div class="section-title">{{ __('admin.daily_profit') }}</div>
+    <table class="data">
         <thead>
             <tr>
                 <th>{{ __('admin.date') }}</th>
-                <th class="text-end">{{ __('admin.gross_revenue') }}</th>
-                <th class="text-end">{{ __('admin.cogs') }}</th>
-                <th class="text-end">{{ __('admin.operational_expenses') }}</th>
-                <th class="text-end">{{ __('admin.net_profit') }}</th>
-                <th class="text-end">{{ __('admin.profit_margin') }}</th>
+                <th class="text-right">{{ __('admin.gross_revenue') }}</th>
+                <th class="text-right">{{ __('admin.cogs') }}</th>
+                <th class="text-right">{{ __('admin.operational_expenses') }}</th>
+                <th class="text-right">{{ __('admin.stock_procurement') }}</th>
+                <th class="text-right">{{ __('admin.net_profit') }}</th>
             </tr>
         </thead>
         <tbody>
             @foreach($dailyData as $day)
                 <tr>
                     <td>{{ \Carbon\Carbon::parse($day['date'])->format('d M Y') }}</td>
-                    <td class="text-end">Rp {{ number_format($day['revenue'], 0, ',', '.') }}</td>
-                    <td class="text-end">Rp {{ number_format($day['cogs'], 0, ',', '.') }}</td>
-                    <td class="text-end">Rp {{ number_format($day['expenses'], 0, ',', '.') }}</td>
-                    <td class="text-end {{ $day['profit'] >= 0 ? 'profit-pos' : 'profit-neg' }}">
-                        Rp {{ number_format($day['profit'], 0, ',', '.') }}
-                    </td>
-                    <td class="text-end">
-                        @php $margin = $day['revenue'] > 0 ? ($day['profit'] / $day['revenue']) * 100 : 0; @endphp
-                        {{ number_format($margin, 1) }}%
+                    <td class="text-right">Rp {{ number_format($day['revenue'], 0, ',', '.') }}</td>
+                    <td class="text-right">Rp {{ number_format($day['cogs'], 0, ',', '.') }}</td>
+                    <td class="text-right">Rp {{ number_format($day['expenses'], 0, ',', '.') }}</td>
+                    <td class="text-right">Rp {{ number_format($day['procurement'], 0, ',', '.') }}</td>
+                    <td class="text-right {{ $day['profit'] >= 0 ? 'text-success' : 'text-danger' }}">
+                        <strong>Rp {{ number_format($day['profit'], 0, ',', '.') }}</strong>
                     </td>
                 </tr>
             @endforeach
@@ -304,20 +213,8 @@
     </table>
 
     <div class="footer">
-        <p>{{ __('admin.footer_generated_by') }}</p>
-        <p>{{ __('admin.computer_generated') }}</p>
-        <p>ARTIKA POS &copy; {{ date('Y') }}</p>
+        <p>Laporan ini dicetak otomatis oleh Sistem ARTIKA POS pada {{ now()->format('d/m/Y H:i:s') }}</p>
     </div>
-
-    @if(!isset($isPdf) || !$isPdf)
-        <script>
-            window.onload = function () {
-                if (window.location.search.indexOf('auto_print=true') > -1) {
-                    window.print();
-                }
-            }
-        </script>
-    @endif
 </body>
 
 </html>

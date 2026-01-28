@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Supplier;
+use App\Models\Product;
+use Illuminate\Support\Facades\DB;
+use App\Models\TransactionItem;
 
 class SupplierController extends Controller
 {
@@ -49,6 +52,44 @@ class SupplierController extends Controller
         $supplier->delete();
 
         return redirect()->route('admin.suppliers')->with('success', 'Supplier deleted successfully!');
+    }
+
+    public function show(Supplier $supplier)
+    {
+        $supplier->load(['purchases.product', 'purchases.user']);
+        $purchases = $supplier->purchases()->latest()->paginate(10);
+        $products = Product::all();
+
+        // Get sales performance and current stock for products supplied by this supplier
+        $productIds = $supplier->purchases()->distinct()->pluck('product_id');
+        $salesPerformance = TransactionItem::whereIn('product_id', $productIds)
+            ->select('product_id', DB::raw('SUM(quantity) as total_sold'), DB::raw('SUM(subtotal) as total_revenue'))
+            ->groupBy('product_id')
+            ->with(['product.stock'])
+            ->get();
+
+        return view('admin.suppliers.show', compact('supplier', 'purchases', 'products', 'salesPerformance'));
+    }
+
+    public function exportPdf(Supplier $supplier)
+    {
+        $supplier->load(['purchases.product', 'purchases.user']);
+
+        // Get sales performance and current stock for products supplied by this supplier
+        $productIds = $supplier->purchases()->distinct()->pluck('product_id');
+        $salesPerformance = TransactionItem::whereIn('product_id', $productIds)
+            ->select('product_id', DB::raw('SUM(quantity) as total_sold'), DB::raw('SUM(subtotal) as total_revenue'))
+            ->groupBy('product_id')
+            ->with(['product.stock'])
+            ->get();
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('admin.suppliers.report', [
+            'supplier' => $supplier,
+            'purchases' => $supplier->purchases()->orderBy('purchase_date', 'desc')->get(),
+            'salesPerformance' => $salesPerformance
+        ]);
+
+        return $pdf->download('Supplier_Report_' . $supplier->name . '_' . date('Ymd') . '.pdf');
     }
 
     public function search(Request $request)

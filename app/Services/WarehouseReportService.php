@@ -14,16 +14,17 @@ class WarehouseReportService
     /**
      * Get audit logs related to warehouse operations (Products, Stocks, Suppliers, Categories).
      */
-    public function getWarehouseAuditLogs($startDate = null, $endDate = null)
+    public function getWarehouseAuditLogs($startDate = null, $endDate = null, $perPage = null, $pageName = 'page')
     {
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
 
-        return AuditLog::with('user')
+        $query = AuditLog::with('user')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->whereIn('model_type', ['Product', 'Stock', 'StockMovement', 'Category', 'Supplier'])
-            ->latest()
-            ->get();
+            ->latest();
+
+        return $perPage ? $query->paginate($perPage, ['*'], $pageName) : $query->get();
     }
     /**
      * Get summary statistics for a given date range.
@@ -64,7 +65,7 @@ class WarehouseReportService
     /**
      * Get stock movements filtered by date range.
      */
-    public function getStockMovements($startDate = null, $endDate = null, $type = null)
+    public function getStockMovements($startDate = null, $endDate = null, $type = null, $perPage = null, $pageName = 'page')
     {
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
@@ -77,18 +78,19 @@ class WarehouseReportService
             $query->where('type', $type);
         }
 
-        return $query->get();
+        return $perPage ? $query->paginate($perPage, ['*'], $pageName) : $query->get();
     }
 
     /**
      * Get items that are below their minimum stock level.
      */
-    public function getLowStockItems()
+    public function getLowStockItems($perPage = null, $pageName = 'page')
     {
-        return Product::join('stocks', 'products.id', '=', 'stocks.product_id')
+        $query = Product::join('stocks', 'products.id', '=', 'stocks.product_id')
             ->whereColumn('stocks.quantity', '<=', 'stocks.min_stock')
-            ->select('products.*', 'stocks.quantity as current_stock', 'stocks.min_stock')
-            ->get();
+            ->select('products.*', 'stocks.quantity as current_stock', 'stocks.min_stock');
+
+        return $perPage ? $query->paginate($perPage, ['*'], $pageName) : $query->get();
     }
 
     /**

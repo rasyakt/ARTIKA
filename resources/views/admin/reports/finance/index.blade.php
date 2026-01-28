@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        html {
+            scroll-behavior: auto !important;
+        }
+    </style>
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -43,57 +48,65 @@
         <!-- Financial KPI Cards -->
         <div class="row g-4 mb-4">
             <!-- Gross Revenue -->
-            <div class="col-md-3">
+            <div class="col-md-2 col-sm-4">
                 <div class="card h-100 shadow-sm border-0"
                     style="background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%); border-radius: 15px;">
-                    <div class="card-body text-white">
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="stats-icon-small"><i class="fa-solid fa-money-bill-trend-up"></i></div>
-                        </div>
+                    <div class="card-body text-white p-3">
+                        <div class="stats-icon-small mb-2"><i class="fa-solid fa-money-bill-trend-up"></i></div>
                         <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.gross_revenue')) }}</p>
-                        <h4 class="fw-bold mb-0">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</h4>
+                        <h5 class="fw-bold mb-0">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</h5>
                     </div>
                 </div>
             </div>
 
             <!-- Total Cost (COGS) -->
-            <div class="col-md-3">
+            <div class="col-md-2 col-sm-4">
                 <div class="card h-100 shadow-sm border-0"
                     style="background: linear-gradient(135deg, #c17a5c 0%, #a18072 100%); border-radius: 15px;">
-                    <div class="card-body text-white">
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="stats-icon-small"><i class="fa-solid fa-tags"></i></div>
-                        </div>
+                    <div class="card-body text-white p-3">
+                        <div class="stats-icon-small mb-2"><i class="fa-solid fa-tags"></i></div>
                         <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.cogs')) }}</p>
-                        <h4 class="fw-bold mb-0">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</h4>
+                        <h5 class="fw-bold mb-0">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</h5>
                     </div>
                 </div>
             </div>
 
             <!-- Operating Expenses -->
-            <div class="col-md-3">
+            <div class="col-md-2 col-sm-4">
                 <div class="card h-100 shadow-sm border-0"
                     style="background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%); border-radius: 15px;">
-                    <div class="card-body text-white">
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="stats-icon-small"><i class="fa-solid fa-file-invoice-dollar"></i></div>
-                        </div>
+                    <div class="card-body text-white p-3">
+                        <div class="stats-icon-small mb-2"><i class="fa-solid fa-file-invoice-dollar"></i></div>
                         <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.operational_expenses')) }}</p>
-                        <h4 class="fw-bold mb-0">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</h4>
+                        <h5 class="fw-bold mb-0">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Procurement -->
+            <div class="col-md-2 col-sm-6">
+                <div class="card h-100 shadow-sm border-0"
+                    style="background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%); border-radius: 15px;">
+                    <div class="card-body text-white p-3">
+                        <div class="stats-icon-small mb-2"><i class="fa-solid fa-truck-ramp-box"></i></div>
+                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.stock_procurement')) }}</p>
+                        <h5 class="fw-bold mb-0">Rp {{ number_format($summary['total_procurement'], 0, ',', '.') }}</h5>
                     </div>
                 </div>
             </div>
 
             <!-- Net Profit -->
-            <div class="col-md-3">
+            <div class="col-md-4 col-sm-6">
                 <div class="card h-100 shadow-sm border-0"
                     style="background: linear-gradient(135deg, {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }} 0%, {{ $summary['net_profit'] >= 0 ? '#15803d' : '#991b1b' }} 100%); border-radius: 15px;">
-                    <div class="card-body text-white">
-                        <div class="d-flex justify-content-between mb-3">
+                    <div class="card-body text-white p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.net_profit')) }}</p>
+                                <h4 class="fw-bold mb-0">Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}</h4>
+                            </div>
                             <div class="stats-icon-small"><i class="fa-solid fa-wallet"></i></div>
                         </div>
-                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.net_profit')) }}</p>
-                        <h4 class="fw-bold mb-0">Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}</h4>
                     </div>
                 </div>
             </div>
@@ -160,7 +173,7 @@
         </div>
 
         <!-- Detailed Daily Data -->
-        <div class="card shadow-sm border-0" style="border-radius: 15px;">
+        <div class="card shadow-sm border-0" id="daily-profit-section" style="border-radius: 15px;">
             <div class="card-header bg-white border-0 pt-4 px-4">
                 <h6 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.daily_profit') }}</h6>
             </div>
@@ -173,6 +186,7 @@
                                 <th class="text-end">{{ __('admin.gross_revenue') }}</th>
                                 <th class="text-end">{{ __('admin.cogs') }}</th>
                                 <th class="text-end">{{ __('admin.operational_expenses') }}</th>
+                                <th class="text-end">{{ __('admin.stock_procurement') }}</th>
                                 <th class="text-end">{{ __('admin.net_profit') }}</th>
                                 <th class="text-end">{{ __('admin.profit_margin') }}</th>
                             </tr>
@@ -184,6 +198,8 @@
                                     <td class="text-end">Rp {{ number_format($day['revenue'], 0, ',', '.') }}</td>
                                     <td class="text-end text-muted">Rp {{ number_format($day['cogs'], 0, ',', '.') }}</td>
                                     <td class="text-end text-muted">Rp {{ number_format($day['expenses'], 0, ',', '.') }}</td>
+                                    <td class="text-end text-muted">Rp {{ number_format($day['procurement'], 0, ',', '.') }}
+                                    </td>
                                     <td class="text-end fw-bold {{ $day['profit'] >= 0 ? 'text-success' : 'text-danger' }}">
                                         Rp {{ number_format($day['profit'], 0, ',', '.') }}
                                     </td>
@@ -198,6 +214,9 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+                <div class="px-3 py-2 border-top d-flex justify-content-end">
+                    {{ $dailyData->fragment('daily-profit-section')->links('vendor.pagination.no-prevnext') }}
                 </div>
             </div>
         </div>
@@ -340,7 +359,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const dailyData = @json($dailyData);
+            const dailyData = {!! json_encode($allDailyData) !!};
 
             const labels = dailyData.map(d => {
                 const date = new Date(d.date);
@@ -383,6 +402,15 @@
                             data: expenseData,
                             borderColor: '#ca8a04',
                             borderDash: [2, 2],
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
+                            label: '{{ __('admin.stock_procurement') }}',
+                            data: dailyData.map(d => d.procurement),
+                            borderColor: '#9333ea',
+                            borderDash: [3, 3],
                             tension: 0.4,
                             borderWidth: 2,
                             pointRadius: 0

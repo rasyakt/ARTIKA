@@ -21,6 +21,6 @@ class Supplier extends Model
 
     public function purchases(): HasMany
     {
-        return $this->hasMany(\App\Models\Transaction::class);
+        return $this->hasMany(\App\Models\SupplierPurchase::class);
     }
 }

@@ -50,6 +50,10 @@
                                             <ul class="dropdown-menu dropdown-menu-end"
                                                 style="border-radius: 12px; border: 1px solid #e0cec7; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                                 <li>
+                                                    <a href="{{ route('admin.suppliers.show', $supplier->id) }}" class="dropdown-item py-2" style="border-radius: 8px;">
+                                                        <i class="fa-solid fa-eye me-1 text-info"></i> {{ __('admin.view_details') }}
+                                                    </a>
+                                                </li>
                                                 <li>
                                                     <button class="dropdown-item" data-bs-toggle="modal"
                                                         data-bs-target="#editSupplierModal"

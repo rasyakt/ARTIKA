@@ -27,6 +27,10 @@
         .table-hover tbody tr:hover {
             background-color: #fdf8f6;
         }
+
+        html {
+            scroll-behavior: auto !important;
+        }
     </style>
 
     <div class="container-fluid py-4">
@@ -310,7 +314,7 @@
         </div>
 
         <!-- Recent Transactions Table -->
-        <div class="card shadow-sm mb-4" style="border-radius: 16px; border: none;">
+        <div class="card shadow-sm mb-4" id="transactions-section" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                 <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                     <i class="fa-solid fa-receipt me-2"></i>{{ __('admin.recent_transactions') }}
@@ -366,11 +370,14 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
+                    {{ $recentTransactions->fragment('transactions-section')->links('vendor.pagination.no-prevnext') }}
+                </div>
             </div>
         </div>
 
         <!-- Audit Logs Section -->
-        <div class="card shadow-sm mb-4" style="border-radius: 16px; border: none;">
+        <div class="card shadow-sm mb-4" id="audit-section" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                 <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                     <i class="fa-solid fa-clipboard-list me-2"></i>{{ __('admin.audit_log') }}
@@ -443,6 +450,9 @@
                             @endforelse
                         </tbody>
                     </table>
+                </div>
+                <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
+                    {{ $auditLogs->fragment('audit-section')->links('vendor.pagination.no-prevnext') }}
                 </div>
             </div>
         </div>

@@ -1,250 +1,200 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ __('admin.logs_report') }} - {{ $startDate }} to {{ $endDate }}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta charset="utf-8">
+    <title>{{ __('admin.logs_report') }} - ARTIKA</title>
     <style>
         @page {
             margin: 10mm;
             size: A4 landscape;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-            font-size: 10px;
+            font-family: 'Helvetica', sans-serif;
+            color: #333;
             line-height: 1.4;
-            color: #2c2c2c;
+            font-size: 10px;
+            margin: 0;
             padding: 20px;
-            background: #ffffff;
         }
 
         .header {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid #85695a;
             text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #85695a;
+            padding-bottom: 10px;
         }
 
         .header h1 {
-            font-size: 22px;
+            font-size: 18px;
             color: #6f5849;
-            margin-bottom: 5px;
+            margin: 0;
             text-transform: uppercase;
         }
 
-        .header .subtitle {
+        .header p {
+            margin: 5px 0 0 0;
             font-size: 12px;
-            color: #78716c;
-            margin-bottom: 3px;
+            color: #85695a;
         }
 
-        .summary-table {
+        .report-meta {
+            margin-bottom: 20px;
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 12px 0;
-            margin: 0 -12px 20px -12px;
-            table-layout: fixed;
+        }
+
+        .report-meta td {
+            padding: 2px 0;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            margin: 15px 0 10px 0;
+            color: #6f5849;
+            text-transform: uppercase;
+            border-left: 4px solid #85695a;
+            padding-left: 10px;
+            background-color: #fdf8f6;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .summary-grid {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
         }
 
         .summary-box {
+            border: 1px solid #e0cec7;
             padding: 10px;
-            border: 1px solid #d4c4bb;
-            background: #faf9f8;
-            border-radius: 6px;
             text-align: center;
-            vertical-align: top;
         }
 
         .summary-box h3 {
+            margin: 0 0 5px 0;
             font-size: 9px;
             color: #78716c;
             text-transform: uppercase;
-            margin-bottom: 5px;
         }
 
         .summary-box .value {
-            font-size: 18px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: bold;
             color: #6f5849;
         }
 
-        table {
+        table.data {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
-        table th {
-            background: #6f5849;
-            color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            padding: 8px 5px;
-            border: 1px solid #5a4639;
-            font-size: 9px;
+        table.data th {
+            background-color: #fdf8f6;
+            color: #6f5849;
             text-align: left;
+            padding: 6px;
+            border: 1px solid #f2e8e5;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 9px;
         }
 
-        table td {
-            border: 1px solid #e0cec7;
-            padding: 6px 5px;
-            vertical-align: top;
+        table.data td {
+            padding: 6px;
+            border: 1px solid #f2e8e5;
         }
 
-        table tr:nth-child(even) {
-            background-color: #faf9f8;
+        .text-right {
+            text-align: right;
         }
 
-        .badge {
-            display: inline-block;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-size: 8px;
-            font-weight: 600;
-            background: #e0cec7;
-            color: #6f5849;
-        }
-
-        .user-name {
-            font-weight: 700;
-            color: #6f5849;
+        .text-center {
+            text-align: center;
         }
 
         .text-muted {
             color: #78716c;
-            font-size: 8px;
-        }
-
-        code {
-            background: #f5f0ed;
-            padding: 1px 3px;
-            border-radius: 2px;
-            font-family: monospace;
-            font-size: 8px;
-        }
-
-        .footer {
-            margin-top: 20px;
-            padding-top: 10px;
-            border-top: 2px solid #e0cec7;
-            text-align: center;
-            color: #a8a29e;
             font-size: 9px;
         }
 
-        /* Controls Panel */
-        .no-print-panel {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-            display: flex;
-            gap: 10px;
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 9px;
+            color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
         }
 
-        .btn-print {
-            background-color: #6f5849;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .badge {
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 8px;
+            font-weight: bold;
+            background-color: #f5f0ed;
+            color: #6f5849;
+            border: 1px solid #e0cec7;
         }
 
-        .btn-close {
-            background-color: #dc2626;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-
-            body {
-                padding: 0;
-            }
+        code {
+            font-family: monospace;
+            font-size: 8px;
+            color: #6f5849;
         }
     </style>
 </head>
 
 <body>
-    @if(!isset($isPdf) || !$isPdf)
-        <div class="no-print-panel no-print">
-            <button onclick="window.print()" class="btn-print">
-                <i class="fa-solid fa-print"></i> {{ __('common.print') }}
-            </button>
-            <button onclick="window.close()" class="btn-close">
-                <i class="fa-solid fa-xmark"></i> {{ __('common.close') }}
-            </button>
-        </div>
-    @endif
-
     <div class="header">
-        <h1>📋 {{ __('admin.logs_report') }}</h1>
-        <div class="subtitle">{{ __('admin.period') }}: {{ $startDate }} - {{ $endDate }}</div>
-        <div class="text-muted">Generated: {{ now()->format('d M Y H:i:s') }} | ARTIKA POS System</div>
+        <h1>{{ __('admin.logs_report') }}</h1>
+        <p>ARTIKA POS SYSTEM</p>
     </div>
 
-    <table class="summary-table">
+    <table class="report-meta">
         <tr>
-            <td class="summary-box">
+            <td width="12%"><strong>{{ __('admin.period') }}</strong></td>
+            <td width="38%">: {{ $startDate }} - {{ $endDate }}</td>
+            <td width="12%"><strong>{{ __('admin.generated') }}</strong></td>
+            <td width="38%">: {{ now()->format('d/m/Y H:i') }}</td>
+        </tr>
+    </table>
+
+    <table class="summary-grid">
+        <tr>
+            <td class="summary-box" width="25%">
                 <h3>Total Logs</h3>
                 <div class="value">{{ number_format($summary['total_logs']) }}</div>
             </td>
-            <td class="summary-box">
+            <td class="summary-box" width="25%">
                 <h3>Transactions</h3>
                 <div class="value">{{ number_format($summary['total_transactions']) }}</div>
             </td>
-            <td class="summary-box">
+            <td class="summary-box" width="25%">
                 <h3>Total Amount</h3>
                 <div class="value">Rp {{ number_format($summary['total_amount'], 0, ',', '.') }}</div>
             </td>
-            <td class="summary-box">
+            <td class="summary-box" width="25%">
                 <h3>Unique Users</h3>
                 <div class="value">{{ count($summary['by_user']) }}</div>
             </td>
         </tr>
     </table>
 
-    <table>
+    <table class="data">
         <thead>
             <tr>
-                <th style="width: 12%;">Date & Time</th>
-                <th style="width: 15%;">User Info</th>
-                <th style="width: 10%;">Action</th>
-                <th style="width: 12%;">Target</th>
-                <th style="width: 12%;">Amount</th>
-                <th style="width: 12%;">Network</th>
-                <th style="width: 12%;">Device</th>
-                <th style="width: 15%;">Details</th>
+                <th width="12%">Date & Time</th>
+                <th width="15%">User Info</th>
+                <th width="10%">Action</th>
+                <th width="12%">Target</th>
+                <th width="12%">Amount</th>
+                <th width="10%">Network</th>
+                <th width="10%">Device</th>
+                <th>Details</th>
             </tr>
         </thead>
         <tbody>
@@ -252,7 +202,7 @@
                 <tr>
                     <td>{{ $log->created_at->format('d/m/Y H:i:s') }}</td>
                     <td>
-                        <div class="user-name">{{ $log->user?->name ?? 'System' }}</div>
+                        <strong>{{ $log->user?->name ?? 'System' }}</strong>
                         @if($log->user && $log->user->role)
                             <div class="text-muted">{{ strtoupper($log->user->role->name) }}</div>
                             @if($log->user->role->name === 'cashier')
@@ -263,7 +213,8 @@
                     <td><span class="badge">{{ strtoupper(str_replace('_', ' ', $log->action)) }}</span></td>
                     <td>
                         <strong>{{ $log->model_type }}</strong>
-                        @if($log->model_id) <br><code style="font-size: 7px;">#{{ $log->model_id }}</code> @endif
+                        @if($log->model_id)
+                        <div class="text-muted">#{{ $log->model_id }}</div> @endif
                     </td>
                     <td>
                         @if($log->amount)
@@ -273,27 +224,15 @@
                     </td>
                     <td><code>{{ $log->ip_address }}</code></td>
                     <td>{{ $log->device_name }}</td>
-                    <td>{{ Str::limit($log->notes, 50) }}</td>
+                    <td>{{ Str::limit($log->notes, 60) }}</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
 
     <div class="footer">
-        <p><strong>ARTIKA POS System</strong> - Audit Log Report</p>
-        <p>Document generated electronically. No signature required.</p>
+        <p>Laporan ini dicetak otomatis oleh Sistem ARTIKA POS pada {{ now()->format('d/m/Y H:i:s') }}</p>
     </div>
-
-    @if(!isset($isPdf) || !$isPdf)
-        <script>
-            window.onload = function () {
-                const urlParams = new URLSearchParams(window.location.search);
-                if (urlParams.get('auto_print') === 'true') {
-                    window.print();
-                }
-            }
-        </script>
-    @endif
 </body>
 
 </html>

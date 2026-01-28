@@ -49,10 +49,10 @@ class WarehouseReportController extends Controller
         }
 
         $summary = $this->warehouseReportService->getSummaryStats($startDate, $endDate);
-        $movements = $this->warehouseReportService->getStockMovements($startDate, $endDate);
-        $lowStockItems = $this->warehouseReportService->getLowStockItems();
+        $movements = $this->warehouseReportService->getStockMovements($startDate, $endDate, null, 10, 'movements_page');
+        $lowStockItems = $this->warehouseReportService->getLowStockItems(10, 'low_stock_page');
         $topMovers = $this->warehouseReportService->getTopMovingItems($startDate, $endDate);
-        $auditLogs = $this->warehouseReportService->getWarehouseAuditLogs($startDate, $endDate);
+        $auditLogs = $this->warehouseReportService->getWarehouseAuditLogs($startDate, $endDate, 10, 'audit_page');
 
         return view('admin.reports.warehouse.index', compact(
             'summary',
