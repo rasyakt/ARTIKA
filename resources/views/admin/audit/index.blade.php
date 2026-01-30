@@ -39,8 +39,12 @@
                 {{-- Export Group --}}
                 <div class="btn-group shadow-sm" style="border-radius: 10px; overflow: hidden;">
                     <button class="btn btn-outline-brown border-end-0" onclick="exportReport('pdf')"
-                        style="padding: 0.5rem 1rem; font-weight: 600; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                        style="padding: 0.5rem 1rem; font-weight: 600;">
                         <i class="fas fa-file-pdf me-2"></i> PDF
+                    </button>
+                    <button class="btn btn-outline-brown border-end-0" onclick="exportReport('excel')"
+                        style="padding: 0.5rem 1rem; font-weight: 600;">
+                        <i class="fas fa-file-excel me-2"></i> Excel
                     </button>
                     <button class="btn btn-brown" onclick="exportReport('print')"
                         style="padding: 0.5rem 1rem; font-weight: 600; border-top-left-radius: 0; border-bottom-left-radius: 0;">

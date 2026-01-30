@@ -10,13 +10,14 @@ Route::get('/', function () {
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::get('/login/admin', [AuthController::class, 'showAdminLoginForm'])->name('login.admin');
 Route::get('/login/warehouse', [AuthController::class, 'showWarehouseLoginForm'])->name('login.warehouse');
+Route::get('/login/kepala-toko', [AuthController::class, 'showKepalaTokoLoginForm'])->name('login.kepala_toko');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         $role = Auth::user()->role->name ?? 'user';
-        if ($role === 'admin')
+        if ($role === 'admin' || $role === 'kepala_toko')
             return redirect()->route('admin.dashboard');
         if ($role === 'cashier')
             return redirect()->route('pos.index');
@@ -25,8 +26,8 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Admin Routes
-    Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Admin & Kepala Toko Routes
+    Route::middleware(['role:admin,kepala_toko'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
 
         // Product Management
@@ -82,6 +83,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])->name('audit.index');
         Route::get('/audit/export', [\App\Http\Controllers\AuditController::class, 'export'])->name('audit.export');
         Route::post('/audit/clear', [\App\Http\Controllers\AuditController::class, 'clear'])->name('audit.clear');
+
+        // Transaction Management (Kepala Toko only)
+        Route::middleware(['role:kepala_toko'])->group(function () {
+            Route::post('/transactions/{id}/rollback', [\App\Http\Controllers\Admin\TransactionController::class, 'rollback'])->name('transactions.rollback');
+            Route::get('/transactions/{id}', [\App\Http\Controllers\Admin\TransactionController::class, 'show'])->name('transactions.show');
+            Route::get('/transactions/{id}/edit', [\App\Http\Controllers\Admin\TransactionController::class, 'edit'])->name('transactions.edit');
+            Route::put('/transactions/{id}', [\App\Http\Controllers\Admin\TransactionController::class, 'update'])->name('transactions.update');
+            Route::delete('/transactions/{id}', [\App\Http\Controllers\Admin\TransactionController::class, 'destroy'])->name('transactions.destroy');
+        });
     });
 
     // Cashier Routes (POS)

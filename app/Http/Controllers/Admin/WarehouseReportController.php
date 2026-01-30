@@ -91,6 +91,20 @@ class WarehouseReportController extends Controller
             return $pdf->download('warehouse-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
         }
 
+        if ($request->input('format') === 'excel') {
+            return \Maatwebsite\Excel\Facades\Excel::download(
+                new \App\Exports\GenericReportExport('admin.reports.warehouse.export_excel', compact(
+                    'summary',
+                    'movements',
+                    'lowStockItems',
+                    'topMovers',
+                    'startDate',
+                    'endDate'
+                )),
+                'warehouse-report-' . $startDate->format('Y-m-d') . '.xlsx'
+            );
+        }
+
         // For now, we return a print-optimized view
         return view('admin.reports.warehouse.print', compact(
             'summary',

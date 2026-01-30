@@ -51,7 +51,6 @@ class AdminController extends Controller
 
         // Recent Transactions
         $recentTransactions = Transaction::with('user')
-            ->where('status', 'completed')
             ->latest()
             ->limit(10)
             ->get();

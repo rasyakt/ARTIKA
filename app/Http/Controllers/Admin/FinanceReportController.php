@@ -112,6 +112,13 @@ class FinanceReportController extends Controller
             return $pdf->download('finance-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
         }
 
+        if ($request->input('format') === 'excel') {
+            return \Maatwebsite\Excel\Facades\Excel::download(
+                new \App\Exports\FinanceExport(compact('summary', 'dailyData', 'startDate', 'endDate', 'period')),
+                'finance-report-' . $startDate->format('Y-m-d') . '.xlsx'
+            );
+        }
+
         return view('admin.reports.finance.print', compact(
             'summary',
             'dailyData',

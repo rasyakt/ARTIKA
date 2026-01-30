@@ -106,6 +106,21 @@ class CashierReportController extends Controller
             return $pdf->download('cashier-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
         }
 
+        if ($request->input('format') === 'excel') {
+            return \Maatwebsite\Excel\Facades\Excel::download(
+                new \App\Exports\GenericReportExport('admin.reports.cashier.export_excel', compact(
+                    'summary',
+                    'paymentBreakdown',
+                    'topProducts',
+                    'cashierPerformance',
+                    'recentTransactions',
+                    'startDate',
+                    'endDate'
+                )),
+                'cashier-report-' . $startDate->format('Y-m-d') . '.xlsx'
+            );
+        }
+
         return view('admin.reports.cashier.print', compact(
             'summary',
             'paymentBreakdown',

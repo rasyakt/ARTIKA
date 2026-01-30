@@ -19,10 +19,11 @@ class DatabaseSeeder extends Seeder
         $adminRole = \App\Models\Role::create(['name' => 'admin', 'description' => 'Administrator']);
         $cashierRole = \App\Models\Role::create(['name' => 'cashier', 'description' => 'Kasir']);
         $warehouseRole = \App\Models\Role::create(['name' => 'warehouse', 'description' => 'Staff Gudang']);
+        $kepalaTokoRole = \App\Models\Role::create(['name' => 'kepala_toko', 'description' => 'Kepala Toko']);
 
         // Users
         \App\Models\User::create([
-            'name' => 'Super Admin',
+            'name' => 'Admin',
             'username' => 'admin',
             'password' => bcrypt('password'), // password
             'role_id' => $adminRole->id,
@@ -41,6 +42,13 @@ class DatabaseSeeder extends Seeder
             'username' => 'gudang',
             'password' => bcrypt('password'),
             'role_id' => $warehouseRole->id,
+        ]);
+
+        \App\Models\User::create([
+            'name' => 'Kepala Toko',
+            'username' => 'kepalatoko',
+            'password' => bcrypt('password'),
+            'role_id' => $kepalaTokoRole->id,
         ]);
         // Categories
         $catSnack = \App\Models\Category::create(['name' => 'Snack', 'slug' => 'snack']);

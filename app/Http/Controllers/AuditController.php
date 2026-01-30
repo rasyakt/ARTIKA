@@ -114,6 +114,11 @@ class AuditController extends Controller
             return $pdf->download($filename);
         }
 
+        if ($request->input('format') === 'excel') {
+            $filename = 'audit-report-' . now()->format('Y-m-d-H-i-s') . '.xlsx';
+            return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\AuditExport($request->all()), $filename);
+        }
+
         return view('admin.audit.print', compact('logs', 'summary', 'startDate', 'endDate'));
     }
 
