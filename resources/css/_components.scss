@@ -130,14 +130,14 @@
     }
 
     // Premium Accents
-    &.accent-brown { border-left: 5px solid $brown-800 !important; background: $brown-50; }
-    &.accent-success { border-left: 5px solid $success !important; background: #f0fdf4; }
-    &.accent-danger { border-left: 5px solid $danger !important; background: #fef2f2; }
-    &.accent-warning { border-left: 5px solid $warning !important; background: #fffbeb; }
-    &.accent-info { border-left: 5px solid $info !important; background: #f0f9ff; }
-    &.accent-purple { border-left: 5px solid #7e22ce !important; background: #f3e8ff; }
-    &.accent-sienna { border-left: 5px solid #c17a5c !important; background: #fff5f2; }
-    &.accent-gold { border-left: 5px solid #ca8a04 !important; background: #fef9c3; }
+    &.accent-brown { border-left: 5px solid $brown-800 !important; }
+    &.accent-success { border-left: 5px solid $success !important; }
+    &.accent-danger { border-left: 5px solid $danger !important; }
+    &.accent-warning { border-left: 5px solid $warning !important; }
+    &.accent-info { border-left: 5px solid $info !important; }
+    &.accent-purple { border-left: 5px solid #7e22ce !important; }
+    &.accent-sienna { border-left: 5px solid #c17a5c !important; }
+    &.accent-gold { border-left: 5px solid #ca8a04 !important; }
 
     &.card-glass {
         background: $glass-bg-light;
@@ -156,14 +156,14 @@
     font-size: 1.25rem;
     transition: all $transition-base;
     
-    &.bg-brown-soft { background: $white; color: $brown-800; box-shadow: $shadow-sm; }
-    &.bg-success-soft { background: $white; color: $success; box-shadow: $shadow-sm; }
-    &.bg-danger-soft { background: $white; color: $danger; box-shadow: $shadow-sm; }
-    &.bg-warning-soft { background: $white; color: $warning; box-shadow: $shadow-sm; }
-    &.bg-info-soft { background: $white; color: $info; box-shadow: $shadow-sm; }
-    &.bg-purple-soft { background: $white; color: #7e22ce; box-shadow: $shadow-sm; }
-    &.bg-sienna-soft { background: $white; color: #c17a5c; box-shadow: $shadow-sm; }
-    &.bg-gold-soft { background: $white; color: #a16207; box-shadow: $shadow-sm; }
+    &.bg-brown-soft { background: $brown-50; color: $brown-800; }
+    &.bg-success-soft { background: #f0fdf4; color: $success; }
+    &.bg-danger-soft { background: #fef2f2; color: $danger; }
+    &.bg-warning-soft { background: #fffbeb; color: $warning; }
+    &.bg-info-soft { background: #f0f9ff; color: $info; }
+    &.bg-purple-soft { background: #f3e8ff; color: #7e22ce; }
+    &.bg-sienna-soft { background: #fff5f2; color: #c17a5c; }
+    &.bg-gold-soft { background: #fef9c3; color: #a16207; }
 }
 
 .card-header {

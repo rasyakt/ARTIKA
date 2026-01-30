@@ -44,7 +44,7 @@
             </div>
             <div>
                 <button class="btn shadow-sm"
-                    style="background: #6f5849; color: white; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;"
+                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;"
                     data-bs-toggle="modal" data-bs-target="#printAllModal"
                     onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                     <i class="fa-solid fa-file-invoice me-2"></i> {{ __('admin.print_all_reports') }}

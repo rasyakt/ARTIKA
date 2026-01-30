@@ -16,8 +16,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <div class="d-flex align-items-center mb-1">
-                    <a href="{{ route('admin.reports') }}" class="btn btn-light me-3 shadow-sm"
-                        style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
+                    <a href="{{ route('admin.reports') }}" class="btn btn-light me-3 shadow-sm" style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     <h2 class="fw-bold mb-0" style="color: #6f5849;">
@@ -28,8 +27,7 @@
             </div>
             <div class="d-flex gap-2">
                 <a href="{{ route('admin.reports.cashier.export', array_merge(request()->all(), ['format' => 'pdf', 'search' => $search, 'action' => $action])) }}"
-                    class="btn btn-outline-brown shadow-sm"
-                    style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                    class="btn btn-outline-brown shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                     <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
                 </a>
                 <a href="{{ route('admin.reports.cashier.export', array_merge(request()->all(), ['auto_print' => 'true', 'search' => $search, 'action' => $action])) }}"
@@ -50,25 +48,20 @@
                         </label>
                         <select name="period" id="period" class="form-select" onchange="this.form.submit()">
                             <option value="today" {{ $period == 'today' ? 'selected' : '' }}>{{ __('admin.today') }}</option>
-                            <option value="week" {{ $period == 'week' ? 'selected' : '' }}>{{ __('admin.this_week') }}
-                            </option>
-                            <option value="month" {{ $period == 'month' ? 'selected' : '' }}>{{ __('admin.this_month') }}
-                            </option>
-                            <option value="year" {{ $period == 'year' ? 'selected' : '' }}>{{ __('admin.this_year') }}
-                            </option>
+                            <option value="week" {{ $period == 'week' ? 'selected' : '' }}>{{ __('admin.this_week') }}</option>
+                            <option value="month" {{ $period == 'month' ? 'selected' : '' }}>{{ __('admin.this_month') }}</option>
+                            <option value="year" {{ $period == 'year' ? 'selected' : '' }}>{{ __('admin.this_year') }}</option>
                         </select>
                     </div>
                     <div class="col-lg-2 col-md-4">
                         <label for="start_date" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i>
-                            {{ __('admin.start_date') }}
+                            <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.start_date') }}
                         </label>
                         <input type="date" class="form-select" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                     </div>
                     <div class="col-lg-2 col-md-4">
                         <label for="end_date" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i>
-                            {{ __('admin.end_date') }}
+                            <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.end_date') }}
                         </label>
                         <input type="date" class="form-select" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
                     </div>
@@ -76,8 +69,7 @@
                         <label for="search" class="form-label text-dark fw-semibold">
                             <i class="fa-solid fa-user me-1" style="color: #c17a5c;"></i> {{ __('common.user') }}
                         </label>
-                        <input type="text" name="search" class="form-control" placeholder="NIS/Username/Nama"
-                            value="{{ $search }}">
+                        <input type="text" name="search" class="form-control" placeholder="NIS/Username/Nama" value="{{ $search }}">
                     </div>
                     <div class="col-lg-2 col-md-6">
                         <label for="action" class="form-label text-dark fw-semibold">
@@ -91,13 +83,11 @@
                         </select>
                     </div>
                     <div class="col-lg-2 col-md-12 d-flex gap-2">
-                        <button type="submit" class="btn btn-brown flex-grow-1 fw-bold"
-                            style="border-radius: 8px; padding: 0.6rem;">
+                        <button type="submit" class="btn btn-brown flex-grow-1 fw-bold" style="border-radius: 8px; padding: 0.6rem;">
                             <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                         </button>
                         @if($search || $action || request('start_date') || request('end_date'))
-                            <a href="{{ route('admin.reports.cashier') }}" class="btn btn-outline-brown"
-                                style="border-radius: 8px; padding: 0.6rem;">
+                            <a href="{{ route('admin.reports.cashier') }}" class="btn btn-outline-brown" style="border-radius: 8px; padding: 0.6rem;">
                                 <i class="fa-solid fa-rotate-left"></i>
                             </a>
                         @endif
@@ -114,10 +104,8 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
-                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
-                                    {{ __('admin.total_sales') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp
-                                    {{ number_format($summary['total_sales'], 0, ',', '.') }}</h3>
+                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('admin.total_sales') }}</p>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($summary['total_sales'], 0, ',', '.') }}</h3>
                                 <small class="text-muted">{{ number_format($summary['total_transactions']) }}
                                     {{ __('admin.transactions_count') }}</small>
                             </div>
@@ -135,12 +123,10 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
-                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
-                                    {{ __('admin.avg_transaction_label') }}
+                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('admin.avg_transaction_label') }}
                                 </p>
                                 <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp
-                                    {{ number_format($summary['average_transaction'], 0, ',', '.') }}
-                                </h3>
+                                    {{ number_format($summary['average_transaction'], 0, ',', '.') }}</h3>
                                 <small class="text-muted">{{ __('admin.per_transaction') }}</small>
                             </div>
                             <div class="icon-box-premium bg-success-soft">
@@ -157,12 +143,9 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
-                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
-                                    {{ __('admin.cash_sales') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp
-                                    {{ number_format($summary['cash_sales'], 0, ',', '.') }}</h3>
-                                <small class="text-muted">{{ $summary['cash_count'] }}
-                                    {{ __('admin.transactions_count') }}</small>
+                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('admin.cash_sales') }}</p>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($summary['cash_sales'], 0, ',', '.') }}</h3>
+                                <small class="text-muted">{{ $summary['cash_count'] }} {{ __('admin.transactions_count') }}</small>
                             </div>
                             <div class="icon-box-premium bg-sienna-soft">
                                 <i class="fa-solid fa-coins"></i>
@@ -178,13 +161,10 @@
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
-                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
-                                    {{ __('admin.non_cash_sales') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp
-                                    {{ number_format($summary['non_cash_sales'], 0, ',', '.') }}
+                                    style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('admin.non_cash_sales') }}</p>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($summary['non_cash_sales'], 0, ',', '.') }}
                                 </h3>
-                                <small class="text-muted">{{ $summary['non_cash_count'] }}
-                                    {{ __('admin.transactions_count') }}</small>
+                                <small class="text-muted">{{ $summary['non_cash_count'] }} {{ __('admin.transactions_count') }}</small>
                             </div>
                             <div class="icon-box-premium bg-info-soft">
                                 <i class="fa-solid fa-credit-card"></i>
@@ -200,7 +180,8 @@
             <!-- Top Products -->
             <div class="col-lg-6">
                 <div class="card shadow-sm">
-                    <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+                    <div class="card-header"
+                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                             <i class="fa-solid fa-trophy me-2"></i>{{ __('admin.top_selling_products') }}
                         </h5>
@@ -210,12 +191,9 @@
                             <table class="table table-hover mb-0">
                                 <thead style="background: #fdf8f6;">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">
-                                            {{ __('admin.product_management') }}</th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                            {{ __('admin.sold') }}</th>
-                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">
-                                            {{ __('admin.revenue') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.product_management') }}</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.sold') }}</th>
+                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">{{ __('admin.revenue') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -223,8 +201,8 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="me-3"
-                                                        style="width: 30px; height: 30px; background: #6f5849; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
+                                                        <div class="me-3"
+                                                            style="width: 30px; height: 30px; background: #6f5849; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
                                                         {{ $index + 1 }}
                                                     </div>
                                                     <div>
@@ -238,8 +216,7 @@
                                                     style="background: #e0cec7; color: #6f5849;">{{ $product->total_sold }}</span>
                                             </td>
                                             <td class="text-end fw-bold" style="color: #c17a5c;">Rp
-                                                {{ number_format($product->total_revenue, 0, ',', '.') }}
-                                            </td>
+                                                {{ number_format($product->total_revenue, 0, ',', '.') }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -260,7 +237,8 @@
             <!-- Cashier Performance -->
             <div class="col-lg-6">
                 <div class="card shadow-sm">
-                    <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+                    <div class="card-header"
+                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                             <i class="fa-solid fa-users me-2"></i>{{ __('admin.cashier_performance') }}
                         </h5>
@@ -270,13 +248,10 @@
                             <table class="table table-hover mb-0">
                                 <thead style="background: #fdf8f6;">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.cashier') }}
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.cashier') }}</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.transactions') }}
                                         </th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                            {{ __('admin.transactions') }}
-                                        </th>
-                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">
-                                            {{ __('admin.total_sales') }}</th>
+                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">{{ __('admin.total_sales') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -292,8 +267,7 @@
                                                     style="background: #e0cec7; color: #6f5849;">{{ $performance->transaction_count }}</span>
                                             </td>
                                             <td class="text-end fw-bold" style="color: #85695a;">Rp
-                                                {{ number_format($performance->total_sales, 0, ',', '.') }}
-                                            </td>
+                                                {{ number_format($performance->total_sales, 0, ',', '.') }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -327,10 +301,8 @@
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.invoice') }}</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.cashier') }}</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('admin.payment_method') }}</th>
-                                <th class="border-0 fw-semibold text-end" style="color: #6f5849;">{{ __('admin.amount') }}
-                                </th>
+                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.payment_method') }}</th>
+                                <th class="border-0 fw-semibold text-end" style="color: #6f5849;">{{ __('admin.amount') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -354,13 +326,11 @@
                                         @elseif($method == 'debit')
                                             <span class="badge bg-warning text-dark">Debit</span>
                                         @else
-                                            <span class="badge"
-                                                style="background: #0284c7; color: white;">{{ __('admin.non_cash') }}</span>
+                                            <span class="badge" style="background: #0284c7; color: white;">{{ __('admin.non_cash') }}</span>
                                         @endif
                                     </td>
                                     <td class="text-end fw-bold" style="color: #c17a5c;">Rp
-                                        {{ number_format($transaction->total_amount, 0, ',', '.') }}
-                                    </td>
+                                        {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
                                 </tr>
                             @empty
                                 <tr>
@@ -393,12 +363,10 @@
                             <tr>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.user') }}</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('admin.action') }}</th>
+                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.action') }}</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.entity') }}</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.details') }}</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('admin.action') }}</th>
+                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -422,20 +390,25 @@
                                     </td>
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-outline-brown shadow-sm" data-bs-toggle="modal"
-                                            data-bs-target="#detailModal" data-id="{{ $log->id }}"
+                                            data-bs-target="#detailModal" 
+                                            data-id="{{ $log->id }}"
                                             data-user="{{ $log->user?->name ?? __('common.system') }}"
                                             data-role="{{ $log->user?->role->name ?? '' }}"
                                             data-nis="{{ $log->user?->nis ?? '-' }}"
-                                            data-username="{{ $log->user?->username ?? '-' }}" data-action="{{ $log->action }}"
-                                            data-model="{{ $log->model_type }}" data-model-id="{{ $log->model_id }}"
+                                            data-username="{{ $log->user?->username ?? '-' }}"
+                                            data-action="{{ $log->action }}" 
+                                            data-model="{{ $log->model_type }}"
+                                            data-model-id="{{ $log->model_id }}"
                                             data-amount="{{ $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '-' }}"
-                                            data-method="{{ $log->payment_method ?? '-' }}" data-ip="{{ $log->ip_address }}"
+                                            data-method="{{ $log->payment_method ?? '-' }}" 
+                                            data-ip="{{ $log->ip_address }}"
                                             data-mac="{{ $log->mac_address ?? 'Not Available' }}"
                                             data-device="{{ $log->device_name ?? 'Unknown Device' }}"
                                             data-agent="{{ $log->user_agent }}"
                                             data-date="{{ $log->created_at->format('d M Y H:i:s') }}"
                                             data-changes="{{ json_encode($log->changes ?? []) }}"
-                                            data-notes="{{ $log->notes ?? '-' }}" style="border-radius: 8px;">
+                                            data-notes="{{ $log->notes ?? '-' }}"
+                                            style="border-radius: 8px;">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                     </td>
@@ -462,12 +435,12 @@
     <div class="modal fade" id="detailModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
-                <div class="modal-header text-white" style="background: #6f5849; border-radius: 16px 16px 0 0;">
+                <div class="modal-header text-white" style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border-radius: 16px 16px 0 0;">
                     <h5 class="modal-title">{{ __('admin.audit_log_detail') }}</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
-                    <div class="row mb-3">
+                   <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="text-muted small">{{ __('common.date') }}</label>
                             <p id="detail-date" class="mb-0 fw-bold"></p>
@@ -541,18 +514,17 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" class="btn btn-brown px-4" style="border-radius: 10px;"
-                        data-bs-dismiss="modal">{{ __('common.close') }}</button>
+                    <button type="button" class="btn btn-brown px-4" style="border-radius: 10px;" data-bs-dismiss="modal">{{ __('common.close') }}</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const detailModal = document.getElementById('detailModal');
             if (detailModal) {
-                detailModal.addEventListener('show.bs.modal', function (event) {
+                detailModal.addEventListener('show.bs.modal', function(event) {
                     const button = event.relatedTarget;
                     const modal = this;
 
@@ -583,7 +555,7 @@
                     modal.querySelector('#detail-date').textContent = date;
                     modal.querySelector('#detail-user').textContent = user;
                     modal.querySelector('#detail-role').textContent = role;
-
+                    
                     const cashierInfoRow = modal.querySelector('#cashier-info-row');
                     if (role && role.toLowerCase() === 'cashier') {
                         cashierInfoRow.style.display = 'flex';
@@ -592,7 +564,7 @@
                     } else {
                         cashierInfoRow.style.display = 'none';
                     }
-
+                    
                     modal.querySelector('#detail-action').innerHTML = `<span class="badge" style="background: #e0cec7; color: #6f5849;">${action}</span>`;
                     modal.querySelector('#detail-model').textContent = model;
                     modal.querySelector('#detail-model-id').textContent = modelId || '-';

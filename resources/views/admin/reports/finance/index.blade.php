@@ -52,8 +52,7 @@
                 <div class="card h-100 shadow-sm accent-brown">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="icon-box-premium bg-brown-soft me-2"
-                                style="width: 35px; height: 35px; font-size: 1rem;">
+                            <div class="p-2 rounded-3 me-2" style="background: #fdf8f6; color: #6f5849;">
                                 <i class="fa-solid fa-money-bill-trend-up"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.gross_revenue')) }}</p>
@@ -70,8 +69,7 @@
                 <div class="card h-100 shadow-sm accent-sienna">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="icon-box-premium bg-sienna-soft me-2"
-                                style="width: 35px; height: 35px; font-size: 1rem;">
+                            <div class="p-2 rounded-3 me-2" style="background: #fff5f2; color: #c17a5c;">
                                 <i class="fa-solid fa-tags"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.cogs')) }}</p>
@@ -88,8 +86,7 @@
                 <div class="card h-100 shadow-sm accent-gold">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="icon-box-premium bg-gold-soft me-2"
-                                style="width: 35px; height: 35px; font-size: 1rem;">
+                            <div class="p-2 rounded-3 me-2" style="background: #fef9c3; color: #a16207;">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.operational_expenses')) }}
@@ -107,8 +104,7 @@
                 <div class="card h-100 shadow-sm accent-purple">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="icon-box-premium bg-purple-soft me-2"
-                                style="width: 35px; height: 35px; font-size: 1rem;">
+                            <div class="p-2 rounded-3 me-2" style="background: #f3e8ff; color: #7e22ce;">
                                 <i class="fa-solid fa-truck-ramp-box"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.stock_procurement')) }}</p>
@@ -132,9 +128,9 @@
                                     Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
                                 </h4>
                             </div>
-                            <div class="icon-box-premium {{ $summary['net_profit'] >= 0 ? 'bg-success-soft' : 'bg-danger-soft' }}"
-                                style="width: 45px; height: 45px; font-size: 1.2rem;">
-                                <i class="fa-solid fa-wallet"></i>
+                            <div class="p-2 rounded-4"
+                                style="background: {{ $summary['net_profit'] >= 0 ? '#f0fdf4' : '#fef2f2' }}; color: {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }};">
+                                <i class="fa-solid fa-wallet fa-lg"></i>
                             </div>
                         </div>
                     </div>
@@ -387,6 +383,38 @@
         .hr-text::after {
             margin-left: .5em;
         }
+
+        .chart-legend-btn {
+            background: transparent;
+            border: 1px solid #f2e8e5;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6f5849;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .chart-legend-btn:hover {
+            background: #fdf8f6;
+            border-color: #eaddd7;
+        }
+
+        .chart-legend-btn.hidden {
+            opacity: 0.4;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
     </style>
 @endsection
 
@@ -511,17 +539,14 @@
             chart.data.datasets.forEach((dataset, i) => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = 'btn btn-sm py-1 px-2';
-                btn.style.fontSize = '0.75rem';
-                btn.style.borderRadius = '8px';
-                btn.style.margin = '2px';
-                btn.style.border = `1px solid ${dataset.borderColor}`;
-                btn.style.color = 'white';
-                btn.style.backgroundColor = dataset.borderColor;
-                btn.style.fontWeight = '600';
-                btn.style.transition = 'all 0.2s';
+                btn.className = 'chart-legend-btn';
 
-                btn.innerHTML = `<i class="fa-solid fa-eye me-1"></i> ${dataset.label}`;
+                const dot = document.createElement('span');
+                dot.className = 'legend-dot';
+                dot.style.backgroundColor = dataset.borderColor;
+
+                btn.appendChild(dot);
+                btn.appendChild(document.createTextNode(dataset.label));
 
                 btn.onclick = () => {
                     const meta = chart.getDatasetMeta(i);
@@ -529,13 +554,9 @@
                     chart.update();
 
                     if (meta.hidden) {
-                        btn.style.backgroundColor = 'transparent';
-                        btn.style.color = dataset.borderColor;
-                        btn.innerHTML = `<i class="fa-solid fa-eye-slash me-1"></i> ${dataset.label}`;
+                        btn.classList.add('hidden');
                     } else {
-                        btn.style.backgroundColor = dataset.borderColor;
-                        btn.style.color = 'white';
-                        btn.innerHTML = `<i class="fa-solid fa-eye me-1"></i> ${dataset.label}`;
+                        btn.classList.remove('hidden');
                     }
                 };
                 controls.appendChild(btn);
