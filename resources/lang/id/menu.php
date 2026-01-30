@@ -25,5 +25,6 @@ return [
     'low_stock_alerts' => 'Peringatan Stok Rendah',
     'stock_movements' => 'Pergerakan Stok',
     'menu' => 'Menu',
-    'operational_expenses'=> 'Biaya Operasional',
+    'operational_expenses' => 'Biaya Operasional',
+    'expense_categories' => 'Kategori Biaya',
 ];

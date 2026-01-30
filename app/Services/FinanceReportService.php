@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use App\Models\TransactionItem;
 use App\Models\ReturnTransaction;
 use App\Models\Expense;
+use App\Models\SupplierPurchase;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -44,11 +45,17 @@ class FinanceReportService
         $totalExpenses = Expense::whereBetween('date', [$startDate, $endDate])
             ->sum('amount');
 
-        // 6. Net Profit
+        // 6. Stock Procurement (New)
+        $totalProcurement = SupplierPurchase::whereBetween('purchase_date', [$startDate, $endDate])
+            ->sum('total_price');
+
+        // 7. Net Profit
         // Net Profit = Gross Profit - Returns - Expenses
+        // Note: Stock procurement is usually not deducted from P&L net profit directly (it's in COGS),
+        // but we track it for cash flow awareness.
         $netProfit = $grossProfit - $totalReturns - $totalExpenses;
 
-        // 7. Profit Margin
+        // 8. Profit Margin
         $profitMargin = $grossRevenue > 0 ? ($netProfit / $grossRevenue) * 100 : 0;
 
         return [
@@ -57,6 +64,7 @@ class FinanceReportService
             'gross_profit' => $grossProfit,
             'total_returns' => $totalReturns,
             'total_expenses' => $totalExpenses,
+            'total_procurement' => $totalProcurement,
             'net_profit' => $netProfit,
             'profit_margin' => $profitMargin,
         ];
@@ -96,12 +104,27 @@ class FinanceReportService
         // 3. Expenses per day
         $dailyExpenses = Expense::whereBetween('date', [$startDate, $endDate])
             ->select(
-                DB::raw('DATE(date) as date'),
+                DB::raw('date'),
                 DB::raw('SUM(amount) as cost')
             )
-            ->groupBy(DB::raw('DATE(date)'))
+            ->groupBy('date')
             ->get()
-            ->keyBy('date');
+            ->keyBy(function ($item) {
+                // Ensure key is Y-m-d string regardless of model casting
+                return is_string($item->date) ? substr($item->date, 0, 10) : $item->date->format('Y-m-d');
+            });
+
+        // 4. Procurement per day
+        $dailyProcurement = SupplierPurchase::whereBetween('purchase_date', [$startDate, $endDate])
+            ->select(
+                DB::raw('purchase_date'),
+                DB::raw('SUM(total_price) as cost')
+            )
+            ->groupBy('purchase_date')
+            ->get()
+            ->keyBy(function ($item) {
+                return is_string($item->purchase_date) ? substr($item->purchase_date, 0, 10) : $item->purchase_date->format('Y-m-d');
+            });
 
         $result = [];
         $currentDate = clone $startDate;
@@ -110,12 +133,14 @@ class FinanceReportService
             $revenue = floatval($dailyData->get($dateStr)->revenue ?? 0);
             $cogs = floatval($dailyCogs->get($dateStr)->cogs ?? 0);
             $expense = floatval($dailyExpenses->get($dateStr)->cost ?? 0);
+            $procurement = floatval($dailyProcurement->get($dateStr)->cost ?? 0);
 
             $result[] = [
                 'date' => $dateStr,
                 'revenue' => $revenue,
                 'cogs' => $cogs,
                 'expenses' => $expense,
+                'procurement' => $procurement,
                 'profit' => $revenue - $cogs - $expense,
             ];
             $currentDate->addDay();

@@ -3,27 +3,33 @@
 @section('content')
     <style>
         .report-card {
-            border-radius: 16px;
-            border: none;
+            border-radius: 20px;
+            border: 1px solid #f2e8e5 !important;
             overflow: hidden;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             cursor: pointer;
         }
 
         .report-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 32px rgba(133, 105, 90, 0.2) !important;
+            box-shadow: 0 20px 40px rgba(133, 105, 90, 0.12) !important;
+            border-color: #eaddd7 !important;
         }
 
         .report-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 16px;
+            width: 72px;
+            height: 72px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .report-card:hover .report-icon {
+            transform: scale(1.1) rotate(5deg);
         }
     </style>
 
@@ -51,11 +57,9 @@
             <!-- Finance Report -->
             <div class="col-md-3">
                 <a href="{{ route('admin.reports.finance') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100"
-                        style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
+                    <div class="card report-card shadow-sm h-100 accent-brown">
                         <div class="card-body text-center p-4">
-                            <div class="report-icon mx-auto"
-                                style="background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%); color: white;">
+                            <div class="report-icon mx-auto bg-brown-soft">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
                             </div>
                             <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.finance_report') }}</h5>
@@ -79,11 +83,9 @@
             <!-- Warehouse Report -->
             <div class="col-md-3">
                 <a href="{{ route('admin.reports.warehouse') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100"
-                        style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
+                    <div class="card report-card shadow-sm h-100 accent-success">
                         <div class="card-body text-center p-4">
-                            <div class="report-icon mx-auto"
-                                style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white;">
+                            <div class="report-icon mx-auto bg-success-soft">
                                 <i class="fa-solid fa-warehouse"></i>
                             </div>
                             <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.warehouse_report') }}</h5>
@@ -109,11 +111,9 @@
             <!-- Cashier Report -->
             <div class="col-md-3">
                 <a href="{{ route('admin.reports.cashier') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100"
-                        style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
+                    <div class="card report-card shadow-sm h-100 accent-info">
                         <div class="card-body text-center p-4">
-                            <div class="report-icon mx-auto"
-                                style="background: linear-gradient(135deg, #0284c7 0%, #075985 100%); color: white;">
+                            <div class="report-icon mx-auto bg-info-soft">
                                 <i class="fa-solid fa-cash-register"></i>
                             </div>
                             <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.cashier_report') }}</h5>
@@ -139,11 +139,9 @@
             <!-- Audit Logs -->
             <div class="col-md-3">
                 <a href="{{ route('admin.audit.index') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100"
-                        style="background: linear-gradient(135deg, #fdf8f6 0%, #ffffff 100%);">
+                    <div class="card report-card shadow-sm h-100 accent-sienna">
                         <div class="card-body text-center p-4">
-                            <div class="report-icon mx-auto"
-                                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white;">
+                            <div class="report-icon mx-auto bg-sienna-soft">
                                 <i class="fa-solid fa-clipboard-list"></i>
                             </div>
                             <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.logs_report') }}</h5>
@@ -164,8 +162,8 @@
         </div>
 
         <!-- Quick Stats -->
-        <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-            <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+        <div class="card shadow-sm">
+            <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                 <h5 class="mb-0 fw-bold" style="color: #6f5849;">
                     <i class="fa-solid fa-info-circle me-2"></i>{{ __('admin.quick_report') }}
                 </h5>
@@ -194,8 +192,7 @@
     <div class="modal fade" id="printAllModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 16px;">
-                <div class="modal-header"
-                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 16px 16px 0 0;">
+                <div class="modal-header" style="background: #6f5849; color: white; border-radius: 16px 16px 0 0;">
                     <h5 class="modal-title">
                         <i class="fa-solid fa-file-invoice me-2"></i>{{ __('admin.print_all_reports') }}
                     </h5>

@@ -10,11 +10,11 @@ class ExpenseController extends Controller
 {
     public function index()
     {
-        $expenses = Expense::with('user')
+        $expenses = Expense::with(['user', 'category'])
             ->latest('date')
             ->paginate(20);
 
-        $categories = ['Gaji', 'Sewa', 'Listrik/Air', 'Transportasi', 'Lainnya'];
+        $categories = \App\Models\ExpenseCategory::all();
 
         return view('admin.expenses.index', compact('expenses', 'categories'));
     }
@@ -23,14 +23,14 @@ class ExpenseController extends Controller
     {
         $request->validate([
             'date' => 'required|date',
-            'category' => 'required|string',
+            'expense_category_id' => 'required|exists:expense_categories,id',
             'amount' => 'required|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
 
         Expense::create([
             'date' => $request->date,
-            'category' => $request->category,
+            'expense_category_id' => $request->expense_category_id,
             'amount' => $request->amount,
             'notes' => $request->notes,
             'user_id' => Auth::id(),
@@ -44,14 +44,14 @@ class ExpenseController extends Controller
     {
         $request->validate([
             'date' => 'required|date',
-            'category' => 'required|string',
+            'expense_category_id' => 'required|exists:expense_categories,id',
             'amount' => 'required|numeric|min:0',
             'notes' => 'nullable|string',
         ]);
 
         $expense->update([
             'date' => $request->date,
-            'category' => $request->category,
+            'expense_category_id' => $request->expense_category_id,
             'amount' => $request->amount,
             'notes' => $request->notes,
         ]);

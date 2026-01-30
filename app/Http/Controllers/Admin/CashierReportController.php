@@ -54,8 +54,8 @@ class CashierReportController extends Controller
         $paymentBreakdown = $this->cashierReportService->getPaymentMethodBreakdown($startDate, $endDate);
         $topProducts = $this->cashierReportService->getTopSellingProducts($startDate, $endDate);
         $cashierPerformance = $this->cashierReportService->getTransactionsByUser($startDate, $endDate);
-        $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 20, $search);
-        $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate, $search, $action);
+        $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 20, $search, 10, 'transactions_page');
+        $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate, $search, $action, 10, 'audit_page');
 
         $actions = \App\Models\AuditLog::distinct()->pluck('action');
 

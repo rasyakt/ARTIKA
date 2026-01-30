@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
 
         // Users
         \App\Models\User::create([
-            'name' => 'Super Admin',
+            'name' => 'Admin',
             'username' => 'admin',
             'password' => bcrypt('password'), // password
             'role_id' => $adminRole->id,

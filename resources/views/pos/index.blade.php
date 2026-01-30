@@ -1976,8 +1976,9 @@
                         icon: 'error',
                         title: 'Produk Tidak Ditemukan',
                         text: 'Barcode: ' + barcode + ' tidak terdaftar di sistem ARTIKA.',
-                        timer: 2000,
+                        timer: 2500,
                         showConfirmButton: false,
+                        allowEnterKey: false, // Prevent scanner tail Enter from closing
                         customClass: {
                             popup: 'artika-swal-popup',
                             title: 'artika-swal-title'
@@ -2068,10 +2069,18 @@
             if (existingItem) {
                 console.log('[Cart] Item exists, increasing quantity');
                 if (existingItem.quantity + 1 > productStock) {
+                    playErrorBeep();
                     Swal.fire({
                         icon: 'error',
                         title: 'Stok Terbatas',
-                        text: `Hanya tersedia ${productStock} unit.`
+                        text: `Hanya tersedia ${productStock} unit.`,
+                        allowEnterKey: false, // Prevents scanner Enter from closing it instantly
+                        customClass: {
+                            popup: 'artika-swal-popup',
+                            title: 'artika-swal-title',
+                            confirmButton: 'artika-swal-confirm-btn'
+                        },
+                        buttonsStyling: false
                     });
                     return false;
                 }
@@ -2080,10 +2089,18 @@
             } else {
                 console.log('[Cart] New item, adding to array');
                 if (productStock <= 0) {
+                    playErrorBeep();
                     Swal.fire({
                         icon: 'error',
                         title: 'Stok Kosong',
-                        text: `Produk "${productName}" tidak memiliki stok di gudang.`
+                        text: `Produk "${productName}" tidak memiliki stok di gudang.`,
+                        allowEnterKey: false, // Prevents scanner Enter from closing it instantly
+                        customClass: {
+                            popup: 'artika-swal-popup',
+                            title: 'artika-swal-title',
+                            confirmButton: 'artika-swal-confirm-btn'
+                        },
+                        buttonsStyling: false
                     });
                     return false;
                 }
@@ -2688,16 +2705,43 @@
         }
 
         // Handle logout confirmation
-        document.getElementById('btnLogout').addEventListener('click', function () {
-            confirmAction({
-                text: "{{ __('pos.logout_confirmation_message') }}",
-                confirmButtonText: "{{ __('pos.logout') }}",
-                icon: 'question'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('logoutForm').submit();
-                }
+        const btnLogout = document.getElementById('btnLogout');
+        if (btnLogout) {
+            btnLogout.addEventListener('click', function () {
+                confirmAction({
+                    text: "{{ __('pos.logout_confirmation_message') }}",
+                    confirmButtonText: "{{ __('pos.logout') }}",
+                    icon: 'question'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('logoutForm').submit();
+                    }
+                });
             });
+        }
+
+        // Global Numeric Input Validation for POS
+        document.addEventListener('keydown', function (e) {
+            if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                // Block 'e', 'E', '-', '+', '.', ','
+                const blockedKeys = ['e', 'E', '-', '+', '.', ','];
+                if (blockedKeys.includes(e.key)) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Prevent paste of non-numeric characters for POS
+        document.addEventListener('paste', function (e) {
+            if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                if (!/^\d+$/.test(pasteData)) {
+                    e.preventDefault();
+                    if (typeof showToast === 'function') {
+                        showToast('warning', 'Hanya angka bulat yang diperbolehkan');
+                    }
+                }
+            }
         });
     </script>
 

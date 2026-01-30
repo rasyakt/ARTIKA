@@ -1,6 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        html {
+            scroll-behavior: auto !important;
+        }
+    </style>
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -41,59 +46,93 @@
         </div>
 
         <!-- Financial KPI Cards -->
-        <div class="row g-4 mb-4">
+        <div class="row g-3 mb-4">
             <!-- Gross Revenue -->
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm border-0"
-                    style="background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%); border-radius: 15px;">
-                    <div class="card-body text-white">
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="stats-icon-small"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+            <div class="col-md col-sm-6">
+                <div class="card h-100 shadow-sm accent-brown">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="p-2 rounded-3 me-2" style="background: #fdf8f6; color: #6f5849;">
+                                <i class="fa-solid fa-money-bill-trend-up"></i>
+                            </div>
+                            <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.gross_revenue')) }}</p>
                         </div>
-                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.gross_revenue')) }}</p>
-                        <h4 class="fw-bold mb-0">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</h4>
+                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                            {{ number_format($summary['gross_revenue'], 0, ',', '.') }}
+                        </h5>
                     </div>
                 </div>
             </div>
 
             <!-- Total Cost (COGS) -->
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm border-0"
-                    style="background: linear-gradient(135deg, #c17a5c 0%, #a18072 100%); border-radius: 15px;">
-                    <div class="card-body text-white">
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="stats-icon-small"><i class="fa-solid fa-tags"></i></div>
+            <div class="col-md col-sm-6">
+                <div class="card h-100 shadow-sm accent-sienna">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="p-2 rounded-3 me-2" style="background: #fff5f2; color: #c17a5c;">
+                                <i class="fa-solid fa-tags"></i>
+                            </div>
+                            <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.cogs')) }}</p>
                         </div>
-                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.cogs')) }}</p>
-                        <h4 class="fw-bold mb-0">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</h4>
+                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                            {{ number_format($summary['cogs'], 0, ',', '.') }}
+                        </h5>
                     </div>
                 </div>
             </div>
 
             <!-- Operating Expenses -->
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm border-0"
-                    style="background: linear-gradient(135deg, #ca8a04 0%, #a16207 100%); border-radius: 15px;">
-                    <div class="card-body text-white">
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="stats-icon-small"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+            <div class="col-md col-sm-6">
+                <div class="card h-100 shadow-sm accent-gold">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="p-2 rounded-3 me-2" style="background: #fef9c3; color: #a16207;">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                            </div>
+                            <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.operational_expenses')) }}
+                            </p>
                         </div>
-                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.operational_expenses')) }}</p>
-                        <h4 class="fw-bold mb-0">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</h4>
+                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                            {{ number_format($summary['total_expenses'], 0, ',', '.') }}
+                        </h5>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stock Procurement -->
+            <div class="col-md col-sm-6">
+                <div class="card h-100 shadow-sm accent-purple">
+                    <div class="card-body p-3">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="p-2 rounded-3 me-2" style="background: #f3e8ff; color: #7e22ce;">
+                                <i class="fa-solid fa-truck-ramp-box"></i>
+                            </div>
+                            <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.stock_procurement')) }}</p>
+                        </div>
+                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                            {{ number_format($summary['total_procurement'], 0, ',', '.') }}
+                        </h5>
                     </div>
                 </div>
             </div>
 
             <!-- Net Profit -->
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm border-0"
-                    style="background: linear-gradient(135deg, {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }} 0%, {{ $summary['net_profit'] >= 0 ? '#15803d' : '#991b1b' }} 100%); border-radius: 15px;">
-                    <div class="card-body text-white">
-                        <div class="d-flex justify-content-between mb-3">
-                            <div class="stats-icon-small"><i class="fa-solid fa-wallet"></i></div>
+            <div class="col-md-3 col-sm-12">
+                <div class="card h-100 shadow-sm {{ $summary['net_profit'] >= 0 ? 'accent-success' : 'accent-danger' }}">
+                    <div class="card-body p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="text-muted small mb-1 fw-semibold">{{ strtoupper(__('admin.net_profit')) }}</p>
+                                <h4 class="fw-bold mb-0"
+                                    style="color: {{ $summary['net_profit'] >= 0 ? '#15803d' : '#991b1b' }}; font-size: 1.3rem;">
+                                    Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
+                                </h4>
+                            </div>
+                            <div class="p-2 rounded-4"
+                                style="background: {{ $summary['net_profit'] >= 0 ? '#f0fdf4' : '#fef2f2' }}; color: {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }};">
+                                <i class="fa-solid fa-wallet fa-lg"></i>
+                            </div>
                         </div>
-                        <p class="text-white-50 small mb-1">{{ strtoupper(__('admin.net_profit')) }}</p>
-                        <h4 class="fw-bold mb-0">Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}</h4>
                     </div>
                 </div>
             </div>
@@ -102,7 +141,7 @@
         <div class="row g-4 mb-4">
             <!-- Profit Margin & Returns -->
             <div class="col-md-4">
-                <div class="card shadow-sm border-0 h-100" style="border-radius: 15px;">
+                <div class="card shadow-sm h-100">
                     <div class="card-body">
                         <h6 class="fw-bold mb-4" style="color: #6f5849;">{{ __('admin.quick_info') }}</h6>
 
@@ -148,31 +187,37 @@
 
             <!-- Trend Chart -->
             <div class="col-md-8">
-                <div class="card shadow-sm border-0 h-100" style="border-radius: 15px;">
-                    <div class="card-header bg-white border-0 pt-4 px-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-header border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
                         <h6 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.financial_trend') }}</h6>
+                        <div id="chart-controls" class="btn-group btn-group-sm">
+                            <!-- Toggle buttons will be injected or managed via CSS/JS -->
+                        </div>
                     </div>
                     <div class="card-body px-4">
-                        <canvas id="financeChart" height="250"></canvas>
+                        <div style="height: 300px;">
+                            <canvas id="financeChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Detailed Daily Data -->
-        <div class="card shadow-sm border-0" style="border-radius: 15px;">
-            <div class="card-header bg-white border-0 pt-4 px-4">
+        <div class="card shadow-sm" id="daily-profit-section">
+            <div class="card-header border-0 pt-4 px-4">
                 <h6 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.daily_profit') }}</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead>
-                            <tr class="table-earth">
+                            <tr style="background: #fdf8f6;">
                                 <th>{{ __('admin.date') }}</th>
                                 <th class="text-end">{{ __('admin.gross_revenue') }}</th>
                                 <th class="text-end">{{ __('admin.cogs') }}</th>
                                 <th class="text-end">{{ __('admin.operational_expenses') }}</th>
+                                <th class="text-end">{{ __('admin.stock_procurement') }}</th>
                                 <th class="text-end">{{ __('admin.net_profit') }}</th>
                                 <th class="text-end">{{ __('admin.profit_margin') }}</th>
                             </tr>
@@ -184,6 +229,8 @@
                                     <td class="text-end">Rp {{ number_format($day['revenue'], 0, ',', '.') }}</td>
                                     <td class="text-end text-muted">Rp {{ number_format($day['cogs'], 0, ',', '.') }}</td>
                                     <td class="text-end text-muted">Rp {{ number_format($day['expenses'], 0, ',', '.') }}</td>
+                                    <td class="text-end text-muted">Rp {{ number_format($day['procurement'], 0, ',', '.') }}
+                                    </td>
                                     <td class="text-end fw-bold {{ $day['profit'] >= 0 ? 'text-success' : 'text-danger' }}">
                                         Rp {{ number_format($day['profit'], 0, ',', '.') }}
                                     </td>
@@ -198,6 +245,9 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+                <div class="px-3 py-2 border-top d-flex justify-content-end">
+                    {{ $dailyData->fragment('daily-profit-section')->links('vendor.pagination.no-prevnext') }}
                 </div>
             </div>
         </div>
@@ -333,6 +383,38 @@
         .hr-text::after {
             margin-left: .5em;
         }
+
+        .chart-legend-btn {
+            background: transparent;
+            border: 1px solid #f2e8e5;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6f5849;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin: 2px;
+        }
+
+        .chart-legend-btn:hover {
+            background: #fdf8f6;
+            border-color: #eaddd7;
+        }
+
+        .chart-legend-btn.hidden {
+            opacity: 0.4;
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
     </style>
 @endsection
 
@@ -340,7 +422,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const dailyData = @json($dailyData);
+            const dailyData = {!! json_encode($allDailyData) !!};
 
             const labels = dailyData.map(d => {
                 const date = new Date(d.date);
@@ -353,7 +435,7 @@
             const profitData = dailyData.map(d => d.profit);
 
             const ctx = document.getElementById('financeChart').getContext('2d');
-            new Chart(ctx, {
+            const chart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: labels,
@@ -388,6 +470,15 @@
                             pointRadius: 0
                         },
                         {
+                            label: '{{ __('admin.stock_procurement') }}',
+                            data: dailyData.map(d => d.procurement),
+                            borderColor: '#9333ea',
+                            borderDash: [3, 3],
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
                             label: '{{ __('admin.net_profit') }}',
                             data: profitData,
                             borderColor: '#16a34a',
@@ -407,12 +498,7 @@
                     },
                     plugins: {
                         legend: {
-                            position: 'top',
-                            labels: {
-                                usePointStyle: true,
-                                padding: 20,
-                                font: { size: 12, family: 'Inter' }
-                            }
+                            display: false // Hide default legend to use custom buttons
                         },
                         tooltip: {
                             padding: 12,
@@ -446,6 +532,34 @@
                         }
                     }
                 }
+            });
+
+            // Handle custom legend / toggle buttons
+            const controls = document.getElementById('chart-controls');
+            chart.data.datasets.forEach((dataset, i) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'chart-legend-btn';
+
+                const dot = document.createElement('span');
+                dot.className = 'legend-dot';
+                dot.style.backgroundColor = dataset.borderColor;
+
+                btn.appendChild(dot);
+                btn.appendChild(document.createTextNode(dataset.label));
+
+                btn.onclick = () => {
+                    const meta = chart.getDatasetMeta(i);
+                    meta.hidden = meta.hidden === null ? !chart.data.datasets[i].hidden : null;
+                    chart.update();
+
+                    if (meta.hidden) {
+                        btn.classList.add('hidden');
+                    } else {
+                        btn.classList.remove('hidden');
+                    }
+                };
+                controls.appendChild(btn);
             });
         });
     </script>

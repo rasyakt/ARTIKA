@@ -10,14 +10,14 @@
                 <p class="text-muted mb-0">{{ __('admin.manage_users_permissions') }}</p>
             </div>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addUserModal"
-                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
+                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
                 <span style="font-size: 1.25rem;">+</span> {{ __('admin.add_user') }}
             </button>
         </div>
 
 
         <!-- Users Table -->
-        <div class="card shadow-sm" style="border-radius: 16px; border: none;">
+        <div class="card shadow-sm">
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
@@ -38,7 +38,7 @@
                                     <td class="ps-4">
                                         <div class="d-flex align-items-center">
                                             <div class="me-3"
-                                                style="width: 45px; height: 45px; background: linear-gradient(135deg, #f2e8e5 0%, #e0cec7 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                                style="width: 45px; height: 45px; background: #f2e8e5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
                                                 <i class="fa-solid fa-user"></i>
                                             </div>
                                             <div>
@@ -109,7 +109,7 @@
                 </div>
             </div>
             @if($users->hasPages())
-                <div class="card-footer bg-white border-0 d-flex justify-content-end py-3">
+                <div class="card-footer border-0 d-flex justify-content-end py-3">
                     {{ $users->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
@@ -201,7 +201,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
+                            style="background: #6f5849; border: none; border-radius: 12px;">
                             <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('admin.save_user') }}
                         </button>
                     </div>
@@ -273,7 +273,7 @@
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
+                            style="background: #6f5849; border: none; border-radius: 12px;">
                             <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.update') }} {{ __('common.user') }}
                         </button>
                     </div>

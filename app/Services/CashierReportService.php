@@ -14,7 +14,7 @@ class CashierReportService
     /**
      * Get cashier audit logs for the period (only cashier role).
      */
-    public function getCashierAuditLogs($startDate = null, $endDate = null, $search = null, $action = null)
+    public function getCashierAuditLogs($startDate = null, $endDate = null, $search = null, $action = null, $perPage = null, $pageName = 'page')
     {
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
@@ -38,7 +38,9 @@ class CashierReportService
             $query->where('action', $action);
         }
 
-        return $query->latest()->get();
+        $query->latest();
+
+        return $perPage ? $query->paginate($perPage, ['*'], $pageName) : $query->get();
     }
 
     /**
@@ -149,7 +151,7 @@ class CashierReportService
     /**
      * Get recent transactions.
      */
-    public function getRecentTransactions($startDate = null, $endDate = null, $limit = 20, $search = null)
+    public function getRecentTransactions($startDate = null, $endDate = null, $limit = 20, $search = null, $perPage = null, $pageName = 'page')
     {
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
@@ -165,8 +167,12 @@ class CashierReportService
             });
         }
 
-        return $query->latest()
-            ->limit($limit)
-            ->get();
+        $query->latest();
+
+        if ($perPage) {
+            return $query->paginate($perPage, ['*'], $pageName);
+        }
+
+        return $query->limit($limit)->get();
     }
 }

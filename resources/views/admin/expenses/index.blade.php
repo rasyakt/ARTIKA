@@ -11,7 +11,7 @@
                 <p class="text-muted mb-0 small">{{ __('admin.expenses_subtitle') }}</p>
             </div>
             <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addExpenseModal"
-                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
+                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
                 <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_expense') }}
             </button>
         </div>
@@ -25,7 +25,7 @@
         @endif
 
         <!-- Expenses Table -->
-        <div class="card shadow-sm border-0" style="border-radius: 16px;">
+        <div class="card shadow-sm">
             <div class="card-body p-0">
                 @if($expenses->count() > 0)
                     <div class="table-responsive">
@@ -57,7 +57,7 @@
                                         <td class="py-3">
                                             <span class="badge"
                                                 style="background: #e0cec7; color: #6f5849; padding: 0.5rem 0.8rem; border-radius: 8px;">
-                                                {{ $expense->category }}
+                                                {{ $expense->category->name }}
                                             </span>
                                         </td>
                                         <td class="py-3">
@@ -121,7 +121,7 @@
                 @endif
             </div>
             @if($expenses->hasPages())
-                <div class="card-footer bg-white border-0 d-flex justify-content-end py-3 px-4">
+                <div class="card-footer border-0 d-flex justify-content-end py-3 px-4">
                     {{ $expenses->links('vendor.pagination.no-prevnext') }}
                 </div>
             @endif
@@ -148,12 +148,11 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.category') }}</label>
-                            <select name="category" class="form-select custom-input" required>
+                            <select name="expense_category_id" class="form-select custom-input" required>
                                 <option value="" disabled selected>{{ __('admin.select_category') }}</option>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat }}">{{ $cat }}</option>
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                 @endforeach
-                                <!-- <option value="Lainnya">{{ __('admin.other') }}</option> -->
                             </select>
                         </div>
                         <div class="mb-3">
@@ -202,9 +201,9 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.category') }}</label>
-                            <select name="category" id="edit_category" class="form-select custom-input" required>
+                            <select name="expense_category_id" id="edit_category" class="form-select custom-input" required>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat }}">{{ $cat }}</option>
+                                    <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -235,7 +234,7 @@
 
     <style>
         .btn-brown {
-            background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);
+            background: #6f5849;
             color: white;
             border: none;
         }
@@ -278,7 +277,7 @@
                     form.action = `/admin/expenses/${expense.id}`;
 
                     document.getElementById('edit_date').value = expense.date.split('T')[0];
-                    document.getElementById('edit_category').value = expense.category;
+                    document.getElementById('edit_category').value = expense.expense_category_id;
                     document.getElementById('edit_amount').value = expense.amount;
                     document.getElementById('edit_notes').value = expense.notes || '';
                 });
@@ -297,6 +296,7 @@
                         });
                     });
                 });
-            });
+            }
+        });
     </script>
 @endsection

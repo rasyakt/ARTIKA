@@ -34,6 +34,7 @@
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
             box-shadow: 0 4px 6px -1px rgba(111, 88, 73, 0.2) !important;
+            margin: 0.25rem !important;
         }
 
         .artika-swal-cancel-btn {
@@ -43,6 +44,7 @@
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
+            margin: 0.25rem !important;
         }
 
         .artika-swal-toast {
@@ -389,8 +391,13 @@
                             <i class="fa-solid fa-truck"></i> {{ __('menu.suppliers') }}
                         </a>
                         <a href="{{ route('admin.expenses.index') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.expenses*') ? 'active' : '' }}">
+                            class="sidebar-link {{ request()->routeIs('admin.expenses.index') ? 'active' : '' }}">
                             <i class="fa-solid fa-wallet"></i> {{ __('menu.operational_expenses') }}
+                        </a>
+                        <a href="{{ route('admin.expense-categories.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.expense-categories.index') ? 'active' : '' }}"
+                            style="padding-left: 2.5rem; font-size: 0.9rem; opacity: 0.8;">
+                            <i class="fa-solid fa-tags" style="font-size: 0.8rem;"></i> {{ __('menu.expense_categories') }}
                         </a>
                         <hr style="margin: 0.5rem 0; opacity: 0.1;">
                         <a href="{{ route('admin.reports') }}"
@@ -583,6 +590,28 @@
                 @if($errors->any())
                     showToast('error', "{{ $errors->first() }}");
                 @endif
+            });
+
+            // Global Numeric Input Validation
+            document.addEventListener('keydown', function (e) {
+                if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                    // Block 'e', 'E', '-', '+', '.', ','
+                    const blockedKeys = ['e', 'E', '-', '+', '.', ','];
+                    if (blockedKeys.includes(e.key)) {
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            // Prevent paste of non-numeric characters
+            document.addEventListener('paste', function (e) {
+                if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                    const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                    if (!/^\d+$/.test(pasteData)) {
+                        e.preventDefault();
+                        showToast('warning', 'Hanya angka bulat yang diperbolehkan');
+                    }
+                }
             });
         </script>
 </body>

@@ -1,140 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashier Report - {{ $startDate->format('d M Y') }} to {{ $endDate->format('d M Y') }}</title>
+    <meta charset="utf-8">
+    <title>{{ __('admin.cashier_report') }} - ARTIKA</title>
     <style>
-        @page {
-            margin: 15mm;
-            size: A4;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Helvetica', sans-serif;
+            color: #333;
+            line-height: 1.4;
             font-size: 11px;
-            line-height: 1.6;
-            color: #4b382f;
+            margin: 0;
             padding: 20px;
-            background: #ffffff;
         }
 
         .header {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #85695a;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #85695a;
+            padding-bottom: 10px;
         }
 
         .header h1 {
-            font-size: 28px;
+            font-size: 18px;
             color: #6f5849;
-            margin-bottom: 8px;
-            font-weight: 700;
+            margin: 0;
+            text-transform: uppercase;
         }
 
-        .header .subtitle {
-            font-size: 13px;
-            color: #78716c;
-            margin-bottom: 5px;
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 12px;
+            color: #85695a;
         }
 
-        .header .meta {
-            font-size: 11px;
-            color: #a8a29e;
-        }
-
-        /* Summary Grid */
-        .summary-table {
+        .report-meta {
+            margin-bottom: 20px;
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 12px 0;
-            margin: 0 -12px 30px -12px;
-            table-layout: fixed;
+        }
+
+        .report-meta td {
+            padding: 2px 0;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin: 15px 0 10px 0;
+            color: #6f5849;
+            text-transform: uppercase;
+            border-left: 4px solid #85695a;
+            padding-left: 10px;
+            background-color: #fdf8f6;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .summary-grid {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
         }
 
         .summary-box {
-            padding: 15px;
-            border: 2px solid #e0cec7;
-            background: #fdf8f6;
-            border-radius: 8px;
-            vertical-align: top;
+            border: 1px solid #e0cec7;
+            padding: 10px;
+            text-align: center;
         }
 
-
         .summary-box h3 {
-            font-size: 10px;
+            margin: 0 0 5px 0;
+            font-size: 9px;
             color: #78716c;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            font-weight: 600;
         }
 
         .summary-box .value {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 14px;
+            font-weight: bold;
             color: #6f5849;
-            margin-bottom: 5px;
         }
 
-        .summary-box .label {
-            font-size: 9px;
-            color: #a8a29e;
-        }
-
-        /* Sections */
-        .section {
-            margin-bottom: 35px;
-            page-break-inside: avoid;
-        }
-
-        .section h2 {
-            font-size: 16px;
-            border-left: 4px solid #85695a;
-            padding-left: 12px;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            color: #6f5849;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-
-        /* Tables */
-        table {
+        table.data {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15px;
-            box-shadow: 0 1px 3px rgba(133, 105, 90, 0.1);
+            margin-bottom: 20px;
         }
 
-        table th,
-        table td {
-            border: 1px solid #e0cec7;
-            padding: 10px 8px;
-            text-align: left;
-        }
-
-        table th {
-            background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);
-            color: white;
-            font-weight: 600;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        table tr:nth-child(even) {
+        table.data th {
             background-color: #fdf8f6;
+            color: #6f5849;
+            text-align: left;
+            padding: 8px;
+            border: 1px solid #f2e8e5;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 10px;
         }
 
-        /* Utilities */
+        table.data td {
+            padding: 8px;
+            border: 1px solid #f2e8e5;
+        }
+
         .text-right {
             text-align: right;
         }
@@ -143,254 +111,171 @@
             text-align: center;
         }
 
-        .text-muted {
-            color: #78716c;
-            font-size: 10px;
+        .text-success {
+            color: #16a34a;
+        }
+
+        .text-primary {
+            color: #0284c7;
+        }
+
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 9px;
+            color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
         }
 
         .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 4px;
+            padding: 2px 5px;
+            border-radius: 3px;
             font-size: 9px;
-            font-weight: 600;
-            text-transform: uppercase;
+            font-weight: bold;
         }
 
         .badge-success {
-            background: #16a34a;
-            color: white;
-        }
-
-        .badge-info {
-            background: #e0cec7;
-            color: #6f5849;
+            background-color: #f0fdf4;
+            color: #16a34a;
+            border: 1px solid #dcfce7;
         }
 
         .badge-primary {
-            background: #0284c7;
-            color: white;
+            background-color: #f0f9ff;
+            color: #0284c7;
+            border: 1px solid #e0f2fe;
         }
 
-        /* Print Styles */
-        @media print {
-            .no-print {
-                display: none;
-            }
-
-            body {
-                padding: 0;
-            }
-
-            .section {
-                page-break-inside: avoid;
-            }
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #e0cec7;
-            text-align: center;
-            color: #a8a29e;
-            font-size: 10px;
+        .badge-info {
+            background-color: #f5f0ed;
+            color: #6f5849;
+            border: 1px solid #e0cec7;
         }
     </style>
 </head>
 
-<body @if(!isset($isPdf) || !$isPdf) onload="window.print()" @endif>
-
-    @if(!isset($isPdf) || !$isPdf)
-        <div class="no-print"
-            style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); text-align: center; border-radius: 8px;">
-            <button onclick="window.print()"
-                style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: white; border: none; border-radius: 6px; font-weight: 600; margin-right: 10px; color: #6f5849;">
-                <i class="fa-solid fa-print"></i> {{ __('admin.print_report') }}
-            </button>
-            <button onclick="window.close()"
-                style="padding: 10px 24px; font-size: 14px; cursor: pointer; background: rgba(255,255,255,0.2); color: white; border: 2px solid white; border-radius: 6px; font-weight: 600;">
-                <i class="fa-solid fa-times"></i> {{ __('admin.close') }}
-            </button>
-        </div>
-    @endif
-
+<body>
     <div class="header">
-        <h1><i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_reports_title') }}</h1>
-        <div class="subtitle">{{ __('admin.period') }}: {{ $startDate->format('d M Y') }} -
-            {{ $endDate->format('d M Y') }}
-        </div>
-        <div class="meta">{{ __('admin.generated') }}: {{ now()->format('d M Y H:i') }} | ARTIKA POS System</div>
+        <h1>{{ __('admin.cashier_report') }}</h1>
+        <p>ARTIKA POS SYSTEM</p>
     </div>
 
-    <table class="summary-table">
+    <table class="report-meta">
         <tr>
-            <td class="summary-box">
+            <td width="15%"><strong>{{ __('admin.period') }}</strong></td>
+            <td width="35%">: {{ $startDate->format('d/m/Y') }} - {{ $endDate->format('d/m/Y') }}</td>
+            <td width="15%"><strong>{{ __('admin.generated') }}</strong></td>
+            <td width="35%">: {{ now()->format('d/m/Y H:i') }}</td>
+        </tr>
+    </table>
+
+    <table class="summary-grid">
+        <tr>
+            <td class="summary-box" width="25%">
                 <h3>{{ __('admin.total_sales') }}</h3>
-                <div class="value">Rp {{ number_format($summary['total_sales'], 0, ',', '.') }}</div>
-                <div class="label">{{ number_format($summary['total_transactions']) }} {{ __('admin.transactions') }}
-                </div>
+                <div class="value text-success">Rp {{ number_format($summary['total_sales'], 0, ',', '.') }}</div>
             </td>
-            <td class="summary-box">
+            <td class="summary-box" width="25%">
+                <h3>{{ __('admin.transactions') }}</h3>
+                <div class="value">{{ number_format($summary['total_transactions']) }} trx</div>
+            </td>
+            <td class="summary-box" width="25%">
                 <h3>{{ __('admin.avg_transaction') }}</h3>
                 <div class="value">Rp {{ number_format($summary['average_transaction'], 0, ',', '.') }}</div>
-                <div class="label">{{ __('admin.per_transaction') }}</div>
             </td>
-            <td class="summary-box">
-                <h3>{{ __('admin.cash_sales') }}</h3>
-                <div class="value">Rp {{ number_format($summary['cash_sales'], 0, ',', '.') }}</div>
-                <div class="label">{{ $summary['cash_count'] }} {{ __('admin.transactions') }}</div>
-            </td>
-            <td class="summary-box">
-                <h3>{{ __('admin.non_cash_sales') }}</h3>
-                <div class="value">Rp {{ number_format($summary['non_cash_sales'], 0, ',', '.') }}</div>
-                <div class="label">{{ $summary['non_cash_count'] }} {{ __('admin.transactions') }}</div>
+            <td class="summary-box" width="25%">
+                <h3>{{ __('admin.payment_method') }}</h3>
+                <div class="value" style="font-size: 11px;">
+                    CASH: {{ $summary['cash_count'] }}<br>
+                    NON-CASH: {{ $summary['non_cash_count'] }}
+                </div>
             </td>
         </tr>
     </table>
 
-    <div class="section">
-        <h2>{{ __('admin.top_selling_products') }}</h2>
-        <table>
-            <thead>
+    <div class="section-title">{{ __('admin.top_selling_products') }}</div>
+    <table class="data">
+        <thead>
+            <tr>
+                <th width="5%">#</th>
+                <th>{{ __('admin.product_management') }}</th>
+                <th width="15%" class="text-center">{{ __('admin.sold') }}</th>
+                <th width="25%" class="text-right">{{ __('admin.revenue') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($topProducts as $index => $product)
                 <tr>
-                    <th style="width: 5%;">#</th>
-                    <th>{{ __('admin.product_management') }}</th>
-                    <th style="width: 15%;" class="text-center">{{ __('admin.sold') }}</th>
-                    <th style="width: 20%;" class="text-right">{{ __('admin.revenue') }}</th>
+                    <td class="text-center">{{ $index + 1 }}</td>
+                    <td>
+                        <strong>{{ $product->name }}</strong><br>
+                        <small>{{ $product->barcode }}</small>
+                    </td>
+                    <td class="text-center">{{ number_format($product->total_sold) }}</td>
+                    <td class="text-right">Rp {{ number_format($product->total_revenue, 0, ',', '.') }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                @forelse($topProducts as $index => $product)
-                    <tr>
-                        <td class="text-center"><strong>{{ $index + 1 }}</strong></td>
-                        <td>
-                            <strong>{{ $product->name }}</strong>
-                            <div class="text-muted">{{ $product->barcode }}</div>
-                        </td>
-                        <td class="text-center">{{ $product->total_sold }}</td>
-                        <td class="text-right"><strong>Rp {{ number_format($product->total_revenue, 0, ',', '.') }}</strong>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="4" class="text-center" style="padding: 20px;">No sales data</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
 
-    <div class="section">
-        <h2>{{ __('admin.cashier_performance') }}</h2>
-        <table>
-            <thead>
+    <div class="section-title">{{ __('admin.cashier_performance') }}</div>
+    <table class="data">
+        <thead>
+            <tr>
+                <th>{{ __('admin.cashier') }}</th>
+                <th width="20%" class="text-center">{{ __('admin.transactions') }}</th>
+                <th width="25%" class="text-right">{{ __('admin.total_sales') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($cashierPerformance as $performance)
                 <tr>
-                    <th>{{ __('admin.cashier') }}</th>
-                    <th style="width: 20%;" class="text-center">{{ __('admin.transactions') }}</th>
-                    <th style="width: 25%;" class="text-right">{{ __('admin.total_sales') }}</th>
+                    <td>
+                        <strong>{{ $performance->user->name }}</strong><br>
+                        <small>{{ $performance->user->role->name }}</small>
+                    </td>
+                    <td class="text-center">{{ $performance->transaction_count }}</td>
+                    <td class="text-right">Rp {{ number_format($performance->total_sales, 0, ',', '.') }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                @forelse($cashierPerformance as $performance)
-                    <tr>
-                        <td>
-                            <strong>{{ $performance->user->name }}</strong>
-                            <div class="text-muted">{{ $performance->user->role->name }}</div>
-                        </td>
-                        <td class="text-center">{{ $performance->transaction_count }}</td>
-                        <td class="text-right"><strong>Rp
-                                {{ number_format($performance->total_sales, 0, ',', '.') }}</strong></td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="3" class="text-center" style="padding: 20px;">No data available</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
 
-    <div class="section">
-        <h2>{{ __('admin.recent_transactions') }}</h2>
-        <table>
-            <thead>
+    <div class="section-title">{{ __('admin.recent_transactions') }}</div>
+    <table class="data">
+        <thead>
+            <tr>
+                <th width="15%">{{ __('admin.invoice') }}</th>
+                <th width="15%">{{ __('admin.date') }}</th>
+                <th>{{ __('admin.cashier') }}</th>
+                <th width="15%" class="text-center">{{ __('admin.payment_method') }}</th>
+                <th width="20%" class="text-right">{{ __('admin.amount') }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($recentTransactions as $transaction)
                 <tr>
-                    <th style="width: 15%;">{{ __('admin.invoice') }}</th>
-                    <th style="width: 15%;">{{ __('admin.date') }}</th>
-                    <th>{{ __('admin.cashier') }}</th>
-                    <th style="width: 12%;" class="text-center">{{ __('admin.payment_method') }}</th>
-                    <th style="width: 15%;" class="text-right">{{ __('admin.amount') }}</th>
+                    <td><strong>{{ $transaction->invoice_no }}</strong></td>
+                    <td>{{ $transaction->created_at->format('d/m/Y H:i') }}</td>
+                    <td>{{ $transaction->user->name }}</td>
+                    <td class="text-center">
+                        @php
+                            $isCash = in_array(strtolower($transaction->payment_method), ['tunai', 'cash']);
+                        @endphp
+                        <span class="badge {{ $isCash ? 'badge-success' : 'badge-primary' }}">
+                            {{ $isCash ? __('admin.cash') : __('admin.non_cash') }}
+                        </span>
+                    </td>
+                    <td class="text-right">Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                @forelse($recentTransactions as $transaction)
-                    <tr>
-                        <td><strong>{{ $transaction->invoice_no }}</strong></td>
-                        <td>{{ $transaction->created_at->format('d/m/Y H:i') }}</td>
-                        <td>{{ $transaction->user->name }}</td>
-                        <td class="text-center">
-                            @if(strtolower($transaction->payment_method) == 'tunai' || strtolower($transaction->payment_method) == 'cash')
-                                <span class="badge badge-success">{{ __('admin.cash') }}</span>
-                            @else
-                                <span class="badge badge-primary">{{ __('admin.non_cash') }}</span>
-                            @endif
-                        </td>
-                        <td class="text-right"><strong>Rp
-                                {{ number_format($transaction->total_amount, 0, ',', '.') }}</strong></td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center" style="padding: 20px;">No transactions found</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    <div class="section">
-        <h2>{{ __('admin.audit_log') }}</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 12%;">{{ __('admin.date') }}</th>
-                    <th style="width: 15%;">{{ __('admin.user') }}</th>
-                    <th style="width: 12%;" class="text-center">{{ __('admin.action') }}</th>
-                    <th style="width: 15%;">{{ __('admin.entity') }}</th>
-                    <th>{{ __('admin.details') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($auditLogs as $log)
-                    <tr>
-                        <td>{{ $log->created_at->format('d/m/Y H:i') }}</td>
-                        <td>
-                            <strong>{{ $log->user->name ?? 'System' }}</strong>
-                            <div class="text-muted">{{ $log->user->role->name ?? '' }}</div>
-                        </td>
-                        <td class="text-center">
-                            <span class="badge badge-info">{{ strtoupper($log->action) }}</span>
-                        </td>
-                        <td>
-                            <strong>{{ $log->model_type }}</strong>
-                            <span class="text-muted">#{{ $log->model_id }}</span>
-                        </td>
-                        <td>{{ $log->notes }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="text-center" style="padding: 20px;">No audit logs found for this period</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
 
     <div class="footer">
-        <p><strong>ARTIKA POS System</strong> - Cashier Performance Report</p>
-        <p>This is a computer-generated report. No signature required.</p>
+        <p>Laporan ini dicetak otomatis oleh Sistem ARTIKA POS pada {{ now()->format('d/m/Y H:i:s') }}</p>
     </div>
-
 </body>
 
 </html>

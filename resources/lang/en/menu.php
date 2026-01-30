@@ -25,5 +25,6 @@ return [
     'low_stock_alerts' => 'Low Stock Alerts',
     'stock_movements' => 'Stock Movements',
     'menu' => 'Menu',
-    'operational_expenses'=> 'Operational Expenses',
+    'operational_expenses' => 'Operational Expenses',
+    'expense_categories' => 'Expense Categories',
 ];
