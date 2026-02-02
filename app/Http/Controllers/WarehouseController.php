@@ -38,9 +38,9 @@ class WarehouseController extends Controller
             ])
             ->get()
             ->map(function ($category) {
-                $totalStock = $category->products->sum(function ($product) {
-                    return $product->stocks->sum('quantity');
-                });
+                $totalStock = $category->products->reduce(function ($carry, $product) {
+                    return $carry + $product->stocks->sum('quantity');
+                }, 0);
                 return [
                     'name' => $category->name,
                     'products_count' => $category->products_count,
@@ -141,53 +141,55 @@ class WarehouseController extends Controller
 
         $quantityBefore = $stock->quantity;
 
-        switch ($request->type) {
-            case 'add':
-                $stock->quantity += $request->quantity;
-                $quantityChange = $request->quantity;
-                break;
-            case 'subtract':
-                $stock->quantity -= $request->quantity;
-                $quantityChange = -$request->quantity;
-                break;
-            case 'set':
-                $quantityChange = $request->quantity - $stock->quantity;
-                $stock->quantity = $request->quantity;
-                break;
-        }
+        return DB::transaction(function () use ($request, $stock, $quantityBefore) {
+            switch ($request->type) {
+                case 'add':
+                    $stock->quantity += $request->quantity;
+                    $quantityChange = $request->quantity;
+                    break;
+                case 'subtract':
+                    $stock->quantity -= $request->quantity;
+                    $quantityChange = -$request->quantity;
+                    break;
+                case 'set':
+                    $quantityChange = $request->quantity - $stock->quantity;
+                    $stock->quantity = $request->quantity;
+                    break;
+            }
 
-        $stock->save();
+            $stock->save();
 
-        // Log the movement
-        $moveType = ($request->type === 'add') ? 'in' : 'adjustment';
+            // Log the movement
+            $moveType = ($request->type === 'add') ? 'in' : 'adjustment';
 
-        StockMovement::create([
-            'product_id' => $request->product_id,
-            'user_id' => Auth::id(),
-            'type' => $moveType,
-            'quantity_before' => $quantityBefore,
-            'quantity_after' => $stock->quantity,
-            'quantity_change' => $quantityChange,
-            'reason' => $request->reason ?? ($request->type === 'add' ? 'Restock/Stock In' : 'Manual adjustment'),
-            'reference' => ($request->type === 'add' ? 'IN-' : 'ADJ-') . date('YmdHis')
-        ]);
+            StockMovement::create([
+                'product_id' => $request->product_id,
+                'user_id' => Auth::id(),
+                'type' => $moveType,
+                'quantity_before' => $quantityBefore,
+                'quantity_after' => $stock->quantity,
+                'quantity_change' => $quantityChange,
+                'reason' => $request->reason ?? ($request->type === 'add' ? 'Restock/Stock In' : 'Manual adjustment'),
+                'reference' => ($request->type === 'add' ? 'IN-' : 'ADJ-') . date('YmdHis')
+            ]);
 
-        // Audit Log
-        AuditLog::log(
-            'stock_adjusted',
-            'Stock',
-            $stock->id,
-            $quantityBefore,
-            $stock->quantity,
-            ['type' => $request->type, 'change' => $quantityChange],
-            'Manual adjustment for ' . $stock->product->name
-        );
+            // Audit Log
+            AuditLog::log(
+                'stock_adjusted',
+                'Stock',
+                $stock->id,
+                $quantityBefore,
+                $stock->quantity,
+                ['type' => $request->type, 'change' => $quantityChange],
+                'Manual adjustment for ' . $stock->product->name
+            );
 
-        return response()->json([
-            'success' => true,
-            'new_quantity' => $stock->quantity,
-            'message' => __('warehouse.stock_adjusted_successfully')
-        ]);
+            return response()->json([
+                'success' => true,
+                'new_quantity' => $stock->quantity,
+                'message' => __('warehouse.stock_adjusted_successfully')
+            ]);
+        });
     }
 }
 

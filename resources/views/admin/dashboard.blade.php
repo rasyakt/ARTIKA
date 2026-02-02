@@ -193,7 +193,7 @@
                                     @forelse($recentTransactions as $transaction)
                                         <tr>
                                             <td class="fw-bold" style="color: #85695a;">{{ $transaction->invoice_no }}</td>
-                                            <td>{{ $transaction->user->name }}</td>
+                                            <td>{{ $transaction->user->name ?? 'System/Deleted' }}</td>
                                             <td class="fw-bold" style="color: #c17a5c;">Rp
                                                 {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
                                             <td><span class="badge"
@@ -225,8 +225,8 @@
                             <div
                                 class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                                 <div>
-                                    <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
-                                    <small class="text-muted">{{ $stock->product->category->name }}</small>
+                                    <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name ?? 'Deleted Product' }}</div>
+                                    <small class="text-muted">{{ $stock->product->category->name ?? 'Uncategorized' }}</small>
                                 </div>
                                 <div class="text-end">
                                     <span class="badge bg-danger">{{ $stock->quantity }} {{ __('common.left') }}</span>

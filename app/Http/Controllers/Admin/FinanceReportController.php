@@ -127,6 +127,54 @@ class FinanceReportController extends Controller
             return $pdf->download('finance-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
         }
 
+        if ($request->input('format') === 'csv') {
+            $filename = 'finance-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.csv';
+            $headers = [
+                "Content-type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=$filename",
+                "Pragma" => "no-cache",
+                "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                "Expires" => "0"
+            ];
+
+            $callback = function () use ($summary, $dailyData, $startDate, $endDate) {
+                $file = fopen('php://output', 'w');
+                fputcsv($file, ['FINANCE REPORT', $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y')]);
+                fputcsv($file, []);
+
+                // Summary
+                fputcsv($file, ['FINANCIAL SUMMARY']);
+                fputcsv($file, ['Gross Revenue', 'Rp ' . number_format($summary['gross_revenue'], 0, ',', '.')]);
+                fputcsv($file, ['COGS (Cost of Goods Sold)', 'Rp ' . number_format($summary['cogs'], 0, ',', '.')]);
+                fputcsv($file, ['Gross Profit', 'Rp ' . number_format($summary['gross_profit'], 0, ',', '.')]);
+                fputcsv($file, ['Operational Expenses', 'Rp ' . number_format($summary['total_expenses'], 0, ',', '.')]);
+                fputcsv($file, ['Stock Procurement', 'Rp ' . number_format($summary['total_procurement'], 0, ',', '.')]);
+                fputcsv($file, ['Net Profit', 'Rp ' . number_format($summary['net_profit'], 0, ',', '.')]);
+                fputcsv($file, ['Profit Margin', number_format($summary['profit_margin'], 2) . '%']);
+                fputcsv($file, []);
+
+                // Daily Data
+                fputcsv($file, ['DAILY DATA']);
+                fputcsv($file, ['Date', 'Revenue', 'COGS', 'Expenses', 'Procurement', 'Profit', 'Margin %']);
+                foreach ($dailyData as $day) {
+                    $margin = $day['revenue'] > 0 ? ($day['profit'] / $day['revenue']) * 100 : 0;
+                    fputcsv($file, [
+                        $day['date'],
+                        'Rp ' . number_format($day['revenue'], 0, ',', '.'),
+                        'Rp ' . number_format($day['cogs'], 0, ',', '.'),
+                        'Rp ' . number_format($day['expenses'], 0, ',', '.'),
+                        'Rp ' . number_format($day['procurement'], 0, ',', '.'),
+                        'Rp ' . number_format($day['profit'], 0, ',', '.'),
+                        number_format($margin, 2) . '%'
+                    ]);
+                }
+
+                fclose($file);
+            };
+
+            return response()->stream($callback, 200, $headers);
+        }
+
         return view('admin.reports.finance.print', compact(
             'summary',
             'dailyData',

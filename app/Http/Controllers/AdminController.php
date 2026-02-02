@@ -41,6 +41,9 @@ class AdminController extends Controller
             ->limit(5)
             ->with('product')
             ->get()
+            ->filter(function ($item) {
+                return $item->product !== null;
+            })
             ->map(function ($item) {
                 return (object) [
                     'name' => $item->product->name,
@@ -158,27 +161,29 @@ class AdminController extends Controller
             'cost_price' => 'required|numeric|min:0',
         ]);
 
-        $product = Product::create($request->all());
+        return DB::transaction(function () use ($request) {
+            $product = Product::create($request->all());
 
-        // Create initial stock
-        Stock::create([
-            'product_id' => $product->id,
-            'quantity' => 0
-        ]);
+            // Create initial stock
+            Stock::create([
+                'product_id' => $product->id,
+                'quantity' => 0
+            ]);
 
-        // Log initial movement
-        StockMovement::create([
-            'product_id' => $product->id,
-            'user_id' => Auth::id(),
-            'type' => 'in',
-            'quantity_before' => 0,
-            'quantity_after' => 0,
-            'quantity_change' => 0,
-            'reason' => 'Product Created',
-            'reference' => 'NEW-' . $product->barcode
-        ]);
+            // Log initial movement
+            StockMovement::create([
+                'product_id' => $product->id,
+                'user_id' => Auth::id(),
+                'type' => 'in',
+                'quantity_before' => 0,
+                'quantity_after' => 0,
+                'quantity_change' => 0,
+                'reason' => 'Product Created',
+                'reference' => 'NEW-' . $product->barcode
+            ]);
 
-        return redirect()->route('admin.products')->with('success', 'Product created successfully!');
+            return redirect()->route('admin.products')->with('success', 'Product created successfully!');
+        });
     }
 
     public function editProduct($id)

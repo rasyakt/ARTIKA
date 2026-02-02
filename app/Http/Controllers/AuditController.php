@@ -114,6 +114,43 @@ class AuditController extends Controller
             return $pdf->download($filename);
         }
 
+        if ($request->input('format') === 'csv') {
+            $filename = 'audit-log-' . now()->format('Y-m-d-H-i-s') . '.csv';
+            $headers = [
+                "Content-type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=$filename",
+                "Pragma" => "no-cache",
+                "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                "Expires" => "0"
+            ];
+
+            $callback = function () use ($logs, $startDate, $endDate) {
+                $file = fopen('php://output', 'w');
+                fputcsv($file, ['AUDIT LOG REPORT', $startDate . ' - ' . $endDate]);
+                fputcsv($file, []);
+
+                fputcsv($file, ['Date', 'User', 'Role', 'Action', 'Model', 'ID', 'Amount', 'IP Address', 'Device', 'Notes']);
+                foreach ($logs as $log) {
+                    fputcsv($file, [
+                        $log->created_at->format('Y-m-d H:i:s'),
+                        $log->user->name ?? 'System',
+                        $log->user->role->name ?? '-',
+                        $log->action,
+                        $log->model_type,
+                        $log->model_id,
+                        $log->amount ? 'Rp ' . number_format($log->amount, 0, ',', '.') : '-',
+                        $log->ip_address,
+                        $log->device_name,
+                        $log->notes
+                    ]);
+                }
+
+                fclose($file);
+            };
+
+            return response()->stream($callback, 200, $headers);
+        }
+
         return view('admin.audit.print', compact('logs', 'summary', 'startDate', 'endDate'));
     }
 
