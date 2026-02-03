@@ -14,7 +14,7 @@ class UserController extends Controller
         // Only show non-admin users
         $users = User::with(['role'])
             ->whereHas('role', function ($query) {
-                $query->where('name', '!=', 'admin');
+                $query->whereNotIn('name', ['admin', 'kepala_toko']);
             })
             ->latest()
             ->paginate(10);
@@ -37,7 +37,7 @@ class UserController extends Controller
         // Security check: only cashier accounts can be created
         $role = Role::findOrFail($request->role_id);
         if ($role->name !== 'cashier') {
-            return redirect()->back()->with('error', 'Only cashier accounts can be added!');
+            return redirect()->back()->with('error', 'Hanya akun kasir yang dapat ditambahkan!');
         }
 
         User::create([
@@ -56,8 +56,8 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         // Security check: cannot edit an admin
-        if ($user->role->name === 'admin') {
-            return redirect()->route('admin.users')->with('error', 'Cannot edit administrator accounts!');
+        if ($user->role->name === 'admin' || $user->role->name === 'kepala_toko') {
+            return redirect()->route('admin.users')->with('error', 'Tidak dapat mengubah akun administrator atau kepala toko!');
         }
 
         $request->validate([
@@ -70,8 +70,8 @@ class UserController extends Controller
 
         // Security check: cannot change role to admin or warehouse (warehouse can be edited but not added or switched to)
         $newRole = Role::findOrFail($request->role_id);
-        if ($newRole->name === 'admin' || ($newRole->name === 'warehouse' && $user->role->name !== 'warehouse')) {
-            return redirect()->back()->with('error', 'Invalid role selection!');
+        if (in_array($newRole->name, ['admin', 'kepala_toko', 'warehouse']) && $user->role->name !== $newRole->name) {
+            return redirect()->back()->with('error', 'Pilihan role tidak valid!');
         }
 
         $data = [

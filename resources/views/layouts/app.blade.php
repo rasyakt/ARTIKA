@@ -314,7 +314,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark main-navbar">
         <div class="container-fluid px-4">
             <!-- Hamburger Menu (Mobile) -->
-            @if(Auth::user()->role->name === 'admin' || Auth::user()->role->name === 'warehouse')
+            @if(Auth::user()->role->name === 'admin' || Auth::user()->role->name === 'warehouse' || Auth::user()->role->name === 'kepala_toko')
                 <button class="hamburger-btn me-3" id="hamburgerBtn" type="button">
                     ☰
                 </button>
@@ -360,8 +360,8 @@
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar (only for admin and warehouse) -->
-            @if(Auth::user()->role->name === 'admin' || Auth::user()->role->name === 'warehouse')
+            <!-- Sidebar (only for admin, warehouse, and kepala_toko) -->
+            @if(Auth::user()->role->name === 'admin' || Auth::user()->role->name === 'warehouse' || Auth::user()->role->name === 'kepala_toko')
                 <div class="col-md-2 sidebar px-0" id="sidebar">
                     <!-- Mobile Sidebar Header -->
                     <div class="sidebar-header">
@@ -369,7 +369,7 @@
                         <button class="sidebar-close" id="sidebarClose">×</button>
                     </div>
 
-                    @if(Auth::user()->role->name === 'admin')
+                    @if(Auth::user()->role->name === 'admin' || Auth::user()->role->name === 'kepala_toko')
                         <a href="{{ route('admin.dashboard') }}"
                             class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}

@@ -186,24 +186,79 @@
                                         <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.cashier') }}</th>
                                         <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.amount') }}</th>
                                         <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.payment') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.time') }}</th>
+                                         @if(Auth::user()->role->name !== 'kepala_toko')
+                                            <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.time') }}</th>
+                                         @endif
+                                         @if(Auth::user()->role->name === 'kepala_toko')
+                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Status</th>
+                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849; width: 80px;">Aksi</th>
+                                         @endif
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($recentTransactions as $transaction)
                                         <tr>
                                             <td class="fw-bold" style="color: #85695a;">{{ $transaction->invoice_no }}</td>
-                                            <td>{{ $transaction->user->name }}</td>
+                                            <td>{{ $transaction->user->name ?? 'System/Deleted' }}</td>
                                             <td class="fw-bold" style="color: #c17a5c;">Rp
                                                 {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
                                             <td><span class="badge"
                                                     style="background: #e0cec7; color: #6f5849;">{{ ucfirst($transaction->payment_method) }}</span>
                                             </td>
-                                            <td class="text-muted">{{ $transaction->created_at->diffForHumans() }}</td>
+                                             @if(Auth::user()->role->name !== 'kepala_toko')
+                                                <td class="text-muted">{{ $transaction->created_at->diffForHumans() }}</td>
+                                             @endif
+
+                                             @if(Auth::user()->role->name === 'kepala_toko')
+                                              <td class="text-center">
+                                                  @if($transaction->status === 'completed')
+                                                      <span class="badge bg-success">Sukses</span>
+                                                  @elseif($transaction->status === 'rolled_back')
+                                                      <span class="badge bg-warning text-dark">Batal</span>
+                                                  @else
+                                                      <span class="badge bg-secondary">{{ $transaction->status }}</span>
+                                                  @endif
+                                              </td>
+                                              <td class="text-center">
+                                                 <div class="dropstart">
+                                                     <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 8px;">
+                                                         <i class="fa-solid fa-ellipsis-vertical"></i>
+                                                     </button>
+                                                      <ul class="dropdown-menu shadow-sm border-0 p-2" style="border-radius: 12px; min-width: auto; width: max-content;">
+                                                         <li class="d-flex gap-2 align-items-center">
+                                                             <a class="btn btn-sm btn-light p-2" href="{{ route('admin.transactions.show', $transaction->id) }}" title="Lihat Detail" style="border-radius: 8px; color: #0d6efd;">
+                                                                 <i class="fa-solid fa-eye"></i>
+                                                             </a>
+                                                             
+                                                             @if($transaction->status !== 'rolled_back')
+                                                                 <a class="btn btn-sm btn-light p-2" href="{{ route('admin.transactions.edit', $transaction->id) }}" title="Edit Transaksi" style="border-radius: 8px; color: #ffc107;">
+                                                                     <i class="fa-solid fa-pen-to-square"></i>
+                                                                 </a>
+                                                                 
+                                                                 <form action="{{ route('admin.transactions.rollback', $transaction->id) }}" method="POST" class="m-0">
+                                                                     @csrf
+                                                                     <button type="submit" class="btn btn-sm btn-light p-2" onclick="return confirm('Rollback akan mengembalian stok. Lanjutkan?')" title="Rollback Stok" style="border-radius: 8px; color: #dc3545;">
+                                                                         <i class="fa-solid fa-rotate-left"></i>
+                                                                     </button>
+                                                                 </form>
+                                                             @endif
+
+                                                             <form action="{{ route('admin.transactions.destroy', $transaction->id) }}" method="POST" class="m-0">
+                                                                 @csrf
+                                                                 @method('DELETE')
+                                                                 <button type="submit" class="btn btn-sm btn-light p-2" onclick="return confirm('Hapus transaksi secara permanen?')" title="Hapus Permanen" style="border-radius: 8px; color: #6c757d;">
+                                                                     <i class="fa-solid fa-trash"></i>
+                                                                 </button>
+                                                             </form>
+                                                         </li>
+                                                      </ul>
+                                                 </div>
+                                              </td>
+                                             @endif
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="5" class="text-center text-muted py-4">{{ __('common.no_transactions') }}</td>
+                                            <td colspan="6" class="text-center text-muted py-4">{{ __('common.no_transactions') }}</td>
                                         </tr>
                                     @endforelse
                                 </tbody>
@@ -225,8 +280,8 @@
                             <div
                                 class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                                 <div>
-                                    <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
-                                    <small class="text-muted">{{ $stock->product->category->name }}</small>
+                                    <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name ?? 'Deleted Product' }}</div>
+                                    <small class="text-muted">{{ $stock->product->category->name ?? 'Uncategorized' }}</small>
                                 </div>
                                 <div class="text-end">
                                     <span class="badge bg-danger">{{ $stock->quantity }} {{ __('common.left') }}</span>

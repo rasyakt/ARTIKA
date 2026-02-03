@@ -191,6 +191,7 @@ return [
     'no_transactions_found' => 'No transactions found',
     'non_cash' => 'Non-Cash',
     'cash' => 'Cash',
+    'rolled_back' => 'Rolled Back',
 
     // Finance Report
     'finance_reports_title' => 'Financial Report',

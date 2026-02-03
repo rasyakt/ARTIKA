@@ -31,10 +31,10 @@
                         class="btn btn-outline-brown shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                         <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
                     </a>
-                    <a href="{{ route('admin.reports.warehouse.export', array_merge(request()->all(), ['auto_print' => 'true'])) }}"
-                        target="_blank" class="btn btn-brown shadow-sm"
+                    <a href="{{ route('admin.reports.warehouse.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
+                        class="btn btn-brown shadow-sm"
                         style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
-                        <i class="fa-solid fa-print me-2"></i> {{ __('admin.print_report') }}
+                        <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
                     </a>
                 </div>
             </div>

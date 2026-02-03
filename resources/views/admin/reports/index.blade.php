@@ -198,7 +198,7 @@
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="{{ route('admin.reports.print-all') }}" method="GET" target="_blank">
+                <form action="{{ route('admin.reports.print-all') }}" method="GET" id="printForm">
                     <div class="modal-body p-4">
                         <div class="mb-4">
                             <label class="form-label fw-bold" style="color: #6f5849;">
@@ -244,24 +244,23 @@
                     </div>
                     <div class="modal-footer bg-light border-top-0 rounded-bottom-4 px-4 pb-3">
                         <input type="hidden" name="format" id="exportFormat" value="">
-                        <input type="hidden" name="auto_print" id="autoPrint" value="">
 
                         <button type="button" class="btn btn-light text-muted border-0 px-4"
                             style="border-radius: 10px; padding: 0.6rem 1.25rem;"
                             data-bs-dismiss="modal">{{ __('admin.cancel') }}</button>
 
                         <button type="submit"
-                            onclick="document.getElementById('exportFormat').value='pdf'; document.getElementById('autoPrint').value='';"
+                            onclick="document.getElementById('exportFormat').value='pdf'; document.getElementById('printForm').target='_blank';"
                             class="btn btn-outline-brown px-4 fw-bold"
                             style="border-radius: 10px; padding: 0.6rem 1.25rem;">
                             <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
                         </button>
 
                         <button type="submit"
-                            onclick="document.getElementById('exportFormat').value=''; document.getElementById('autoPrint').value='true';"
+                            onclick="document.getElementById('exportFormat').value='csv'; document.getElementById('printForm').target='_self';"
                             class="btn px-4 fw-bold"
                             style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border-radius: 10px; padding: 0.6rem 1.25rem;">
-                            <i class="fa-solid fa-print me-2"></i> {{ __('admin.print_report') }}
+                            <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
                         </button>
                     </div>
                 </form>
