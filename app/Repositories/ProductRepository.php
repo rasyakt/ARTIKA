@@ -26,4 +26,13 @@ class ProductRepository implements ProductRepositoryInterface
             $stock->decrement('quantity', $quantity);
         }
     }
+
+    public function incrementStock($productId, $quantity)
+    {
+        // Increment stock for the product
+        $stock = Stock::where('product_id', $productId)->first();
+        if ($stock) {
+            $stock->increment('quantity', $quantity);
+        }
+    }
 }

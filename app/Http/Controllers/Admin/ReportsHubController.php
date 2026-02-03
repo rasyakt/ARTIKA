@@ -110,6 +110,75 @@ class ReportsHubController extends Controller
             return $pdf->download('full-store-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
         }
 
+        if ($request->input('format') === 'csv') {
+            $filename = 'full-store-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.csv';
+            $headers = [
+                "Content-type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=$filename",
+                "Pragma" => "no-cache",
+                "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                "Expires" => "0"
+            ];
+
+            $callback = function () use ($startDate, $endDate, $warehouseSummary, $topMovers, $lowStockItems, $cashierSummary, $topProducts, $cashierPerformance, $financeSummary, $auditLogs) {
+                $file = fopen('php://output', 'w');
+                fputcsv($file, ['FULL STORE CONSOLIDATED REPORT', $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y')]);
+                fputcsv($file, []);
+
+                // FINANCE SECTION
+                fputcsv($file, ['1. FINANCIAL SUMMARY']);
+                fputcsv($file, ['Gross Revenue', 'Rp ' . number_format($financeSummary['gross_revenue'], 0, ',', '.')]);
+                fputcsv($file, ['COGS', 'Rp ' . number_format($financeSummary['cogs'], 0, ',', '.')]);
+                fputcsv($file, ['Gross Profit', 'Rp ' . number_format($financeSummary['gross_profit'], 0, ',', '.')]);
+                fputcsv($file, ['Operational Expenses', 'Rp ' . number_format($financeSummary['total_expenses'], 0, ',', '.')]);
+                fputcsv($file, ['Net Profit', 'Rp ' . number_format($financeSummary['net_profit'], 0, ',', '.')]);
+                fputcsv($file, ['Profit Margin', number_format($financeSummary['profit_margin'], 2) . '%']);
+                fputcsv($file, []);
+
+                // CASHIER SECTION
+                fputcsv($file, ['2. CASHIER & SALES SUMMARY']);
+                fputcsv($file, ['Total Sales', 'Rp ' . number_format($cashierSummary['total_sales'], 0, ',', '.')]);
+                fputcsv($file, ['Total Transactions', $cashierSummary['total_transactions']]);
+                fputcsv($file, ['Cash Sales', 'Rp ' . number_format($cashierSummary['cash_sales'], 0, ',', '.')]);
+                fputcsv($file, ['Non-Cash Sales', 'Rp ' . number_format($cashierSummary['non_cash_sales'], 0, ',', '.')]);
+                fputcsv($file, []);
+
+                fputcsv($file, ['TOP SELLING PRODUCTS']);
+                fputcsv($file, ['Product Name', 'Sold Count', 'Revenue']);
+                foreach ($topProducts as $p) {
+                    fputcsv($file, [$p->name, $p->total_sold, 'Rp ' . number_format($p->total_revenue, 0, ',', '.')]);
+                }
+                fputcsv($file, []);
+
+                // WAREHOUSE SECTION
+                fputcsv($file, ['3. WAREHOUSE & INVENTORY SUMMARY']);
+                fputcsv($file, ['Total Valuation', 'Rp ' . number_format($warehouseSummary['total_valuation'], 0, ',', '.')]);
+                fputcsv($file, ['Total Items in Stock', $warehouseSummary['total_items']]);
+                fputcsv($file, ['Low Stock Alerts', $warehouseSummary['low_stock_count']]);
+                fputcsv($file, []);
+
+                if ($lowStockItems->count() > 0) {
+                    fputcsv($file, ['LOW STOCK ITEMS']);
+                    fputcsv($file, ['Product Name', 'Min Stock', 'Current Stock']);
+                    foreach ($lowStockItems as $item) {
+                        fputcsv($file, [$item->name, $item->min_stock, $item->current_stock]);
+                    }
+                    fputcsv($file, []);
+                }
+
+                // AUDIT SECTION
+                fputcsv($file, ['4. RECENT AUDIT LOGS']);
+                fputcsv($file, ['Date', 'User', 'Action', 'Notes']);
+                foreach ($auditLogs as $log) {
+                    fputcsv($file, [$log->created_at->format('Y-m-d H:i'), $log->user->name ?? 'System', $log->action, $log->notes]);
+                }
+
+                fclose($file);
+            };
+
+            return response()->stream($callback, 200, $headers);
+        }
+
         return view('admin.reports.print-all', compact(
             'startDate',
             'endDate',

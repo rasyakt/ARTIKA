@@ -7,4 +7,5 @@ interface ProductRepositoryInterface
     public function getAllProducts();
     public function findProductByBarcode($barcode);
     public function updateStock($productId, $quantity);
+    public function incrementStock($productId, $quantity);
 }

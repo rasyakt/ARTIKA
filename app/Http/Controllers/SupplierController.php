@@ -92,6 +92,74 @@ class SupplierController extends Controller
         return $pdf->download('Supplier_Report_' . $supplier->name . '_' . date('Ymd') . '.pdf');
     }
 
+    public function exportCsv(Supplier $supplier)
+    {
+        $supplier->load(['purchases.product', 'purchases.user']);
+
+        // Get sales performance and current stock for products supplied by this supplier
+        $productIds = $supplier->purchases()->distinct()->pluck('product_id');
+        $salesPerformance = TransactionItem::whereIn('product_id', $productIds)
+            ->select('product_id', DB::raw('SUM(quantity) as total_sold'), DB::raw('SUM(subtotal) as total_revenue'))
+            ->groupBy('product_id')
+            ->with(['product.stock'])
+            ->get();
+
+        $filename = 'Supplier_Report_' . $supplier->name . '_' . date('Ymd') . '.csv';
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $callback = function () use ($supplier, $salesPerformance) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, ['SUPPLIER REPORT', $supplier->name]);
+            fputcsv($file, ['Phone:', $supplier->phone]);
+            fputcsv($file, ['Email:', $supplier->email]);
+            fputcsv($file, []);
+
+            // Sales Performance
+            if ($salesPerformance->count() > 0) {
+                fputcsv($file, ['SALES PERFORMANCE & INVENTORY']);
+                fputcsv($file, ['Product Name', 'Barcode', 'Sold Count', 'Total Revenue', 'Current Stock']);
+                foreach ($salesPerformance as $item) {
+                    fputcsv($file, [
+                        $item->product->name,
+                        $item->product->barcode,
+                        $item->total_sold,
+                        'Rp ' . number_format($item->total_revenue, 0, ',', '.'),
+                        $item->product->stock->quantity ?? 0
+                    ]);
+                }
+                fputcsv($file, []);
+            }
+
+            // Purchase History
+            $purchases = $supplier->purchases()->orderBy('purchase_date', 'desc')->get();
+            if ($purchases->count() > 0) {
+                fputcsv($file, ['PURCHASE HISTORY']);
+                fputcsv($file, ['Date', 'Invoice', 'Product', 'Quantity', 'Cost', 'Total Cost']);
+                foreach ($purchases as $p) {
+                    fputcsv($file, [
+                        $p->purchase_date->format('Y-m-d'),
+                        $p->invoice_no,
+                        $p->product->name,
+                        $p->quantity,
+                        'Rp ' . number_format($p->cost_price, 0, ',', '.'),
+                        'Rp ' . number_format($p->total_cost, 0, ',', '.')
+                    ]);
+                }
+                fputcsv($file, []);
+            }
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
     public function search(Request $request)
     {
         $query = $request->get('q');

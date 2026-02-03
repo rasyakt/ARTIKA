@@ -191,6 +191,7 @@ return [
     'no_transactions_found' => 'Tidak ada transaksi ditemukan',
     'non_cash' => 'Non-Tunai',
     'cash' => 'Tunai',
+    'rolled_back' => 'Dibatalkan (Rollback)',
 
     // Finance Report
     'finance_reports_title' => 'Laporan Keuangan',

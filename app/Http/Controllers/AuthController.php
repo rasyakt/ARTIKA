@@ -22,6 +22,11 @@ class AuthController extends Controller
         return view('auth.login', ['role' => 'warehouse', 'title' => 'Warehouse Login']);
     }
 
+    public function showKepalaTokoLoginForm()
+    {
+        return view('auth.login', ['role' => 'kepala_toko', 'title' => 'Kepala Toko Login']);
+    }
+
     public function login(\Illuminate\Http\Request $request)
     {
         $credentials = $request->validate([
@@ -54,7 +59,7 @@ class AuthController extends Controller
 
             // Redirect based on role
             $role = $user->role->name;
-            if ($role === 'admin')
+            if ($role === 'admin' || $role === 'kepala_toko')
                 return redirect()->route('admin.dashboard');
             if ($role === 'cashier')
                 return redirect()->route('pos.index');

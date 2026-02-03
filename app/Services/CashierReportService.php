@@ -51,7 +51,8 @@ class CashierReportService
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
 
-        $transactions = Transaction::whereBetween('created_at', [$startDate, $endDate]);
+        $transactions = Transaction::whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', 'completed');
 
         $totalSales = $transactions->sum('total_amount');
         $totalTransactions = $transactions->count();
@@ -103,6 +104,7 @@ class CashierReportService
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
 
         return Transaction::whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', 'completed')
             ->select('payment_method', DB::raw('COUNT(*) as count'), DB::raw('SUM(total_amount) as total'))
             ->groupBy('payment_method')
             ->get();
@@ -119,6 +121,7 @@ class CashierReportService
         return TransactionItem::join('transactions', 'transaction_items.transaction_id', '=', 'transactions.id')
             ->join('products', 'transaction_items.product_id', '=', 'products.id')
             ->whereBetween('transactions.created_at', [$startDate, $endDate])
+            ->where('transactions.status', 'completed')
             ->select(
                 'products.id',
                 'products.name',
@@ -142,6 +145,7 @@ class CashierReportService
 
         return Transaction::with('user')
             ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', 'completed')
             ->select('user_id', DB::raw('COUNT(*) as transaction_count'), DB::raw('SUM(total_amount) as total_sales'))
             ->groupBy('user_id')
             ->orderByDesc('total_sales')
