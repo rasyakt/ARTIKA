@@ -3,6 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\Stock;
+use App\Models\Supplier;
+use App\Models\PaymentMethod;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -16,20 +22,21 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Roles
-        $adminRole = \App\Models\Role::create(['name' => 'admin', 'description' => 'Administrator']);
-        $cashierRole = \App\Models\Role::create(['name' => 'cashier', 'description' => 'Kasir']);
-        $warehouseRole = \App\Models\Role::create(['name' => 'warehouse', 'description' => 'Staff Gudang']);
+        $adminRole = Role::create(['name' => 'admin', 'description' => 'Administrator']);
+        $managerRole = Role::create(['name' => 'manager', 'description' => 'Kepala Toko']);
+        $cashierRole = Role::create(['name' => 'cashier', 'description' => 'Kasir']);
+        $warehouseRole = Role::create(['name' => 'warehouse', 'description' => 'Staff Gudang']);
         $kepalaTokoRole = \App\Models\Role::create(['name' => 'kepala_toko', 'description' => 'Kepala Toko']);
 
         // Users
         \App\Models\User::create([
-            'name' => 'Admin',
+            'name' => 'Super Admin',
             'username' => 'admin',
             'password' => bcrypt('password'), // password
             'role_id' => $adminRole->id,
         ]);
 
-        \App\Models\User::create([
+        User::create([
             'name' => 'Kasir 01',
             'username' => 'kasir1',
             'nis' => '12345',
@@ -37,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $cashierRole->id,
         ]);
 
-        \App\Models\User::create([
+        User::create([
             'name' => 'Staff Gudang',
             'username' => 'gudang',
             'password' => bcrypt('password'),
@@ -51,11 +58,11 @@ class DatabaseSeeder extends Seeder
             'role_id' => $kepalaTokoRole->id,
         ]);
         // Categories
-        $catSnack = \App\Models\Category::create(['name' => 'Snack', 'slug' => 'snack']);
-        $catDrink = \App\Models\Category::create(['name' => 'Minuman', 'slug' => 'drink']);
-        $catFood = \App\Models\Category::create(['name' => 'Makanan', 'slug' => 'food']);
-        $catDairy = \App\Models\Category::create(['name' => 'Dairy', 'slug' => 'dairy']);
-        $catHousehold = \App\Models\Category::create(['name' => 'Peralatan', 'slug' => 'household']);
+        $catSnack = Category::create(['name' => 'Snack', 'slug' => 'snack']);
+        $catDrink = Category::create(['name' => 'Minuman', 'slug' => 'drink']);
+        $catFood = Category::create(['name' => 'Makanan', 'slug' => 'food']);
+        $catDairy = Category::create(['name' => 'Dairy', 'slug' => 'dairy']);
+        $catHousehold = Category::create(['name' => 'Peralatan', 'slug' => 'household']);
 
         // Products - Snacks
         $products = [
@@ -90,16 +97,16 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($products as $productData) {
-            $product = \App\Models\Product::create($productData);
+            $product = Product::create($productData);
             // Add stock for product
-            \App\Models\Stock::create([
+            Stock::create([
                 'product_id' => $product->id,
                 'quantity' => rand(50, 200)
             ]);
         }
 
         // Sample Suppliers (replacing Customers seeds)
-        \App\Models\Supplier::create([
+        Supplier::create([
             'name' => 'CV. Sumber Jaya',
             'phone' => '081298765432',
             'email' => 'sumberjaya@example.com',
@@ -107,7 +114,7 @@ class DatabaseSeeder extends Seeder
             'last_purchase_at' => now()->subDays(10),
         ]);
 
-        \App\Models\Supplier::create([
+        Supplier::create([
             'name' => 'UD. Maju Sentosa',
             'phone' => '081233344455',
             'email' => 'maju@example.com',
@@ -115,7 +122,7 @@ class DatabaseSeeder extends Seeder
             'last_purchase_at' => now()->subMonths(1),
         ]);
 
-        \App\Models\Supplier::create([
+        Supplier::create([
             'name' => 'PT. Grosir Utama',
             'phone' => '081277788899',
             'email' => 'grosir@example.com',
@@ -124,10 +131,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Payment Methods
-        \App\Models\PaymentMethod::create(['name' => 'Cash', 'slug' => 'cash']);
-        \App\Models\PaymentMethod::create(['name' => 'QRIS', 'slug' => 'qris']);
-        \App\Models\PaymentMethod::create(['name' => 'Debit Card', 'slug' => 'debit']);
-        \App\Models\PaymentMethod::create(['name' => 'Credit Card', 'slug' => 'credit']);
-        \App\Models\PaymentMethod::create(['name' => 'E-Wallet', 'slug' => 'ewallet']);
+        PaymentMethod::create(['name' => 'Cash', 'slug' => 'cash']);
+        PaymentMethod::create(['name' => 'QRIS', 'slug' => 'qris']);
+        PaymentMethod::create(['name' => 'Debit Card', 'slug' => 'debit']);
+        PaymentMethod::create(['name' => 'Credit Card', 'slug' => 'credit']);
+        PaymentMethod::create(['name' => 'E-Wallet', 'slug' => 'ewallet']);
     }
 }

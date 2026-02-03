@@ -2,28 +2,6 @@
 
 @section('content')
     <style>
-        .stats-card {
-            border-radius: 16px;
-            border: none;
-            overflow: hidden;
-            transition: all 0.3s;
-        }
-
-        .stats-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 24px rgba(133, 105, 90, 0.15) !important;
-        }
-
-        .stats-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.75rem;
-        }
-
         .chart-container {
             position: relative;
             height: 350px;
@@ -50,17 +28,16 @@
         <div class="row g-4 mb-4">
             <!-- Total Sales -->
             <div class="col-md-3">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm accent-brown">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.total_sales') }}</p>
-                                <h3 class="fw-bold mb-0">Rp {{ number_format($totalSales, 0, ',', '.') }}</h3>
-                                <small class="opacity-75">{{ __('common.this_month') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($totalSales, 0, ',', '.') }}</h3>
+                                <small class="text-muted">{{ __('common.this_month') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-money-bill-wave"></i>
                             </div>
                         </div>
@@ -70,17 +47,16 @@
 
             <!-- Total Transactions -->
             <div class="col-md-3">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm accent-success">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.transactions') }}</p>
-                                <h3 class="fw-bold mb-0">{{ number_format($totalTransactions) }}</h3>
-                                <small class="opacity-75">{{ __('common.completed') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($totalTransactions) }}</h3>
+                                <small class="text-muted">{{ __('common.completed') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-success-soft">
                                 <i class="fa-solid fa-chart-pie"></i>
                             </div>
                         </div>
@@ -90,17 +66,16 @@
 
             <!-- Total Products -->
             <div class="col-md-3">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #c17a5c 0%, #a18072 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm accent-sienna">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.products') }}</p>
-                                <h3 class="fw-bold mb-0">{{ $totalProducts }}</h3>
-                                <small class="opacity-75">{{ __('common.in_catalog') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalProducts }}</h3>
+                                <small class="text-muted">{{ __('common.in_catalog') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-sienna-soft">
                                 <i class="fa-solid fa-box"></i>
                             </div>
                         </div>
@@ -110,17 +85,16 @@
 
             <!-- Total Suppliers -->
             <div class="col-md-3">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #0284c7 0%, #075985 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm accent-info">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.suppliers') }}</p>
-                                <h3 class="fw-bold mb-0">{{ $totalSuppliers ?? $totalCustomers ?? 0 }}</h3>
-                                <small class="opacity-75">{{ __('common.registered_suppliers') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalSuppliers ?? $totalCustomers ?? 0 }}</h3>
+                                <small class="text-muted">{{ __('common.registered_suppliers') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-info-soft">
                                 <i class="fa-solid fa-truck"></i>
                             </div>
                         </div>
@@ -133,8 +107,8 @@
         <div class="row g-4 mb-4">
             <!-- Sales Chart -->
             <div class="col-md-8">
-                <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-                    <div class="card-header bg-white"
+                <div class="card shadow-sm h-100">
+                    <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-chart-line me-2"></i>{{ __('common.sales_overview') }}</h5>
@@ -158,8 +132,8 @@
 
             <!-- Top Products -->
             <div class="col-md-4">
-                <div class="card shadow-sm" style="border-radius: 16px; border: none; height: 100%;">
-                    <div class="card-header bg-white"
+                <div class="card shadow-sm h-100">
+                    <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-trophy me-2"></i>{{ __('common.top_products') }}</h5>
                     </div>
@@ -198,8 +172,8 @@
         <div class="row g-4">
             <!-- Recent Transactions -->
             <div class="col-md-7">
-                <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-                    <div class="card-header bg-white"
+                <div class="card shadow-sm">
+                    <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-receipt me-2"></i>{{ __('common.recent_transactions') }}</h5>
                     </div>
@@ -225,7 +199,7 @@
                                     @forelse($recentTransactions as $transaction)
                                         <tr>
                                             <td class="fw-bold" style="color: #85695a;">{{ $transaction->invoice_no }}</td>
-                                            <td>{{ $transaction->user->name }}</td>
+                                            <td>{{ $transaction->user->name ?? 'System/Deleted' }}</td>
                                             <td class="fw-bold" style="color: #c17a5c;">Rp
                                                 {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
                                             <td><span class="badge"
@@ -296,8 +270,8 @@
 
             <!-- Low Stock Alerts -->
             <div class="col-md-5">
-                <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-                    <div class="card-header bg-white"
+                <div class="card shadow-sm">
+                    <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                         <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-triangle-exclamation me-2"></i>{{ __('common.low_stock_alerts') }}</h5>
                     </div>
@@ -306,8 +280,8 @@
                             <div
                                 class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                                 <div>
-                                    <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
-                                    <small class="text-muted">{{ $stock->product->category->name }}</small>
+                                    <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name ?? 'Deleted Product' }}</div>
+                                    <small class="text-muted">{{ $stock->product->category->name ?? 'Uncategorized' }}</small>
                                 </div>
                                 <div class="text-end">
                                     <span class="badge bg-danger">{{ $stock->quantity }} {{ __('common.left') }}</span>

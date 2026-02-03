@@ -11,11 +11,16 @@ class Expense extends Model
 
     protected $fillable = [
         'date',
-        'category',
+        'expense_category_id',
         'amount',
         'notes',
         'user_id',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(ExpenseCategory::class, 'expense_category_id');
+    }
 
     protected $casts = [
         'date' => 'date',

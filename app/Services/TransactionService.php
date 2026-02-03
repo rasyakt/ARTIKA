@@ -98,4 +98,111 @@ class TransactionService
             return $transaction;
         });
     }
+
+    /**
+     * Rollback a transaction
+     */
+    public function rollbackTransaction($transactionId)
+    {
+        $transaction = \App\Models\Transaction::with('items')->findOrFail($transactionId);
+
+        if ($transaction->status === 'rolled_back') {
+            throw new \Exception('Transaction is already rolled back.');
+        }
+
+        return DB::transaction(function () use ($transaction) {
+            // 1. Restore Stock for each item
+            foreach ($transaction->items as $item) {
+                // Get current stock for logging
+                $stock = Stock::where('product_id', $item->product_id)->first();
+                $qtyBefore = $stock ? $stock->quantity : 0;
+
+                // Restore Stock
+                $this->productRepository->incrementStock($item->product_id, $item->quantity);
+
+                $newStock = Stock::where('product_id', $item->product_id)->first();
+                $qtyAfter = $newStock ? $newStock->quantity : 0;
+
+                // Log Stock Movement (IN)
+                StockMovement::create([
+                    'product_id' => $item->product_id,
+                    'user_id' => Auth::id(),
+                    'type' => 'in',
+                    'quantity_before' => $qtyBefore,
+                    'quantity_after' => $qtyAfter,
+                    'quantity_change' => $item->quantity,
+                    'reason' => 'Transaction Rollback',
+                    'reference' => $transaction->invoice_no
+                ]);
+            }
+
+            // 2. Accounting Integration (Reversed Entries)
+            // Credit Cash
+            \App\Models\Journal::create([
+                'transaction_id' => $transaction->id,
+                'type' => 'credit',
+                'account_name' => 'Cash',
+                'amount' => $transaction->total_amount,
+                'description' => 'Rollback Sales Invoice ' . $transaction->invoice_no,
+            ]);
+
+            // Debit Sales Revenue
+            \App\Models\Journal::create([
+                'transaction_id' => $transaction->id,
+                'type' => 'debit',
+                'account_name' => 'Sales Revenue',
+                'amount' => $transaction->total_amount,
+                'description' => 'Rollback Sales Invoice ' . $transaction->invoice_no,
+            ]);
+
+            // 3. Update Transaction Status
+            $transaction->update(['status' => 'rolled_back']);
+
+            return $transaction;
+        });
+    }
+
+    /**
+     * Delete a transaction and restore stock if needed
+     */
+    public function deleteTransaction($transactionId)
+    {
+        return DB::transaction(function () use ($transactionId) {
+            $transaction = \App\Models\Transaction::findOrFail($transactionId);
+
+            // 1. Restore Stock if not already rolled back
+            if ($transaction->status !== 'rolled_back') {
+                foreach ($transaction->items as $item) {
+                    // Get current stock for logging
+                    $stock = Stock::where('product_id', $item->product_id)->first();
+                    $qtyBefore = $stock ? $stock->quantity : 0;
+
+                    // Restore Stock
+                    $this->productRepository->incrementStock($item->product_id, $item->quantity);
+
+                    $newStock = Stock::where('product_id', $item->product_id)->first();
+                    $qtyAfter = $newStock ? $newStock->quantity : 0;
+
+                    // Log Stock Movement (IN)
+                    StockMovement::create([
+                        'product_id' => $item->product_id,
+                        'user_id' => Auth::id(),
+                        'type' => 'in',
+                        'quantity_before' => $qtyBefore,
+                        'quantity_after' => $qtyAfter,
+                        'quantity_change' => $item->quantity,
+                        'reason' => 'Transaction Deletion (Stock Recovery)',
+                        'reference' => $transaction->invoice_no
+                    ]);
+                }
+            }
+
+            // 2. Delete related records
+            \App\Models\TransactionItem::where('transaction_id', $transactionId)->delete();
+            \App\Models\Journal::where('transaction_id', $transactionId)->delete();
+
+            // 3. Delete the transaction itself
+            return $transaction->delete();
+        });
+    }
 }

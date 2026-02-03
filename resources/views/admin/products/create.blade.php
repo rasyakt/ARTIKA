@@ -14,7 +14,7 @@
                 </div>
 
                 <!-- Form Card -->
-                <div class="card shadow-sm" style="border-radius: 16px; border: none;">
+                <div class="card shadow-sm">
                     <div class="card-body p-4">
                         <form action="{{ route('admin.products.store') }}" method="POST">
                             @csrf
@@ -69,7 +69,7 @@
                                     <label for="cost_price" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.cost_price') }} (Rp) *</label>
                                     <input type="number" class="form-control @error('cost_price') is-invalid @enderror"
                                         id="cost_price" name="cost_price" value="{{ old('cost_price') }}"
-                                        placeholder="{{ __('common.cost_price_placeholder') }}" min="0" step="100" required
+                                        placeholder="{{ __('common.cost_price_placeholder') }}" min="0" step="1" required
                                         style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     @error('cost_price')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -82,7 +82,7 @@
                                         (Rp) *</label>
                                     <input type="number" class="form-control @error('price') is-invalid @enderror"
                                         id="price" name="price" value="{{ old('price') }}" placeholder="{{ __('common.sell_price_placeholder') }}" min="0"
-                                        step="100" required
+                                        step="1" required
                                         style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     @error('price')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -117,7 +117,7 @@
                                     {{ __('common.cancel') }}
                                 </a>
                                 <button type="submit" class="btn btn-primary shadow-sm"
-                                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600;">
+                                    style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 2rem; font-weight: 600;">
                                     <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.save') }} {{ __('common.product') }}
                                 </button>
                             </div>

@@ -8,34 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @page {
-            size: 58mm auto;
             margin: 0;
-        }
-
-        @media print {
-            .no-print {
-                display: none;
-            }
-
-            body {
-                width: 58mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: white !important;
-                height: auto !important;
-                min-height: auto !important;
-                overflow: visible !important;
-            }
-
-            .receipt {
-                width: 48mm !important;
-                margin: 0 auto !important;
-                box-shadow: none !important;
-                padding: 4mm 0 !important;
-                height: auto !important;
-                min-height: auto !important;
-                overflow: visible !important;
-            }
         }
 
         * {
@@ -218,6 +191,41 @@
         .back-button:hover {
             background: #5a6268;
         }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
+            }
+
+            .receipt {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 auto !important;
+                box-shadow: none !important;
+                padding: 2mm 0 !important;
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
+                background: white !important;
+                color: #000 !important;
+            }
+
+            * {
+                color: #000 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -323,20 +331,15 @@
         window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('auto_print')) {
-                window.print();
+                // [FIX] Add a small delay to ensure rendering and logo loading
+                setTimeout(() => {
+                    window.print();
+                }, 500);
 
                 // Optional: Close tab after printing
                 window.onafterprint = function () {
                     window.close();
                 };
-
-                // Fallback for browsers that don't support onafterprint or if printing is cancelled
-                setTimeout(() => {
-                    // Only close if it seems to be an automated window
-                    if (window.opener) {
-                        // window.close(); 
-                    }
-                }, 3000);
             }
         }
     </script>

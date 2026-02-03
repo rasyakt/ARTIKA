@@ -7,6 +7,8 @@ use App\Services\FinanceReportService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 class FinanceReportController extends Controller
 {
@@ -52,11 +54,24 @@ class FinanceReportController extends Controller
         }
 
         $summary = $this->financeService->getFinancialSummary($startDate, $endDate);
-        $dailyData = $this->financeService->getDailyFinanceData($startDate, $endDate);
+        $allDailyData = $this->financeService->getDailyFinanceData($startDate, $endDate);
+
+        // Manually paginate the dailyData array for the table
+        $itemCollection = collect($allDailyData);
+        $perPage = 10;
+        $pageName = 'daily_page';
+        $currentPage = LengthAwarePaginator::resolveCurrentPage($pageName);
+        $currentPageItems = $itemCollection->slice(($currentPage * $perPage) - $perPage, $perPage)->all();
+        $dailyData = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage, $currentPage, [
+            'path' => $request->url(),
+            'query' => $request->query(),
+            'pageName' => $pageName,
+        ]);
 
         return view('admin.reports.finance.index', compact(
             'summary',
             'dailyData',
+            'allDailyData',
             'startDate',
             'endDate',
             'period'
@@ -110,13 +125,6 @@ class FinanceReportController extends Controller
                 'isPdf' => true
             ]);
             return $pdf->download('finance-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
-        }
-
-        if ($request->input('format') === 'excel') {
-            return \Maatwebsite\Excel\Facades\Excel::download(
-                new \App\Exports\FinanceExport(compact('summary', 'dailyData', 'startDate', 'endDate', 'period')),
-                'finance-report-' . $startDate->format('Y-m-d') . '.xlsx'
-            );
         }
 
         return view('admin.reports.finance.print', compact(

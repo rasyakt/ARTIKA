@@ -14,7 +14,7 @@ class CashierReportService
     /**
      * Get cashier audit logs for the period (only cashier role).
      */
-    public function getCashierAuditLogs($startDate = null, $endDate = null, $search = null, $action = null)
+    public function getCashierAuditLogs($startDate = null, $endDate = null, $search = null, $action = null, $perPage = null, $pageName = 'page')
     {
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
@@ -38,7 +38,9 @@ class CashierReportService
             $query->where('action', $action);
         }
 
-        return $query->latest()->get();
+        $query->latest();
+
+        return $perPage ? $query->paginate($perPage, ['*'], $pageName) : $query->get();
     }
 
     /**
@@ -49,7 +51,8 @@ class CashierReportService
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
 
-        $transactions = Transaction::whereBetween('created_at', [$startDate, $endDate]);
+        $transactions = Transaction::whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', 'completed');
 
         $totalSales = $transactions->sum('total_amount');
         $totalTransactions = $transactions->count();
@@ -101,6 +104,7 @@ class CashierReportService
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
 
         return Transaction::whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', 'completed')
             ->select('payment_method', DB::raw('COUNT(*) as count'), DB::raw('SUM(total_amount) as total'))
             ->groupBy('payment_method')
             ->get();
@@ -117,6 +121,7 @@ class CashierReportService
         return TransactionItem::join('transactions', 'transaction_items.transaction_id', '=', 'transactions.id')
             ->join('products', 'transaction_items.product_id', '=', 'products.id')
             ->whereBetween('transactions.created_at', [$startDate, $endDate])
+            ->where('transactions.status', 'completed')
             ->select(
                 'products.id',
                 'products.name',
@@ -140,6 +145,7 @@ class CashierReportService
 
         return Transaction::with('user')
             ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', 'completed')
             ->select('user_id', DB::raw('COUNT(*) as transaction_count'), DB::raw('SUM(total_amount) as total_sales'))
             ->groupBy('user_id')
             ->orderByDesc('total_sales')
@@ -149,7 +155,7 @@ class CashierReportService
     /**
      * Get recent transactions.
      */
-    public function getRecentTransactions($startDate = null, $endDate = null, $limit = 20, $search = null)
+    public function getRecentTransactions($startDate = null, $endDate = null, $limit = 20, $search = null, $perPage = null, $pageName = 'page')
     {
         $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
         $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
@@ -165,8 +171,12 @@ class CashierReportService
             });
         }
 
-        return $query->latest()
-            ->limit($limit)
-            ->get();
+        $query->latest();
+
+        if ($perPage) {
+            return $query->paginate($perPage, ['*'], $pageName);
+        }
+
+        return $query->limit($limit)->get();
     }
 }
