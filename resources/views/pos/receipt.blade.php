@@ -243,7 +243,6 @@
             </div>
             <div class="store-name">ARTIKA MINIMARKET</div>
             <div class="store-info">Jl. Jendral Sudirman 269A</div>
-            <div class="store-info">Telp./Fax. (0265) 771204 Ciamis</div>
         </div>
 
         <!-- Transaction Info -->
