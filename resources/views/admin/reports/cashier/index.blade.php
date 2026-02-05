@@ -380,14 +380,6 @@
                                                             <i class="fas fa-edit me-2"></i> Edit Transaksi
                                                         </button>
                                                     </li>
-                                                    <li>
-                                                        <button type="button" class="dropdown-item py-2 text-warning btn-rollback-tx" data-id="{{ $transaction->id }}">
-                                                            <i class="fas fa-undo me-2"></i> Rollback
-                                                        </button>
-                                                        <form id="rollback-form-{{ $transaction->id }}" action="{{ route('admin.reports.cashier.rollback', $transaction->id) }}" method="POST" style="display: none;">
-                                                            @csrf
-                                                        </form>
-                                                    </li>
                                                 @else
                                                     <li><hr class="dropdown-divider"></li>
                                                     <li class="px-3 py-1 mb-1">
@@ -874,24 +866,6 @@
                     document.getElementById('tx-edit-cash').value = cash;
                     
                     transactionEditModal.show();
-                });
-            });
-
-            // Rollback Confirmation
-            document.querySelectorAll('.btn-rollback-tx').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    confirmAction({
-                        title: 'Konfirmasi Rollback',
-                        text: 'Apakah Anda yakin ingin melakukan rollback? Stok akan dikembalikan dan transaksi akan dibatalkan.',
-                        icon: 'warning',
-                        confirmButtonText: 'Ya, Rollback!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            document.getElementById(`rollback-form-${id}`).submit();
-                        }
-                    });
                 });
             });
 
