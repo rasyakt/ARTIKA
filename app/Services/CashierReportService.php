@@ -153,6 +153,54 @@ class CashierReportService
     }
 
     /**
+     * Get sales breakdown by category.
+     */
+    public function getSalesByCategory($startDate = null, $endDate = null)
+    {
+        $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
+        $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
+
+        return TransactionItem::join('transactions', 'transaction_items.transaction_id', '=', 'transactions.id')
+            ->join('products', 'transaction_items.product_id', '=', 'products.id')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->whereBetween('transactions.created_at', [$startDate, $endDate])
+            ->where('transactions.status', 'completed')
+            ->select(
+                'categories.name',
+                DB::raw('SUM(transaction_items.quantity) as total_sold'),
+                DB::raw('SUM(transaction_items.subtotal) as total_revenue')
+            )
+            ->groupBy('categories.id', 'categories.name')
+            ->orderByDesc('total_revenue')
+            ->get();
+    }
+
+    /**
+     * Get discount summary for the period.
+     */
+    public function getDiscountSummary($startDate = null, $endDate = null)
+    {
+        $startDate = $startDate ? Carbon::parse($startDate)->startOfDay() : Carbon::now()->startOfMonth();
+        $endDate = $endDate ? Carbon::parse($endDate)->endOfDay() : Carbon::now()->endOfDay();
+
+        $stats = Transaction::whereBetween('created_at', [$startDate, $endDate])
+            ->where('status', 'completed')
+            ->where('discount', '>', 0)
+            ->select(
+                DB::raw('COUNT(*) as count'),
+                DB::raw('SUM(discount) as total_discount'),
+                DB::raw('SUM(total_amount) as total_revenue_after_discount')
+            )
+            ->first();
+
+        return [
+            'count' => $stats->count ?? 0,
+            'total_discount' => $stats->total_discount ?? 0,
+            'total_revenue' => $stats->total_revenue_after_discount ?? 0
+        ];
+    }
+
+    /**
      * Get recent transactions.
      */
     public function getRecentTransactions($startDate = null, $endDate = null, $limit = 20, $search = null, $perPage = null, $pageName = 'page')

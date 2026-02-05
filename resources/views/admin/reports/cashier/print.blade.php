@@ -187,8 +187,8 @@
             <td class="summary-box" width="25%">
                 <h3>{{ __('admin.payment_method') }}</h3>
                 <div class="value" style="font-size: 11px;">
-                    CASH: {{ $summary['cash_count'] }}<br>
-                    NON-CASH: {{ $summary['non_cash_count'] }}
+                    {{ __('admin.cash') }}: {{ $summary['cash_count'] }}<br>
+                    {{ __('admin.non_cash') }}: {{ $summary['non_cash_count'] }}
                 </div>
             </td>
         </tr>

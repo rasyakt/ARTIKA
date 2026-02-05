@@ -59,6 +59,8 @@ class CashierReportController extends Controller
         $cashierPerformance = $this->cashierReportService->getTransactionsByUser($startDate, $endDate);
         $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 20, $search, 10, 'transactions_page');
         $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate, $search, $action, 10, 'audit_page');
+        $categorySales = $this->cashierReportService->getSalesByCategory($startDate, $endDate);
+        $discountSummary = $this->cashierReportService->getDiscountSummary($startDate, $endDate);
 
         $actions = \App\Models\AuditLog::distinct()->pluck('action');
 
@@ -69,6 +71,8 @@ class CashierReportController extends Controller
             'cashierPerformance',
             'recentTransactions',
             'auditLogs',
+            'categorySales',
+            'discountSummary',
             'startDate',
             'endDate',
             'period',

@@ -187,23 +187,125 @@
             </div>
         </div>
 
-        <!-- Detailed Sections -->
-        <div class="row g-4 mb-4">
-            <!-- Top Products -->
-            <div class="col-lg-6">
-                <div class="card shadow-sm">
-                    <div class="card-header"
-                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">
+        <!-- Detailed Reports Section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white border-bottom-0 pt-4 px-4">
+                <ul class="nav nav-pills nav-fill gap-2 p-1 bg-light rounded-pill mb-0" id="reportTabs" role="tablist" style="border: 1px solid #f2e8e5;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active rounded-pill fw-bold" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions-pane" type="button" role="tab">
+                            <i class="fa-solid fa-receipt me-2"></i>{{ __('admin.recent_transactions') }}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="products-tab" data-bs-toggle="tab" data-bs-target="#products-pane" type="button" role="tab">
                             <i class="fa-solid fa-trophy me-2"></i>{{ __('admin.top_selling_products') }}
-                        </h5>
-                    </div>
-                    <div class="card-body p-0">
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="categories-tab" data-bs-toggle="tab" data-bs-target="#categories-pane" type="button" role="tab">
+                            <i class="fa-solid fa-tags me-2"></i>Kategori
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="performance-tab" data-bs-toggle="tab" data-bs-target="#performance-pane" type="button" role="tab">
+                            <i class="fa-solid fa-users me-2"></i>{{ __('admin.cashier_performance') }}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="payment-tab" data-bs-toggle="tab" data-bs-target="#payment-pane" type="button" role="tab">
+                            <i class="fa-solid fa-credit-card me-2"></i>Pembayaran
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="discount-tab" data-bs-toggle="tab" data-bs-target="#discount-pane" type="button" role="tab">
+                            <i class="fa-solid fa-percent me-2"></i>Diskon
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link rounded-pill fw-bold" id="audit-tab" data-bs-toggle="tab" data-bs-target="#audit-pane" type="button" role="tab">
+                            <i class="fa-solid fa-clipboard-list me-2"></i>{{ __('admin.audit_log') }}
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body p-0">
+                <div class="tab-content" id="reportTabsContent">
+                    <!-- Transactions Tab -->
+                    <div class="tab-pane fade show active" id="transactions-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
                                 <thead style="background: #fdf8f6;">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.product_management') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.invoice') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.cashier') }}</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.payment_method') }}</th>
+                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">{{ __('admin.amount') }}</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.action') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($recentTransactions as $transaction)
+                                        <tr class="{{ $transaction->status === 'rolled_back' ? 'opacity-50 grayscale' : '' }}">
+                                            <td>
+                                                <div class="fw-bold {{ $transaction->status === 'rolled_back' ? 'text-decoration-line-through' : '' }}" style="color: #85695a;">
+                                                    {{ $transaction->invoice_no }}
+                                                </div>
+                                            </td>
+                                            <td class="text-muted small">{{ $transaction->created_at->format('d M Y H:i') }}</td>
+                                            <td>{{ $transaction->user->name }}</td>
+                                            <td class="text-center">
+                                                @php $method = strtolower($transaction->payment_method); @endphp
+                                                @if($method == 'tunai' || $method == 'cash')
+                                                    <span class="badge bg-success">{{ __('admin.cash') }}</span>
+                                                @elseif($method == 'qris')
+                                                    <span class="badge bg-info text-white">QRIS</span>
+                                                @elseif($method == 'transfer')
+                                                    <span class="badge bg-primary">Transfer</span>
+                                                @elseif($method == 'debit')
+                                                    <span class="badge bg-warning text-dark">Debit</span>
+                                                @else
+                                                    <span class="badge" style="background: #0284c7; color: white;">{{ __('admin.non_cash') }}</span>
+                                                @endif
+                                            </td>
+                                            <td class="text-end fw-bold" style="color: #c17a5c;">Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
+                                            <td class="text-center">
+                                                <div class="dropdown">
+                                                    <button class="btn btn-sm btn-light border shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0">
+                                                        <li><h6 class="dropdown-header text-muted small text-uppercase fw-bold">{{ __('admin.action') }}</h6></li>
+                                                        <li><button class="dropdown-item btn-view-transaction py-2" data-id="{{ $transaction->id }}"><i class="fas fa-eye me-2 text-brown"></i> Detail</button></li>
+                                                        <li><button class="dropdown-item btn-print-direct py-2" data-id="{{ $transaction->id }}"><i class="fas fa-print me-2 text-secondary"></i> Cetak</button></li>
+                                                        @if($transaction->status !== 'rolled_back')
+                                                            <li><hr class="dropdown-divider"></li>
+                                                            <li><button class="dropdown-item btn-edit-transaction py-2 text-primary" data-id="{{ $transaction->id }}" data-method="{{ $transaction->payment_method }}" data-cash="{{ $transaction->cash_amount }}"><i class="fas fa-edit me-2"></i> Edit</button></li>
+                                                        @endif
+                                                        <li><hr class="dropdown-divider"></li>
+                                                        <li><button type="button" class="dropdown-item py-2 text-danger btn-delete-tx" data-id="{{ $transaction->id }}"><i class="fas fa-trash me-2"></i> Hapus</button></li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="6" class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i><br>{{ __('admin.no_transactions_found') }}</td></tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
+                            {{ $recentTransactions->fragment('transactions-pane')->links('vendor.pagination.no-prevnext') }}
+                        </div>
+                    </div>
+
+                    <!-- Top Products Tab -->
+                    <div class="tab-pane fade" id="products-pane" role="tabpanel" tabindex="0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background: #fdf8f6;">
+                                    <tr>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Produk</th>
                                         <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.sold') }}</th>
                                         <th class="border-0 fw-semibold text-end" style="color: #6f5849;">{{ __('admin.revenue') }}</th>
                                     </tr>
@@ -213,289 +315,179 @@
                                         <tr>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                        <div class="me-3"
-                                                            style="width: 30px; height: 30px; background: #6f5849; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
-                                                        {{ $index + 1 }}
-                                                    </div>
+                                                    <div class="me-3" style="width: 30px; height: 30px; background: #6f5849; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">{{ $index + 1 }}</div>
                                                     <div>
                                                         <div class="fw-bold" style="color: #6f5849;">{{ $product->name }}</div>
                                                         <small class="text-muted">{{ $product->barcode }}</small>
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="text-center">
-                                                <span class="badge"
-                                                    style="background: #e0cec7; color: #6f5849;">{{ $product->total_sold }}</span>
-                                            </td>
-                                            <td class="text-end fw-bold" style="color: #c17a5c;">Rp
-                                                {{ number_format($product->total_revenue, 0, ',', '.') }}</td>
+                                            <td class="text-center"><span class="badge" style="background: #e0cec7; color: #6f5849;">{{ $product->total_sold }}</span></td>
+                                            <td class="text-end fw-bold" style="color: #c17a5c;">Rp {{ number_format($product->total_revenue, 0, ',', '.') }}</td>
                                         </tr>
                                     @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center text-muted py-4">
-                                                <div style="font-size: 3rem; opacity: 0.3;"><i class="fa-solid fa-inbox"></i>
-                                                </div>
-                                                <p class="mb-0">{{ __('admin.no_sales_data') }}</p>
-                                            </td>
-                                        </tr>
+                                        <tr><td colspan="3" class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i><br>{{ __('admin.no_sales_data') }}</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Cashier Performance -->
-            <div class="col-lg-6">
-                <div class="card shadow-sm">
-                    <div class="card-header"
-                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">
-                            <i class="fa-solid fa-users me-2"></i>{{ __('admin.cashier_performance') }}
-                        </h5>
+                    <!-- Category Tab -->
+                    <div class="tab-pane fade" id="categories-pane" role="tabpanel" tabindex="0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background: #fdf8f6;">
+                                    <tr>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Kategori</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Item Terjual</th>
+                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">Total Pendapatan</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($categorySales as $cat)
+                                        <tr>
+                                            <td class="fw-bold" style="color: #6f5849;">{{ $cat->name }}</td>
+                                            <td class="text-center"><span class="badge bg-brown-soft text-brown">{{ $cat->total_sold }}</span></td>
+                                            <td class="text-end fw-bold" style="color: #c17a5c;">Rp {{ number_format($cat->total_revenue, 0, ',', '.') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="3" class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i><br>Tidak ada data kategori</td></tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="card-body p-0">
+
+                    <!-- Cashier Tab -->
+                    <div class="tab-pane fade" id="performance-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
                                 <thead style="background: #fdf8f6;">
                                     <tr>
                                         <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.cashier') }}</th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.transactions') }}
-                                        </th>
+                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Transaksi</th>
                                         <th class="border-0 fw-semibold text-end" style="color: #6f5849;">{{ __('admin.total_sales') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse($cashierPerformance as $performance)
+                                    @forelse($cashierPerformance as $p)
                                         <tr>
                                             <td>
-                                                <div class="fw-bold" style="color: #6f5849;">{{ $performance->user->name }}
-                                                </div>
-                                                <small class="text-muted">{{ $performance->user->role->name }}</small>
+                                                <div class="fw-bold" style="color: #6f5849;">{{ $p->user->name }}</div>
+                                                <small class="text-muted">{{ $p->user->role->name }}</small>
                                             </td>
-                                            <td class="text-center">
-                                                <span class="badge"
-                                                    style="background: #e0cec7; color: #6f5849;">{{ $performance->transaction_count }}</span>
-                                            </td>
-                                            <td class="text-end fw-bold" style="color: #85695a;">Rp
-                                                {{ number_format($performance->total_sales, 0, ',', '.') }}</td>
+                                            <td class="text-center"><span class="badge" style="background: #e0cec7; color: #6f5849;">{{ $p->transaction_count }}</span></td>
+                                            <td class="text-end fw-bold" style="color: #85695a;">Rp {{ number_format($p->total_sales, 0, ',', '.') }}</td>
                                         </tr>
                                     @empty
-                                        <tr>
-                                            <td colspan="3" class="text-center text-muted py-4">
-                                                <div style="font-size: 3rem; opacity: 0.3;"><i class="fa-solid fa-inbox"></i>
-                                                </div>
-                                                <p class="mb-0">{{ __('admin.no_data_available') }}</p>
-                                            </td>
-                                        </tr>
+                                        <tr><td colspan="3" class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i><br>{{ __('admin.no_data_available') }}</td></tr>
                                     @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Recent Transactions Table -->
-        <div class="card shadow-sm mb-4" id="transactions-section">
-            <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;">
-                    <i class="fa-solid fa-receipt me-2"></i>{{ __('admin.recent_transactions') }}
-                </h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead style="background: #fdf8f6;">
-                            <tr>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.invoice') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.cashier') }}</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.payment_method') }}</th>
-                                <th class="border-0 fw-semibold text-end" style="color: #6f5849;">{{ __('admin.amount') }}</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.action') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($recentTransactions as $transaction)
-                                <tr class="{{ $transaction->status === 'rolled_back' ? 'opacity-50 grayscale' : '' }}">
-                                    <td>
-                                        <div class="fw-bold {{ $transaction->status === 'rolled_back' ? 'text-decoration-line-through' : '' }}" style="color: #85695a;">
-                                            {{ $transaction->invoice_no }}
-                                            @if($transaction->status === 'rolled_back')
-                                                <i class="fas fa-undo-alt ms-1 small" title="Rolled Back"></i>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td class="text-muted {{ $transaction->status === 'rolled_back' ? 'text-decoration-line-through' : '' }}">{{ $transaction->created_at->format('d M Y H:i') }}</td>
-                                    <td>{{ $transaction->user->name }}</td>
-                                    <td class="text-center">
-                                        @php
-                                            $method = strtolower($transaction->payment_method);
-                                        @endphp
-                                        @if($method == 'tunai' || $method == 'cash')
-                                            <span class="badge bg-success">{{ __('admin.cash') }}</span>
-                                        @elseif($method == 'qris')
-                                            <span class="badge bg-info text-white">QRIS</span>
-                                        @elseif($method == 'transfer')
-                                            <span class="badge bg-primary">Transfer</span>
-                                        @elseif($method == 'debit')
-                                            <span class="badge bg-warning text-dark">Debit</span>
-                                        @else
-                                            <span class="badge" style="background: #0284c7; color: white;">{{ __('admin.non_cash') }}</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-end fw-bold" style="color: #c17a5c;">Rp
-                                        {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
-                                    <td class="text-center">
-                                        <div class="dropdown">
-                                            <button class="btn btn-sm btn-light border shadow-sm" type="button" data-bs-toggle="dropdown" 
-                                                data-bs-boundary="viewport" aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </button>
-                                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" style="border-radius: 12px; min-width: 180px;">
-                                                <li>
-                                                    <h6 class="dropdown-header text-muted small text-uppercase fw-bold">{{ __('admin.action') }}</h6>
-                                                </li>
-                                                <li>
-                                                    <button class="dropdown-item btn-view-transaction py-2" data-id="{{ $transaction->id }}">
-                                                        <i class="fas fa-eye me-2 text-brown"></i> Detail Transaksi
-                                                    </button>
-                                                </li>
-                                                <li>
-                                                    <button class="dropdown-item btn-print-direct py-2" data-id="{{ $transaction->id }}">
-                                                        <i class="fas fa-print me-2 text-secondary"></i> Cetak Struk
-                                                    </button>
-                                                </li>
-                                                
-                                                @if($transaction->status !== 'rolled_back')
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li>
-                                                        <button class="dropdown-item btn-edit-transaction py-2 text-primary" 
-                                                            data-id="{{ $transaction->id }}"
-                                                            data-method="{{ $transaction->payment_method }}"
-                                                            data-cash="{{ $transaction->cash_amount }}">
-                                                            <i class="fas fa-edit me-2"></i> Edit Transaksi
-                                                        </button>
-                                                    </li>
-                                                @else
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li class="px-3 py-1 mb-1">
-                                                        <div class="small fw-bold text-muted mb-1 text-center">STATUS</div>
-                                                        <span class="badge bg-danger w-100 py-2">{{ strtoupper(__('admin.rolled_back')) }}</span>
-                                                    </li>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                @endif
+                    <!-- Payment Method Tab -->
+                    <div class="tab-pane fade" id="payment-pane" role="tabpanel" tabindex="0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background: #fdf8f6;">
+                                    <tr>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Metode Pembayaran</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Jumlah Transaksi</th>
+                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">Total Nominal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($paymentBreakdown as $pay)
+                                        <tr>
+                                            <td class="fw-bold text-brown">{{ $pay->payment_method }}</td>
+                                            <td class="text-center">{{ $pay->count }}</td>
+                                            <td class="text-end fw-bold" style="color: #c17a5c;">Rp {{ number_format($pay->total, 0, ',', '.') }}</td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="3" class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i><br>Tidak ada data pembayaran</td></tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 
-                                                <li>
-                                                    <button type="button" class="dropdown-item py-2 text-danger btn-delete-tx" data-id="{{ $transaction->id }}">
-                                                        <i class="fas fa-trash me-2"></i> Hapus Permanen
-                                                    </button>
-                                                    <form id="delete-form-{{ $transaction->id }}" action="{{ route('admin.reports.cashier.delete', $transaction->id) }}" method="POST" style="display: none;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                    </form>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted py-4">
-                                        <div style="font-size: 3rem; opacity: 0.3;"><i class="fa-solid fa-inbox"></i></div>
-                                        <p class="mb-0">{{ __('admin.no_transactions_found') }}</p>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
-                    {{ $recentTransactions->fragment('transactions-section')->links('vendor.pagination.no-prevnext') }}
-                </div>
-            </div>
-        </div>
+                    <!-- Discount Tab -->
+                    <div class="tab-pane fade" id="discount-pane" role="tabpanel" tabindex="0">
+                        <div class="p-4 text-center">
+                            <div class="row g-4 justify-content-center">
+                                <div class="col-md-4">
+                                    <div class="p-4 rounded-16" style="background: #fef2f2; border: 1px solid #fee2e2;">
+                                        <div class="text-muted small text-uppercase fw-bold mb-1">Transaksi Berdiskon</div>
+                                        <h2 class="fw-bold mb-0 text-danger">{{ $discountSummary['count'] }}</h2>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-4 rounded-16" style="background: #fdf8f6; border: 1px solid #f2e8e5;">
+                                        <div class="text-muted small text-uppercase fw-bold mb-1">Total Potongan Harga</div>
+                                        <h2 class="fw-bold mb-0" style="color: #6f5849;">Rp {{ number_format($discountSummary['total_discount'], 0, ',', '.') }}</h2>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="p-4 rounded-16" style="background: #f0fdf4; border: 1px solid #dcfce7;">
+                                        <div class="text-muted small text-uppercase fw-bold mb-1">Total Setelah Diskon</div>
+                                        <h2 class="fw-bold mb-0 text-success">Rp {{ number_format($discountSummary['total_revenue'], 0, ',', '.') }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-        <!-- Audit Logs Section -->
-        <div class="card shadow-sm mb-4" id="audit-section">
-            <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;">
-                    <i class="fa-solid fa-clipboard-list me-2"></i>{{ __('admin.audit_log') }}
-                </h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead style="background: #fdf8f6;">
-                            <tr>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.user') }}</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.action') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.entity') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.details') }}</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.action') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($auditLogs as $log)
-                                <tr>
-                                    <td class="text-muted">{{ $log->created_at->format('d M Y H:i') }}</td>
-                                    <td>
-                                        <div class="fw-bold" style="color: #6f5849;">{{ $log->user->name ?? 'System' }}</div>
-                                        <small class="text-muted">{{ $log->user->role->name ?? '' }}</small>
-                                    </td>
-                                    <td class="text-center">
-                                        <span class="badge"
-                                            style="background: #e0cec7; color: #6f5849;">{{ strtoupper($log->action) }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="fw-semibold" style="color: #85695a;">{{ $log->model_type }}</span>
-                                        <span class="text-muted small">#{{ $log->model_id }}</span>
-                                    </td>
-                                    <td>
-                                        <span class="small">{{ Str::limit($log->notes, 50) }}</span>
-                                    </td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-outline-brown shadow-sm" data-bs-toggle="modal"
-                                            data-bs-target="#detailModal" 
-                                            data-id="{{ $log->id }}"
-                                            data-user="{{ $log->user?->name ?? __('common.system') }}"
-                                            data-role="{{ $log->user?->role->name ?? '' }}"
-                                            data-nis="{{ $log->user?->nis ?? '-' }}"
-                                            data-username="{{ $log->user?->username ?? '-' }}"
-                                            data-action="{{ $log->action }}" 
-                                            data-model="{{ $log->model_type }}"
-                                            data-model-id="{{ $log->model_id }}"
-                                            data-amount="{{ $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '-' }}"
-                                            data-method="{{ $log->payment_method ?? '-' }}" 
-                                            data-ip="{{ $log->ip_address }}"
-                                            data-mac="{{ $log->mac_address ?? 'Not Available' }}"
-                                            data-device="{{ $log->device_name ?? 'Unknown Device' }}"
-                                            data-agent="{{ $log->user_agent }}"
-                                            data-date="{{ $log->created_at->format('d M Y H:i:s') }}"
-                                            data-changes="{{ json_encode($log->changes ?? []) }}"
-                                            data-notes="{{ $log->notes ?? '-' }}"
-                                            style="border-radius: 8px;">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="6" class="text-center text-muted py-4">
-                                        <div style="font-size: 3rem; opacity: 0.3;"><i class="fa-solid fa-inbox"></i></div>
-                                        <p class="mb-0">{{ __('admin.no_audit_logs') }}</p>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
-                    {{ $auditLogs->fragment('audit-section')->links('vendor.pagination.no-prevnext') }}
+                    <!-- Audit Tab -->
+                    <div class="tab-pane fade" id="audit-pane" role="tabpanel" tabindex="0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background: #fdf8f6;">
+                                    <tr>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.user') }}</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('admin.action') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.details') }}</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">View</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($auditLogs as $log)
+                                        <tr>
+                                            <td class="text-muted small">{{ $log->created_at->format('d M Y H:i') }}</td>
+                                            <td>
+                                                <div class="fw-bold" style="color: #6f5849;">{{ $log->user->name ?? 'System' }}</div>
+                                                <small class="text-muted">{{ $log->user->role->name ?? '' }}</small>
+                                            </td>
+                                            <td class="text-center"><span class="badge" style="background: #e0cec7; color: #6f5849;">{{ strtoupper($log->action) }}</span></td>
+                                            <td><span class="small">{{ Str::limit($log->notes, 40) }}</span></td>
+                                            <td class="text-center">
+                                                <button class="btn btn-sm btn-outline-brown rounded-circle" data-bs-toggle="modal" data-bs-target="#detailModal" 
+                                                    data-id="{{ $log->id }}" data-user="{{ $log->user?->name ?? 'System' }}"
+                                                    data-role="{{ $log->user?->role->name ?? '' }}" data-nis="{{ $log->user?->nis ?? '-' }}"
+                                                    data-username="{{ $log->user?->username ?? '-' }}" data-action="{{ $log->action }}" 
+                                                    data-model="{{ $log->model_type }}" data-model-id="{{ $log->model_id }}"
+                                                    data-amount="{{ $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '-' }}"
+                                                    data-method="{{ $log->payment_method ?? '-' }}" data-ip="{{ $log->ip_address }}"
+                                                    data-mac="{{ $log->mac_address ?? '-' }}" data-device="{{ $log->device_name ?? 'Unknown' }}"
+                                                    data-agent="{{ $log->user_agent }}" data-date="{{ $log->created_at->format('d M Y H:i:s') }}"
+                                                    data-changes="{{ json_encode($log->changes ?? []) }}" data-notes="{{ $log->notes ?? '-' }}">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr><td colspan="5" class="text-center text-muted py-5"><i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i><br>{{ __('admin.no_audit_logs') }}</td></tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
+                            {{ $auditLogs->fragment('audit-pane')->links('vendor.pagination.no-prevnext') }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -717,6 +709,25 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Tab Persistence logic
+            const hash = window.location.hash;
+            if (hash) {
+                const tabTriggerEl = document.querySelector(`.nav-link[data-bs-target="${hash}"]`);
+                if (tabTriggerEl) {
+                    const tab = new bootstrap.Tab(tabTriggerEl);
+                    tab.show();
+                }
+            }
+
+            // Update hash on tab change
+            const tabEls = document.querySelectorAll('button[data-bs-toggle="tab"]');
+            tabEls.forEach(el => {
+                el.addEventListener('shown.bs.tab', event => {
+                    window.location.hash = event.target.getAttribute('data-bs-target');
+                });
+            });
+
+            // Audit Log Modal Detail View
             const detailModal = document.getElementById('detailModal');
             if (detailModal) {
                 detailModal.addEventListener('show.bs.modal', function(event) {

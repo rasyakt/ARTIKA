@@ -271,11 +271,11 @@
                 <div class="value">{{ number_format($cashierSummary['total_transactions']) }} trx</div>
             </td>
             <td class="summary-box" width="25%">
-                <h3>CASH SALES</h3>
+                <h3>{{ __('admin.cash_sales') }}</h3>
                 <div class="value">Rp {{ number_format($cashierSummary['cash_sales'], 0, ',', '.') }}</div>
             </td>
             <td class="summary-box" width="25%">
-                <h3>NON-CASH</h3>
+                <h3>{{ __('admin.non_cash_sales') }}</h3>
                 <div class="value">Rp {{ number_format($cashierSummary['non_cash_sales'], 0, ',', '.') }}</div>
             </td>
         </tr>
