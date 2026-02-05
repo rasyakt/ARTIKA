@@ -49,7 +49,7 @@
         <div class="row g-3 mb-4">
             <!-- Gross Revenue -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm accent-brown">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="p-2 rounded-3 me-2" style="background: #fdf8f6; color: #6f5849;">
@@ -66,7 +66,7 @@
 
             <!-- Total Cost (COGS) -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm accent-sienna">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="p-2 rounded-3 me-2" style="background: #fff5f2; color: #c17a5c;">
@@ -83,7 +83,7 @@
 
             <!-- Operating Expenses -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm accent-gold">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="p-2 rounded-3 me-2" style="background: #fef9c3; color: #a16207;">
@@ -101,7 +101,7 @@
 
             <!-- Stock Procurement -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm accent-purple">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="p-2 rounded-3 me-2" style="background: #f3e8ff; color: #7e22ce;">
@@ -118,7 +118,7 @@
 
             <!-- Net Profit -->
             <div class="col-md-3 col-sm-12">
-                <div class="card h-100 shadow-sm {{ $summary['net_profit'] >= 0 ? 'accent-success' : 'accent-danger' }}">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>

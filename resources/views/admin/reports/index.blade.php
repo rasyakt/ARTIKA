@@ -57,7 +57,7 @@
             <!-- Finance Report -->
             <div class="col-md-3">
                 <a href="{{ route('admin.reports.finance') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100 accent-brown">
+                    <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto bg-brown-soft">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
@@ -83,7 +83,7 @@
             <!-- Warehouse Report -->
             <div class="col-md-3">
                 <a href="{{ route('admin.reports.warehouse') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100 accent-success">
+                    <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto bg-success-soft">
                                 <i class="fa-solid fa-warehouse"></i>
@@ -111,7 +111,7 @@
             <!-- Cashier Report -->
             <div class="col-md-3">
                 <a href="{{ route('admin.reports.cashier') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100 accent-info">
+                    <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto bg-info-soft">
                                 <i class="fa-solid fa-cash-register"></i>
@@ -139,7 +139,7 @@
             <!-- Audit Logs -->
             <div class="col-md-3">
                 <a href="{{ route('admin.audit.index') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100 accent-sienna">
+                    <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto bg-sienna-soft">
                                 <i class="fa-solid fa-clipboard-list"></i>

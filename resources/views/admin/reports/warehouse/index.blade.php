@@ -126,7 +126,7 @@
             <!-- Summary Cards -->
             <div class="row g-4 mb-4">
                 <div class="col-md-3">
-                    <div class="card shadow-sm accent-brown">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1 me-3">
@@ -147,7 +147,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card shadow-sm accent-success">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1 me-3">
@@ -166,7 +166,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card shadow-sm accent-danger">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1 me-3">
@@ -186,7 +186,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card shadow-sm accent-info">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>

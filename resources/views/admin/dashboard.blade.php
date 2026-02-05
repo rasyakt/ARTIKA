@@ -28,7 +28,7 @@
         <div class="row g-4 mb-4">
             <!-- Total Sales -->
             <div class="col-md-3">
-                <div class="card h-100 shadow-sm accent-brown">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
@@ -47,7 +47,7 @@
 
             <!-- Total Transactions -->
             <div class="col-md-3">
-                <div class="card h-100 shadow-sm accent-success">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
@@ -66,7 +66,7 @@
 
             <!-- Total Products -->
             <div class="col-md-3">
-                <div class="card h-100 shadow-sm accent-sienna">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
@@ -85,7 +85,7 @@
 
             <!-- Total Suppliers -->
             <div class="col-md-3">
-                <div class="card h-100 shadow-sm accent-info">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
