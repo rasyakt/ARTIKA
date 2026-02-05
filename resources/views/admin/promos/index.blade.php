@@ -129,7 +129,7 @@
             </div>
             @if($promos->hasPages())
                 <div class="card-footer bg-white border-0 d-flex justify-content-end py-3">
-                    {{ $promos->links('vendor.pagination.no-prevnext') }}
+                    {{ $promos->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>

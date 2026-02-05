@@ -138,7 +138,11 @@
                                     </td>
                                     <td>
                                         @if($log->amount)
-                                            <strong>Rp{{ number_format($log->amount, 0, ',', '.') }}</strong>
+                                            @if(in_array($log->action, ['transaction_created', 'payment_received', 'refund', 'expense_created']))
+                                                <strong>Rp{{ number_format($log->amount, 0, ',', '.') }}</strong>
+                                            @else
+                                                <span class="fw-bold">{{ number_format($log->amount, 0, ',', '.') }}</span>
+                                            @endif
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
@@ -161,7 +165,7 @@
                                             data-username="{{ $log->user?->username ?? '-' }}"
                                             data-action="{{ $log->action }}" data-model="{{ $log->model_type }}"
                                             data-model-id="{{ $log->model_id }}"
-                                            data-amount="{{ $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '-' }}"
+                                            data-amount="{{ $log->amount ? (in_array($log->action, ['transaction_created', 'payment_received', 'refund', 'expense_created']) ? 'Rp' . number_format($log->amount, 0, ',', '.') : number_format($log->amount, 0, ',', '.')) : '-' }}"
                                             data-method="{{ $log->payment_method ?? '-' }}" 
                                             data-ip="{{ $log->ip_address }}"
                                             data-mac="{{ $log->mac_address ?? 'Not Available' }}"
@@ -186,7 +190,7 @@
                 </div>
             </div>
             <div class="card-footer bg-light d-flex justify-content-end">
-                {{ $logs->links('vendor.pagination.no-prevnext') }}
+                {{ $logs->links('vendor.pagination.custom-brown') }}
             </div>
         </div>
     </div>

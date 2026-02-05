@@ -294,7 +294,7 @@
                             </table>
                         </div>
                         <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
-                            {{ $recentTransactions->fragment('transactions-pane')->links('vendor.pagination.no-prevnext') }}
+                            {{ $recentTransactions->fragment('transactions-pane')->links('vendor.pagination.custom-brown') }}
                         </div>
                     </div>
 
@@ -484,7 +484,7 @@
                             </table>
                         </div>
                         <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
-                            {{ $auditLogs->fragment('audit-pane')->links('vendor.pagination.no-prevnext') }}
+                            {{ $auditLogs->fragment('audit-pane')->links('vendor.pagination.custom-brown') }}
                         </div>
                     </div>
                 </div>

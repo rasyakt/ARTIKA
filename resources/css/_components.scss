@@ -553,6 +553,38 @@
 // Loading Spinner
 // ============================================
 
+// ============================================
+// Pagination
+// ============================================
+
+.pagination-custom {
+    .page-item {
+        .page-link {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            &:hover {
+                background-color: rgba(133, 105, 90, 0.1) !important;
+                color: #6f5849 !important;
+                transform: scale(1.05);
+            }
+        }
+        
+        &.active .page-link {
+            box-shadow: 0 4px 12px rgba(133, 105, 90, 0.3);
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        
+        &.disabled .page-link {
+            opacity: 0.5;
+            cursor: not-allowed;
+            &:hover {
+                transform: none;
+                background-color: transparent !important;
+            }
+        }
+    }
+}
+
 .spinner-border {
     border-color: $primary;
     border-right-color: transparent;

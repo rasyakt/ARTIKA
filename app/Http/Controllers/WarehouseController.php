@@ -229,7 +229,7 @@ class WarehouseController extends Controller
             'stock_adjusted',
             'Stock',
             $stock->id,
-            $quantityBefore,
+            $quantityChange,
             $stock->quantity,
             ['type' => $type, 'change' => $quantityChange],
             'Manual adjustment for ' . $stock->product->name

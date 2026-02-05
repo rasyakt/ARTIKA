@@ -218,7 +218,11 @@
                     </td>
                     <td>
                         @if($log->amount)
-                            <strong style="color: #16a34a;">Rp{{ number_format($log->amount, 0, ',', '.') }}</strong>
+                            @if(in_array($log->action, ['transaction_created', 'payment_received', 'refund', 'expense_created']))
+                                <strong style="color: #16a34a;">Rp{{ number_format($log->amount, 0, ',', '.') }}</strong>
+                            @else
+                                <strong style="color: #6f5849;">{{ number_format($log->amount, 0, ',', '.') }}</strong>
+                            @endif
                             <div class="text-muted">{{ $log->payment_method }}</div>
                         @else - @endif
                     </td>

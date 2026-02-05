@@ -90,7 +90,7 @@
             </div>
             @if($customers->hasPages())
                 <div class="card-footer border-0 d-flex justify-content-end">
-                    {{ $customers->links('vendor.pagination.no-prevnext') }}
+                    {{ $customers->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>

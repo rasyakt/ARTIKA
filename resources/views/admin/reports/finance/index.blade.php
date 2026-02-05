@@ -247,7 +247,7 @@
                     </table>
                 </div>
                 <div class="px-3 py-2 border-top d-flex justify-content-end">
-                    {{ $dailyData->fragment('daily-profit-section')->links('vendor.pagination.no-prevnext') }}
+                    {{ $dailyData->fragment('daily-profit-section')->links('vendor.pagination.custom-brown') }}
                 </div>
             </div>
         </div>

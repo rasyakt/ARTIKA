@@ -608,7 +608,7 @@
 
             @if($transactions->hasPages())
                 <div class="mt-4 d-flex justify-content-center">
-                    {{ $transactions->links('vendor.pagination.no-prevnext') }}
+                    {{ $transactions->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>

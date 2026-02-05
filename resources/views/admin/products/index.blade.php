@@ -223,7 +223,7 @@
 
 			@if(method_exists($products, 'links'))
 				<div class="card-footer border-0 d-flex justify-content-end">
-					{{ $products->links('vendor.pagination.no-prevnext') }}
+					{{ $products->links('vendor.pagination.custom-brown') }}
 				</div>
 			@endif
 		</div>

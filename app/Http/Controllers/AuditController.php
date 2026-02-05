@@ -156,7 +156,9 @@ class AuditController extends Controller
                         $log->action,
                         $log->model_type,
                         $log->model_id,
-                        $log->amount ? 'Rp ' . number_format($log->amount, 0, ',', '.') : '-',
+                        in_array($log->action, ['transaction_created', 'payment_received', 'refund', 'expense_created'])
+                        ? ($log->amount ? 'Rp ' . number_format($log->amount, 0, ',', '.') : '-')
+                        : ($log->amount ? number_format($log->amount, 0, ',', '.') : '-'),
                         $log->ip_address,
                         $log->device_name,
                         $log->notes

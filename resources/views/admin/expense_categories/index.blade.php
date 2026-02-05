@@ -122,7 +122,7 @@
             </div>
             @if($categories->hasPages())
                 <div class="card-footer border-0 d-flex justify-content-end py-3 px-4">
-                    {{ $categories->links('vendor.pagination.no-prevnext') }}
+                    {{ $categories->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>

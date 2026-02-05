@@ -110,7 +110,7 @@
             </div>
             @if($users->hasPages())
                 <div class="card-footer border-0 d-flex justify-content-end py-3">
-                    {{ $users->links('vendor.pagination.no-prevnext') }}
+                    {{ $users->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>

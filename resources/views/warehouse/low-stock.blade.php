@@ -160,7 +160,7 @@
             </div>
             @if($lowStockItems->hasPages())
                 <div class="card-footer bg-white d-flex justify-content-end" style="border-top: 2px solid #f2e8e5;">
-                    {{ $lowStockItems->links('vendor.pagination.no-prevnext') }}
+                    {{ $lowStockItems->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>

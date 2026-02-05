@@ -176,7 +176,7 @@
                     </div>
                     @if($purchases->hasPages())
                         <div class="card-footer border-0 d-flex justify-content-end py-3 px-4">
-                            {{ $purchases->links('vendor.pagination.no-prevnext') }}
+                            {{ $purchases->links('vendor.pagination.custom-brown') }}
                         </div>
                     @endif
                 </div>
