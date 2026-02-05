@@ -26,11 +26,14 @@
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.expired_at') }}
                                 </th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('warehouse.current_stock') }}</th>
+                                    {{ __('warehouse.current_stock') }}
+                                </th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('common.status') }}</th>
+                                    {{ __('common.status') }}
+                                </th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('common.actions') }}</th>
+                                    {{ __('common.actions') }}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -214,7 +217,7 @@
 
                     document.getElementById('product_name').value = productName;
                     document.getElementById('current_stock').value = currentQty + ' {{ __('warehouse.units') }}';
-                    
+
                     // Pre-fill existing batch info if adjusting specific record
                     document.getElementById('batch_no').value = batchNo || '';
                     document.getElementById('expired_at').value = expiredAt || '';
@@ -223,16 +226,38 @@
                     document.getElementById('adjustment_qty').value = '';
                     document.getElementById('adjustment_reason').value = '';
                     document.getElementById('adjustment_type').value = 'add';
-                    
+
                     toggleBatchFields();
                 });
+            }
+
+            // Auto-trigger adjustment modal if stock_id or product_id is in URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const stockId = urlParams.get('stock_id');
+            const productId = urlParams.get('product_id');
+
+            if (stockId || productId) {
+                setTimeout(() => {
+                    let targetButton = null;
+                    if (stockId) {
+                        targetButton = document.querySelector(`button[data-stock-id="${stockId}"]`);
+                    } else if (productId) {
+                        targetButton = document.querySelector(`button[data-product-id="${productId}"]`);
+                    }
+
+                    if (targetButton) {
+                        // Scroll to the button slowly then click it
+                        targetButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        setTimeout(() => targetButton.click(), 500);
+                    }
+                }, 300);
             }
         });
 
         function toggleBatchFields() {
             const type = document.getElementById('adjustment_type').value;
             const batchFields = document.getElementById('batch_fields');
-            
+
             // Only show/allow editing batch/expiry for "add" type
             if (type === 'add') {
                 batchFields.style.opacity = '1';
