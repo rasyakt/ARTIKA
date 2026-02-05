@@ -21,7 +21,7 @@
             </div>
             <div class="d-flex gap-2">
                 <button type="button" class="btn btn-outline-brown shadow-sm" data-bs-toggle="modal"
-                    data-bs-target="#exportPdfModal">
+                    data-bs-target="#filterModal">
                     <i class="fa-solid fa-filter me-2"></i> {{ __('admin.apply_filter') }}
                 </button>
                 <button type="button" class="btn btn-outline-brown shadow-sm" data-bs-toggle="modal"
@@ -309,324 +309,326 @@
                 </form>
             </div>
         </div>
-        <!-- PDF Customization Modal -->
-        <div class="modal fade" id="exportPdfCustomModal" tabindex="-1" aria-labelledby="exportPdfCustomModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content shadow border-0" style="border-radius: 16px;">
-                    <div class="modal-header border-bottom-0 pb-0">
-                        <h5 class="modal-title fw-bold text-brown" id="exportPdfCustomModalLabel">
-                            <i class="fa-solid fa-file-settings me-2"></i>Kustomisasi Laporan Keuangan
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="{{ route('admin.reports.finance.export') }}" method="GET">
-                        <input type="hidden" name="format" value="pdf">
-                        <input type="hidden" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
-                        <input type="hidden" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
-                        <input type="hidden" name="period" value="{{ $period }}">
-
-                        <div class="modal-body py-4">
-                            <p class="text-muted mb-4 small">Pilih bagian laporan yang ingin ditampilkan dalam dokumen PDF:
-                            </p>
-
-                            <div class="list-group list-group-flush border rounded-12">
-                                <label class="list-group-item d-flex align-items-center py-3">
-                                    <input class="form-check-input me-3" type="checkbox" name="sections[]" value="summary"
-                                        checked>
-                                    <div>
-                                        <div class="fw-bold">Ringkasan KPI Keuangan</div>
-                                        <small class="text-muted small">Pendapatan kotor, COGS, Laba bersih, dll.</small>
-                                    </div>
-                                </label>
-                                <label class="list-group-item d-flex align-items-center py-3">
-                                    <input class="form-check-input me-3" type="checkbox" name="sections[]"
-                                        value="quick_info" checked>
-                                    <div>
-                                        <div class="fw-bold">Info Cepat & Margin</div>
-                                        <small class="text-muted small">Margin profit, Gross profit, Retur & Refund.</small>
-                                    </div>
-                                </label>
-                                <label class="list-group-item d-flex align-items-center py-3">
-                                    <input class="form-check-input me-3" type="checkbox" name="sections[]"
-                                        value="trend_chart" checked>
-                                    <div>
-                                        <div class="fw-bold">Grafik Tren Keuangan</div>
-                                        <small class="text-muted small">Visualisasi tren pendapatan vs keuntungan.</small>
-                                    </div>
-                                </label>
-                                <label class="list-group-item d-flex align-items-center py-3">
-                                    <input class="form-check-input me-3" type="checkbox" name="sections[]"
-                                        value="daily_data" checked>
-                                    <div>
-                                        <div class="fw-bold">Data Harian Detail</div>
-                                        <small class="text-muted small">Tabel rincian keuangan setiap harinya.</small>
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="modal-footer border-top-0 pt-0 pb-4 justify-content-center">
-                            <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal"
-                                style="border-radius: 10px;">Batal</button>
-                            <button type="submit" class="btn btn-brown px-4" style="border-radius: 10px;">
-                                <i class="fa-solid fa-download me-2"></i>Generate PDF
-                            </button>
-                        </div>
-                    </form>
+    </div>
+    <!-- PDF Customization Modal -->
+    <div class="modal fade" id="exportPdfCustomModal" tabindex="-1" aria-labelledby="exportPdfCustomModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow border-0" style="border-radius: 16px;">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-brown" id="exportPdfCustomModalLabel">
+                        <i class="fa-solid fa-file-settings me-2"></i>Kustomisasi Laporan Keuangan
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="{{ route('admin.reports.finance.export') }}" method="GET">
+                    <input type="hidden" name="format" value="pdf">
+                    <input type="hidden" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
+                    <input type="hidden" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
+                    <input type="hidden" name="period" value="{{ $period }}">
+
+                    <div class="modal-body py-4">
+                        <p class="text-muted mb-4 small">Pilih bagian laporan yang ingin ditampilkan dalam dokumen PDF:
+                        </p>
+
+                        <div class="list-group list-group-flush border rounded-12">
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="summary"
+                                    checked>
+                                <div>
+                                    <div class="fw-bold">Ringkasan KPI Keuangan</div>
+                                    <small class="text-muted small">Pendapatan kotor, COGS, Laba bersih, dll.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="quick_info"
+                                    checked>
+                                <div>
+                                    <div class="fw-bold">Info Cepat & Margin</div>
+                                    <small class="text-muted small">Margin profit, Gross profit, Retur & Refund.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="trend_chart"
+                                    checked>
+                                <div>
+                                    <div class="fw-bold">Grafik Tren Keuangan</div>
+                                    <small class="text-muted small">Visualisasi tren pendapatan vs keuntungan.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="daily_data"
+                                    checked>
+                                <div>
+                                    <div class="fw-bold">Data Harian Detail</div>
+                                    <small class="text-muted small">Tabel rincian keuangan setiap harinya.</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0 pb-4 justify-content-center">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal"
+                            style="border-radius: 10px;">Batal</button>
+                        <button type="submit" class="btn btn-brown px-4" style="border-radius: 10px;">
+                            <i class="fa-solid fa-download me-2"></i>Generate PDF
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+    </div>
 
-        <style>
-            .btn-brown {
-                background-color: #85695a;
-                color: white;
-            }
+    <style>
+        .btn-brown {
+            background-color: #85695a;
+            color: white;
+        }
 
-            .btn-brown:hover {
-                background-color: #6f5849;
-                color: white;
-            }
+        .btn-brown:hover {
+            background-color: #6f5849;
+            color: white;
+        }
 
-            .btn-outline-brown {
-                border-color: #85695a;
-                color: #85695a;
-            }
+        .btn-outline-brown {
+            border-color: #85695a;
+            color: #85695a;
+        }
 
-            .btn-outline-brown:hover,
-            .btn-outline-brown.active {
-                background-color: #85695a;
-                color: white;
-            }
+        .btn-outline-brown:hover,
+        .btn-outline-brown.active {
+            background-color: #85695a;
+            color: white;
+        }
 
-            .alert-brown {
-                background-color: #fdf8f6;
-                border-color: #f2e8e5;
-                color: #6f5849;
-                border-radius: 12px;
-            }
+        .alert-brown {
+            background-color: #fdf8f6;
+            border-color: #f2e8e5;
+            color: #6f5849;
+            border-radius: 12px;
+        }
 
-            .bg-brown {
-                background-color: #85695a;
-            }
+        .bg-brown {
+            background-color: #85695a;
+        }
 
-            .table-earth {
-                background-color: #fdf8f6 !important;
-            }
+        .table-earth {
+            background-color: #fdf8f6 !important;
+        }
 
-            .stats-icon-small {
-                width: 40px;
-                height: 40px;
-                border-radius: 10px;
-                background: rgba(255, 255, 255, 0.2);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 1.2rem;
-            }
+        .stats-icon-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
 
-            .hr-text {
-                display: flex;
-                align-items: center;
-                text-align: center;
-                font-size: 0.8rem;
-                font-weight: 600;
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
+        .hr-text {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-            .hr-text::before,
-            .hr-text::after {
-                content: '';
-                flex: 1;
-                border-bottom: 1px solid #f2e8e5;
-            }
+        .hr-text::before,
+        .hr-text::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #f2e8e5;
+        }
 
-            .hr-text::before {
-                margin-right: .5em;
-            }
+        .hr-text::before {
+            margin-right: .5em;
+        }
 
-            .hr-text::after {
-                margin-left: .5em;
-            }
+        .hr-text::after {
+            margin-left: .5em;
+        }
 
-            .chart-legend-btn {
-                background: transparent;
-                border: 1px solid #f2e8e5;
-                border-radius: 20px;
-                padding: 4px 12px;
-                font-size: 0.75rem;
-                font-weight: 600;
-                color: #6f5849;
-                display: flex;
-                align-items: center;
-                gap: 6px;
-                transition: all 0.2s ease;
-                cursor: pointer;
-                margin: 2px;
-            }
+        .chart-legend-btn {
+            background: transparent;
+            border: 1px solid #f2e8e5;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6f5849;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin: 2px;
+        }
 
-            .chart-legend-btn:hover {
-                background: #fdf8f6;
-                border-color: #eaddd7;
-            }
+        .chart-legend-btn:hover {
+            background: #fdf8f6;
+            border-color: #eaddd7;
+        }
 
-            .chart-legend-btn.hidden {
-                opacity: 0.4;
-            }
+        .chart-legend-btn.hidden {
+            opacity: 0.4;
+        }
 
-            .legend-dot {
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                display: inline-block;
-            }
-        </style>
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
 @endsection
 
-    @push('scripts')
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const dailyData = {!! json_encode($allDailyData) !!};
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dailyData = {!! json_encode($allDailyData) !!};
 
-                const labels = dailyData.map(d => {
-                    const date = new Date(d.date);
-                    return date.toLocaleDateString(navigator.language, { day: 'numeric', month: 'short' });
-                });
+            const labels = dailyData.map(d => {
+                const date = new Date(d.date);
+                return date.toLocaleDateString(navigator.language, { day: 'numeric', month: 'short' });
+            });
 
-                const revenueData = dailyData.map(d => d.revenue);
-                const costData = dailyData.map(d => d.cogs);
-                const expenseData = dailyData.map(d => d.expenses);
-                const profitData = dailyData.map(d => d.profit);
+            const revenueData = dailyData.map(d => d.revenue);
+            const costData = dailyData.map(d => d.cogs);
+            const expenseData = dailyData.map(d => d.expenses);
+            const profitData = dailyData.map(d => d.profit);
 
-                const ctx = document.getElementById('financeChart').getContext('2d');
-                const chart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: '{{ __('admin.gross_revenue') }}',
-                                data: revenueData,
-                                borderColor: '#85695a',
-                                backgroundColor: 'rgba(133, 105, 90, 0.1)',
-                                fill: true,
-                                tension: 0.4,
-                                borderWidth: 3,
-                                pointRadius: 4,
-                                pointBackgroundColor: '#85695a'
-                            },
-                            {
-                                label: '{{ __('admin.cogs') }}',
-                                data: costData,
-                                borderColor: '#c17a5c',
-                                borderDash: [5, 5],
-                                tension: 0.4,
-                                borderWidth: 2,
-                                pointRadius: 0
-                            },
-                            {
-                                label: '{{ __('admin.operational_expenses') }}',
-                                data: expenseData,
-                                borderColor: '#ca8a04',
-                                borderDash: [2, 2],
-                                tension: 0.4,
-                                borderWidth: 2,
-                                pointRadius: 0
-                            },
-                            {
-                                label: '{{ __('admin.stock_procurement') }}',
-                                data: dailyData.map(d => d.procurement),
-                                borderColor: '#9333ea',
-                                borderDash: [3, 3],
-                                tension: 0.4,
-                                borderWidth: 2,
-                                pointRadius: 0
-                            },
-                            {
-                                label: '{{ __('admin.net_profit') }}',
-                                data: profitData,
-                                borderColor: '#16a34a',
-                                borderWidth: 2,
-                                pointRadius: 0,
-                                fill: false,
-                                tension: 0.4
-                            }
-                        ]
+            const ctx = document.getElementById('financeChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: '{{ __('admin.gross_revenue') }}',
+                            data: revenueData,
+                            borderColor: '#85695a',
+                            backgroundColor: 'rgba(133, 105, 90, 0.1)',
+                            fill: true,
+                            tension: 0.4,
+                            borderWidth: 3,
+                            pointRadius: 4,
+                            pointBackgroundColor: '#85695a'
+                        },
+                        {
+                            label: '{{ __('admin.cogs') }}',
+                            data: costData,
+                            borderColor: '#c17a5c',
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
+                            label: '{{ __('admin.operational_expenses') }}',
+                            data: expenseData,
+                            borderColor: '#ca8a04',
+                            borderDash: [2, 2],
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
+                            label: '{{ __('admin.stock_procurement') }}',
+                            data: dailyData.map(d => d.procurement),
+                            borderColor: '#9333ea',
+                            borderDash: [3, 3],
+                            tension: 0.4,
+                            borderWidth: 2,
+                            pointRadius: 0
+                        },
+                        {
+                            label: '{{ __('admin.net_profit') }}',
+                            data: profitData,
+                            borderColor: '#16a34a',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            fill: false,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: {
-                            intersect: false,
-                            mode: 'index',
+                    plugins: {
+                        legend: {
+                            display: false // Hide default legend to use custom buttons
                         },
-                        plugins: {
-                            legend: {
-                                display: false // Hide default legend to use custom buttons
-                            },
-                            tooltip: {
-                                padding: 12,
-                                backgroundColor: 'rgba(0,0,0,0.8)',
-                                titleFont: { size: 14, weight: 'bold' },
-                                bodyFont: { size: 13 },
-                                callbacks: {
-                                    label: function (context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) label += ': ';
-                                        if (context.parsed.y !== null) {
-                                            label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(context.parsed.y);
-                                        }
-                                        return label;
+                        tooltip: {
+                            padding: 12,
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 13 },
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) label += ': ';
+                                    if (context.parsed.y !== null) {
+                                        label += new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(context.parsed.y);
                                     }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f5f5f4' },
+                            ticks: {
+                                callback: function (value) {
+                                    return 'Rp ' + (value >= 1000000 ? (value / 1000000) + 'M' : (value / 1000) + 'k');
                                 }
                             }
                         },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: { color: '#f5f5f4' },
-                                ticks: {
-                                    callback: function (value) {
-                                        return 'Rp ' + (value >= 1000000 ? (value / 1000000) + 'M' : (value / 1000) + 'k');
-                                    }
-                                }
-                            },
-                            x: {
-                                grid: { display: false }
-                            }
+                        x: {
+                            grid: { display: false }
                         }
                     }
-                });
-
-                // Handle custom legend / toggle buttons
-                const controls = document.getElementById('chart-controls');
-                chart.data.datasets.forEach((dataset, i) => {
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'chart-legend-btn';
-
-                    const dot = document.createElement('span');
-                    dot.className = 'legend-dot';
-                    dot.style.backgroundColor = dataset.borderColor;
-
-                    btn.appendChild(dot);
-                    btn.appendChild(document.createTextNode(dataset.label));
-
-                    btn.onclick = () => {
-                        const meta = chart.getDatasetMeta(i);
-                        meta.hidden = meta.hidden === null ? !chart.data.datasets[i].hidden : null;
-                        chart.update();
-
-                        if (meta.hidden) {
-                            btn.classList.add('hidden');
-                        } else {
-                            btn.classList.remove('hidden');
-                        }
-                    };
-                    controls.appendChild(btn);
-                });
+                }
             });
-        </script>
-    @endpush
+
+            // Handle custom legend / toggle buttons
+            const controls = document.getElementById('chart-controls');
+            chart.data.datasets.forEach((dataset, i) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'chart-legend-btn';
+
+                const dot = document.createElement('span');
+                dot.className = 'legend-dot';
+                dot.style.backgroundColor = dataset.borderColor;
+
+                btn.appendChild(dot);
+                btn.appendChild(document.createTextNode(dataset.label));
+
+                btn.onclick = () => {
+                    const meta = chart.getDatasetMeta(i);
+                    meta.hidden = meta.hidden === null ? !chart.data.datasets[i].hidden : null;
+                    chart.update();
+
+                    if (meta.hidden) {
+                        btn.classList.add('hidden');
+                    } else {
+                        btn.classList.remove('hidden');
+                    }
+                };
+                controls.appendChild(btn);
+            });
+        });
+    </script>
+@endpush
