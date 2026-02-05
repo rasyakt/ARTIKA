@@ -234,6 +234,40 @@
                             </div>
                         </div>
 
+                        <div class="mb-4">
+                            <label class="form-label fw-bold" style="color: #6f5849;">
+                                <i class="fa-solid fa-layer-group me-2"></i>Bagian Laporan
+                            </label>
+                            <div class="list-group list-group-flush border rounded-12">
+                                <label class="list-group-item d-flex align-items-center py-2">
+                                    <input class="form-check-input me-3" type="checkbox" name="modules[]" value="finance"
+                                        checked>
+                                    <div>
+                                        <div class="fw-bold small">Laporan Keuangan</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Ringkasan KPI & Trend</small>
+                                    </div>
+                                </label>
+                                <label class="list-group-item d-flex align-items-center py-2">
+                                    <input class="form-check-input me-3" type="checkbox" name="modules[]" value="warehouse"
+                                        checked>
+                                    <div>
+                                        <div class="fw-bold small">Laporan Gudang</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Stok, Pergerakan &
+                                            Valuasi</small>
+                                    </div>
+                                </label>
+                                <label class="list-group-item d-flex align-items-center py-2">
+                                    <input class="form-check-input me-3" type="checkbox" name="modules[]" value="cashier"
+                                        checked>
+                                    <div>
+                                        <div class="fw-bold small">Laporan Kasir</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Penjualan, Produk &
+                                            Performa</small>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center"
                             style="background-color: #fff7ed; color: #9a3412;">
                             <i class="fa-solid fa-circle-info fa-lg me-3"></i>

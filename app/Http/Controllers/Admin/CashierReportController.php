@@ -96,6 +96,11 @@ class CashierReportController extends Controller
         $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 50, $search);
         $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate, $search, $action);
 
+        $sections = $request->input('sections', ['summary', 'payment_methods', 'top_products', 'cashier_performance', 'recent_transactions']);
+
+        $categorySales = $this->cashierReportService->getSalesByCategory($startDate, $endDate);
+        $discountSummary = $this->cashierReportService->getDiscountSummary($startDate, $endDate);
+
         if ($request->input('format') === 'pdf') {
             $pdf = Pdf::loadView('admin.reports.cashier.print', [
                 'summary' => $summary,
@@ -104,8 +109,11 @@ class CashierReportController extends Controller
                 'cashierPerformance' => $cashierPerformance,
                 'recentTransactions' => $recentTransactions,
                 'auditLogs' => $auditLogs,
+                'categorySales' => $categorySales,
+                'discountSummary' => $discountSummary,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
+                'sections' => $sections,
                 'isPdf' => true,
                 'search' => $search,
                 'action' => $action

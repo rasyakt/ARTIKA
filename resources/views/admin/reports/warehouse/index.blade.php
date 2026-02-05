@@ -27,10 +27,9 @@
                     <p class="text-muted mb-0 ms-5 ps-4">{{ __('admin.warehouse_reports_subtitle') }}</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('admin.reports.warehouse.export', array_merge(request()->all(), ['format' => 'pdf'])) }}"
-                        class="btn btn-outline-brown shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                    <button type="button" class="btn btn-outline-brown shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;" data-bs-toggle="modal" data-bs-target="#exportPdfModal">
                         <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
-                    </a>
+                    </button>
                     <a href="{{ route('admin.reports.warehouse.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
                         class="btn btn-brown shadow-sm"
                         style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
@@ -467,4 +466,73 @@
                 </div>
             </div>
         </div>
+    <!-- PDF Customization Modal -->
+    <div class="modal fade" id="exportPdfModal" tabindex="-1" aria-labelledby="exportPdfModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow border-0" style="border-radius: 16px;">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold text-brown" id="exportPdfModalLabel">
+                        <i class="fa-solid fa-file-settings me-2"></i>Kustomisasi Laporan Gudang
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('admin.reports.warehouse.export') }}" method="GET">
+                    <input type="hidden" name="format" value="pdf">
+                    <input type="hidden" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
+                    <input type="hidden" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
+                    <input type="hidden" name="search" value="{{ $search }}">
+                    <input type="hidden" name="category_id" value="{{ $categoryId }}">
+                    <input type="hidden" name="stock_status" value="{{ $stockStatus }}">
+                    
+                    <div class="modal-body py-4">
+                        <p class="text-muted mb-4 small">Pilih bagian laporan yang ingin ditampilkan dalam dokumen PDF:</p>
+                        
+                        <div class="list-group list-group-flush border rounded-12">
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="summary" checked>
+                                <div>
+                                    <div class="fw-bold">Ringkasan Persediaan</div>
+                                    <small class="text-muted small">Valuasi stok, total item, peringatan stok rendah, dll.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="top_movers" checked>
+                                <div>
+                                    <div class="fw-bold">Produk Paling Aktif</div>
+                                    <small class="text-muted small">Item dengan pergerakan stok tertinggi.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="low_stock" checked>
+                                <div>
+                                    <div class="fw-bold">Peringatan Stok Rendah</div>
+                                    <small class="text-muted small">Daftar produk yang perlu restock segera.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="movements" checked>
+                                <div>
+                                    <div class="fw-bold">Riwayat Pergerakan Stok</div>
+                                    <small class="text-muted small">Daftar transaksi IN/OUT/ADJ terakhir.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="audit_logs">
+                                <div>
+                                    <div class="fw-bold">Audit Log Gudang</div>
+                                    <small class="text-muted small">Catatan sistem untuk pergerakan gudang.</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0 pb-4 justify-content-center">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 10px;">Batal</button>
+                        <button type="submit" class="btn btn-brown px-4" style="border-radius: 10px;">
+                            <i class="fa-solid fa-download me-2"></i>Generate PDF
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection

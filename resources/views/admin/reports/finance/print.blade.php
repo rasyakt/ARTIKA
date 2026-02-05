@@ -145,72 +145,91 @@
         </tr>
     </table>
 
-    <table class="summary-grid">
-        <tr>
-            <td class="summary-box" width="33.33%">
-                <h3>{{ __('admin.gross_revenue') }}</h3>
-                <div class="value">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box" width="33.33%">
-                <h3>{{ __('admin.cogs') }}</h3>
-                <div class="value">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box" width="33.33%">
-                <h3>{{ __('admin.gross_profit') }}</h3>
-                <div class="value text-success">Rp {{ number_format($summary['gross_profit'], 0, ',', '.') }}</div>
-            </td>
-        </tr>
-        <tr>
-            <td class="summary-box">
-                <h3>{{ __('admin.operational_expenses') }}</h3>
-                <div class="value text-danger">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box">
-                <h3>{{ __('admin.stock_procurement') }}</h3>
-                <div class="value text-danger">Rp {{ number_format($summary['total_procurement'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box">
-                <h3>{{ __('admin.net_profit') }}</h3>
-                <div class="value {{ $summary['net_profit'] >= 0 ? 'text-success' : 'text-danger' }}">
-                    Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td class="summary-box" colspan="3">
-                <h3>{{ __('admin.profit_margin') }}</h3>
-                <div class="value">{{ number_format($summary['profit_margin'], 2) }}%</div>
-            </td>
-        </tr>
-    </table>
-
-    <div class="section-title">{{ __('admin.daily_profit') }}</div>
-    <table class="data">
-        <thead>
+    @if(in_array('summary', $sections))
+        <table class="summary-grid">
             <tr>
-                <th>{{ __('admin.date') }}</th>
-                <th class="text-right">{{ __('admin.gross_revenue') }}</th>
-                <th class="text-right">{{ __('admin.cogs') }}</th>
-                <th class="text-right">{{ __('admin.operational_expenses') }}</th>
-                <th class="text-right">{{ __('admin.stock_procurement') }}</th>
-                <th class="text-right">{{ __('admin.net_profit') }}</th>
+                <td class="summary-box" width="33.33%">
+                    <h3>{{ __('admin.gross_revenue') }}</h3>
+                    <div class="value">Rp {{ number_format($summary['gross_revenue'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="33.33%">
+                    <h3>{{ __('admin.cogs') }}</h3>
+                    <div class="value">Rp {{ number_format($summary['cogs'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="33.33%">
+                    <h3>{{ __('admin.gross_profit') }}</h3>
+                    <div class="value text-success">Rp {{ number_format($summary['gross_profit'], 0, ',', '.') }}</div>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($dailyData as $day)
+            <tr>
+                <td class="summary-box">
+                    <h3>{{ __('admin.operational_expenses') }}</h3>
+                    <div class="value text-danger">Rp {{ number_format($summary['total_expenses'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box">
+                    <h3>{{ __('admin.stock_procurement') }}</h3>
+                    <div class="value text-danger">Rp {{ number_format($summary['total_procurement'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box">
+                    <h3>{{ __('admin.net_profit') }}</h3>
+                    <div class="value {{ $summary['net_profit'] >= 0 ? 'text-success' : 'text-danger' }}">
+                        Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    @endif
+
+    @if(in_array('quick_info', $sections))
+        <div class="section-title">{{ __('admin.quick_info') }} & Profitability</div>
+        <table class="summary-grid">
+            <tr>
+                <td class="summary-box" width="50%">
+                    <h3>{{ __('admin.profit_margin') }}</h3>
+                    <div class="value"
+                        style="color: {{ $summary['profit_margin'] > 15 ? '#16a34a' : ($summary['profit_margin'] > 5 ? '#ca8a04' : '#dc2626') }}">
+                        {{ number_format($summary['profit_margin'], 2) }}%
+                    </div>
+                </td>
+                <td class="summary-box" width="50%">
+                    <h3>Retur & Refund</h3>
+                    <div class="value text-danger">
+                        - Rp {{ number_format($summary['total_returns'], 0, ',', '.') }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    @endif
+
+    @if(in_array('daily_data', $sections))
+        <div class="section-title">{{ __('admin.daily_profit') }}</div>
+        <table class="data">
+            <thead>
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($day['date'])->format('d M Y') }}</td>
-                    <td class="text-right">Rp {{ number_format($day['revenue'], 0, ',', '.') }}</td>
-                    <td class="text-right">Rp {{ number_format($day['cogs'], 0, ',', '.') }}</td>
-                    <td class="text-right">Rp {{ number_format($day['expenses'], 0, ',', '.') }}</td>
-                    <td class="text-right">Rp {{ number_format($day['procurement'], 0, ',', '.') }}</td>
-                    <td class="text-right {{ $day['profit'] >= 0 ? 'text-success' : 'text-danger' }}">
-                        <strong>Rp {{ number_format($day['profit'], 0, ',', '.') }}</strong>
-                    </td>
+                    <th>{{ __('admin.date') }}</th>
+                    <th class="text-right">{{ __('admin.gross_revenue') }}</th>
+                    <th class="text-right">{{ __('admin.cogs') }}</th>
+                    <th class="text-right">{{ __('admin.operational_expenses') }}</th>
+                    <th class="text-right">{{ __('admin.stock_procurement') }}</th>
+                    <th class="text-right">{{ __('admin.net_profit') }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($dailyData as $day)
+                    <tr>
+                        <td>{{ \Carbon\Carbon::parse($day['date'])->format('d M Y') }}</td>
+                        <td class="text-right">Rp {{ number_format($day['revenue'], 0, ',', '.') }}</td>
+                        <td class="text-right">Rp {{ number_format($day['cogs'], 0, ',', '.') }}</td>
+                        <td class="text-right">Rp {{ number_format($day['expenses'], 0, ',', '.') }}</td>
+                        <td class="text-right">Rp {{ number_format($day['procurement'], 0, ',', '.') }}</td>
+                        <td class="text-right {{ $day['profit'] >= 0 ? 'text-success' : 'text-danger' }}">
+                            <strong>Rp {{ number_format($day['profit'], 0, ',', '.') }}</strong>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
     <div class="footer">
         <p>Laporan ini dicetak otomatis oleh Sistem ARTIKA POS pada {{ now()->format('d/m/Y H:i:s') }}</p>

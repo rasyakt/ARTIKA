@@ -115,6 +115,8 @@ class FinanceReportController extends Controller
         $summary = $this->financeService->getFinancialSummary($startDate, $endDate);
         $dailyData = $this->financeService->getDailyFinanceData($startDate, $endDate);
 
+        $sections = $request->input('sections', ['summary', 'quick_info', 'trend_chart', 'daily_data']);
+
         if ($request->input('format') === 'pdf') {
             $pdf = Pdf::loadView('admin.reports.finance.print', [
                 'summary' => $summary,
@@ -122,6 +124,7 @@ class FinanceReportController extends Controller
                 'startDate' => $startDate,
                 'endDate' => $endDate,
                 'period' => $period,
+                'sections' => $sections,
                 'isPdf' => true
             ]);
             return $pdf->download('finance-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');

@@ -30,6 +30,7 @@ class ProductRepository implements ProductRepositoryInterface
             ->get();
 
         foreach ($stocks as $stock) {
+            /** @var Stock $stock */
             if ($remainingToDeduct <= 0)
                 break;
 

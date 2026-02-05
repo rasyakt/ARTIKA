@@ -170,108 +170,205 @@
         </tr>
     </table>
 
-    <table class="summary-grid">
-        <tr>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.total_sales') }}</h3>
-                <div class="value text-success">Rp {{ number_format($summary['total_sales'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.transactions') }}</h3>
-                <div class="value">{{ number_format($summary['total_transactions']) }} trx</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.avg_transaction') }}</h3>
-                <div class="value">Rp {{ number_format($summary['average_transaction'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.payment_method') }}</h3>
-                <div class="value" style="font-size: 11px;">
-                    {{ __('admin.cash') }}: {{ $summary['cash_count'] }}<br>
-                    {{ __('admin.non_cash') }}: {{ $summary['non_cash_count'] }}
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <div class="section-title">{{ __('admin.top_selling_products') }}</div>
-    <table class="data">
-        <thead>
+    @if(in_array('summary', $sections))
+        <table class="summary-grid">
             <tr>
-                <th width="5%">#</th>
-                <th>{{ __('admin.product_management') }}</th>
-                <th width="15%" class="text-center">{{ __('admin.sold') }}</th>
-                <th width="25%" class="text-right">{{ __('admin.revenue') }}</th>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.total_sales') }}</h3>
+                    <div class="value text-success">Rp {{ number_format($summary['total_sales'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.transactions') }}</h3>
+                    <div class="value">{{ number_format($summary['total_transactions']) }} trx</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.avg_transaction') }}</h3>
+                    <div class="value">Rp {{ number_format($summary['average_transaction'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.payment_method') }}</h3>
+                    <div class="value" style="font-size: 11px;">
+                        {{ __('admin.cash') }}: {{ $summary['cash_count'] }}<br>
+                        {{ __('admin.non_cash') }}: {{ $summary['non_cash_count'] }}
+                    </div>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($topProducts as $index => $product)
-                <tr>
-                    <td class="text-center">{{ $index + 1 }}</td>
-                    <td>
-                        <strong>{{ $product->name }}</strong><br>
-                        <small>{{ $product->barcode }}</small>
-                    </td>
-                    <td class="text-center">{{ number_format($product->total_sold) }}</td>
-                    <td class="text-right">Rp {{ number_format($product->total_revenue, 0, ',', '.') }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+        </table>
+    @endif
 
-    <div class="section-title">{{ __('admin.cashier_performance') }}</div>
-    <table class="data">
-        <thead>
-            <tr>
-                <th>{{ __('admin.cashier') }}</th>
-                <th width="20%" class="text-center">{{ __('admin.transactions') }}</th>
-                <th width="25%" class="text-right">{{ __('admin.total_sales') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($cashierPerformance as $performance)
+    @if(in_array('payment_methods', $sections))
+        <div class="section-title">Breakdown Pembayaran</div>
+        <table class="data">
+            <thead>
                 <tr>
-                    <td>
-                        <strong>{{ $performance->user->name }}</strong><br>
-                        <small>{{ $performance->user->role->name }}</small>
-                    </td>
-                    <td class="text-center">{{ $performance->transaction_count }}</td>
-                    <td class="text-right">Rp {{ number_format($performance->total_sales, 0, ',', '.') }}</td>
+                    <th>Metode</th>
+                    <th class="text-center">Jumlah Transaksi</th>
+                    <th class="text-right">Total Nominal</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($paymentBreakdown as $pay)
+                    <tr>
+                        <td><strong>{{ $pay->payment_method }}</strong></td>
+                        <td class="text-center">{{ $pay->count }}</td>
+                        <td class="text-right">Rp {{ number_format($pay->total, 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
-    <div class="section-title">{{ __('admin.recent_transactions') }}</div>
-    <table class="data">
-        <thead>
-            <tr>
-                <th width="15%">{{ __('admin.invoice') }}</th>
-                <th width="15%">{{ __('admin.date') }}</th>
-                <th>{{ __('admin.cashier') }}</th>
-                <th width="15%" class="text-center">{{ __('admin.payment_method') }}</th>
-                <th width="20%" class="text-right">{{ __('admin.amount') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($recentTransactions as $transaction)
+    @if(in_array('top_products', $sections))
+        <div class="section-title">{{ __('admin.top_selling_products') }}</div>
+        <table class="data">
+            <thead>
                 <tr>
-                    <td><strong>{{ $transaction->invoice_no }}</strong></td>
-                    <td>{{ $transaction->created_at->format('d/m/Y H:i') }}</td>
-                    <td>{{ $transaction->user->name }}</td>
-                    <td class="text-center">
-                        @php
-                            $isCash = in_array(strtolower($transaction->payment_method), ['tunai', 'cash']);
-                        @endphp
-                        <span class="badge {{ $isCash ? 'badge-success' : 'badge-primary' }}">
-                            {{ $isCash ? __('admin.cash') : __('admin.non_cash') }}
-                        </span>
-                    </td>
-                    <td class="text-right">Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
+                    <th width="5%">#</th>
+                    <th>{{ __('admin.product_management') }}</th>
+                    <th width="15%" class="text-center">{{ __('admin.sold') }}</th>
+                    <th width="25%" class="text-right">{{ __('admin.revenue') }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($topProducts as $index => $product)
+                    <tr>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td>
+                            <strong>{{ $product->name }}</strong><br>
+                            <small>{{ $product->barcode }}</small>
+                        </td>
+                        <td class="text-center">{{ number_format($product->total_sold) }}</td>
+                        <td class="text-right">Rp {{ number_format($product->total_revenue, 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+
+    @if(in_array('category_sales', $sections))
+        <div class="section-title">Penjualan per Kategori</div>
+        <table class="data">
+            <thead>
+                <tr>
+                    <th>Kategori</th>
+                    <th width="20%" class="text-center">Item Terjual</th>
+                    <th width="30%" class="text-right">Total Pendapatan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($categorySales as $cat)
+                    <tr>
+                        <td><strong>{{ $cat->name }}</strong></td>
+                        <td class="text-center">{{ number_format($cat->total_sold) }}</td>
+                        <td class="text-right">Rp {{ number_format($cat->total_revenue, 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+
+    @if(in_array('cashier_performance', $sections))
+        <div class="section-title">{{ __('admin.cashier_performance') }}</div>
+        <table class="data">
+            <thead>
+                <tr>
+                    <th>{{ __('admin.cashier') }}</th>
+                    <th width="20%" class="text-center">{{ __('admin.transactions') }}</th>
+                    <th width="25%" class="text-right">{{ __('admin.total_sales') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($cashierPerformance as $performance)
+                    <tr>
+                        <td>
+                            <strong>{{ $performance->user->name }}</strong><br>
+                            <small>{{ $performance->user->role->name }}</small>
+                        </td>
+                        <td class="text-center">{{ $performance->transaction_count }}</td>
+                        <td class="text-right">Rp {{ number_format($performance->total_sales, 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+
+    @if(in_array('discount_summary', $sections))
+        <div class="section-title">Laporan Potongan Harga (Diskon)</div>
+        <table class="summary-grid">
+            <tr>
+                <td class="summary-box" width="33%">
+                    <h3>Transaksi Berdiskon</h3>
+                    <div class="value" style="color: #dc2626;">{{ $discountSummary['count'] }}</div>
+                </td>
+                <td class="summary-box" width="33%">
+                    <h3>Total Potongan</h3>
+                    <div class="value">Rp {{ number_format($discountSummary['total_discount'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="33%">
+                    <h3>Total Setelah Diskon</h3>
+                    <div class="value text-success">Rp {{ number_format($discountSummary['total_revenue'], 0, ',', '.') }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    @endif
+
+    @if(in_array('recent_transactions', $sections))
+        <div class="section-title">{{ __('admin.recent_transactions') }}</div>
+        <table class="data">
+            <thead>
+                <tr>
+                    <th width="15%">{{ __('admin.invoice') }}</th>
+                    <th width="15%">{{ __('admin.date') }}</th>
+                    <th>{{ __('admin.cashier') }}</th>
+                    <th width="15%" class="text-center">{{ __('admin.payment_method') }}</th>
+                    <th width="20%" class="text-right">{{ __('admin.amount') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($recentTransactions as $transaction)
+                    <tr>
+                        <td><strong>{{ $transaction->invoice_no }}</strong></td>
+                        <td>{{ $transaction->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $transaction->user->name }}</td>
+                        <td class="text-center">
+                            @php
+                                $isCash = in_array(strtolower($transaction->payment_method), ['tunai', 'cash']);
+                            @endphp
+                            <span class="badge {{ $isCash ? 'badge-success' : 'badge-primary' }}">
+                                {{ $isCash ? __('admin.cash') : __('admin.non_cash') }}
+                            </span>
+                        </td>
+                        <td class="text-right">Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+
+    @if(in_array('audit_logs', $sections))
+        <div class="section-title">Log Aktivitas Kasir</div>
+        <table class="data">
+            <thead>
+                <tr>
+                    <th width="15%">{{ __('admin.date') }}</th>
+                    <th width="15%">{{ __('admin.user') }}</th>
+                    <th width="15%" class="text-center">{{ __('admin.action') }}</th>
+                    <th>{{ __('admin.details') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($auditLogs as $log)
+                    <tr>
+                        <td>{{ $log->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $log->user->name ?? 'System' }}</td>
+                        <td class="text-center">{{ strtoupper($log->action) }}</td>
+                        <td><small>{{ $log->notes }}</small></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
     <div class="footer">
         <p>Laporan ini dicetak otomatis oleh Sistem ARTIKA POS pada {{ now()->format('d/m/Y H:i:s') }}</p>

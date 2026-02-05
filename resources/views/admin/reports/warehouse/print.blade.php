@@ -170,118 +170,150 @@
         </tr>
     </table>
 
-    <table class="summary-grid">
-        <tr>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.total_valuation') }}</h3>
-                <div class="value">Rp {{ number_format($summary['total_valuation'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.total_stock') }}</h3>
-                <div class="value">{{ number_format($summary['total_items']) }} unit</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.low_stock_alerts') }}</h3>
-                <div class="value text-danger">{{ number_format($summary['low_stock_count']) }} item</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.movements') }}</h3>
-                <div class="value">
-                    <span class="text-success">{{ $summary['movements_in'] }}↑</span> /
-                    <span class="text-danger">{{ $summary['movements_out'] }}↓</span>
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <div class="section-title">{{ __('admin.top_moving_items') }}</div>
-    <table class="data">
-        <thead>
+    @if(in_array('summary', $sections))
+        <table class="summary-grid">
             <tr>
-                <th width="5%">#</th>
-                <th>{{ __('admin.product_management') }}</th>
-                <th width="20%" class="text-center">{{ __('admin.total_movements') }}</th>
-                <th width="20%" class="text-center">{{ __('admin.quantity') }}</th>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.total_valuation') }}</h3>
+                    <div class="value">Rp {{ number_format($summary['total_valuation'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.total_stock') }}</h3>
+                    <div class="value">{{ number_format($summary['total_items']) }} unit</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.low_stock_alerts') }}</h3>
+                    <div class="value text-danger">{{ number_format($summary['low_stock_count']) }} item</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.movements') }}</h3>
+                    <div class="value">
+                        <span class="text-success">{{ $summary['movements_in'] }}↑</span> /
+                        <span class="text-danger">{{ $summary['movements_out'] }}↓</span>
+                    </div>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($topMovers as $index => $mover)
-                <tr>
-                    <td class="text-center">{{ $index + 1 }}</td>
-                    <td>
-                        <strong>{{ $mover->product->name }}</strong><br>
-                        <small>{{ $mover->product->barcode }}</small>
-                    </td>
-                    <td class="text-center">{{ $mover->total_movements }}</td>
-                    <td class="text-center">{{ number_format($mover->total_quantity) }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+        </table>
+    @endif
 
-    <div class="section-title">{{ __('admin.low_stock_items') }}</div>
-    <table class="data">
-        <thead>
-            <tr>
-                <th>{{ __('admin.product_management') }}</th>
-                <th width="20%" class="text-center">{{ __('admin.min_stock') }}</th>
-                <th width="20%" class="text-center">{{ __('admin.current_stock') }}</th>
-                <th width="20%" class="text-center">{{ __('admin.status') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($lowStockItems as $item)
+    @if(in_array('top_movers', $sections))
+        <div class="section-title">{{ __('admin.top_moving_items') }}</div>
+        <table class="data">
+            <thead>
                 <tr>
-                    <td><strong>{{ $item->name }}</strong></td>
-                    <td class="text-center">{{ $item->min_stock }}</td>
-                    <td class="text-center text-danger"><strong>{{ $item->current_stock }}</strong></td>
-                    <td class="text-center">
-                        <span class="badge badge-danger">{{ __('admin.needs_restock') }}</span>
-                    </td>
+                    <th width="5%">#</th>
+                    <th>{{ __('admin.product_management') }}</th>
+                    <th width="20%" class="text-center">{{ __('admin.total_movements') }}</th>
+                    <th width="20%" class="text-center">{{ __('admin.quantity') }}</th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="text-center">{{ __('admin.all_well_stocked') }}</td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($topMovers as $index => $mover)
+                    <tr>
+                        <td class="text-center">{{ $index + 1 }}</td>
+                        <td>
+                            <strong>{{ $mover->product->name }}</strong><br>
+                            <small>{{ $mover->product->barcode }}</small>
+                        </td>
+                        <td class="text-center">{{ $mover->total_movements }}</td>
+                        <td class="text-center">{{ number_format($mover->total_quantity) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
-    <div class="section-title">{{ __('admin.recent_stock_movements') }}</div>
-    <table class="data">
-        <thead>
-            <tr>
-                <th width="15%">{{ __('admin.date') }}</th>
-                <th>{{ __('admin.product_management') }}</th>
-                <th width="10%" class="text-center">{{ __('admin.activity_type') }}</th>
-                <th width="10%" class="text-center">{{ __('admin.quantity') }}</th>
-                <th width="20%">{{ __('admin.reference') }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($movements as $movement)
+    @if(in_array('low_stock', $sections))
+        <div class="section-title">{{ __('admin.low_stock_items') }}</div>
+        <table class="data">
+            <thead>
                 <tr>
-                    <td>{{ $movement->created_at->format('d/m/Y H:i') }}</td>
-                    <td><strong>{{ $movement->product->name }}</strong></td>
-                    <td class="text-center">
-                        @if($movement->type == 'in')
-                            <span class="badge badge-success">IN</span>
-                        @elseif($movement->type == 'out')
-                            <span class="badge badge-danger">OUT</span>
-                        @else
-                            <span class="badge badge-info">ADJ</span>
-                        @endif
-                    </td>
-                    <td class="text-center">
-                        <strong class="{{ $movement->quantity_change > 0 ? 'text-success' : 'text-danger' }}">
-                            {{ $movement->quantity_change > 0 ? '+' : '' }}{{ $movement->quantity_change }}
-                        </strong>
-                    </td>
-                    <td>{{ $movement->reference ?: '-' }}</td>
+                    <th>{{ __('admin.product_management') }}</th>
+                    <th width="20%" class="text-center">{{ __('admin.min_stock') }}</th>
+                    <th width="20%" class="text-center">{{ __('admin.current_stock') }}</th>
+                    <th width="20%" class="text-center">{{ __('admin.status') }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @forelse($lowStockItems as $item)
+                    <tr>
+                        <td><strong>{{ $item->name }}</strong></td>
+                        <td class="text-center">{{ $item->min_stock }}</td>
+                        <td class="text-center text-danger"><strong>{{ $item->current_stock }}</strong></td>
+                        <td class="text-center">
+                            <span class="badge badge-danger">{{ __('admin.needs_restock') }}</span>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center">{{ __('admin.all_well_stocked') }}</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    @endif
+
+    @if(in_array('movements', $sections))
+        <div class="section-title">{{ __('admin.recent_stock_movements') }}</div>
+        <table class="data">
+            <thead>
+                <tr>
+                    <th width="15%">{{ __('admin.date') }}</th>
+                    <th>{{ __('admin.product_management') }}</th>
+                    <th width="10%" class="text-center">{{ __('admin.activity_type') }}</th>
+                    <th width="10%" class="text-center">{{ __('admin.quantity') }}</th>
+                    <th width="20%">{{ __('admin.reference') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($movements as $movement)
+                    <tr>
+                        <td>{{ $movement->created_at->format('d/m/Y H:i') }}</td>
+                        <td><strong>{{ $movement->product->name }}</strong></td>
+                        <td class="text-center">
+                            @if($movement->type == 'in')
+                                <span class="badge badge-success">IN</span>
+                            @elseif($movement->type == 'out')
+                                <span class="badge badge-danger">OUT</span>
+                            @else
+                                <span class="badge badge-info">ADJ</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            <strong class="{{ $movement->quantity_change > 0 ? 'text-success' : 'text-danger' }}">
+                                {{ $movement->quantity_change > 0 ? '+' : '' }}{{ $movement->quantity_change }}
+                            </strong>
+                        </td>
+                        <td>{{ $movement->reference ?: '-' }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+
+    @if(in_array('audit_logs', $sections))
+        <div class="section-title">Audit Log Gudang</div>
+        <table class="data">
+            <thead>
+                <tr>
+                    <th width="20%">{{ __('admin.date') }}</th>
+                    <th width="20%">{{ __('admin.user') }}</th>
+                    <th width="15%" class="text-center">{{ __('admin.action') }}</th>
+                    <th>{{ __('admin.details') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($auditLogs as $log)
+                    <tr>
+                        <td>{{ $log->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $log->user->name ?? 'System' }}</td>
+                        <td class="text-center">{{ strtoupper($log->action) }}</td>
+                        <td><small>{{ $log->notes }}</small></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
     <div class="footer">
         <p>Laporan ini dicetak otomatis oleh Sistem ARTIKA POS pada {{ now()->format('d/m/Y H:i:s') }}</p>
