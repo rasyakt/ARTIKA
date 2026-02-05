@@ -181,7 +181,9 @@
 									<td class="text-center">
 										<div class="btn-group">
 											<button class="btn btn-sm btn-light action-btn" data-bs-toggle="dropdown"
-												aria-expanded="false"> <i class="fa-solid fa-ellipsis-vertical"></i></button>
+												data-bs-boundary="viewport" aria-expanded="false">
+												<i class="fa-solid fa-ellipsis-vertical"></i>
+											</button>
 											<ul class="dropdown-menu dropdown-menu-end" style="border-radius:12px;">
 												<li>
 													<a class="dropdown-item"

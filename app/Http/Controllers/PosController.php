@@ -35,7 +35,12 @@ class PosController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('pos.index', compact('products', 'categories', 'paymentMethods', 'heldTransactions'));
+        $activePromos = \App\Models\Promo::where('is_active', true)
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now())
+            ->get();
+
+        return view('pos.index', compact('products', 'categories', 'paymentMethods', 'heldTransactions', 'activePromos'));
     }
 
     public function logs(Request $request)

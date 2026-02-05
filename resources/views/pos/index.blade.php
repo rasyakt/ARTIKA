@@ -1403,6 +1403,38 @@
                 display: none !important;
             }
         }
+
+        .promo-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #ef4444;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.65rem;
+            font-weight: 800;
+            border-bottom-left-radius: 8px;
+            z-index: 2;
+            box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .pulsate-slow {
+            animation: pulsate 2s infinite ease-in-out;
+        }
+
+        @keyframes pulsate {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 
@@ -1515,14 +1547,44 @@
                             @php
                                 $totalStock = $product->stocks->sum('quantity');
                                 $isOutOfStock = $totalStock <= 0;
+
+                                // Find best active promo for this product
+                                $promo = $activePromos->where('product_id', $product->id)->first()
+                                    ?? $activePromos->where('category_id', $product->category_id)->first();
+
+                                $promoPrice = $product->price;
+                                $hasPromo = false;
+                                if ($promo) {
+                                    $hasPromo = true;
+                                    if ($promo->type === 'percentage') {
+                                        $promoPrice = $product->price * (1 - $promo->value / 100);
+                                    } else {
+                                        $promoPrice = max(0, $product->price - $promo->value);
+                                    }
+                                }
                             @endphp
                             <div class="product-card {{ $isOutOfStock ? 'opacity-50' : '' }}"
                                 data-product-id="{{ $product->id }}" data-category="{{ $product->category_id }}"
                                 data-name="{{ $product->name }}" data-price="{{ $product->price }}"
-                                data-stock="{{ $totalStock }}" data-barcode="{{ $product->barcode }}">
+                                data-promo-price="{{ $promoPrice }}" data-stock="{{ $totalStock }}"
+                                data-barcode="{{ $product->barcode }}">
+                                @if($hasPromo)
+                                    <div class="promo-badge pulsate-slow">
+                                        {{ $promo->type === 'percentage' ? '-' . round($promo->value) . '%' : '-Rp' . number_format($promo->value, 0, ',', '.') }}
+                                    </div>
+                                @endif
                                 <div class="product-name text-truncate w-100 px-1">{{ $product->name }}</div>
                                 <div class="product-info-stack">
-                                    <div class="product-price">Rp{{ number_format($product->price, 0, ',', '.') }}</div>
+                                    <div class="product-price">
+                                        @if($hasPromo)
+                                            <span
+                                                class="original-price text-muted text-decoration-line-through small me-1">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
+                                            <span
+                                                class="discounted-price text-danger">Rp{{ number_format($promoPrice, 0, ',', '.') }}</span>
+                                        @else
+                                            Rp{{ number_format($product->price, 0, ',', '.') }}
+                                        @endif
+                                    </div>
                                     <div class="small {{ $isOutOfStock ? 'text-danger fw-bold' : 'text-muted' }}"
                                         style="font-size: 0.65rem;">
                                         {{ __('pos.qty') }}: {{ $totalStock }}
@@ -1789,6 +1851,7 @@
         let cart = [];
         let selectedPaymentMethod = null;
         let scanner = null;
+        const activePromos = {!! json_encode($activePromos) !!};
 
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.paymentMethodBtn').forEach((btn, idx) => {
@@ -2059,10 +2122,12 @@
             console.log('[Cart] addToCart called for:', productCard.dataset.name);
             const productId = productCard.dataset.productId;
             const productName = productCard.dataset.name;
-            const productPrice = parseFloat(productCard.dataset.price);
+            const originalPrice = parseFloat(productCard.dataset.price);
+            const promoPrice = parseFloat(productCard.dataset.promoPrice || productCard.dataset.price);
+            const productPrice = promoPrice;
             const productStock = parseInt(productCard.dataset.stock || 0);
 
-            console.log(`[Cart] Params: ID=${productId}, Name=${productName}, Price=${productPrice}, Stock=${productStock}`);
+            console.log(`[Cart] Params: ID=${productId}, Name=${productName}, Price=${productPrice}, Original=${originalPrice}, Stock=${productStock}`);
 
             const existingItem = cart.find(item => item.product_id == productId);
 
@@ -2108,6 +2173,7 @@
                     product_id: productId,
                     name: productName,
                     price: productPrice,
+                    originalPrice: originalPrice,
                     quantity: 1,
                     subtotal: productPrice,
                     stock: productStock
@@ -2287,8 +2353,10 @@
 
             // Setup confirm button
             document.getElementById('keypadConfirm').onclick = () => {
-                const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
-                const total = subtotal; // Logic for discount if needed
+                const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0); // Discounted subtotal
+                const originalSubtotal = cart.reduce((sum, item) => sum + (item.quantity * (item.originalPrice || item.price)), 0);
+                const discountAmount = originalSubtotal - subtotal;
+                const total = subtotal;
 
                 if (isCash) {
                     const cashAmount = parseFloat(document.getElementById('keypadDisplay').value);
@@ -2301,7 +2369,7 @@
                         return;
                     }
                     modal.hide();
-                    processCheckout(cart, subtotal, total, cashAmount, null);
+                    processCheckout(cart, subtotal, total, cashAmount, null, discountAmount, originalSubtotal);
                 } else {
                     const inputCamera = document.getElementById('inputCamera');
                     const inputGallery = document.getElementById('inputGallery');
@@ -2313,9 +2381,8 @@
                         file = inputGallery.files[0];
                     }
 
-                    // Optional: We no longer require payment proof strictly
                     modal.hide();
-                    processCheckout(cart, subtotal, total, total, file);
+                    processCheckout(cart, subtotal, total, total, file, discountAmount, originalSubtotal);
                 }
             };
         }
@@ -2362,7 +2429,7 @@
             document.getElementById('imagePreview').src = '';
         }
 
-        function processCheckout(items, subtotal, total, cashAmount, paymentProofFile) {
+        function processCheckout(items, subtotal, total, cashAmount, paymentProofFile, discountAmount = 0, originalSubtotal = 0) {
             const checkoutBtn = document.getElementById('checkoutBtn');
             const originalText = checkoutBtn.innerHTML;
             checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> {{ __('pos.processing') }}';
@@ -2371,19 +2438,18 @@
             const change = cashAmount - total;
             const formData = new FormData();
 
-            // Append items as JSON string because FormData doesn't handle array of objects well directly for Laravel validation
-            // However, Laravel validation `items.*.product_id` expects an array.
-            // Best approach for FormData array:
+            // Append items
             items.forEach((item, index) => {
                 formData.append(`items[${index}][product_id]`, item.product_id);
                 formData.append(`items[${index}][quantity]`, item.quantity);
                 formData.append(`items[${index}][price]`, item.price);
             });
 
-            formData.append('subtotal', subtotal);
+            formData.append('subtotal', originalSubtotal || subtotal);
             formData.append('total_amount', total);
             formData.append('payment_method', selectedPaymentMethod);
             formData.append('cash_amount', cashAmount);
+            formData.append('discount', discountAmount);
             formData.append('change_amount', change > 0 ? change : 0);
 
             if (paymentProofFile) {

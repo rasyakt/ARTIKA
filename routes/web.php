@@ -99,6 +99,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])->name('audit.index');
         Route::get('/audit/export', [\App\Http\Controllers\AuditController::class, 'export'])->name('audit.export');
         Route::post('/audit/clear', [\App\Http\Controllers\AuditController::class, 'clear'])->name('audit.clear');
+
+        // Promo Management
+        Route::get('/promos', [\App\Http\Controllers\PromoController::class, 'index'])->name('promos.index');
+        Route::post('/promos', [\App\Http\Controllers\PromoController::class, 'store'])->name('promos.store');
+        Route::put('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'update'])->name('promos.update');
+        Route::delete('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'destroy'])->name('promos.delete');
+        Route::post('/promos/{id}/toggle', [\App\Http\Controllers\PromoController::class, 'toggleStatus'])->name('promos.toggle');
     });
 
     // Cashier Routes (POS)

@@ -351,7 +351,8 @@
                                         {{ number_format($transaction->total_amount, 0, ',', '.') }}</td>
                                     <td class="text-center">
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-light border shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-sm btn-light border shadow-sm" type="button" data-bs-toggle="dropdown" 
+                                                data-bs-boundary="viewport" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0" style="border-radius: 12px; min-width: 180px;">

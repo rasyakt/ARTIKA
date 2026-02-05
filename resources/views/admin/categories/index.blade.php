@@ -24,9 +24,11 @@
                                 <tr>
                                     <th class="px-4 py-3" style="border: none; color: #6f5849; font-weight: 600;">#</th>
                                     <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
-                                        {{ __('common.category_name') }}</th>
+                                        {{ __('common.category_name') }}
+                                    </th>
                                     <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
-                                        {{ __('common.products') }}</th>
+                                        {{ __('common.products') }}
+                                    </th>
                                     <th class="py-3 text-end px-4" style="border: none; color: #6f5849; font-weight: 600;">
                                         {{ __('common.actions') }}
                                     </th>
@@ -54,6 +56,7 @@
                                         <td class="py-3 align-middle text-end px-4">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-light" type="button" data-bs-toggle="dropdown"
+                                                    data-bs-boundary="viewport"
                                                     style="border: 1px solid #dee2e6; border-radius: 8px; padding: 0.35rem 0.7rem;">
                                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                                 </button>

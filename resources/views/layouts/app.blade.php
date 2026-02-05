@@ -417,6 +417,10 @@
                             class="sidebar-link {{ request()->routeIs('admin.categories*') ? 'active' : '' }}">
                             <i class="fa-solid fa-folder"></i> {{ __('menu.categories') }}
                         </a>
+                        <a href="{{ route('admin.promos.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-tags"></i> {{ __('admin.promos') }}
+                        </a>
                         <a href="{{ route('admin.users') }}"
                             class="sidebar-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
                             <i class="fa-solid fa-users"></i> {{ __('menu.users') }}
