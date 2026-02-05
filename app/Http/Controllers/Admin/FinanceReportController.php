@@ -139,23 +139,29 @@ class FinanceReportController extends Controller
 
             $callback = function () use ($summary, $dailyData, $startDate, $endDate) {
                 $file = fopen('php://output', 'w');
-                fputcsv($file, ['FINANCE REPORT', $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y')]);
-                fputcsv($file, []);
+
+                // Add UTF-8 BOM for Excel
+                fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+                $delimiter = ';';
+
+                fputcsv($file, [__('admin.finance_report'), $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y')], $delimiter);
+                fputcsv($file, [], $delimiter);
 
                 // Summary
-                fputcsv($file, ['FINANCIAL SUMMARY']);
-                fputcsv($file, ['Gross Revenue', 'Rp ' . number_format($summary['gross_revenue'], 0, ',', '.')]);
-                fputcsv($file, ['COGS (Cost of Goods Sold)', 'Rp ' . number_format($summary['cogs'], 0, ',', '.')]);
-                fputcsv($file, ['Gross Profit', 'Rp ' . number_format($summary['gross_profit'], 0, ',', '.')]);
-                fputcsv($file, ['Operational Expenses', 'Rp ' . number_format($summary['total_expenses'], 0, ',', '.')]);
-                fputcsv($file, ['Stock Procurement', 'Rp ' . number_format($summary['total_procurement'], 0, ',', '.')]);
-                fputcsv($file, ['Net Profit', 'Rp ' . number_format($summary['net_profit'], 0, ',', '.')]);
-                fputcsv($file, ['Profit Margin', number_format($summary['profit_margin'], 2) . '%']);
-                fputcsv($file, []);
+                fputcsv($file, [strtoupper(__('admin.quick_info'))], $delimiter);
+                fputcsv($file, [__('admin.gross_revenue'), 'Rp ' . number_format($summary['gross_revenue'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.cogs'), 'Rp ' . number_format($summary['cogs'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.gross_profit'), 'Rp ' . number_format($summary['gross_profit'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('menu.operational_expenses'), 'Rp ' . number_format($summary['total_expenses'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.stock_procurement') ?? 'Stock Procurement', 'Rp ' . number_format($summary['total_procurement'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.net_profit'), 'Rp ' . number_format($summary['net_profit'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.profit_margin'), number_format($summary['profit_margin'], 2) . '%'], $delimiter);
+                fputcsv($file, [], $delimiter);
 
                 // Daily Data
-                fputcsv($file, ['DAILY DATA']);
-                fputcsv($file, ['Date', 'Revenue', 'COGS', 'Expenses', 'Procurement', 'Profit', 'Margin %']);
+                fputcsv($file, [strtoupper(__('admin.daily_data') ?? 'DAILY DATA')], $delimiter);
+                fputcsv($file, [__('admin.date'), __('admin.revenue'), __('admin.cogs'), __('menu.operational_expenses'), __('admin.procurement') ?? 'Procurement', __('admin.profit') ?? 'Profit', __('admin.margin') . ' %'], $delimiter);
                 foreach ($dailyData as $day) {
                     $margin = $day['revenue'] > 0 ? ($day['profit'] / $day['revenue']) * 100 : 0;
                     fputcsv($file, [
@@ -166,7 +172,7 @@ class FinanceReportController extends Controller
                         'Rp ' . number_format($day['procurement'], 0, ',', '.'),
                         'Rp ' . number_format($day['profit'], 0, ',', '.'),
                         number_format($margin, 2) . '%'
-                    ]);
+                    ], $delimiter);
                 }
 
                 fclose($file);

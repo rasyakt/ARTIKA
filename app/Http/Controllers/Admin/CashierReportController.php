@@ -121,52 +121,58 @@ class CashierReportController extends Controller
 
             $callback = function () use ($summary, $topProducts, $cashierPerformance, $recentTransactions, $startDate, $endDate) {
                 $file = fopen('php://output', 'w');
-                fputcsv($file, ['CASHIER REPORT', $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y')]);
-                fputcsv($file, []);
+
+                // Add UTF-8 BOM for Excel
+                fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+                $delimiter = ';';
+
+                fputcsv($file, [__('admin.cashier_report'), $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y')], $delimiter);
+                fputcsv($file, [], $delimiter);
 
                 // Summary
-                fputcsv($file, ['SUMMARY STATISTICS']);
-                fputcsv($file, ['Total Sales', 'Rp ' . number_format($summary['total_sales'], 0, ',', '.')]);
-                fputcsv($file, ['Total Transactions', $summary['total_transactions']]);
-                fputcsv($file, ['Average Transaction', 'Rp ' . number_format($summary['average_transaction'], 0, ',', '.')]);
-                fputcsv($file, ['Cash Sales', 'Rp ' . number_format($summary['cash_sales'], 0, ',', '.')]);
-                fputcsv($file, ['Non-Cash Sales', 'Rp ' . number_format($summary['non_cash_sales'], 0, ',', '.')]);
-                fputcsv($file, []);
+                fputcsv($file, [strtoupper(__('admin.quick_info'))], $delimiter);
+                fputcsv($file, [__('admin.total_sales'), 'Rp ' . number_format($summary['total_sales'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.total_transactions'), $summary['total_transactions']], $delimiter);
+                fputcsv($file, [__('admin.average_transaction'), 'Rp ' . number_format($summary['average_transaction'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.cash_sales') ?? 'Cash Sales', 'Rp ' . number_format($summary['cash_sales'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.non_cash_sales') ?? 'Non-Cash Sales', 'Rp ' . number_format($summary['non_cash_sales'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [], $delimiter);
 
                 // Top Selling Products
                 if ($topProducts->count() > 0) {
-                    fputcsv($file, ['TOP SELLING PRODUCTS']);
-                    fputcsv($file, ['Product Name', 'Barcode', 'Sold Count', 'Revenue']);
+                    fputcsv($file, [strtoupper(__('admin.top_selling_products') ?? 'TOP SELLING PRODUCTS')], $delimiter);
+                    fputcsv($file, [__('admin.product_name'), __('admin.barcode'), __('admin.sold_count') ?? 'Sold Count', __('admin.revenue')], $delimiter);
                     foreach ($topProducts as $product) {
                         fputcsv($file, [
                             $product->name,
                             $product->barcode,
                             $product->total_sold,
                             'Rp ' . number_format($product->total_revenue, 0, ',', '.')
-                        ]);
+                        ], $delimiter);
                     }
-                    fputcsv($file, []);
+                    fputcsv($file, [], $delimiter);
                 }
 
                 // Cashier Performance
                 if ($cashierPerformance->count() > 0) {
-                    fputcsv($file, ['CASHIER PERFORMANCE']);
-                    fputcsv($file, ['Name', 'Role', 'Transaction Count', 'Total Sales']);
+                    fputcsv($file, [strtoupper(__('admin.cashier_performance') ?? 'CASHIER PERFORMANCE')], $delimiter);
+                    fputcsv($file, [__('admin.name'), __('admin.role'), __('admin.transaction_count') ?? 'Transaction Count', __('admin.total_sales')], $delimiter);
                     foreach ($cashierPerformance as $p) {
                         fputcsv($file, [
                             $p->user->name,
                             $p->user->role->name,
                             $p->transaction_count,
                             'Rp ' . number_format($p->total_sales, 0, ',', '.')
-                        ]);
+                        ], $delimiter);
                     }
-                    fputcsv($file, []);
+                    fputcsv($file, [], $delimiter);
                 }
 
                 // Recent Transactions
                 if ($recentTransactions->count() > 0) {
-                    fputcsv($file, ['RECENT TRANSACTIONS']);
-                    fputcsv($file, ['Invoice', 'Date', 'Cashier', 'Payment Method', 'Amount', 'Status']);
+                    fputcsv($file, [strtoupper(__('admin.recent_transactions') ?? 'RECENT TRANSACTIONS')], $delimiter);
+                    fputcsv($file, [__('admin.invoice'), __('admin.date'), __('admin.cashier'), __('admin.payment_method'), __('admin.amount'), __('admin.status')], $delimiter);
                     foreach ($recentTransactions as $tx) {
                         fputcsv($file, [
                             $tx->invoice_no,
@@ -175,9 +181,9 @@ class CashierReportController extends Controller
                             $tx->payment_method,
                             'Rp ' . number_format($tx->total_amount, 0, ',', '.'),
                             strtoupper($tx->status)
-                        ]);
+                        ], $delimiter);
                     }
-                    fputcsv($file, []);
+                    fputcsv($file, [], $delimiter);
                 }
 
                 fclose($file);

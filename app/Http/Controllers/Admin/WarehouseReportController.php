@@ -113,38 +113,44 @@ class WarehouseReportController extends Controller
 
             $callback = function () use ($summary, $movements, $lowStockItems, $topMovers, $auditLogs, $startDate, $endDate) {
                 $file = fopen('php://output', 'w');
-                fputcsv($file, ['WARHOUSE REPORT', $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y')]);
-                fputcsv($file, []);
+
+                // Add UTF-8 BOM for Excel
+                fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+                $delimiter = ';';
+
+                fputcsv($file, [__('admin.warehouse_reports_title'), $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y')], $delimiter);
+                fputcsv($file, [], $delimiter);
 
                 // Summary
-                fputcsv($file, ['SUMMARY STATISTICS']);
-                fputcsv($file, ['Total Valuation', 'Rp ' . number_format($summary['total_valuation'], 0, ',', '.')]);
-                fputcsv($file, ['Total Items in Stock', number_format($summary['total_items'])]);
-                fputcsv($file, ['Low Stock Alerts', $summary['low_stock_count']]);
-                fputcsv($file, ['Movements IN', $summary['movements_in']]);
-                fputcsv($file, ['Movements OUT', $summary['movements_out']]);
-                fputcsv($file, ['Adjustments', $summary['movements_adjustment']]);
-                fputcsv($file, []);
+                fputcsv($file, [strtoupper(__('admin.quick_info'))], $delimiter);
+                fputcsv($file, [__('admin.total_valuation'), 'Rp ' . number_format($summary['total_valuation'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.total_items_in_stock') ?? 'Total Items in Stock', number_format($summary['total_items'])], $delimiter);
+                fputcsv($file, [__('admin.low_stock_alerts') ?? 'Low Stock Alerts', $summary['low_stock_count']], $delimiter);
+                fputcsv($file, [__('admin.movements_in') ?? 'Movements IN', $summary['movements_in']], $delimiter);
+                fputcsv($file, [__('admin.movements_out') ?? 'Movements OUT', $summary['movements_out']], $delimiter);
+                fputcsv($file, [__('admin.adjustments') ?? 'Adjustments', $summary['movements_adjustment']], $delimiter);
+                fputcsv($file, [], $delimiter);
 
                 // Top Moving Items
                 if ($topMovers->count() > 0) {
-                    fputcsv($file, ['TOP MOVING ITEMS']);
-                    fputcsv($file, ['Product Name', 'Barcode', 'Movements Count', 'Total Quantity']);
+                    fputcsv($file, [strtoupper(__('admin.top_moving_items') ?? 'TOP MOVING ITEMS')], $delimiter);
+                    fputcsv($file, [__('admin.product_name'), __('admin.barcode'), __('admin.movements_count') ?? 'Movements Count', __('admin.total_quantity') ?? 'Total Quantity'], $delimiter);
                     foreach ($topMovers as $mover) {
                         fputcsv($file, [
                             $mover->product->name,
                             $mover->product->barcode,
                             $mover->total_movements,
                             $mover->total_quantity
-                        ]);
+                        ], $delimiter);
                     }
-                    fputcsv($file, []);
+                    fputcsv($file, [], $delimiter);
                 }
 
                 // Recent Stock Movements
                 if ($movements->count() > 0) {
-                    fputcsv($file, ['RECENT STOCK MOVEMENTS']);
-                    fputcsv($file, ['Date', 'Product', 'Type', 'Quantity', 'Reference', 'User']);
+                    fputcsv($file, [strtoupper(__('menu.stock_movements') ?? 'RECENT STOCK MOVEMENTS')], $delimiter);
+                    fputcsv($file, [__('admin.date'), __('admin.product'), __('admin.type'), __('admin.quantity'), __('admin.reference'), __('admin.user')], $delimiter);
                     foreach ($movements as $m) {
                         fputcsv($file, [
                             $m->created_at->format('Y-m-d H:i'),
@@ -153,23 +159,23 @@ class WarehouseReportController extends Controller
                             $m->quantity_change,
                             $m->reference ?? '-',
                             $m->user->name ?? 'System'
-                        ]);
+                        ], $delimiter);
                     }
-                    fputcsv($file, []);
+                    fputcsv($file, [], $delimiter);
                 }
 
                 // Low Stock Items
                 if ($lowStockItems->count() > 0) {
-                    fputcsv($file, ['LOW STOCK ITEMS']);
-                    fputcsv($file, ['Product Name', 'Min Stock', 'Current Stock']);
+                    fputcsv($file, [strtoupper(__('admin.low_stock_items'))], $delimiter);
+                    fputcsv($file, [__('admin.product_name'), __('admin.min_stock'), __('admin.current_stock')], $delimiter);
                     foreach ($lowStockItems as $item) {
                         fputcsv($file, [
                             $item->name,
                             $item->min_stock,
                             $item->current_stock
-                        ]);
+                        ], $delimiter);
                     }
-                    fputcsv($file, []);
+                    fputcsv($file, [], $delimiter);
                 }
 
                 fclose($file);

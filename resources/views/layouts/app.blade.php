@@ -65,13 +65,37 @@
             box-shadow: 0 4px 18px rgba(107, 83, 70, 0.08);
             padding: 0.75rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            height: 70px;
         }
 
         .sidebar {
             background: #fffefc;
-            min-height: calc(100vh - 70px);
+            position: fixed;
+            top: 70px;
+            left: 0;
+            bottom: 0;
+            width: 16.666667%;
+            /* Matched to col-md-2 */
             border-right: 1px solid #f2e8e5;
             padding: 1.25rem 0;
+            overflow-y: auto;
+            z-index: 1000;
+            scrollbar-width: thin;
+            scrollbar-color: #8a6b57 transparent;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #8a6b57;
+            border-radius: 4px;
         }
 
         .sidebar-link {
@@ -114,6 +138,11 @@
         .main-content {
             padding: 0;
             background: #faf9f8;
+            margin-left: 16.666667%;
+            /* Offset by fixed sidebar width */
+            margin-top: 70px;
+            /* Offset by fixed navbar height */
+            min-height: calc(100vh - 70px);
         }
 
         .navbar-brand {
@@ -305,6 +334,12 @@
             .sidebar-header {
                 display: none;
             }
+        }
+
+        .main-navbar .container-fluid {
+            height: 100%;
+            display: flex;
+            align-items: center;
         }
     </style>
 </head>

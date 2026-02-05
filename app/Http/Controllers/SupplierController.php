@@ -115,15 +115,21 @@ class SupplierController extends Controller
 
         $callback = function () use ($supplier, $salesPerformance) {
             $file = fopen('php://output', 'w');
-            fputcsv($file, ['SUPPLIER REPORT', $supplier->name]);
-            fputcsv($file, ['Phone:', $supplier->phone]);
-            fputcsv($file, ['Email:', $supplier->email]);
-            fputcsv($file, []);
+
+            // Add UTF-8 BOM for Excel
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+            $delimiter = ';';
+
+            fputcsv($file, [__('admin.supplier_report') ?? 'SUPPLIER REPORT', $supplier->name], $delimiter);
+            fputcsv($file, [__('admin.phone') . ':', $supplier->phone], $delimiter);
+            fputcsv($file, [__('admin.email') . ':', $supplier->email], $delimiter);
+            fputcsv($file, [], $delimiter);
 
             // Sales Performance
             if ($salesPerformance->count() > 0) {
-                fputcsv($file, ['SALES PERFORMANCE & INVENTORY']);
-                fputcsv($file, ['Product Name', 'Barcode', 'Sold Count', 'Total Revenue', 'Current Stock']);
+                fputcsv($file, [strtoupper(__('admin.sales_performance_inventory') ?? 'SALES PERFORMANCE & INVENTORY')], $delimiter);
+                fputcsv($file, [__('admin.product_name'), __('admin.barcode'), __('admin.sold_count') ?? 'Sold Count', __('admin.total_revenue') ?? 'Total Revenue', __('admin.current_stock')], $delimiter);
                 foreach ($salesPerformance as $item) {
                     fputcsv($file, [
                         $item->product->name,
@@ -131,16 +137,16 @@ class SupplierController extends Controller
                         $item->total_sold,
                         'Rp ' . number_format($item->total_revenue, 0, ',', '.'),
                         $item->product->stock->quantity ?? 0
-                    ]);
+                    ], $delimiter);
                 }
-                fputcsv($file, []);
+                fputcsv($file, [], $delimiter);
             }
 
             // Purchase History
             $purchases = $supplier->purchases()->orderBy('purchase_date', 'desc')->get();
             if ($purchases->count() > 0) {
-                fputcsv($file, ['PURCHASE HISTORY']);
-                fputcsv($file, ['Date', 'Invoice', 'Product', 'Quantity', 'Cost', 'Total Cost']);
+                fputcsv($file, [strtoupper(__('admin.purchase_history') ?? 'PURCHASE HISTORY')], $delimiter);
+                fputcsv($file, [__('admin.date'), __('admin.invoice'), __('admin.product'), __('admin.quantity'), __('admin.cost'), __('admin.total_cost')], $delimiter);
                 foreach ($purchases as $p) {
                     fputcsv($file, [
                         $p->purchase_date->format('Y-m-d'),
@@ -149,9 +155,9 @@ class SupplierController extends Controller
                         $p->quantity,
                         'Rp ' . number_format($p->cost_price, 0, ',', '.'),
                         'Rp ' . number_format($p->total_cost, 0, ',', '.')
-                    ]);
+                    ], $delimiter);
                 }
-                fputcsv($file, []);
+                fputcsv($file, [], $delimiter);
             }
 
             fclose($file);

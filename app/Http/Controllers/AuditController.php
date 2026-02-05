@@ -126,10 +126,28 @@ class AuditController extends Controller
 
             $callback = function () use ($logs, $startDate, $endDate) {
                 $file = fopen('php://output', 'w');
-                fputcsv($file, ['AUDIT LOG REPORT', $startDate . ' - ' . $endDate]);
-                fputcsv($file, []);
 
-                fputcsv($file, ['Date', 'User', 'Role', 'Action', 'Model', 'ID', 'Amount', 'IP Address', 'Device', 'Notes']);
+                // Add UTF-8 BOM for Excel
+                fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+                $delimiter = ';';
+
+                fputcsv($file, [__('admin.logs_report'), $startDate . ' - ' . $endDate], $delimiter);
+                fputcsv($file, [], $delimiter);
+
+                fputcsv($file, [
+                    __('admin.date'),
+                    __('admin.user'),
+                    __('admin.role') ?? 'Role',
+                    __('admin.action'),
+                    __('admin.model') ?? 'Model',
+                    'ID',
+                    __('admin.amount'),
+                    'IP Address',
+                    __('admin.device') ?? 'Device',
+                    __('admin.notes')
+                ], $delimiter);
+
                 foreach ($logs as $log) {
                     fputcsv($file, [
                         $log->created_at->format('Y-m-d H:i:s'),
@@ -142,7 +160,7 @@ class AuditController extends Controller
                         $log->ip_address,
                         $log->device_name,
                         $log->notes
-                    ]);
+                    ], $delimiter);
                 }
 
                 fclose($file);
