@@ -239,7 +239,7 @@
         <!-- Header -->
         <div class="header">
             <div class="logo-container">
-                <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
+                <img src="{{ asset('img/logo2.png') }}" alt="Logo" class="logo">
             </div>
             <div class="store-name">ARTIKA MINIMARKET</div>
             <div class="store-info">Jl. Jendral Sudirman 269A</div>

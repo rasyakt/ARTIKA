@@ -9,6 +9,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>{{ __('pos.title') }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1609,27 +1610,27 @@
                                     <div class="expiry-badge expiring bg-warning text-dark">
                                         <i class="fas fa-hourglass-half"></i>
                                         {{ (int) \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) }}d
-                                                </div>
+                                    </div>
                                 @endif
 
-                                    <div class="product-name text-truncate w-100 px-1">{{ $product->name }}</div>
-                                    <div class="product-info-stack">
-                                        <div class="product-price">
-                                            @if($hasPromo)
-                                                <span
-                                                    class="original-price text-muted text-decoration-line-through small me-1">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
-                                                <span
-                                                    class="discounted-price text-danger">Rp{{ number_format($promoPrice, 0, ',', '.') }}</span>
-                                            @else
-                                                Rp{{ number_format($product->price, 0, ',', '.') }}
-                                            @endif
-                                        </div>
-                                        <div class="small {{ $isOutOfStock ? 'text-danger fw-bold' : 'text-muted' }}"
-                                            style="font-size: 0.65rem;">
-                                            {{ __('pos.qty') }}: {{ $totalStock }}
-                                        </div>
+                                <div class="product-name text-truncate w-100 px-1">{{ $product->name }}</div>
+                                <div class="product-info-stack">
+                                    <div class="product-price">
+                                        @if($hasPromo)
+                                            <span
+                                                class="original-price text-muted text-decoration-line-through small me-1">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
+                                            <span
+                                                class="discounted-price text-danger">Rp{{ number_format($promoPrice, 0, ',', '.') }}</span>
+                                        @else
+                                            Rp{{ number_format($product->price, 0, ',', '.') }}
+                                        @endif
+                                    </div>
+                                    <div class="small {{ $isOutOfStock ? 'text-danger fw-bold' : 'text-muted' }}"
+                                        style="font-size: 0.65rem;">
+                                        {{ __('pos.qty') }}: {{ $totalStock }}
                                     </div>
                                 </div>
+                            </div>
                         @endforeach
                     </div>
                 </div>
