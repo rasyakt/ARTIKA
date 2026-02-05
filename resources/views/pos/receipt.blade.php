@@ -266,13 +266,12 @@
         <div class="items-table">
             @foreach($transaction->items as $item)
                 <div class="item-row">
-                    <div class="item-main">
-                        <span class="item-name">{{ $item->product->name }}</span>
-                        <span
-                            class="item-subtotal">Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</span>
+                    <div class="item-main" style="text-transform: uppercase;">
+                        <span>{{ $item->product->name }}</span>
                     </div>
-                    <div class="item-details">
-                        {{ $item->quantity }} x {{ number_format($item->price, 0, ',', '.') }}
+                    <div class="item-details" style="display: flex; justify-content: space-between;">
+                        <span>{{ $item->quantity }} x {{ number_format($item->price, 0, ',', '.') }}</span>
+                        <span>Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</span>
                     </div>
                 </div>
             @endforeach
@@ -287,7 +286,7 @@
                 <span>Rp{{ number_format($transaction->subtotal, 0, ',', '.') }}</span>
             </div>
             @if($transaction->discount > 0)
-                <div class="total-row">
+                <div class="total-row" style="color: #000;">
                     <span>{{ __('pos.discount') }}:</span>
                     <span>-Rp{{ number_format($transaction->discount, 0, ',', '.') }}</span>
                 </div>
@@ -295,6 +294,20 @@
             <div class="total-row grand-total">
                 <span>{{ __('pos.total') }}:</span>
                 <span>Rp{{ number_format($transaction->total_amount, 0, ',', '.') }}</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Summary -->
+        <div style="margin: 5px 0; font-size: 9px; font-weight: 700;">
+            <div class="total-row">
+                <span>Total Item:</span>
+                <span>{{ $transaction->items->count() }}</span>
+            </div>
+            <div class="total-row">
+                <span>Total Qty:</span>
+                <span>{{ $transaction->items->sum('quantity') }}</span>
             </div>
         </div>
 
