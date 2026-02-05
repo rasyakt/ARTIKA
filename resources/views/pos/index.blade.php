@@ -1435,6 +1435,28 @@
                 transform: scale(1);
             }
         }
+
+        .expiry-badge {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.65rem;
+            font-weight: 800;
+            border-bottom-right-radius: 8px;
+            z-index: 2;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .expiry-badge.expired {
+            background: #ef4444;
+            color: white;
+        }
+
+        .expiry-badge.expiring {
+            background: #f59e0b;
+            color: #4b382f;
+        }
     </style>
 </head>
 
@@ -1563,34 +1585,51 @@
                                     }
                                 }
                             @endphp
+                            @php
+                                $expiry = $product->earliest_expiry;
+                                $isExpired = $expiry && \Carbon\Carbon::parse($expiry)->isPast();
+                                $isExpiringSoon = $expiry && \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) < 30 && !$isExpired;
+                            @endphp
                             <div class="product-card {{ $isOutOfStock ? 'opacity-50' : '' }}"
                                 data-product-id="{{ $product->id }}" data-category="{{ $product->category_id }}"
                                 data-name="{{ $product->name }}" data-price="{{ $product->price }}"
                                 data-promo-price="{{ $promoPrice }}" data-stock="{{ $totalStock }}"
-                                data-barcode="{{ $product->barcode }}">
+                                data-barcode="{{ $product->barcode }}"
+                                data-expiry="{{ $expiry ? \Carbon\Carbon::parse($expiry)->format('Y-m-d') : '' }}">
                                 @if($hasPromo)
                                     <div class="promo-badge pulsate-slow">
                                         {{ $promo->type === 'percentage' ? '-' . round($promo->value) . '%' : '-Rp' . number_format($promo->value, 0, ',', '.') }}
                                     </div>
                                 @endif
-                                <div class="product-name text-truncate w-100 px-1">{{ $product->name }}</div>
-                                <div class="product-info-stack">
-                                    <div class="product-price">
-                                        @if($hasPromo)
-                                            <span
-                                                class="original-price text-muted text-decoration-line-through small me-1">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
-                                            <span
-                                                class="discounted-price text-danger">Rp{{ number_format($promoPrice, 0, ',', '.') }}</span>
-                                        @else
-                                            Rp{{ number_format($product->price, 0, ',', '.') }}
-                                        @endif
+                                @if($isExpired)
+                                    <div class="expiry-badge expired bg-danger">
+                                        <i class="fas fa-calendar-times"></i> {{ __('warehouse.expired') }}
                                     </div>
-                                    <div class="small {{ $isOutOfStock ? 'text-danger fw-bold' : 'text-muted' }}"
-                                        style="font-size: 0.65rem;">
-                                        {{ __('pos.qty') }}: {{ $totalStock }}
+                                @elseif($isExpiringSoon)
+                                    <div class="expiry-badge expiring bg-warning text-dark">
+                                        <i class="fas fa-hourglass-half"></i>
+                                        {{ (int) \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) }}d
+                                                </div>
+                                @endif
+
+                                    <div class="product-name text-truncate w-100 px-1">{{ $product->name }}</div>
+                                    <div class="product-info-stack">
+                                        <div class="product-price">
+                                            @if($hasPromo)
+                                                <span
+                                                    class="original-price text-muted text-decoration-line-through small me-1">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
+                                                <span
+                                                    class="discounted-price text-danger">Rp{{ number_format($promoPrice, 0, ',', '.') }}</span>
+                                            @else
+                                                Rp{{ number_format($product->price, 0, ',', '.') }}
+                                            @endif
+                                        </div>
+                                        <div class="small {{ $isOutOfStock ? 'text-danger fw-bold' : 'text-muted' }}"
+                                            style="font-size: 0.65rem;">
+                                            {{ __('pos.qty') }}: {{ $totalStock }}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -2126,6 +2165,33 @@
             const promoPrice = parseFloat(productCard.dataset.promoPrice || productCard.dataset.price);
             const productPrice = promoPrice;
             const productStock = parseInt(productCard.dataset.stock || 0);
+
+            const expiryDate = productCard.dataset.expiry;
+
+            // Expiry Check
+            if (expiryDate) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const expiry = new Date(expiryDate);
+                const diffDays = Math.ceil((expiry - today) / (1000 * 60 * 60 * 24));
+
+                if (diffDays <= 0) {
+                    playErrorBeep();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Produk Kadaluarsa!',
+                        text: `Produk "${productName}" sudah kadaluarsa sejak ${expiry.toLocaleDateString('id-ID')}. Pilih batch lain atau buang barang ini.`,
+                        customClass: { popup: 'artika-swal-popup', title: 'artika-swal-title', confirmButton: 'artika-swal-confirm-btn' },
+                        buttonsStyling: false
+                    });
+                    return false;
+                } else if (diffDays < 30) {
+                    ArtikaToast.fire({
+                        icon: 'warning',
+                        title: `Perhatian: Kadaluarsa dalam ${diffDays} hari (${expiry.toLocaleDateString('id-ID')})`
+                    });
+                }
+            }
 
             console.log(`[Cart] Params: ID=${productId}, Name=${productName}, Price=${productPrice}, Original=${originalPrice}, Stock=${productStock}`);
 

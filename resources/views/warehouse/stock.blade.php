@@ -22,15 +22,15 @@
                             <tr>
                                 <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">{{ __('common.product') }}
                                 </th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.category') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.current_stock') }}
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.batch_no') }}</th>
+                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.expired_at') }}
                                 </th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.min_stock') }}
-                                </th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.status') }}</th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('common.actions') }}
-                                </th>
+                                    {{ __('warehouse.current_stock') }}</th>
+                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                    {{ __('common.status') }}</th>
+                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                    {{ __('common.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,21 +39,46 @@
                                     <td class="ps-4">
                                         <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
                                         <small class="text-muted">{{ $stock->product->barcode }}</small>
-                                    </td>
-                                    <td>
-                                        <span class="badge" style="background: #e0cec7; color: #6f5849;">
+                                        <span class="badge ms-1"
+                                            style="background: #e0cec7; color: #6f5849; font-size: 0.7rem;">
                                             {{ $stock->product->category->name }}
                                         </span>
                                     </td>
                                     <td>
+                                        <code class="text-muted">{{ $stock->batch_no ?? '-' }}</code>
+                                    </td>
+                                    <td>
+                                        @if($stock->expired_at)
+                                            <div class="d-flex flex-column">
+                                                <span
+                                                    class="fw-semibold {{ $stock->expired_at->isPast() ? 'text-danger' : ($stock->expired_at->diffInDays(now()->startOfDay()) < 30 ? 'text-warning' : '') }}">
+                                                    {{ $stock->expired_at->format('d M Y') }}
+                                                </span>
+                                                @if($stock->expired_at->isPast())
+                                                    <small class="text-danger fw-bold"
+                                                        style="font-size: 0.7rem;">{{ __('warehouse.expired') }}</small>
+                                                @elseif($stock->expired_at->diffInDays(now()->startOfDay()) < 30)
+                                                    <small class="text-warning fw-bold"
+                                                        style="font-size: 0.7rem;">{{ (int) $stock->expired_at->diffInDays(now()->startOfDay()) }}
+                                                        {{ __('warehouse.days_left') }}</small>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
                                         <span
                                             class="fw-bold {{ $stock->quantity < 10 ? 'text-danger' : ($stock->quantity < 20 ? 'text-warning' : 'text-success') }}">
-                                            {{ $stock->quantity }} {{ __('warehouse.units') }}
+                                            {{ $stock->quantity }}
                                         </span>
                                     </td>
-                                    <td>{{ $stock->min_stock }}</td>
-                                    <td>
-                                        @if($stock->quantity < 10)
+                                    <td class="text-center">
+                                        @if($stock->quantity <= 0)
+                                            <span class="badge bg-secondary">{{ __('warehouse.out_of_stock') }}</span>
+                                        @elseif($stock->expired_at && $stock->expired_at->isPast())
+                                            <span class="badge bg-danger">{{ __('warehouse.expired') }}</span>
+                                        @elseif($stock->quantity < $stock->min_stock)
                                             <span class="badge bg-danger">{{ __('warehouse.critical') }}</span>
                                         @elseif($stock->quantity < 20)
                                             <span class="badge bg-warning">{{ __('warehouse.low') }}</span>
@@ -66,7 +91,9 @@
                                             data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"
                                             data-product-id="{{ $stock->product_id }}"
                                             data-product-name="{{ $stock->product->name }}"
-                                            data-current-qty="{{ $stock->quantity }}" style="border-radius: 8px;">
+                                            data-current-qty="{{ $stock->quantity }}" data-batch-no="{{ $stock->batch_no }}"
+                                            data-expired-at="{{ $stock->expired_at ? $stock->expired_at->format('Y-m-d') : '' }}"
+                                            style="border-radius: 8px;">
                                             <i class="fa-solid fa-gear me-1"></i> {{ __('common.adjust') }}
                                         </button>
                                     </td>
@@ -99,27 +126,50 @@
                         <input type="text" class="form-control" id="product_name" readonly
                             style="border-radius: 12px; background: #f8f9fa;">
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold"
-                            style="color: #6f5849;">{{ __('warehouse.current_stock') }}</label>
-                        <input type="text" class="form-control" id="current_stock" readonly
-                            style="border-radius: 12px; background: #f8f9fa;">
+
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold"
+                                style="color: #6f5849;">{{ __('warehouse.current_stock') }}</label>
+                            <input type="text" class="form-control" id="current_stock" readonly
+                                style="border-radius: 12px; background: #f8f9fa;">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold"
+                                style="color: #6f5849;">{{ __('warehouse.adjustment_type') }}</label>
+                            <select class="form-select" id="adjustment_type" onchange="toggleBatchFields()"
+                                style="border-radius: 12px; border: 2px solid #e0cec7;">
+                                <option value="add">{{ __('warehouse.add_stock') }}</option>
+                                <option value="subtract">{{ __('warehouse.subtract_stock') }}</option>
+                                <option value="set">{{ __('warehouse.set_stock') }}</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold"
-                            style="color: #6f5849;">{{ __('warehouse.adjustment_type') }}</label>
-                        <select class="form-select" id="adjustment_type"
-                            style="border-radius: 12px; border: 2px solid #e0cec7;">
-                            <option value="add">{{ __('warehouse.add_stock') }}</option>
-                            <option value="subtract">{{ __('warehouse.subtract_stock') }}</option>
-                            <option value="set">{{ __('warehouse.set_stock') }}</option>
-                        </select>
-                    </div>
+
                     <div class="mb-3">
                         <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('warehouse.quantity') }}</label>
                         <input type="number" class="form-control" id="adjustment_qty" min="0" step="1"
-                            style="border-radius: 12px; border: 2px solid #e0cec7;">
+                            style="border-radius: 20px; border: 2px solid #e0cec7; font-size: 1.25rem; text-align: center; font-weight: bold;">
                     </div>
+
+                    <!-- Batch Info Fields (Shown for 'add') -->
+                    <div id="batch_fields">
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold"
+                                    style="color: #6f5849;">{{ __('warehouse.batch_no') }}</label>
+                                <input type="text" class="form-control" id="batch_no" placeholder="ABC-123"
+                                    style="border-radius: 12px; border: 2px solid #e0cec7;">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold"
+                                    style="color: #6f5849;">{{ __('warehouse.expired_at') }}</label>
+                                <input type="date" class="form-control" id="expired_at"
+                                    style="border-radius: 12px; border: 2px solid #e0cec7;">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="mb-3">
                         <label class="form-label fw-semibold"
                             style="color: #6f5849;">{{ __('warehouse.reason_optional') }}</label>
@@ -127,15 +177,17 @@
                             placeholder="{{ __('warehouse.reason_placeholder') }}"
                             style="border-radius: 12px; border: 2px solid #e0cec7;">
                     </div>
-                    <div class="alert alert-info" style="border-radius: 12px;">
-                        <strong>{{ __('common.note') }}:</strong> {{ __('warehouse.adjustment_note') }}
+
+                    <div class="alert alert-info py-2 ps-3 mb-0"
+                        style="border-radius: 12px; border: none; background: #f2e8e5; color: #6f5849; font-size: 0.85rem;">
+                        <i class="fa-solid fa-circle-info me-2"></i> {{ __('warehouse.adjustment_note') }}
                     </div>
                 </div>
                 <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
-                        style="border-radius: 12px;">{{ __('common.cancel') }}</button>
-                    <button type="button" class="btn btn-primary" onclick="saveAdjustment()"
-                        style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px;">
+                        style="border-radius: 12px; font-weight: 600;">{{ __('common.cancel') }}</button>
+                    <button type="button" id="saveAdjustmentBtn" class="btn btn-primary" onclick="saveAdjustment()"
+                        style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.6rem 2rem; font-weight: 600;">
                         <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('warehouse.save_adjustment') }}
                     </button>
                 </div>
@@ -151,38 +203,63 @@
             var adjustStockModal = document.getElementById('adjustStockModal');
             if (adjustStockModal) {
                 adjustStockModal.addEventListener('show.bs.modal', function (event) {
-                    // Button that triggered the modal
                     var button = event.relatedTarget;
 
-                    // Extract info from data-* attributes
                     currentStockId = button.getAttribute('data-stock-id');
                     currentProductId = button.getAttribute('data-product-id');
                     var productName = button.getAttribute('data-product-name');
                     var currentQty = button.getAttribute('data-current-qty');
+                    var batchNo = button.getAttribute('data-batch-no');
+                    var expiredAt = button.getAttribute('data-expired-at');
 
-                    // Update the modal's content.
                     document.getElementById('product_name').value = productName;
                     document.getElementById('current_stock').value = currentQty + ' {{ __('warehouse.units') }}';
+                    
+                    // Pre-fill existing batch info if adjusting specific record
+                    document.getElementById('batch_no').value = batchNo || '';
+                    document.getElementById('expired_at').value = expiredAt || '';
 
                     // Reset fields
                     document.getElementById('adjustment_qty').value = '';
                     document.getElementById('adjustment_reason').value = '';
+                    document.getElementById('adjustment_type').value = 'add';
+                    
+                    toggleBatchFields();
                 });
             }
         });
+
+        function toggleBatchFields() {
+            const type = document.getElementById('adjustment_type').value;
+            const batchFields = document.getElementById('batch_fields');
+            
+            // Only show/allow editing batch/expiry for "add" type
+            if (type === 'add') {
+                batchFields.style.opacity = '1';
+                batchFields.style.pointerEvents = 'auto';
+            } else {
+                batchFields.style.opacity = '0.5';
+                batchFields.style.pointerEvents = 'none';
+            }
+        }
 
         function saveAdjustment() {
             const type = document.getElementById('adjustment_type').value;
             const quantity = parseInt(document.getElementById('adjustment_qty').value);
             const reason = document.getElementById('adjustment_reason').value;
+            const expired_at = document.getElementById('expired_at').value;
+            const batch_no = document.getElementById('batch_no').value;
 
             if (!quantity || quantity <= 0) {
-                showToast('warning', '{{ __('warehouse.enter_valid_quantity') }}');
+                Swal.fire({
+                    icon: 'warning',
+                    text: '{{ __('warehouse.enter_valid_quantity') }}',
+                    customClass: { popup: 'artika-swal-popup' }
+                });
                 return;
             }
 
-            // Disable button to prevent double submission
-            const saveBtn = event.target;
+            const saveBtn = document.getElementById('saveAdjustmentBtn');
             saveBtn.disabled = true;
             saveBtn.innerHTML = '<i class="fa-solid fa-hourglass-half me-1"></i> {{ __('warehouse.saving') }}';
 
@@ -194,9 +271,12 @@
                 },
                 body: JSON.stringify({
                     product_id: currentProductId,
+                    stock_id: currentStockId,
                     quantity: quantity,
                     type: type,
-                    reason: reason
+                    reason: reason,
+                    expired_at: expired_at,
+                    batch_no: batch_no
                 })
             })
                 .then(response => response.json())
@@ -219,7 +299,8 @@
                         Swal.fire({
                             icon: 'error',
                             title: '{{ __('common.error') }}',
-                            text: data.message
+                            text: data.message,
+                            customClass: { popup: 'artika-swal-popup' }
                         });
                         saveBtn.disabled = false;
                         saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> {{ __('warehouse.save_adjustment') }}';
@@ -229,7 +310,8 @@
                     Swal.fire({
                         icon: 'error',
                         title: '{{ __('common.error') }}',
-                        text: error.message
+                        text: error.message,
+                        customClass: { popup: 'artika-swal-popup' }
                     });
                     saveBtn.disabled = false;
                     saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> {{ __('warehouse.save_adjustment') }}';
