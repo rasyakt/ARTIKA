@@ -116,7 +116,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Warehouse Routes
-    Route::middleware(['role:warehouse'])->prefix('warehouse')->name('warehouse.')->group(function () {
+    Route::middleware(['role:admin,manager,warehouse'])->prefix('warehouse')->name('warehouse.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\WarehouseController::class, 'index'])->name('dashboard');
         Route::get('/stock', [\App\Http\Controllers\WarehouseController::class, 'stockManagement'])->name('stock');
         Route::get('/low-stock', [\App\Http\Controllers\WarehouseController::class, 'lowStock'])->name('low-stock');

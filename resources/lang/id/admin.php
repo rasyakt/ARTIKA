@@ -143,6 +143,7 @@ return [
     'clear_confirm' => 'Apakah Anda yakin ingin menghapus log ini?',
     'logs_cleared' => 'Log audit berhasil dihapus.',
     'quick_report' => 'Informasi Tambahan',
+    'warehouse_management' => 'Manajemen Gudang',
 
     // Warehouse Report
     'warehouse_reports_title' => 'Laporan Gudang',

@@ -143,6 +143,7 @@ return [
     'clear_logs_filtered' => 'Delete Logs Based on Current Filter',
     'clear_confirm' => 'Are you sure you want to delete these logs?',
     'logs_cleared' => 'Audit logs successfully cleared.',
+    'warehouse_management' => 'Warehouse Management',
 
     // Warehouse Report
     'warehouse_reports_title' => 'Warehouse Reports',

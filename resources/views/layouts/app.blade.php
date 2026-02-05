@@ -400,6 +400,29 @@
                             <i class="fa-solid fa-tags" style="font-size: 0.8rem;"></i> {{ __('menu.expense_categories') }}
                         </a>
                         <hr style="margin: 0.5rem 0; opacity: 0.1;">
+                        <div class="px-3 py-2 small text-muted fw-bold text-uppercase"
+                            style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                            {{ __('admin.warehouse_management') ?? 'Warehouse Management' }}
+                        </div>
+                        <a href="{{ route('warehouse.stock') }}"
+                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.stock*') ? 'active' : '' }}"
+                            style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-warehouse" style="font-size: 0.9rem;"></i>
+                            {{ __('menu.stock_management') }}
+                        </a>
+                        <a href="{{ route('warehouse.low-stock') }}"
+                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.low-stock*') ? 'active' : '' }}"
+                            style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-triangle-exclamation" style="font-size: 0.9rem;"></i>
+                            {{ __('menu.low_stock_alerts') }}
+                        </a>
+                        <a href="{{ route('warehouse.stock-movements') }}"
+                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.stock-movements*') ? 'active' : '' }}"
+                            style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-arrows-rotate" style="font-size: 0.9rem;"></i>
+                            {{ __('menu.stock_movements') }}
+                        </a>
+                        <hr style="margin: 0.5rem 0; opacity: 0.1;">
                         <a href="{{ route('admin.reports') }}"
                             class="sidebar-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
