@@ -110,6 +110,86 @@ class ReportsHubController extends Controller
             return $pdf->download('full-store-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');
         }
 
+        if ($request->input('format') === 'csv') {
+            $filename = 'full-store-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.csv';
+            $headers = [
+                "Content-type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=$filename",
+                "Pragma" => "no-cache",
+                "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                "Expires" => "0"
+            ];
+
+            $callback = function () use ($startDate, $endDate, $warehouseSummary, $topMovers, $lowStockItems, $cashierSummary, $topProducts, $cashierPerformance, $financeSummary, $auditLogs) {
+                $file = fopen('php://output', 'w');
+
+                // Add UTF-8 BOM for Excel
+                fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+                $delimiter = ';';
+
+                fputcsv($file, [__('admin.print_all_reports'), $startDate->format('d M Y') . ' - ' . $endDate->format('d M Y')], $delimiter);
+                fputcsv($file, [], $delimiter);
+
+                // FINANCE SECTION
+                fputcsv($file, ['1. ' . __('admin.finance_report')], $delimiter);
+                fputcsv($file, [__('admin.gross_revenue'), 'Rp ' . number_format($financeSummary['gross_revenue'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.cogs'), 'Rp ' . number_format($financeSummary['cogs'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.gross_profit'), 'Rp ' . number_format($financeSummary['gross_profit'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('menu.operational_expenses'), 'Rp ' . number_format($financeSummary['total_expenses'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.net_profit'), 'Rp ' . number_format($financeSummary['net_profit'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.profit_margin'), number_format($financeSummary['profit_margin'], 2) . '%'], $delimiter);
+                fputcsv($file, [], $delimiter);
+
+                // CASHIER SECTION
+                fputcsv($file, ['2. ' . __('admin.cashier_report')], $delimiter);
+                fputcsv($file, [__('admin.total_sales'), 'Rp ' . number_format($cashierSummary['total_sales'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.total_transactions'), $cashierSummary['total_transactions']], $delimiter);
+                fputcsv($file, [__('admin.cash_sales') ?? 'Cash Sales', 'Rp ' . number_format($cashierSummary['cash_sales'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.non_cash_sales') ?? 'Non-Cash Sales', 'Rp ' . number_format($cashierSummary['non_cash_sales'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [], $delimiter);
+
+                fputcsv($file, [strtoupper(__('admin.top_selling_products') ?? 'TOP SELLING PRODUCTS')], $delimiter);
+                fputcsv($file, [__('admin.product_name'), __('admin.sold_count') ?? 'Sold Count', __('admin.revenue')], $delimiter);
+                foreach ($topProducts as $p) {
+                    fputcsv($file, [$p->name, $p->total_sold, 'Rp ' . number_format($p->total_revenue, 0, ',', '.')], $delimiter);
+                }
+                fputcsv($file, [], $delimiter);
+
+                // WAREHOUSE SECTION
+                fputcsv($file, ['3. ' . __('admin.warehouse_report')], $delimiter);
+                fputcsv($file, [__('admin.total_valuation'), 'Rp ' . number_format($warehouseSummary['total_valuation'], 0, ',', '.')], $delimiter);
+                fputcsv($file, [__('admin.total_items_in_stock') ?? 'Total Items in Stock', $warehouseSummary['total_items']], $delimiter);
+                fputcsv($file, [__('admin.low_stock_alerts') ?? 'Low Stock Alerts', $warehouseSummary['low_stock_count']], $delimiter);
+                fputcsv($file, [], $delimiter);
+
+                if ($lowStockItems->count() > 0) {
+                    fputcsv($file, [strtoupper(__('admin.low_stock_items'))], $delimiter);
+                    fputcsv($file, [__('admin.product_name'), __('admin.current_stock'), __('admin.min_stock')], $delimiter);
+                    foreach ($lowStockItems as $item) {
+                        fputcsv($file, [$item->name, $item->current_stock, $item->min_stock], $delimiter);
+                    }
+                    fputcsv($file, [], $delimiter);
+                }
+
+                // AUDIT SECTION
+                fputcsv($file, ['4. ' . __('admin.logs_report')], $delimiter);
+                fputcsv($file, [__('admin.date'), __('admin.user'), __('admin.action'), __('admin.notes')], $delimiter);
+                foreach ($auditLogs as $log) {
+                    fputcsv($file, [
+                        $log->created_at->format('Y-m-d H:i'),
+                        $log->user->name ?? 'System',
+                        $log->action,
+                        $log->notes
+                    ], $delimiter);
+                }
+
+                fclose($file);
+            };
+
+            return response()->stream($callback, 200, $headers);
+        }
+
         return view('admin.reports.print-all', compact(
             'startDate',
             'endDate',

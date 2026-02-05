@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') - ARTIKA POS</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -65,13 +66,37 @@
             box-shadow: 0 4px 18px rgba(107, 83, 70, 0.08);
             padding: 0.75rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            height: 70px;
         }
 
         .sidebar {
             background: #fffefc;
-            min-height: calc(100vh - 70px);
+            position: fixed;
+            top: 70px;
+            left: 0;
+            bottom: 0;
+            width: 16.666667%;
+            /* Matched to col-md-2 */
             border-right: 1px solid #f2e8e5;
             padding: 1.25rem 0;
+            overflow-y: auto;
+            z-index: 1000;
+            scrollbar-width: thin;
+            scrollbar-color: #8a6b57 transparent;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #8a6b57;
+            border-radius: 4px;
         }
 
         .sidebar-link {
@@ -114,6 +139,11 @@
         .main-content {
             padding: 0;
             background: #faf9f8;
+            margin-left: 16.666667%;
+            /* Offset by fixed sidebar width */
+            margin-top: 70px;
+            /* Offset by fixed navbar height */
+            min-height: calc(100vh - 70px);
         }
 
         .navbar-brand {
@@ -306,6 +336,12 @@
                 display: none;
             }
         }
+
+        .main-navbar .container-fluid {
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -382,6 +418,10 @@
                             class="sidebar-link {{ request()->routeIs('admin.categories*') ? 'active' : '' }}">
                             <i class="fa-solid fa-folder"></i> {{ __('menu.categories') }}
                         </a>
+                        <a href="{{ route('admin.promos.index') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-tags"></i> {{ __('admin.promos') }}
+                        </a>
                         <a href="{{ route('admin.users') }}"
                             class="sidebar-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
                             <i class="fa-solid fa-users"></i> {{ __('menu.users') }}
@@ -398,6 +438,29 @@
                             class="sidebar-link {{ request()->routeIs('admin.expense-categories.index') ? 'active' : '' }}"
                             style="padding-left: 2.5rem; font-size: 0.9rem; opacity: 0.8;">
                             <i class="fa-solid fa-tags" style="font-size: 0.8rem;"></i> {{ __('menu.expense_categories') }}
+                        </a>
+                        <hr style="margin: 0.5rem 0; opacity: 0.1;">
+                        <div class="px-3 py-2 small text-muted fw-bold text-uppercase"
+                            style="font-size: 0.7rem; letter-spacing: 0.5px;">
+                            {{ __('admin.warehouse_management') ?? 'Warehouse Management' }}
+                        </div>
+                        <a href="{{ route('warehouse.stock') }}"
+                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.stock*') ? 'active' : '' }}"
+                            style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-warehouse" style="font-size: 0.9rem;"></i>
+                            {{ __('menu.stock_management') }}
+                        </a>
+                        <a href="{{ route('warehouse.low-stock') }}"
+                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.low-stock*') ? 'active' : '' }}"
+                            style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-triangle-exclamation" style="font-size: 0.9rem;"></i>
+                            {{ __('menu.low_stock_alerts') }}
+                        </a>
+                        <a href="{{ route('warehouse.stock-movements') }}"
+                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.stock-movements*') ? 'active' : '' }}"
+                            style="font-size: 0.85rem;">
+                            <i class="fa-solid fa-arrows-rotate" style="font-size: 0.9rem;"></i>
+                            {{ __('menu.stock_movements') }}
                         </a>
                         <hr style="margin: 0.5rem 0; opacity: 0.1;">
                         <a href="{{ route('admin.reports') }}"

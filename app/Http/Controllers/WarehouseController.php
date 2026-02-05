@@ -38,9 +38,9 @@ class WarehouseController extends Controller
             ])
             ->get()
             ->map(function ($category) {
-                $totalStock = $category->products->sum(function ($product) {
-                    return $product->stocks->sum('quantity');
-                });
+                $totalStock = $category->products->reduce(function ($carry, $product) {
+                    return $carry + $product->stocks->sum('quantity');
+                }, 0);
                 return [
                     'name' => $category->name,
                     'products_count' => $category->products_count,
@@ -127,67 +127,113 @@ class WarehouseController extends Controller
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',
+            'stock_id' => 'nullable|exists:stocks,id',
             'quantity' => 'required|integer',
             'type' => 'required|in:add,subtract,set',
-            'reason' => 'nullable|string|max:255'
+            'reason' => 'nullable|string|max:255',
+            'expired_at' => 'nullable|date',
+            'batch_no' => 'nullable|string|max:100'
         ]);
 
-        $stock = Stock::where('product_id', $request->product_id)
-            ->first();
+        // If stock_id is provided, we target that specific batch
+        if ($request->stock_id) {
+            $stock = Stock::find($request->stock_id);
+        } else {
+            // Otherwise, find the latest general batch or most recently added
+            $stock = Stock::where('product_id', $request->product_id)
+                ->when(!$request->expired_at, function ($q) {
+                    return $q->whereNull('expired_at');
+                })
+                ->orderBy('created_at', 'desc')
+                ->first();
+        }
+
+        // If it's an 'add' and we have expiry or no existing general batch, create a NEW one
+        if ($request->type === 'add' && ($request->expired_at || !$stock)) {
+            $quantityBefore = 0;
+            return DB::transaction(function () use ($request, $quantityBefore) {
+                $stock = Stock::create([
+                    'product_id' => $request->product_id,
+                    'quantity' => $request->quantity,
+                    'expired_at' => $request->expired_at,
+                    'batch_no' => $request->batch_no,
+                    'min_stock' => 10 // Default
+                ]);
+
+                // Log movement... (rest of logic moved below for reuse)
+                $this->logStockMovement($stock, $request->quantity, 'in', $quantityBefore, $request->reason);
+
+                return response()->json([
+                    'success' => true,
+                    'new_quantity' => $stock->quantity,
+                    'message' => __('warehouse.stock_adjusted_successfully')
+                ]);
+            });
+        }
 
         if (!$stock) {
-            return response()->json(['success' => false, 'message' => 'Stock not found'], 404);
+            return response()->json(['success' => false, 'message' => 'Stock record not found'], 404);
         }
 
         $quantityBefore = $stock->quantity;
 
-        switch ($request->type) {
-            case 'add':
-                $stock->quantity += $request->quantity;
-                $quantityChange = $request->quantity;
-                break;
-            case 'subtract':
-                $stock->quantity -= $request->quantity;
-                $quantityChange = -$request->quantity;
-                break;
-            case 'set':
-                $quantityChange = $request->quantity - $stock->quantity;
-                $stock->quantity = $request->quantity;
-                break;
-        }
+        return DB::transaction(function () use ($request, $stock, $quantityBefore) {
+            switch ($request->type) {
+                case 'add':
+                    $stock->quantity += $request->quantity;
+                    $quantityChange = $request->quantity;
+                    $moveType = 'in';
+                    break;
+                case 'subtract':
+                    $stock->quantity -= $request->quantity;
+                    $quantityChange = -$request->quantity;
+                    $moveType = 'out';
+                    break;
+                case 'set':
+                    $quantityChange = $request->quantity - $stock->quantity;
+                    $stock->quantity = $request->quantity;
+                    $moveType = 'adjustment';
+                    break;
+            }
 
-        $stock->save();
+            $stock->save();
 
-        // Log the movement
-        $moveType = ($request->type === 'add') ? 'in' : 'adjustment';
+            $this->logStockMovement($stock, $quantityChange, $moveType, $quantityBefore, $request->reason);
+            $this->logAudit($stock, $quantityBefore, $quantityChange, $request->type);
 
+            return response()->json([
+                'success' => true,
+                'new_quantity' => $stock->quantity,
+                'message' => __('warehouse.stock_adjusted_successfully')
+            ]);
+        });
+    }
+
+    private function logStockMovement($stock, $quantityChange, $type, $quantityBefore, $reason = null)
+    {
         StockMovement::create([
-            'product_id' => $request->product_id,
+            'product_id' => $stock->product_id,
             'user_id' => Auth::id(),
-            'type' => $moveType,
+            'type' => $type,
             'quantity_before' => $quantityBefore,
             'quantity_after' => $stock->quantity,
             'quantity_change' => $quantityChange,
-            'reason' => $request->reason ?? ($request->type === 'add' ? 'Restock/Stock In' : 'Manual adjustment'),
-            'reference' => ($request->type === 'add' ? 'IN-' : 'ADJ-') . date('YmdHis')
+            'reason' => $reason ?? ($type === 'in' ? 'Restock/Stock In' : 'Manual adjustment'),
+            'reference' => ($type === 'in' ? 'IN-' : ($type === 'out' ? 'OUT-' : 'ADJ-')) . date('YmdHis')
         ]);
+    }
 
-        // Audit Log
+    private function logAudit($stock, $quantityBefore, $quantityChange, $type)
+    {
         AuditLog::log(
             'stock_adjusted',
             'Stock',
             $stock->id,
             $quantityBefore,
             $stock->quantity,
-            ['type' => $request->type, 'change' => $quantityChange],
+            ['type' => $type, 'change' => $quantityChange],
             'Manual adjustment for ' . $stock->product->name
         );
-
-        return response()->json([
-            'success' => true,
-            'new_quantity' => $stock->quantity,
-            'message' => __('warehouse.stock_adjusted_successfully')
-        ]);
     }
 }
 

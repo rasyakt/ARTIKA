@@ -63,9 +63,19 @@ class Product extends Model
      */
     public function getProfitMarginAttribute()
     {
-        if ($this->cost_price == 0)
-            return 0;
         return (($this->price - $this->cost_price) / $this->cost_price) * 100;
+    }
+
+    /**
+     * Get earliest expiration date among batches
+     */
+    public function getEarliestExpiryAttribute()
+    {
+        return $this->stocks()
+            ->where('quantity', '>', 0)
+            ->whereNotNull('expired_at')
+            ->orderBy('expired_at', 'asc')
+            ->value('expired_at');
     }
     /**
      * Get all purchases from suppliers for this product

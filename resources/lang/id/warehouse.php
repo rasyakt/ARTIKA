@@ -74,4 +74,13 @@ return [
     'low' => 'Rendah',
     'medium' => 'Sedang',
     'high' => 'Tinggi',
+    'expired_at' => 'Tgl Kadaluarsa',
+    'expiry_date' => 'Tanggal Kadaluarsa',
+    'batch_no' => 'No. Batch',
+    'batches' => 'Batch Stok',
+    'expiring_soon' => 'Segera Kadaluarsa',
+    'already_expired' => 'Sudah Kadaluarsa',
+    'days_left' => 'hari lagi',
+    'expired' => 'Kadaluarsa',
+    'batch_info' => 'Informasi Batch',
 ];

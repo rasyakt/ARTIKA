@@ -42,9 +42,9 @@
                         style="padding: 0.5rem 1rem; font-weight: 600; border-top-right-radius: 0; border-bottom-right-radius: 0;">
                         <i class="fas fa-file-pdf me-2"></i> PDF
                     </button>
-                    <button class="btn btn-brown" onclick="exportReport('print')"
+                    <button class="btn btn-brown" onclick="exportReport('csv')"
                         style="padding: 0.5rem 1rem; font-weight: 600; border-top-left-radius: 0; border-bottom-left-radius: 0;">
-                        <i class="fas fa-print me-2"></i> {{ __('common.print') }}
+                        <i class="fas fa-file-csv me-2"></i> CSV
                     </button>
                 </div>
             </div>
@@ -446,9 +446,8 @@
         function exportReport(format) {
             const params = new URLSearchParams(window.location.search);
             params.set('format', format);
-            if (format === 'print') {
-                params.set('auto_print', 'true');
-                window.open("{{ route('admin.audit.export') }}?" + params.toString(), '_blank');
+            if (format === 'csv') {
+                window.location.href = "{{ route('admin.audit.export') }}?" + params.toString();
             } else {
                 window.location.href = "{{ route('admin.audit.export') }}?" + params.toString();
             }

@@ -16,7 +16,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         $role = Auth::user()->role->name ?? 'user';
-        if ($role === 'admin')
+        if ($role === 'admin' || $role === 'manager')
             return redirect()->route('admin.dashboard');
         if ($role === 'cashier')
             return redirect()->route('pos.index');
@@ -25,8 +25,8 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Admin Routes
-    Route::middleware(['role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Admin & Manager Routes
+    Route::middleware(['role:admin,manager'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
 
         // Product Management
@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'update'])->name('suppliers.update');
         Route::delete('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->name('suppliers.delete');
         Route::get('/suppliers/{supplier}/pdf', [\App\Http\Controllers\SupplierController::class, 'exportPdf'])->name('suppliers.pdf');
+        Route::get('/suppliers/{supplier}/csv', [\App\Http\Controllers\SupplierController::class, 'exportCsv'])->name('suppliers.csv');
 
         // Supplier Purchases
         Route::post('/supplier-purchases', [\App\Http\Controllers\SupplierPurchaseController::class, 'store'])->name('supplier-purchases.store');
@@ -84,6 +85,11 @@ Route::middleware(['auth'])->group(function () {
         // Cashier Reports
         Route::get('/reports/cashier', [\App\Http\Controllers\Admin\CashierReportController::class, 'index'])->name('reports.cashier');
         Route::get('/reports/cashier/export', [\App\Http\Controllers\Admin\CashierReportController::class, 'export'])->name('reports.cashier.export');
+        Route::post('/reports/cashier/rollback/{id}', [\App\Http\Controllers\Admin\CashierReportController::class, 'rollback'])->name('reports.cashier.rollback');
+        Route::get('/reports/cashier/items/{id}', [\App\Http\Controllers\Admin\CashierReportController::class, 'getTransactionItems'])->name('reports.cashier.items');
+        Route::put('/reports/cashier/update/{id}', [\App\Http\Controllers\Admin\CashierReportController::class, 'update'])->name('reports.cashier.update');
+        Route::delete('/reports/cashier/delete/{id}', [\App\Http\Controllers\Admin\CashierReportController::class, 'destroy'])->name('reports.cashier.delete');
+        Route::get('/reports/cashier/receipt/{id}', [\App\Http\Controllers\Admin\CashierReportController::class, 'printReceipt'])->name('reports.cashier.receipt');
 
         // Finance Reports
         Route::get('/reports/finance', [\App\Http\Controllers\Admin\FinanceReportController::class, 'index'])->name('reports.finance');
@@ -93,6 +99,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])->name('audit.index');
         Route::get('/audit/export', [\App\Http\Controllers\AuditController::class, 'export'])->name('audit.export');
         Route::post('/audit/clear', [\App\Http\Controllers\AuditController::class, 'clear'])->name('audit.clear');
+
+        // Promo Management
+        Route::get('/promos', [\App\Http\Controllers\PromoController::class, 'index'])->name('promos.index');
+        Route::post('/promos', [\App\Http\Controllers\PromoController::class, 'store'])->name('promos.store');
+        Route::put('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'update'])->name('promos.update');
+        Route::delete('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'destroy'])->name('promos.delete');
+        Route::post('/promos/{id}/toggle', [\App\Http\Controllers\PromoController::class, 'toggleStatus'])->name('promos.toggle');
     });
 
     // Cashier Routes (POS)
@@ -110,7 +123,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Warehouse Routes
-    Route::middleware(['role:warehouse'])->prefix('warehouse')->name('warehouse.')->group(function () {
+    Route::middleware(['role:admin,manager,warehouse'])->prefix('warehouse')->name('warehouse.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\WarehouseController::class, 'index'])->name('dashboard');
         Route::get('/stock', [\App\Http\Controllers\WarehouseController::class, 'stockManagement'])->name('stock');
         Route::get('/low-stock', [\App\Http\Controllers\WarehouseController::class, 'lowStock'])->name('low-stock');

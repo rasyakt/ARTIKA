@@ -43,7 +43,7 @@
                                     <td>
                                         <div class="dropdown text-center">
                                             <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false"
+                                                data-bs-boundary="viewport" aria-expanded="false"
                                                 style="border-radius: 8px; border: 1px solid #e0cec7; font-size: 1.2rem; line-height: 1; padding: 0.25rem 0.5rem;">
                                                 ⋮
                                             </button>

@@ -143,6 +143,7 @@ return [
     'clear_logs_filtered' => 'Delete Logs Based on Current Filter',
     'clear_confirm' => 'Are you sure you want to delete these logs?',
     'logs_cleared' => 'Audit logs successfully cleared.',
+    'warehouse_management' => 'Warehouse Management',
 
     // Warehouse Report
     'warehouse_reports_title' => 'Warehouse Reports',
@@ -191,6 +192,7 @@ return [
     'no_transactions_found' => 'No transactions found',
     'non_cash' => 'Non-Cash',
     'cash' => 'Cash',
+    'rolled_back' => 'Rolled Back',
 
     // Finance Report
     'finance_reports_title' => 'Financial Report',
@@ -284,4 +286,22 @@ return [
     'device' => 'Device',
     'complete_report_footer' => 'ARTIKA POS SYSTEM - Complete Store Performance Report',
     'report_disclaimer' => 'This is a computer-generated comprehensive report combining Warehouse, Cashier, and System Audit data.',
+
+    // Promos & Discounts
+    'promos' => 'Promos & Discounts',
+    'manage_promos_subtitle' => 'Manage automated promotion programs and discounts',
+    'add_promo' => 'Add Promo',
+    'edit_promo' => 'Edit Promo',
+    'promo_name' => 'Promo Name',
+    'promo_type' => 'Promo Type',
+    'promo_value' => 'Promo Value',
+    'percentage' => 'Percentage (%)',
+    'fixed_amount' => 'Fixed Amount (Rp)',
+    'promo_added_success' => 'Promotion program added successfully',
+    'promo_updated_success' => 'Promotion program updated successfully',
+    'promo_deleted_success' => 'Promotion program deleted successfully',
+    'min_purchase_short' => 'Min. Purchase',
+    'active_periods' => 'Active Period',
+    'no_promos_found' => 'No active promotion programs found',
+    'add_first_promo' => 'Create First Promo',
 ];

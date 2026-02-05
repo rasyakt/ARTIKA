@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Login' }} - ARTIKA POS</title>
+    <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     <!-- Using inline SVG icons for reliability and theme control (removed external CDN) -->
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <style>
@@ -558,7 +559,7 @@
         <div class="card login-card">
             <div class="card-header">
                 <div class="brand-logo">
-                    <img src="{{ asset('img/logo.png') }}" alt="ARTIKA Logo">
+                    <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo">
                 </div>
                 <p class="brand-subtitle mb-0">Smart Point of Sale System</p>
             </div>

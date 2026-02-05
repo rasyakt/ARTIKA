@@ -8,34 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @page {
-            size: 58mm auto;
             margin: 0;
-        }
-
-        @media print {
-            .no-print {
-                display: none;
-            }
-
-            body {
-                width: 58mm !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: white !important;
-                height: auto !important;
-                min-height: auto !important;
-                overflow: visible !important;
-            }
-
-            .receipt {
-                width: 48mm !important;
-                margin: 0 auto !important;
-                box-shadow: none !important;
-                padding: 4mm 0 !important;
-                height: auto !important;
-                min-height: auto !important;
-                overflow: visible !important;
-            }
         }
 
         * {
@@ -218,6 +191,41 @@
         .back-button:hover {
             background: #5a6268;
         }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
+            }
+
+            .receipt {
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 auto !important;
+                box-shadow: none !important;
+                padding: 2mm 0 !important;
+                height: auto !important;
+                min-height: auto !important;
+                overflow: visible !important;
+                background: white !important;
+                color: #000 !important;
+            }
+
+            * {
+                color: #000 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+            }
+        }
     </style>
 </head>
 
@@ -231,11 +239,10 @@
         <!-- Header -->
         <div class="header">
             <div class="logo-container">
-                <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
+                <img src="{{ asset('img/logo2.png') }}" alt="Logo" class="logo">
             </div>
             <div class="store-name">ARTIKA MINIMARKET</div>
             <div class="store-info">Jl. Jendral Sudirman 269A</div>
-            <div class="store-info">Telp./Fax. (0265) 771204 Ciamis</div>
         </div>
 
         <!-- Transaction Info -->
@@ -259,13 +266,12 @@
         <div class="items-table">
             @foreach($transaction->items as $item)
                 <div class="item-row">
-                    <div class="item-main">
-                        <span class="item-name">{{ $item->product->name }}</span>
-                        <span
-                            class="item-subtotal">Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</span>
+                    <div class="item-main" style="text-transform: uppercase;">
+                        <span>{{ $item->product->name }}</span>
                     </div>
-                    <div class="item-details">
-                        {{ $item->quantity }} x {{ number_format($item->price, 0, ',', '.') }}
+                    <div class="item-details" style="display: flex; justify-content: space-between;">
+                        <span>{{ $item->quantity }} x {{ number_format($item->price, 0, ',', '.') }}</span>
+                        <span>Rp{{ number_format($item->quantity * $item->price, 0, ',', '.') }}</span>
                     </div>
                 </div>
             @endforeach
@@ -280,7 +286,7 @@
                 <span>Rp{{ number_format($transaction->subtotal, 0, ',', '.') }}</span>
             </div>
             @if($transaction->discount > 0)
-                <div class="total-row">
+                <div class="total-row" style="color: #000;">
                     <span>{{ __('pos.discount') }}:</span>
                     <span>-Rp{{ number_format($transaction->discount, 0, ',', '.') }}</span>
                 </div>
@@ -288,6 +294,20 @@
             <div class="total-row grand-total">
                 <span>{{ __('pos.total') }}:</span>
                 <span>Rp{{ number_format($transaction->total_amount, 0, ',', '.') }}</span>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Summary -->
+        <div style="margin: 5px 0; font-size: 9px; font-weight: 700;">
+            <div class="total-row">
+                <span>Total Item:</span>
+                <span>{{ $transaction->items->count() }}</span>
+            </div>
+            <div class="total-row">
+                <span>Total Qty:</span>
+                <span>{{ $transaction->items->sum('quantity') }}</span>
             </div>
         </div>
 
@@ -323,20 +343,15 @@
         window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('auto_print')) {
-                window.print();
+                // [FIX] Add a small delay to ensure rendering and logo loading
+                setTimeout(() => {
+                    window.print();
+                }, 500);
 
                 // Optional: Close tab after printing
                 window.onafterprint = function () {
                     window.close();
                 };
-
-                // Fallback for browsers that don't support onafterprint or if printing is cancelled
-                setTimeout(() => {
-                    // Only close if it seems to be an automated window
-                    if (window.opener) {
-                        // window.close(); 
-                    }
-                }, 3000);
             }
         }
     </script>

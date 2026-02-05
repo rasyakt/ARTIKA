@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\HeldTransaction;
 use App\Models\AuditLog;
+use App\Models\Category;
+use App\Models\PaymentMethod;
+use App\Models\Transaction;
+use App\Models\TransactionItem;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class PosController extends Controller
 {
@@ -22,18 +29,23 @@ class PosController extends Controller
     public function index()
     {
         $products = $this->productRepository->getAllProducts();
-        $categories = \App\Models\Category::all();
-        $paymentMethods = \App\Models\PaymentMethod::where('is_active', true)->get();
-        $heldTransactions = HeldTransaction::where('user_id', \Illuminate\Support\Facades\Auth::id())
+        $categories = Category::all();
+        $paymentMethods = PaymentMethod::where('is_active', true)->get();
+        $heldTransactions = HeldTransaction::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('pos.index', compact('products', 'categories', 'paymentMethods', 'heldTransactions'));
+        $activePromos = \App\Models\Promo::where('is_active', true)
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now())
+            ->get();
+
+        return view('pos.index', compact('products', 'categories', 'paymentMethods', 'heldTransactions', 'activePromos'));
     }
 
-    public function logs(\Illuminate\Http\Request $request)
+    public function logs(Request $request)
     {
-        $query = AuditLog::where('user_id', \Illuminate\Support\Facades\Auth::id());
+        $query = AuditLog::where('user_id', Auth::id());
 
         // Filter by type
         if ($request->has('type')) {
@@ -52,9 +64,9 @@ class PosController extends Controller
         return view('pos.logs', compact('logs'));
     }
 
-    public function history(\Illuminate\Http\Request $request)
+    public function history(Request $request)
     {
-        $query = \App\Models\Transaction::where('user_id', \Illuminate\Support\Facades\Auth::id())
+        $query = Transaction::where('user_id', Auth::id())
             ->with('items.product');
 
         // Date Filter
@@ -70,9 +82,9 @@ class PosController extends Controller
         $totalRevenue = $summaryQuery->sum('total_amount') ?? 0;
 
         // Get Sold Items Summary
-        $soldItems = \App\Models\TransactionItem::whereIn('transaction_id', $summaryQuery->pluck('id'))
+        $soldItems = TransactionItem::whereIn('transaction_id', $summaryQuery->pluck('id'))
             ->join('products', 'transaction_items.product_id', '=', 'products.id')
-            ->select('products.name', \Illuminate\Support\Facades\DB::raw('SUM(transaction_items.quantity) as total_qty'), \Illuminate\Support\Facades\DB::raw('SUM(transaction_items.subtotal) as total_sales'))
+            ->select('products.name', DB::raw('SUM(transaction_items.quantity) as total_qty'), DB::raw('SUM(transaction_items.subtotal) as total_sales'))
             ->groupBy('products.name')
             ->orderByDesc('total_qty')
             ->get();
@@ -86,7 +98,7 @@ class PosController extends Controller
 
     public function showReceipt($id)
     {
-        $transaction = \App\Models\Transaction::where('user_id', \Illuminate\Support\Facades\Auth::id())
+        $transaction = Transaction::where('user_id', Auth::id())
             ->with(['user', 'items.product'])
             ->findOrFail($id);
 
@@ -99,7 +111,7 @@ class PosController extends Controller
         return view('pos.scanner', compact('products'));
     }
 
-    public function store(\Illuminate\Http\Request $request)
+    public function store(Request $request)
     {
         // Validation
         $validated = $request->validate([
@@ -118,7 +130,7 @@ class PosController extends Controller
 
         try {
             $data = [
-                'user_id' => \Illuminate\Support\Facades\Auth::id(),
+                'user_id' => Auth::id(),
                 'subtotal' => $validated['subtotal'],
                 'discount' => $validated['discount'] ?? 0,
                 'total_amount' => $validated['total_amount'],
@@ -142,35 +154,37 @@ class PosController extends Controller
 
             $items = $validated['items'];
 
-            $transaction = $this->transactionService->processTransaction($data, $items);
+            return DB::transaction(function () use ($data, $items) {
+                $transaction = $this->transactionService->processTransaction($data, $items);
 
-            // AUTO AUDIT LOG
-            AuditLog::log(
-                'transaction_created',
-                'Transaction',
-                $transaction->id,
-                $transaction->total_amount,
-                $transaction->payment_method,
-                [
-                    'subtotal' => $transaction->subtotal,
-                    'discount' => $transaction->discount,
-                    'items_count' => count($items),
-                    'cash_amount' => $data['cash_amount'],
-                    'change_amount' => $data['change_amount'],
-                ],
-                'Invoice: ' . $transaction->invoice_no
-            );
+                // AUTO AUDIT LOG
+                AuditLog::log(
+                    'transaction_created',
+                    'Transaction',
+                    $transaction->id,
+                    $transaction->total_amount,
+                    $transaction->payment_method,
+                    [
+                        'subtotal' => $transaction->subtotal,
+                        'discount' => $transaction->discount,
+                        'items_count' => count($items),
+                        'cash_amount' => $data['cash_amount'],
+                        'change_amount' => $data['change_amount'],
+                    ],
+                    'Invoice: ' . $transaction->invoice_no
+                );
 
-            return response()->json([
-                'success' => true,
-                'transaction_id' => $transaction->id,
-                'invoice_no' => $transaction->invoice_no,
-                'change' => $data['change_amount']
-            ]);
+                return response()->json([
+                    'success' => true,
+                    'transaction_id' => $transaction->id,
+                    'invoice_no' => $transaction->invoice_no,
+                    'change' => $data['change_amount']
+                ]);
+            });
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json(['success' => false, 'message' => 'Validasi gagal: ' . implode(', ', $e->errors()[array_key_first($e->errors())])], 422);
         } catch (\Exception $e) {
-            \Log::error('POS Checkout Error: ' . $e->getMessage(), ['exception' => $e]);
+            Log::error('POS Checkout Error: ' . $e->getMessage(), ['exception' => $e]);
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
@@ -188,7 +202,7 @@ class PosController extends Controller
 
         try {
             $held = HeldTransaction::create([
-                'user_id' => \Illuminate\Support\Facades\Auth::id(),
+                'user_id' => Auth::id(),
                 'items' => $request->items,
                 'subtotal' => $request->subtotal,
                 'discount' => $request->discount ?? 0,
@@ -207,7 +221,7 @@ class PosController extends Controller
      */
     public function getHeldTransactions()
     {
-        $held = HeldTransaction::where('user_id', \Illuminate\Support\Facades\Auth::id())
+        $held = HeldTransaction::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -252,7 +266,7 @@ class PosController extends Controller
      */
     public function printReceipt($transactionId)
     {
-        $transaction = \App\Models\Transaction::with(['user', 'items.product'])
+        $transaction = Transaction::with(['user', 'items.product'])
             ->findOrFail($transactionId);
 
         return view('pos.receipt', compact('transaction'));

@@ -114,6 +114,61 @@ class AuditController extends Controller
             return $pdf->download($filename);
         }
 
+        if ($request->input('format') === 'csv') {
+            $filename = 'audit-log-' . now()->format('Y-m-d-H-i-s') . '.csv';
+            $headers = [
+                "Content-type" => "text/csv",
+                "Content-Disposition" => "attachment; filename=$filename",
+                "Pragma" => "no-cache",
+                "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+                "Expires" => "0"
+            ];
+
+            $callback = function () use ($logs, $startDate, $endDate) {
+                $file = fopen('php://output', 'w');
+
+                // Add UTF-8 BOM for Excel
+                fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+                $delimiter = ';';
+
+                fputcsv($file, [__('admin.logs_report'), $startDate . ' - ' . $endDate], $delimiter);
+                fputcsv($file, [], $delimiter);
+
+                fputcsv($file, [
+                    __('admin.date'),
+                    __('admin.user'),
+                    __('admin.role') ?? 'Role',
+                    __('admin.action'),
+                    __('admin.model') ?? 'Model',
+                    'ID',
+                    __('admin.amount'),
+                    'IP Address',
+                    __('admin.device') ?? 'Device',
+                    __('admin.notes')
+                ], $delimiter);
+
+                foreach ($logs as $log) {
+                    fputcsv($file, [
+                        $log->created_at->format('Y-m-d H:i:s'),
+                        $log->user->name ?? 'System',
+                        $log->user->role->name ?? '-',
+                        $log->action,
+                        $log->model_type,
+                        $log->model_id,
+                        $log->amount ? 'Rp ' . number_format($log->amount, 0, ',', '.') : '-',
+                        $log->ip_address,
+                        $log->device_name,
+                        $log->notes
+                    ], $delimiter);
+                }
+
+                fclose($file);
+            };
+
+            return response()->stream($callback, 200, $headers);
+        }
+
         return view('admin.audit.print', compact('logs', 'summary', 'startDate', 'endDate'));
     }
 
