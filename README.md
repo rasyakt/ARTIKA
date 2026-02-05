@@ -37,32 +37,6 @@
 - MySQL 5.7+ atau PostgreSQL
 - Node.js & NPM
 
-### Langkah Instalasi
-
-```bash
-# Clone repository
-git clone https://github.com/username/artika-pos.git
-cd artika-pos
-
-# Install dependensi
-composer install
-npm install
-
-# Setup environment
-cp .env.example .env
-php artisan key:generate
-
-# Konfigurasi database di file .env Anda, kemudian:
-php artisan migrate --seed
-
-# Compile asset & jalankan server
-npm run build
-php artisan serve
-```
->>>>>>> 140d1e583c50961f7b2697822b4fc01b889acf13
-
----
-
 ## Instalasi Cepat
 
 Ikuti langkah-langkah ini untuk menjalankan proyek di lokal Anda:
