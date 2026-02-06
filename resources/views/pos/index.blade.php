@@ -103,7 +103,8 @@
 
         @media (max-width: 1366px) {
             body {
-                overflow-y: auto !important;
+                /* overflow-y: auto !important; REVERTED: User wants fixed frame with internal scroll */
+                overflow: hidden;
             }
         }
 
@@ -115,14 +116,14 @@
 
         @media (max-width: 1366px) {
             .pos-container {
-                height: auto;
-                min-height: 100vh;
+                height: 100%;
+                overflow: hidden;
             }
 
             .pos-main {
-                overflow: visible !important;
-                height: auto;
-                min-height: calc(100vh - 55px);
+                overflow: hidden !important;
+                height: 100%;
+                /* min-height: calc(100vh - 55px); REVERTED: Strict height for internal scroll */
             }
         }
 
@@ -948,8 +949,11 @@
 
             .pos-container {
                 height: 100%;
+                /* Ensure full height on mobile */
                 display: flex;
                 flex-direction: column;
+                overflow: hidden;
+                /* Prevent body scroll */
             }
 
             .pos-navbar {
@@ -1448,6 +1452,32 @@
         .expiry-badge.expiring {
             background: #f59e0b;
             color: #4b382f;
+        }
+
+        .expiry-badge.expiring {
+            background: #f59e0b;
+            color: #4b382f;
+        }
+
+        /* FIX TABLET SCROLLING */
+        @media (max-width: 1366px) {
+            .products-section {
+                /* Ensure section takes full available height */
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            .products-grid-container {
+                /* Force container to take remaining space and scroll */
+                flex: 1;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+                height: 0;
+                /* Important for flex child scrolling */
+                min-height: 0;
+            }
         }
 
         /* FIX MOBILE CART VIEW OVERLAP */
