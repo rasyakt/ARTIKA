@@ -283,20 +283,22 @@
 
         /* Hide camera button on non-touch desktop screens (>= 1367px) */
         @media (min-width: 1367px) and (pointer: fine) {
-            .scanner-btn-container {
+            .scanner-btn-group {
                 display: none !important;
             }
         }
 
-        .scanner-btn-container button {
-            padding: 0.75rem;
-            border-radius: 12px;
+        .scanner-btn-group button {
+            padding: 0.6rem;
+            border-radius: 8px;
             font-weight: 600;
-            box-shadow: 0 4px 6px rgba(133, 105, 90, 0.2);
+            box-shadow: 0 2px 4px rgba(133, 105, 90, 0.1);
             transition: all 0.2s;
+            height: 100%;
+            /* Match height of search input */
         }
 
-        .scanner-btn-container button:active {
+        .scanner-btn-group button:active {
             transform: scale(0.98);
         }
 
@@ -929,6 +931,12 @@
 
         /* MOBILE - SMALL SCREENS */
         @media (max-width: 576px) {
+            .dual-search-container {
+                grid-template-columns: 1fr;
+                /* Stack search and camera button */
+                gap: 0.75rem;
+            }
+
             body {
                 overflow-y: auto !important;
             }
@@ -998,6 +1006,8 @@
                 flex-direction: column;
                 flex: 1;
                 overflow: hidden;
+                padding-bottom: 75px;
+                /* Add padding for fixed bottom nav */
                 position: relative;
             }
 
@@ -1177,14 +1187,19 @@
             }
 
             /* Bottom Navigation */
+            /* Bottom Navigation */
             .bottom-nav {
                 display: flex;
                 height: 65px;
                 background: white;
                 border-top: 1px solid var(--gray-200);
                 padding-bottom: env(safe-area-inset-bottom);
-                flex-shrink: 0;
-                z-index: 200;
+                /* Fixed positioning */
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                z-index: 1000;
                 box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.06);
             }
 
@@ -1214,7 +1229,7 @@
 
             /* Floating Cart Button */
             .fab-cart {
-                position: absolute;
+                position: fixed;
                 bottom: 85px;
                 right: 20px;
                 width: 60px;
@@ -1434,6 +1449,29 @@
             background: #f59e0b;
             color: #4b382f;
         }
+
+        /* FIX MOBILE CART VIEW OVERLAP */
+        #mobileCartView {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1100;
+            /* Higher than fixed bottom nav (1000) */
+            display: none;
+            flex-direction: column;
+        }
+
+        #mobileCartView.active {
+            display: flex;
+        }
+
+        #mobileCartView .cart-footer {
+            padding-bottom: 2rem;
+            /* Ensure buttons have space */
+        }
     </style>
 </head>
 
@@ -1512,14 +1550,14 @@
                             <input type="text" id="barcodeScannerInput" class="barcode-input"
                                 placeholder="Scan Barcode Di Sini..." autofocus autocomplete="off">
                         </div>
-                    </div>
 
-                    <!-- Separate Scanner Button for Tablet/Mobile -->
-                    <div class="scanner-btn-container mt-2">
-                        <button id="openScannerBtn"
-                            class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
-                            <i class="fas fa-camera"></i> <span>Scan Barcode (Kamera)</span>
-                        </button>
+                        <!-- Mobile/Tablet Scanner Button (Takes 2nd slot or stacks) -->
+                        <div class="scanner-btn-group">
+                            <button id="openScannerBtn"
+                                class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
+                                <i class="fas fa-camera"></i> <span>Scan Barcode</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
