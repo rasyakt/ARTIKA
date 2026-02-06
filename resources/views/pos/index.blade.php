@@ -101,10 +101,29 @@
             height: 100%;
         }
 
+        @media (max-width: 1366px) {
+            body {
+                overflow-y: auto !important;
+            }
+        }
+
         .pos-container {
             height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        @media (max-width: 1366px) {
+            .pos-container {
+                height: auto;
+                min-height: 100vh;
+            }
+
+            .pos-main {
+                overflow: visible !important;
+                height: auto;
+                min-height: calc(100vh - 55px);
+            }
         }
 
         /* NAVBAR */
@@ -254,15 +273,31 @@
             color: var(--primary-dark);
         }
 
-        @media (max-width: 768px) {
-            .dual-search-container {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
-            }
-
+        /* Hide barcode input on tablets (even in landscape) and touch devices to prevent keyboard popup */
+        @media (max-width: 1366px),
+        (pointer: coarse) {
             .barcode-input-group {
                 display: none !important;
             }
+        }
+
+        /* Hide camera button on non-touch desktop screens (>= 1367px) */
+        @media (min-width: 1367px) and (pointer: fine) {
+            .scanner-btn-container {
+                display: none !important;
+            }
+        }
+
+        .scanner-btn-container button {
+            padding: 0.75rem;
+            border-radius: 12px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(133, 105, 90, 0.2);
+            transition: all 0.2s;
+        }
+
+        .scanner-btn-container button:active {
+            transform: scale(0.98);
         }
 
         /* CATEGORIES */
@@ -809,6 +844,23 @@
             padding: 1rem;
             border-bottom: 1px solid var(--gray-200);
             background: var(--brown-50);
+            transition: all 0.3s ease;
+        }
+
+        @media (min-width: 577px) {
+            .scanner-section.active {
+                display: block;
+                position: absolute;
+                top: 60px;
+                left: 1rem;
+                right: 360px;
+                /* Offset from cart */
+                z-index: 99;
+                border-radius: 12px;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                border: 2px solid var(--primary);
+                background: white;
+            }
         }
 
         .scanner-section.active {
@@ -829,31 +881,34 @@
         }
 
         .btn-toggle-scanner {
-            padding: 0.4rem 0.8rem;
-            background: var(--primary);
+            padding: 0.5rem 1.25rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-size: 0.85rem;
+            font-weight: 700;
             transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(133, 105, 90, 0.2);
         }
 
         .btn-toggle-scanner:hover {
-            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(133, 105, 90, 0.3);
         }
 
         #reader {
             width: 100%;
-            max-height: 250px;
-            border-radius: 6px;
+            max-height: 300px;
+            border-radius: 8px;
             overflow: hidden;
+            border: 1px solid var(--gray-200);
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 576px) {
             .cart-section {
-                width: 300px;
+                width: 100%;
             }
 
             .products-grid {
@@ -861,97 +916,21 @@
             }
         }
 
-        /* TABLET - MEDIUM SCREENS */
-        @media (max-width: 768px) {
-            .pos-navbar {
-                padding: 0.5rem 1rem;
-                height: 50px;
-            }
-
-            .navbar-brand {
-                font-size: 1rem;
-            }
-
-            .navbar-right {
-                gap: 0.75rem;
-            }
-
-            .navbar-user {
-                font-size: 0.75rem;
-            }
-
-            .btn-logout {
-                padding: 0.3rem 0.6rem;
-                font-size: 0.7rem;
-            }
-
+        /* TABLET - MEDIUM SCREENS (Preserve Desktop Layout) */
+        @media (max-width: 1023px) and (min-width: 577px) {
             .cart-section {
-                width: 280px;
+                width: 320px;
             }
 
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: 0.75rem;
-            }
-
-            .product-icon {
-                font-size: 1.5rem;
-            }
-
-            .category-filter {
-                padding: 0.75rem 0.75rem;
-                gap: 0.45rem;
-                border-bottom: 2px solid var(--gray-200);
-                background: linear-gradient(to right, white 0%, white 95%, rgba(255, 255, 255, 0.8) 100%);
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            }
-
-            .category-btn {
-                padding: 0.55rem 1rem;
-                font-size: 0.8rem;
-                min-height: 37px;
-                border-radius: 9px;
-                border: 2px solid var(--gray-300);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-            }
-
-            .category-btn:hover {
-                box-shadow: 0 4px 12px rgba(133, 105, 90, 0.15);
-                border-color: var(--primary-light);
-            }
-
-            .category-btn.active {
-                box-shadow: 0 6px 16px rgba(133, 105, 90, 0.25);
-                border-color: transparent;
-            }
-
-            .cart-items::-webkit-scrollbar {
-                width: 4px;
-            }
-
-            .payment-methods {
-                gap: 0.3rem;
-            }
-
-            .payment-method-btn {
-                padding: 0.4rem;
-                font-size: 0.7rem;
-            }
-
-            .numeric-keypad {
-                gap: 0.4rem;
-            }
-
-            .keypad-btn {
-                padding: 0.6rem;
-                font-size: 0.9rem;
+                grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
             }
         }
 
         /* MOBILE - SMALL SCREENS */
         @media (max-width: 576px) {
             body {
-                overflow: hidden !important;
+                overflow-y: auto !important;
             }
 
             html,
@@ -1395,12 +1374,9 @@
             }
         }
 
-        /* MOBILE ONLY SCANNER UI */
-        @media (min-width: 768px) {
-
-            #openScannerBtn,
-            #navScannerMobile,
-            #scannerSection {
+        /* MOBILE ONLY SCANNER UI - Enabled for all sizes but styled differently */
+        @media (min-width: 1024px) {
+            #navScannerMobile {
                 display: none !important;
             }
         }
@@ -1537,13 +1513,14 @@
                                 placeholder="Scan Barcode Di Sini..." autofocus autocomplete="off">
                         </div>
                     </div>
-                </div>
 
-                <!-- SCANNER TOGGLE -->
-                <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--gray-200); text-align: right;">
-                    <button id="openScannerBtn" class="btn-toggle-scanner">
-                        <i class="fas fa-barcode "></i> {{ __('pos.open_scanner') }}
-                    </button>
+                    <!-- Separate Scanner Button for Tablet/Mobile -->
+                    <div class="scanner-btn-container mt-2">
+                        <button id="openScannerBtn"
+                            class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
+                            <i class="fas fa-camera"></i> <span>Scan Barcode (Kamera)</span>
+                        </button>
+                    </div>
                 </div>
 
                 <!-- SCANNER -->
@@ -1783,7 +1760,7 @@
                     <div id="cashInputSection">
                         <input type="text" id="keypadDisplay" class="form-control"
                             style="font-size: 1.2rem; font-weight: bold; text-align: right; margin-bottom: 1rem; padding: 10px;"
-                            placeholder="0" autocomplete="off" inputmode="decimal">
+                            placeholder="0" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
                         <div class="numeric-keypad">
                             <button class="keypad-btn" data-key="1">1</button>
                             <button class="keypad-btn" data-key="2">2</button>
@@ -1930,9 +1907,14 @@
 
             const barcodeInput = document.getElementById('barcodeScannerInput');
             // Periodic Focus Enforcement (Faster 1s check)
+            // Disable auto-focus on touch devices (tablets/phones) to prevent keyboard popup
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
             setInterval(() => {
                 const barcodeInput = document.getElementById('barcodeScannerInput');
                 if (barcodeInput &&
+                    !isTouchDevice &&
+                    window.innerWidth >= 1024 &&
                     document.activeElement.tagName !== 'INPUT' &&
                     document.activeElement.tagName !== 'TEXTAREA' &&
                     !document.querySelector('.modal.show')) {
@@ -2151,7 +2133,7 @@
                 // [NEW] Refocus barcode input after modal is closed
                 keypadModal.addEventListener('hidden.bs.modal', function () {
                     const barcodeInput = document.getElementById('barcodeScannerInput');
-                    if (barcodeInput) barcodeInput.focus();
+                    if (barcodeInput && !isTouchDevice && window.innerWidth >= 1024) barcodeInput.focus();
                 });
             }
 
@@ -2573,8 +2555,8 @@
                             buttonsStyling: false
                         }).then((result_swal) => {
                             if (result_swal.isConfirmed && result.transaction_id) {
-                                // Only auto-print if NOT on mobile (width >= 768px)
-                                const isMobile = window.innerWidth < 768;
+                                // Only auto-print if NOT on mobile/tablet (width >= 1024px)
+                                const isMobile = window.innerWidth < 1024;
                                 const printUrl = '{{ url("pos/receipt") }}/' + result.transaction_id + (isMobile ? '' : '?auto_print=true');
                                 window.open(printUrl, '_blank');
                             }
@@ -2610,7 +2592,7 @@
             // [NEW] Auto-scroll and modal repositioning on focus for mobile
             if (display) {
                 display.addEventListener('focus', function () {
-                    if (window.innerWidth < 768) {
+                    if (window.innerWidth < 1024) {
                         // Scroll page to top
                         window.scrollTo({ top: 0, behavior: 'smooth' });
 
@@ -2759,11 +2741,15 @@
         }
 
         // SCANNER FUNCTIONS
+        let isScannerStarting = false;
+
         function openScanner() {
+            if (isScannerStarting) return;
             const scannerSection = document.getElementById('scannerSection');
             scannerSection.classList.add('active');
 
             if (!scanner) {
+                isScannerStarting = true;
                 scanner = new Html5Qrcode("reader");
                 scanner.start(
                     { facingMode: "environment" },
@@ -2773,7 +2759,12 @@
                     },
                     onScanSuccess,
                     onScanFailure
-                ).catch(err => console.log("Camera error:", err));
+                ).then(() => {
+                    isScannerStarting = false;
+                }).catch(err => {
+                    console.log("Camera error:", err);
+                    isScannerStarting = false;
+                });
             }
         }
 
@@ -2782,11 +2773,26 @@
             scannerSection.classList.remove('active');
 
             if (scanner) {
-                scanner.stop().then(() => {
-                    scanner = null;
-                }).catch(err => console.log("Stop scanner error:", err));
+                const s = scanner;
+                scanner = null; // Prevent race conditions
+                s.stop().catch(err => console.log("Stop scanner error:", err));
             }
         }
+
+        // Handle Orientation Change / Resize for Scanner
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const scannerSection = document.getElementById('scannerSection');
+                if (scannerSection && scannerSection.classList.contains('active')) {
+                    console.log('[Scanner] Orientation/Resize detected, restarting scanner...');
+                    // Restart scanner to pick up new aspect ratio
+                    closeScanner();
+                    setTimeout(openScanner, 300); // Give it a moment to clear
+                }
+            }, 500);
+        });
 
         function onScanSuccess(decodedText, decodedResult) {
             const currentTime = Date.now();
@@ -2855,11 +2861,23 @@
 
         // Global Numeric Input Validation for POS
         document.addEventListener('keydown', function (e) {
-            if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+            if (e.target.tagName === 'INPUT' && (e.target.type === 'number' || e.target.inputMode === 'numeric')) {
                 // Block 'e', 'E', '-', '+', '.', ','
                 const blockedKeys = ['e', 'E', '-', '+', '.', ','];
                 if (blockedKeys.includes(e.key)) {
                     e.preventDefault();
+                }
+            }
+        });
+
+        // Strict input sanitization (handles copy-paste & mobile keyboards)
+        document.addEventListener('input', function (e) {
+            const target = e.target;
+            if (target.tagName === 'INPUT' && (target.type === 'number' || target.inputMode === 'numeric')) {
+                // Remove any non-numeric characters immediately
+                const val = target.value;
+                if (/[^0-9]/.test(val)) {
+                    target.value = val.replace(/[^0-9]/g, '');
                 }
             }
         });

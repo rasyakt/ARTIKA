@@ -252,7 +252,7 @@
         }
 
         /* Mobile Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 1023px) {
             .hamburger-btn {
                 display: block;
             }
@@ -331,7 +331,7 @@
             }
         }
 
-        @media (min-width: 769px) {
+        @media (min-width: 1024px) {
             .sidebar-header {
                 display: none;
             }
@@ -570,8 +570,8 @@
                     document.body.style.overflow = '';
                 }
 
-                // Close sidebar when clicking a link (mobile)
-                if (window.innerWidth <= 768) {
+                // Close sidebar when clicking a link (mobile/tablet)
+                if (window.innerWidth <= 1023) {
                     const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
                     sidebarLinks.forEach(link => {
                         link.addEventListener('click', closeSidebar);
