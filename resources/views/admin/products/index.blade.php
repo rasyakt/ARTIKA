@@ -4,86 +4,202 @@
 	<style>
 		.page-header {
 			display: flex;
-			gap: 1rem;
 			align-items: center;
 			justify-content: space-between;
-			margin-bottom: 1rem;
+			margin-bottom: 2rem;
+			gap: 1.5rem;
 		}
 
-		.search-filter {
+		.header-title-group {
+			flex: 1;
+		}
+
+		.header-controls {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+		}
+
+		.search-form {
 			display: flex;
 			gap: 0.75rem;
 			align-items: center;
 		}
 
+		.search-input-group {
+			position: relative;
+			min-width: 320px;
+		}
+
+		.search-input-group i {
+			position: absolute;
+			left: 1.25rem;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #a18072;
+			opacity: 0.7;
+		}
+
 		.search-input {
-			min-width: 260px;
+			width: 100%;
 			border-radius: 12px;
-			padding: 0.5rem 0.75rem;
-			border: 1px solid #e9e2df;
+			padding: 0.75rem 1rem 0.75rem 3rem;
+			border: 1px solid #e2d8d4;
+			background: #ffffff;
+			transition: all 0.3s;
+			font-size: 0.95rem;
+		}
+
+		.search-input:focus {
+			border-color: #8a6b57;
+			box-shadow: 0 0 0 4px rgba(138, 107, 87, 0.1);
+			outline: none;
 		}
 
 		.category-select {
 			min-width: 200px;
 			border-radius: 12px;
+			padding: 0.75rem 1rem;
+			border: 1px solid #e2d8d4;
+			background: #ffffff;
+			height: 100%;
+			font-size: 0.95rem;
+		}
+
+		.btn-add-product {
+			background: #6f5849;
+			color: white;
+			border: none;
+			border-radius: 16px;
+			padding: 1rem 1.5rem;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			min-width: 120px;
+			transition: all 0.3s;
+			box-shadow: 0 4px 12px rgba(111, 88, 73, 0.2);
+			line-height: 1.2;
+		}
+
+		.btn-add-product:hover {
+			background: #5d4a3d;
+			transform: translateY(-2px);
+			box-shadow: 0 6px 15px rgba(111, 88, 73, 0.3);
+			color: white;
+		}
+
+		.btn-add-product i {
+			font-size: 1.25rem;
+			margin-bottom: 0.4rem;
+		}
+
+		.btn-add-product span {
+			font-size: 0.85rem;
+			font-weight: 600;
+			text-align: center;
 		}
 
 		.card-table {
-			border-radius: 16px;
+			border-radius: 20px;
+			border: none;
 			overflow: hidden;
 		}
 
+		.table thead {
+			background: #f8f5f4;
+		}
+
+		.table thead th {
+			font-size: 0.75rem;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+			color: #a18072;
+			padding: 1.25rem 1rem;
+		}
+
 		.product-badge {
-			width: 48px;
-			height: 48px;
-			border-radius: 10px;
+			width: 44px;
+			height: 44px;
+			border-radius: 12px;
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
 			background: #f2e8e5;
 			color: #6f5849;
+			font-size: 1.1rem;
 		}
 
-		.action-btn {
-			border-radius: 8px;
-			padding: 0.35rem 0.6rem;
+		.product-name-text {
+			color: #4b382f;
+			font-size: 0.95rem;
 		}
 
-		.table-responsive {
-			overflow-x: auto;
+		.product-row {
+			transition: all 0.2s;
 		}
 
-		@media (max-width:768px) {
-			.search-input {
-				min-width: 140px;
-			}
+		.product-row:hover {
+			background-color: #fdfbf9 !important;
+		}
 
-			.category-select {
-				min-width: 140px;
-			}
-
+		@media (max-width: 1200px) {
 			.page-header {
+				flex-wrap: wrap;
+			}
+
+			.header-controls {
+				width: 100%;
+				justify-content: space-between;
+			}
+
+			.search-form {
+				flex: 1;
+			}
+
+			.search-input-group {
+				min-width: 200px;
+				flex: 1;
+			}
+		}
+
+		@media (max-width: 768px) {
+			.header-controls {
 				flex-direction: column;
-				align-items: flex-start;
-				gap: 0.75rem;
+				align-items: stretch;
+			}
+
+			.search-form {
+				flex-direction: column;
+			}
+
+			.btn-add-product {
+				flex-direction: row;
+				padding: 0.75rem;
+				min-width: 0;
+			}
+
+			.btn-add-product i {
+				margin-bottom: 0;
+				margin-right: 0.5rem;
 			}
 		}
 	</style>
 
 	<div class="container-fluid py-4">
 		<div class="page-header">
-			<div>
-				<h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i
-						class="fa-solid fa-box me-2"></i>{{ __('admin.product_management') }}</h2>
+			<div class="header-title-group">
+				<h2 class="fw-bold mb-1" style="color: #4b382f;">
+					<i class="fa-solid fa-box-open me-2"></i>{{ __('admin.product_management') }}
+				</h2>
 				<p class="text-muted mb-0">{{ __('admin.product_management_subtitle') }}</p>
 			</div>
 
-			<div class="d-flex align-items-center">
-				<form action="{{ route('admin.products') }}" method="GET" class="search-filter me-3">
-					<div class="position-relative">
-						<i class="fa-solid fa-magnifying-glass position-absolute"
-							style="left: 1rem; top: 50%; transform: translateY(-50%); opacity: 0.5;"></i>
-						<input name="search" class="search-input ps-5" type="text"
+			<div class="header-controls">
+				<form action="{{ route('admin.products') }}" method="GET" class="search-form">
+					<div class="search-input-group">
+						<i class="fa-solid fa-magnifying-glass"></i>
+						<input name="search" class="search-input" type="text"
 							placeholder="{{ __('common.search_placeholder') }}" value="{{ request('search') }}">
 					</div>
 					<select name="category_id" class="form-select category-select" onchange="this.form.submit()">
@@ -96,9 +212,9 @@
 					</select>
 				</form>
 
-				<a href="{{ route('admin.products.create') }}" class="btn btn-primary shadow-sm"
-					style="background: #6f5849; border:none; border-radius:12px; padding:0.6rem 1rem;">
-					<i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_product') }}
+				<a href="{{ route('admin.products.create') }}" class="btn-add-product">
+					<i class="fa-solid fa-plus"></i>
+					<span>{{ __('admin.add_product') }}</span>
 				</a>
 			</div>
 		</div>
@@ -142,18 +258,18 @@
 									$totalStock = $product->stocks->sum('quantity');
 									$margin = $product->cost_price > 0 ? (($product->price - $product->cost_price) / $product->cost_price) * 100 : 0;
 								@endphp
-								<tr data-name="{{ strtolower($product->name) }}" data-barcode="{{ $product->barcode }}"
-									data-category="{{ $product->category->name ?? '' }}">
+								<tr class="product-row" data-name="{{ strtolower($product->name) }}"
+									data-barcode="{{ $product->barcode }}" data-category="{{ $product->category->name ?? '' }}">
 									<td class="ps-4">
 										<div class="d-flex align-items-center">
 											<div class="me-3 product-badge">
 												<i class="fa-solid fa-box"></i>
 											</div>
 											<div>
-												<div class="fw-bold" style="color:var(--color-primary-dark);">
+												<div class="fw-bold product-name-text">
 													{{ $product->name }}
 												</div>
-												<small class="text-muted">ID: {{ $product->id }}</small>
+												<small class="text-muted">ID: #{{ $product->id }}</small>
 											</div>
 										</div>
 									</td>

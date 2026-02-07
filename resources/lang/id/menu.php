@@ -27,4 +27,5 @@ return [
     'menu' => 'Menu',
     'operational_expenses' => 'Biaya Operasional',
     'expense_categories' => 'Kategori Biaya',
+    'finance' => 'Keuangan',
 ];

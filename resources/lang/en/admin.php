@@ -144,6 +144,8 @@ return [
     'clear_confirm' => 'Are you sure you want to delete these logs?',
     'logs_cleared' => 'Audit logs successfully cleared.',
     'warehouse_management' => 'Warehouse Management',
+    'inventory' => 'Inventory',
+    'people' => 'People',
 
     // Warehouse Report
     'warehouse_reports_title' => 'Warehouse Reports',

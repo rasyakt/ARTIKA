@@ -144,6 +144,8 @@ return [
     'logs_cleared' => 'Log audit berhasil dihapus.',
     'quick_report' => 'Informasi Tambahan',
     'warehouse_management' => 'Manajemen Gudang',
+    'inventory' => 'Inventori',
+    'people' => 'Pengguna & Pemasok',
 
     // Warehouse Report
     'warehouse_reports_title' => 'Laporan Gudang',

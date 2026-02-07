@@ -136,6 +136,83 @@
             border-left-color: #ef4444 !important;
         }
 
+        /* Sidebar Dropdown Styles */
+        .sidebar-dropdown {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-dropdown-toggle {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .dropdown-arrow {
+            margin-left: auto;
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+            opacity: 0.6;
+        }
+
+        .sidebar-dropdown.active .dropdown-arrow {
+            transform: rotate(90deg);
+            opacity: 1;
+        }
+
+        .sidebar-submenu {
+            display: none;
+            background: #fafaf9;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-dropdown.active .sidebar-submenu {
+            display: block;
+        }
+
+        .submenu-link {
+            display: flex;
+            align-items: center;
+            padding: 0.65rem 1.5rem 0.65rem 3rem;
+            color: #6f5849;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .submenu-link:hover {
+            background: #fdf8f6;
+            color: #85695a;
+        }
+
+        .submenu-link.active {
+            color: #85695a;
+            font-weight: 700;
+            background: #f5f2f0;
+        }
+
+        .submenu-link i {
+            margin-right: 0.75rem;
+            font-size: 0.9rem;
+            width: 1.1rem;
+            text-align: center;
+            color: #8a6b57;
+            opacity: 0.8;
+        }
+
+        .sidebar-section-title {
+            padding: 1.25rem 1.5rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-uppercase;
+            color: #a18072;
+            letter-spacing: 0.05em;
+        }
+
         .main-content {
             padding: 0;
             background: #faf9f8;
@@ -410,91 +487,133 @@
                             class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
                         </a>
-                        <a href="{{ route('admin.products') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.products*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-box"></i> {{ __('menu.products') }}
-                        </a>
-                        <a href="{{ route('admin.categories') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.categories*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-folder"></i> {{ __('menu.categories') }}
-                        </a>
-                        <a href="{{ route('admin.promos.index') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-tags"></i> {{ __('admin.promos') }}
-                        </a>
-                        <a href="{{ route('admin.users') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-users"></i> {{ __('menu.users') }}
-                        </a>
-                        <a href="{{ route('admin.suppliers') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-truck"></i> {{ __('menu.suppliers') }}
-                        </a>
-                        <a href="{{ route('admin.expenses.index') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.expenses.index') ? 'active' : '' }}">
-                            <i class="fa-solid fa-wallet"></i> {{ __('menu.operational_expenses') }}
-                        </a>
-                        <a href="{{ route('admin.expense-categories.index') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.expense-categories.index') ? 'active' : '' }}"
-                            style="padding-left: 2.5rem; font-size: 0.9rem; opacity: 0.8;">
-                            <i class="fa-solid fa-tags" style="font-size: 0.8rem;"></i> {{ __('menu.expense_categories') }}
-                        </a>
-                        <hr style="margin: 0.5rem 0; opacity: 0.1;">
-                        <div class="px-3 py-2 small text-muted fw-bold text-uppercase"
-                            style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                            {{ __('admin.warehouse_management') ?? 'Warehouse Management' }}
+
+                        <!-- Inventory Group -->
+                        <div class="sidebar-dropdown {{ request()->routeIs('admin.products*') || request()->routeIs('admin.categories*') || request()->routeIs('admin.promos*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-box-archive"></i> {{ __('admin.inventory') ?? 'Inventory' }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('admin.products') }}" class="submenu-link {{ request()->routeIs('admin.products*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-box"></i> {{ __('menu.products') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.categories') }}" class="submenu-link {{ request()->routeIs('admin.categories*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-folder"></i> {{ __('menu.categories') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.promos.index') }}" class="submenu-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-tags"></i> {{ __('admin.promos') }}
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <a href="{{ route('warehouse.stock') }}"
-                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.stock*') ? 'active' : '' }}"
-                            style="font-size: 0.85rem;">
-                            <i class="fa-solid fa-warehouse" style="font-size: 0.9rem;"></i>
-                            {{ __('menu.stock_management') }}
-                        </a>
-                        <a href="{{ route('warehouse.low-stock') }}"
-                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.low-stock*') ? 'active' : '' }}"
-                            style="font-size: 0.85rem;">
-                            <i class="fa-solid fa-triangle-exclamation" style="font-size: 0.9rem;"></i>
-                            {{ __('menu.low_stock_alerts') }}
-                        </a>
-                        <a href="{{ route('warehouse.stock-movements') }}"
-                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.stock-movements*') ? 'active' : '' }}"
-                            style="font-size: 0.85rem;">
-                            <i class="fa-solid fa-arrows-rotate" style="font-size: 0.9rem;"></i>
-                            {{ __('menu.stock_movements') }}
-                        </a>
-                        <hr style="margin: 0.5rem 0; opacity: 0.1;">
-                        <a href="{{ route('admin.reports') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
-                        </a>
-                        <div class="sidebar-submenu {{ request()->routeIs('admin.reports*') || request()->routeIs('admin.audit*') ? 'show' : '' }}"
-                            style="padding-left: 1.5rem;">
-                            <a href="{{ route('admin.reports.warehouse') }}"
-                                class="sidebar-link py-2 {{ request()->routeIs('admin.reports.warehouse*') ? 'active' : '' }}"
-                                style="font-size: 0.85rem; border-left: none;">
-                                <i class="fa-solid fa-warehouse" style="font-size: 0.9rem;"></i>
-                                {{ __('admin.warehouse_report') }}
-                            </a>
-                            <a href="{{ route('admin.reports.cashier') }}"
-                                class="sidebar-link py-2 {{ request()->routeIs('admin.reports.cashier*') ? 'active' : '' }}"
-                                style="font-size: 0.85rem; border-left: none;">
-                                <i class="fa-solid fa-cash-register" style="font-size: 0.9rem;"></i>
-                                {{ __('admin.cashier_report') }}
-                            </a>
-                            <a href="{{ route('admin.reports.finance') }}"
-                                class="sidebar-link py-2 {{ request()->routeIs('admin.reports.finance*') ? 'active' : '' }}"
-                                style="font-size: 0.85rem; border-left: none;">
-                                <i class="fa-solid fa-file-invoice-dollar" style="font-size: 0.9rem;"></i>
-                                {{ __('admin.finance_report') }}
-                            </a>
-                            <a href="{{ route('admin.audit.index') }}"
-                                class="sidebar-link py-2 {{ request()->routeIs('admin.audit.index*') ? 'active' : '' }}"
-                                style="font-size: 0.85rem; border-left: none;">
-                                <i class="fa-solid fa-clipboard-list" style="font-size: 0.9rem;"></i>
-                                {{ __('admin.logs_report') }}
-                            </a>
+
+                        <!-- Warehouse Group -->
+                        <div class="sidebar-dropdown {{ request()->routeIs('warehouse.*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_management') ?? 'Warehouse' }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('warehouse.stock') }}" class="submenu-link {{ request()->routeIs('warehouse.stock*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-boxes-stacked"></i> {{ __('menu.stock_management') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('warehouse.low-stock') }}" class="submenu-link {{ request()->routeIs('warehouse.low-stock*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> {{ __('menu.low_stock_alerts') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('warehouse.stock-movements') }}" class="submenu-link {{ request()->routeIs('warehouse.stock-movements*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-arrows-rotate"></i> {{ __('menu.stock_movements') }}
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <hr style="margin: 1rem 0; border-color: #f2e8e5;">
+
+                        <!-- Finance Group -->
+                        <div class="sidebar-dropdown {{ request()->routeIs('admin.expenses*') || request()->routeIs('admin.expense-categories*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-wallet"></i> {{ __('menu.finance') ?? 'Finance' }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('admin.expenses.index') }}" class="submenu-link {{ request()->routeIs('admin.expenses.index') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('menu.operational_expenses') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.expense-categories.index') }}" class="submenu-link {{ request()->routeIs('admin.expense-categories.index') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-tags"></i> {{ __('menu.expense_categories') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- People Group -->
+                        <div class="sidebar-dropdown {{ request()->routeIs('admin.users*') || request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-user-group"></i> {{ __('admin.people') ?? 'People' }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('admin.users') }}" class="submenu-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-users"></i> {{ __('menu.users') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.suppliers') }}" class="submenu-link {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-truck"></i> {{ __('menu.suppliers') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Reports Group -->
+                        <div class="sidebar-dropdown {{ request()->routeIs('admin.reports*') || request()->routeIs('admin.audit*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('admin.reports') }}" class="submenu-link {{ request()->is('admin/reports') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-th-large"></i> {{ __('admin.reports_hub') ?? 'Reports Hub' }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.reports.warehouse') }}" class="submenu-link {{ request()->routeIs('admin.reports.warehouse*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_report') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.reports.cashier') }}" class="submenu-link {{ request()->routeIs('admin.reports.cashier*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_report') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.reports.finance') }}" class="submenu-link {{ request()->routeIs('admin.reports.finance*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('admin.finance_report') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.audit.index') }}" class="submenu-link {{ request()->routeIs('admin.audit.index*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-clipboard-list"></i> {{ __('admin.logs_report') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <hr style="margin: 0.5rem 0; opacity: 0.1;">
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                             @csrf
                             <button type="submit" class="sidebar-link text-danger"
@@ -572,12 +691,41 @@
 
                 // Close sidebar when clicking a link (mobile/tablet)
                 if (window.innerWidth <= 1023) {
-                    const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
+                    const sidebarLinks = sidebar.querySelectorAll('.sidebar-link:not(.sidebar-dropdown-toggle)');
                     sidebarLinks.forEach(link => {
                         link.addEventListener('click', closeSidebar);
                     });
                 }
             }
+
+            // Sidebar Dropdown Toggle Logic
+            document.querySelectorAll('.sidebar-dropdown-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const parent = this.closest('.sidebar-dropdown');
+                    const isActive = parent.classList.contains('active');
+
+                    // Close other dropdowns (optional, but cleaner)
+                    // document.querySelectorAll('.sidebar-dropdown').forEach(d => d.classList.remove('active'));
+
+                    if (isActive) {
+                        parent.classList.remove('active');
+                    } else {
+                        parent.classList.add('active');
+                    }
+                });
+            });
+
+            // Ensure active dropdowns are open on load
+            document.addEventListener('DOMContentLoaded', function() {
+                const activeSubmenuLink = document.querySelector('.submenu-link.active');
+                if (activeSubmenuLink) {
+                    const parentDropdown = activeSubmenuLink.closest('.sidebar-dropdown');
+                    if (parentDropdown) {
+                        parentDropdown.classList.add('active');
+                    }
+                }
+            });
         </script>
 
         @stack('scripts')
