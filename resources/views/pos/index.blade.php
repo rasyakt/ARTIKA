@@ -101,7 +101,7 @@
             height: 100%;
         }
 
-        @media (max-width: 1366px) {
+        @media (max-width: 1024px) {
             body {
                 /* overflow-y: auto !important; REVERTED: User wants fixed frame with internal scroll */
                 overflow: hidden;
@@ -114,7 +114,7 @@
             flex-direction: column;
         }
 
-        @media (max-width: 1366px) {
+        @media (max-width: 1024px) {
             .pos-container {
                 height: 100%;
                 overflow: hidden;
@@ -274,16 +274,16 @@
             color: var(--primary-dark);
         }
 
-        /* Hide barcode input on tablets (even in landscape) and touch devices to prevent keyboard popup */
-        @media (max-width: 1366px),
+        /* Hide barcode input on smaller tablets and touch devices to prevent keyboard popup */
+        @media (max-width: 1024px),
         (pointer: coarse) {
             .barcode-input-group {
                 display: none !important;
             }
         }
 
-        /* Hide camera button on non-touch desktop screens (>= 1367px) */
-        @media (min-width: 1367px) and (pointer: fine) {
+        /* Hide camera button on non-touch desktop screens (>= 1025px) */
+        @media (min-width: 1025px) and (pointer: fine) {
             .scanner-btn-group {
                 display: none !important;
             }
@@ -1460,7 +1460,7 @@
         }
 
         /* FIX TABLET SCROLLING */
-        @media (max-width: 1366px) {
+        @media (max-width: 1024px) {
             .products-section {
                 /* Ensure section takes full available height */
                 height: 100%;
@@ -1982,7 +1982,7 @@
                 const barcodeInput = document.getElementById('barcodeScannerInput');
                 if (barcodeInput &&
                     !isTouchDevice &&
-                    window.innerWidth >= 1024 &&
+                    window.innerWidth >= 1025 &&
                     document.activeElement.tagName !== 'INPUT' &&
                     document.activeElement.tagName !== 'TEXTAREA' &&
                     !document.querySelector('.modal.show')) {
@@ -2201,7 +2201,7 @@
                 // [NEW] Refocus barcode input after modal is closed
                 keypadModal.addEventListener('hidden.bs.modal', function () {
                     const barcodeInput = document.getElementById('barcodeScannerInput');
-                    if (barcodeInput && !isTouchDevice && window.innerWidth >= 1024) barcodeInput.focus();
+                    if (barcodeInput && !isTouchDevice && window.innerWidth >= 1025) barcodeInput.focus();
                 });
             }
 

@@ -59,6 +59,7 @@
             min-height: 100vh;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
             color: #4b382f;
+            zoom: 90%;
         }
 
         .main-navbar {
