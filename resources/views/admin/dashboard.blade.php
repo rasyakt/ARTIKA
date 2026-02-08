@@ -34,7 +34,7 @@
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.total_sales') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($totalSales, 0, ',', '.') }}</h3>
+                                <h4 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($totalSales, 0, ',', '.') }}</h4>
                                 <small class="text-muted">{{ __('common.this_month') }}</small>
                             </div>
                             <div class="icon-box-premium bg-brown-soft">
@@ -53,10 +53,10 @@
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.transactions') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($totalTransactions) }}</h3>
+                                <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($totalTransactions) }}</h4>
                                 <small class="text-muted">{{ __('common.completed') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-success-soft">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-chart-pie"></i>
                             </div>
                         </div>
@@ -72,10 +72,10 @@
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.products') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalProducts }}</h3>
+                                <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalProducts }}</h4>
                                 <small class="text-muted">{{ __('common.in_catalog') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-sienna-soft">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-box"></i>
                             </div>
                         </div>
@@ -91,10 +91,10 @@
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.suppliers') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalSuppliers ?? $totalCustomers ?? 0 }}</h3>
+                                <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalSuppliers ?? $totalCustomers ?? 0 }}</h4>
                                 <small class="text-muted">{{ __('common.registered_suppliers') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-info-soft">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-truck"></i>
                             </div>
                         </div>
@@ -143,7 +143,7 @@
                                 class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                                 <div class="d-flex align-items-center">
                                     <div class="me-3"
-                                        style="width: 30px; height: 30px; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
+                                        style="width: 30px; height: 30px; background: #85695a; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
                                         {{ $index + 1 }}
                                     </div>
                                     <div>

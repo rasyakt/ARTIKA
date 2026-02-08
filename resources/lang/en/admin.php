@@ -27,6 +27,7 @@ return [
     'no_users_found' => 'No users found',
     'password_leave_blank' => 'Leave blank to keep current',
     'save_user' => 'Save User',
+    'stock_status' => 'Stock Status',
 
     // Supplier Management
     'supplier_management' => 'Supplier Management',

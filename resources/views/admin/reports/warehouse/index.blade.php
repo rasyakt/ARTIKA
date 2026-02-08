@@ -73,7 +73,7 @@
                                 <i class="fa-solid fa-list me-1" style="color: #c17a5c;"></i> {{ __('common.category') }}
                             </label>
                             <select name="category_id" id="category_id" class="form-select">
-                                <option value="">-- {{ __('admin.all_categories') }} --</option>
+                                <option value="">{{ __('admin.all_categories') }}</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
                                         {{ $categoryId == $category->id ? 'selected' : '' }}>
@@ -87,7 +87,7 @@
                                 <i class="fa-solid fa-layer-group me-1" style="color: #c17a5c;"></i> {{ __('admin.stock_status') }}
                             </label>
                             <select name="stock_status" id="stock_status" class="form-select">
-                                <option value="">-- {{ __('admin.all_status') }} --</option>
+                                <option value="">{{ __('admin.all_status') }}</option>
                                 <option value="low" {{ $stockStatus == 'low' ? 'selected' : '' }}>
                                     {{ __('admin.low_stock') }}</option>
                                 <option value="out" {{ $stockStatus == 'out' ? 'selected' : '' }}>
@@ -133,9 +133,9 @@
                                     <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.total_valuation') }}</p>
-                                    <h4 class="fw-bold mb-0" style="color: #4b382f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <h5 class="fw-bold mb-0" style="color: #4b382f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         Rp {{ number_format($summary['total_valuation'], 0, ',', '.') }}
-                                    </h4>
+                                    </h5>
                                     <small class="text-muted">{{ __('admin.based_on_cost') }}</small>
                                 </div>
                                 <div class="icon-box-premium bg-brown-soft">
@@ -154,10 +154,10 @@
                                     <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.total_items') }}</p>
-                                    <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['total_items']) }}</h4>
+                                    <h5 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['total_items']) }}</h5>
                                     <small class="text-muted">{{ __('admin.units_in_stock') }}</small>
                                 </div>
-                                <div class="icon-box-premium bg-success-soft">
+                                <div class="icon-box-premium bg-brown-soft">
                                     <i class="fa-solid fa-box"></i>
                                 </div>
                             </div>
@@ -174,10 +174,10 @@
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.low_stock_alerts') }}
                                     </p>
-                                    <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['low_stock_count']) }}</h4>
+                                    <h5 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['low_stock_count']) }}</h5>
                                     <small class="text-muted">{{ __('admin.items_need_restocking') }}</small>
                                 </div>
-                                <div class="icon-box-premium bg-danger-soft">
+                                <div class="icon-box-premium bg-brown-soft">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                 </div>
                             </div>
@@ -207,7 +207,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="icon-box-premium bg-info-soft">
+                                <div class="icon-box-premium bg-brown-soft">
                                     <i class="fa-solid fa-arrows-rotate"></i>
                                 </div>
                             </div>

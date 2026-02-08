@@ -182,33 +182,16 @@
         background: $brown-50;
         color: $brown-800;
     }
-    &.bg-success-soft {
-        background: #f0fdf4;
-        color: $success;
-    }
-    &.bg-danger-soft {
-        background: #fef2f2;
-        color: $danger;
-    }
-    &.bg-warning-soft {
-        background: #fffbeb;
-        color: $warning;
-    }
-    &.bg-info-soft {
-        background: #f0f9ff;
-        color: $info;
-    }
-    &.bg-purple-soft {
-        background: #f3e8ff;
-        color: #7e22ce;
-    }
-    &.bg-sienna-soft {
-        background: #fff5f2;
-        color: #c17a5c;
-    }
+    &.bg-success-soft,
+    &.bg-danger-soft,
+    &.bg-warning-soft,
+    &.bg-info-soft,
+    &.bg-purple-soft,
+    &.bg-sienna-soft,
     &.bg-gold-soft {
-        background: #fef9c3;
-        color: #a16207;
+        background: $brown-50;
+        color: $brown-800;
+        opacity: 0.9;
     }
 }
 

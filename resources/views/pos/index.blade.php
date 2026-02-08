@@ -95,22 +95,42 @@
             background: var(--gray-100);
         }
 
+        html,
+        body {
+            height: 100% !important;
+            margin: 0;
+            padding: 0;
+            overflow: hidden !important;
+        }
+
+        /* Prevent SweetAlert2 from breaking 100% height layout */
+        html.swal2-shown,
+        body.swal2-shown {
+            height: 100% !important;
+            overflow: hidden !important;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--gray-100);
-            overflow: hidden;
         }
 
-        html,
-        body {
-            height: 100%;
+        /* Fixed Overlay Alignment Fix for Zoom & Mobile Stacking */
+        .modal-backdrop {
+            z-index: 3000 !important;
         }
 
-        /* Fixed Overlay Alignment Fix for Zoom */
+        .modal {
+            z-index: 3001 !important;
+        }
+
+        .swal2-container {
+            z-index: 5000 !important;
+        }
+
         .modal-backdrop,
         .swal2-container,
-        .modal,
-        .scanner-section {
+        .modal {
             width: auto !important;
             height: auto !important;
             left: 0 !important;
@@ -119,30 +139,19 @@
             bottom: 0 !important;
         }
 
-        @media (max-width: 1024px) {
-            body {
-                /* overflow-y: auto !important; REVERTED: User wants fixed frame with internal scroll */
-                overflow: hidden;
-            }
-        }
-
         .pos-container {
-            height: 100vh;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            overflow: hidden !important;
         }
 
-        @media (max-width: 1024px) {
-            .pos-container {
-                height: 100%;
-                overflow: hidden;
-            }
-
-            .pos-main {
-                overflow: hidden !important;
-                height: 100%;
-                /* min-height: calc(100vh - 55px); REVERTED: Strict height for internal scroll */
-            }
+        .pos-main {
+            flex: 1;
+            display: flex;
+            gap: 0;
+            overflow: hidden !important;
+            height: 100%;
         }
 
         /* NAVBAR */
@@ -220,21 +229,13 @@
             color: var(--primary-dark);
         }
 
-        /* MAIN LAYOUT */
-        .pos-main {
-            flex: 1;
-            display: flex;
-            gap: 0;
-            overflow: hidden;
-        }
-
         .products-section {
             flex: 1;
             display: flex;
             flex-direction: column;
             background: white;
             border-right: 1px solid var(--gray-300);
-            overflow: hidden;
+            overflow: hidden !important;
         }
 
         /* SEARCH */
@@ -668,8 +669,15 @@
         .cart-empty {
             text-align: center;
             color: var(--gray-700);
-            padding: 2rem 1rem;
+            padding: 4rem 1rem;
+            /* Increased padding for better visual stability */
             font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            opacity: 0.6;
         }
 
         /* FOOTER */
@@ -864,59 +872,161 @@
             background: #dc2626;
         }
 
-        /* SCANNER */
+        /* SCANNER REFINED (Unified Overlay) */
         .scanner-section {
             display: none;
-            padding: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--brown-50);
-            transition: all 0.3s ease;
-        }
-
-        @media (min-width: 577px) {
-            .scanner-section.active {
-                display: block;
-                position: absolute;
-                top: 60px;
-                left: 1rem;
-                right: 360px;
-                /* Offset from cart */
-                z-index: 99;
-                border-radius: 12px;
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-                border: 2px solid var(--primary);
-                background: white;
-            }
+            position: fixed;
+            inset: 0;
+            /* Use inset for true full-screen */
+            width: 100%;
+            height: 100%;
+            /* Dynamic viewport height for mobile */
+            background: rgba(0, 0, 0, 0.85);
+            /* Darker for better contrast */
+            backdrop-filter: blur(8px);
+            /* Stronger blur */
+            z-index: 5000;
+            /* Extremely high to stay on top of everything */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
         }
 
         .scanner-section.active {
-            display: block;
+            display: flex;
+            animation: fadeInScanner 0.3s ease-out;
+        }
+
+        @keyframes fadeInScanner {
+            from {
+                opacity: 0;
+                transform: scale(1.02);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .scanner-header {
+            width: 100%;
+            max-width: 500px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            z-index: 5001;
         }
 
         .scanner-title {
-            font-weight: 600;
-            color: var(--gray-700);
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scanner-title i {
+            color: #10b981;
+            filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
+        }
+
+        #reader {
+            width: 100% !important;
+            max-width: 500px !important;
+            aspect-ratio: 1/1;
+            border: 4px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 24px !important;
+            /* Slightly more rounded */
+            overflow: hidden !important;
+            background: #000 !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 5001;
+        }
+
+        @media (max-width: 768px) {
+            .scanner-section {
+                padding: 0;
+            }
+
+            #reader {
+                position: absolute;
+                inset: 0;
+                width: 100vw !important;
+                height: 100dvh !important;
+                max-width: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                aspect-ratio: none;
+                z-index: 5000;
+            }
+
+            #reader video {
+                object-fit: cover !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            .scanner-header {
+                max-width: none;
+                padding: 1.5rem 2rem;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent);
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 5002;
+            }
+
+            .scanner-footer {
+                max-width: none;
+                padding: 2.5rem 2rem;
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 5002;
+                margin-top: 0;
+            }
+        }
+
+        .scanner-footer {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
         }
 
         .btn-toggle-scanner {
-            padding: 0.5rem 1.25rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
             color: white;
-            border: none;
-            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 1rem;
             font-weight: 700;
-            transition: all 0.2s;
-            box-shadow: 0 4px 6px rgba(133, 105, 90, 0.2);
+            transition: all 0.25s;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-toggle-scanner:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-toggle-scanner:active {
+            transform: scale(0.98);
         }
 
         .btn-toggle-scanner:hover {
@@ -924,13 +1034,13 @@
             box-shadow: 0 6px 12px rgba(133, 105, 90, 0.3);
         }
 
-        #reader {
+        /* #reader {
             width: 100%;
             max-height: 300px;
             border-radius: 8px;
             overflow: hidden;
             border: 1px solid var(--gray-200);
-        }
+        } */
 
         @media (max-width: 576px) {
             .cart-section {
@@ -961,23 +1071,23 @@
                 gap: 0.75rem;
             }
 
-            body {
+            /* body {
                 overflow-y: auto !important;
             }
 
             html,
             body {
                 height: 100%;
-            }
+            } */
 
-            .pos-container {
+            /* .pos-container {
                 height: 100%;
                 /* Ensure full height on mobile */
-                display: flex;
+            /* display: flex;
                 flex-direction: column;
-                overflow: hidden;
-                /* Prevent body scroll */
-            }
+                overflow: hidden; */
+            /* Prevent body scroll */
+            /* } */
 
             .pos-navbar {
                 padding: 0 1rem;
@@ -1028,16 +1138,6 @@
             .dropdown-item:active {
                 background-color: var(--brown-50);
                 color: var(--primary-dark);
-            }
-
-            /* Main layout stays flexible */
-            .pos-main {
-                flex-direction: column;
-                flex: 1;
-                overflow: hidden;
-                padding-bottom: 75px;
-                /* Add padding for fixed bottom nav */
-                position: relative;
             }
 
             .products-section {
@@ -1316,37 +1416,6 @@
                 font-size: 1.05rem;
             }
 
-            .scanner-section {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background: black;
-                z-index: 1000;
-                flex-direction: column;
-            }
-
-            .scanner-section.active {
-                display: flex;
-            }
-
-            .scanner-header {
-                padding: 1rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                color: white;
-                background: rgba(0, 0, 0, 0.5);
-            }
-
-            #reader {
-                flex: 1;
-                width: 100% !important;
-                border: none !important;
-                border-radius: 0 !important;
-            }
         }
 
         /* Responsive Visibility Helpers */
@@ -1387,6 +1456,18 @@
                 border-radius: 24px;
                 border: none;
                 box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+                max-height: 90vh;
+                overflow-y: auto !important;
+            }
+
+            .keyboard-active {
+                height: 100vh !important;
+                overflow: hidden !important;
+            }
+
+            .keyboard-active #keypadModal {
+                padding-bottom: 300px;
+                /* Space for virtual keyboard */
             }
 
             .products-grid {
@@ -1545,8 +1626,10 @@
                             <i class="fas fa-user-circle"></i>
                         </div>
                         <div class="d-none d-lg-flex flex-column align-items-start me-2">
-                            <span class="text-white fw-700 mb-0" style="font-size: 1rem; line-height: 1.1;">{{ Auth::user()->name }}</span>
-                            <span class="text-white-50 fw-700 text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ Auth::user()->role->name }}</span>
+                            <span class="text-white fw-700 mb-0"
+                                style="font-size: 1rem; line-height: 1.1;">{{ Auth::user()->name }}</span>
+                            <span class="text-white-50 fw-700 text-uppercase"
+                                style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ Auth::user()->role->name }}</span>
                         </div>
                         <!-- <i class="fas fa-chevron-down text-white-50 small d-none d-lg-block"></i> -->
                     </button>
@@ -1607,7 +1690,7 @@
                         <div class="barcode-input-group">
                             <span class="search-icon"><i class="fas fa-barcode"></i></span>
                             <input type="text" id="barcodeScannerInput" class="barcode-input"
-                                placeholder="Scan Barcode Di Sini..." autofocus autocomplete="off">
+                                placeholder="Scan Barcode Di Sini..." autofocus autocomplete="off" inputmode="none">
                         </div>
 
                         <!-- Mobile/Tablet Scanner Button (Takes 2nd slot or stacks) -->
@@ -1620,14 +1703,6 @@
                     </div>
                 </div>
 
-                <!-- SCANNER -->
-                <div class="scanner-section" id="scannerSection">
-                    <div class="scanner-header">
-                        <span class="scanner-title"><i class="fas fa-barcode"></i> {{ __('pos.scanner_title') }}</span>
-                        <button class="btn-toggle-scanner" id="closeScannerBtn">{{ __('common.close') }}</button>
-                    </div>
-                    <div id="reader"></div>
-                </div>
 
                 <!-- CATEGORIES -->
                 <div class="category-filter">
@@ -1859,7 +1934,7 @@
                     <div id="cashInputSection">
                         <input type="text" id="keypadDisplay" class="form-control"
                             style="font-size: 1.2rem; font-weight: bold; text-align: right; margin-bottom: 1rem; padding: 10px;"
-                            placeholder="0" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
+                            placeholder="0" autocomplete="off" inputmode="numeric">
                         <div class="numeric-keypad">
                             <button class="keypad-btn" data-key="1">1</button>
                             <button class="keypad-btn" data-key="2">2</button>
@@ -2010,16 +2085,8 @@
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
             setInterval(() => {
-                const barcodeInput = document.getElementById('barcodeScannerInput');
-                if (barcodeInput &&
-                    !isTouchDevice &&
-                    window.innerWidth >= 1025 &&
-                    document.activeElement.tagName !== 'INPUT' &&
-                    document.activeElement.tagName !== 'TEXTAREA' &&
-                    !document.querySelector('.modal.show')) {
-                    barcodeInput.focus();
-                }
-            }, 1000);
+                if (typeof refocusBarcode === 'function') refocusBarcode();
+            }, 1500);
 
             // Global Barcode Scanner Listener (Take 5 - Consolidated & Safe)
             let barcodeBuffer = '';
@@ -2507,7 +2574,7 @@
                 const total = subtotal;
 
                 if (isCash) {
-                    const cashAmount = parseFloat(document.getElementById('keypadDisplay').value);
+                    const cashAmount = parseFloat(document.getElementById('keypadDisplay').value.replace(/[^0-9]/g, ''));
                     if (!cashAmount || cashAmount === 0) {
                         showToast('warning', '{{ __('pos.enter_cash_amount') }}');
                         return;
@@ -2620,7 +2687,9 @@
                     checkoutBtn.disabled = false;
 
                     if (result.success) {
-                        const isCash = selectedPaymentMethod === 'cash';
+                        const transaction_id = result.transaction_id || result.transaction?.id;
+                        const change = result.change || 0;
+                        const cashAmount = parseFloat(document.getElementById('keypadDisplay').value.replace(/[^0-9]/g, '')) || 0;
                         let swalOptions = {
                             icon: 'success',
                             title: '{{ __('pos.transaction_success') }}',
@@ -2688,35 +2757,56 @@
             const keypadBtns = document.querySelectorAll('.keypad-btn[data-key]');
             console.log('Found keypad buttons:', keypadBtns.length);
 
-            // [NEW] Auto-scroll and modal repositioning on focus for mobile
+            // [REFINED] Auto-scroll and modal repositioning on focus for mobile
             if (display) {
+                // Centralized Robust Formatting Helper
+                const updateFormattedValue = (inputEl, newValue) => {
+                    let numeric = (newValue || '').toString().replace(/[^0-9]/g, '');
+                    if (!numeric) {
+                        inputEl.value = '';
+                        return;
+                    }
+                    // Prevent leading zeros unless it's just "0"
+                    const parsed = parseInt(numeric);
+                    inputEl.value = 'Rp' + parsed.toLocaleString('id-ID');
+                };
+
+                display.addEventListener('input', function () {
+                    let cursor = this.selectionStart;
+                    let oldLen = this.value.length;
+                    updateFormattedValue(this, this.value);
+                    let newLen = this.value.length;
+                    // Adjust cursor if it shifted
+                    this.setSelectionRange(cursor + (newLen - oldLen), cursor + (newLen - oldLen));
+                });
+
                 display.addEventListener('focus', function () {
                     if (window.innerWidth < 1024) {
-                        // Scroll page to top
                         window.scrollTo({ top: 0, behavior: 'smooth' });
-
-                        // Shift modal up slightly to ensure bottom buttons are clear of keyboard
+                        document.body.classList.add('keyboard-active');
                         const modalDialog = document.querySelector('#keypadModal .modal-dialog');
                         if (modalDialog) {
-                            modalDialog.style.transform = 'translateY(-25%)';
-                            modalDialog.style.transition = 'transform 0.3s ease';
+                            modalDialog.style.marginTop = '2rem';
+                            modalDialog.style.transition = 'margin-top 0.3s ease';
                         }
                     }
                 });
 
                 display.addEventListener('blur', function () {
+                    document.body.classList.remove('keyboard-active');
                     const modalDialog = document.querySelector('#keypadModal .modal-dialog');
                     if (modalDialog) {
-                        modalDialog.style.transform = 'translateY(0)';
+                        modalDialog.style.marginTop = '0.5rem';
                     }
                 });
             }
 
-            // Button click handlers
+            // Button click handlers (Re-use centralized logic)
             keypadBtns.forEach(btn => {
                 btn.addEventListener('click', () => {
                     if (display) {
-                        display.value += btn.dataset.key;
+                        let currentNumeric = display.value.replace(/[^0-9]/g, '');
+                        updateFormattedValue(display, currentNumeric + btn.dataset.key);
                         display.focus();
                     }
                 });
@@ -2727,33 +2817,21 @@
             if (deleteBtn) {
                 deleteBtn.addEventListener('click', () => {
                     if (display) {
-                        display.value = display.value.slice(0, -1);
+                        let currentNumeric = display.value.replace(/[^0-9]/g, '');
+                        updateFormattedValue(display, currentNumeric.slice(0, -1));
                         display.focus();
                     }
                 });
             }
 
-            // Keyboard input handler - only accept numbers and backspace
+            // Keyboard input handler
             if (display) {
                 display.addEventListener('keydown', (e) => {
-                    console.log('Keypress:', e.key);
-
                     // Allow Enter to confirm payment
                     if (e.key === 'Enter') {
                         e.preventDefault();
-                        document.getElementById('keypadConfirm').click();
-                        return;
-                    }
-
-                    // Allow: numbers (0-9), backspace, delete
-                    if (!/^[0-9]$/.test(e.key) &&
-                        e.key !== 'Backspace' &&
-                        e.key !== 'Delete' &&
-                        e.key !== 'ArrowLeft' &&
-                        e.key !== 'ArrowRight' &&
-                        e.key !== 'Home' &&
-                        e.key !== 'End') {
-                        e.preventDefault();
+                        const confirmBtn = document.getElementById('keypadConfirm');
+                        if (confirmBtn) confirmBtn.click();
                     }
                 });
 
@@ -2763,7 +2841,7 @@
                     const pastedText = (e.clipboardData || window.clipboardData).getData('text');
                     const numericOnly = pastedText.replace(/[^0-9]/g, '');
                     if (numericOnly) {
-                        display.value += numericOnly;
+                        updateFormattedValue(display, display.value + numericOnly);
                     }
                 });
             }
@@ -2783,6 +2861,8 @@
         // Professional Scanner Beep using Web Audio API
         function playBeep() {
             try {
+                // Ensure focus returns after interaction
+                setTimeout(refocusBarcode, 100);
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 if (audioCtx.state === 'suspended') {
                     audioCtx.resume();
@@ -2845,24 +2925,49 @@
         function openScanner() {
             if (isScannerStarting) return;
             const scannerSection = document.getElementById('scannerSection');
-            scannerSection.classList.add('active');
+            if (scannerSection) scannerSection.classList.add('active');
 
             if (!scanner) {
                 isScannerStarting = true;
                 scanner = new Html5Qrcode("reader");
-                scanner.start(
-                    { facingMode: "environment" },
-                    {
-                        fps: 10,
-                        qrbox: { width: 250, height: 250 }
+
+                // Advanced constraints for sharpness and focus
+                const videoConstraints = {
+                    facingMode: "environment",
+                    width: { min: 640, ideal: 1280, max: 1920 },
+                    height: { min: 480, ideal: 720, max: 1080 },
+                    aspectRatio: { ideal: 1.7777777778 } // 16:9 ideal for mobile
+                };
+
+                const config = {
+                    fps: 20, // Higher FPS for smoother focus response
+                    qrbox: (viewWidth, viewHeight) => {
+                        // Dynamic box size relative to viewport
+                        const minDim = Math.min(viewWidth, viewHeight);
+                        const boxSize = Math.floor(minDim * 0.7);
+                        return { width: boxSize, height: boxSize };
                     },
+                    aspectRatio: 1.0, // Square guide
+                    // Try to enable continuous focus if supported
+                    videoConstraints: {
+                        ...videoConstraints,
+                        advanced: [{ focusMode: "continuous" }]
+                    }
+                };
+
+                scanner.start(
+                    videoConstraints,
+                    config,
                     onScanSuccess,
                     onScanFailure
                 ).then(() => {
                     isScannerStarting = false;
+                    console.log("[Scanner] Started with advanced constraints");
                 }).catch(err => {
-                    console.log("Camera error:", err);
+                    console.error("Camera error:", err);
                     isScannerStarting = false;
+                    // Fallback to basic start if advanced fails
+                    scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess, onScanFailure);
                 });
             }
         }
@@ -2960,6 +3065,7 @@
 
         // Global Numeric Input Validation for POS
         document.addEventListener('keydown', function (e) {
+            if (e.target.id === 'keypadDisplay') return; // Skip for formatted payment input
             if (e.target.tagName === 'INPUT' && (e.target.type === 'number' || e.target.inputMode === 'numeric')) {
                 // Block 'e', 'E', '-', '+', '.', ','
                 const blockedKeys = ['e', 'E', '-', '+', '.', ','];
@@ -2972,6 +3078,7 @@
         // Strict input sanitization (handles copy-paste & mobile keyboards)
         document.addEventListener('input', function (e) {
             const target = e.target;
+            if (target.id === 'keypadDisplay') return; // Skip for formatted payment input
             if (target.tagName === 'INPUT' && (target.type === 'number' || target.inputMode === 'numeric')) {
                 // Remove any non-numeric characters immediately
                 const val = target.value;
@@ -2983,6 +3090,7 @@
 
         // Prevent paste of non-numeric characters for POS
         document.addEventListener('paste', function (e) {
+            if (e.target.id === 'keypadDisplay') return; // Skip for formatted payment input
             if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
                 const pasteData = (e.clipboardData || window.clipboardData).getData('text');
                 if (!/^\d+$/.test(pasteData)) {
@@ -2993,7 +3101,89 @@
                 }
             }
         });
+        // BARCODE FOCUS MANAGEMENT
+        // Create a global reference immediately
+        window.refocusBarcode = function () {
+            const input = document.getElementById('barcodeScannerInput');
+            if (!input) return;
+
+            // Only focus if no other input is active and offline scanner is closed
+            const scannerSection = document.getElementById('scannerSection');
+            const isScannerActive = scannerSection && scannerSection.classList.contains('active');
+
+            if (!isScannerActive) {
+                // Don't steal focus if any modal is open
+                if (document.querySelector('.modal.show')) return;
+
+                // Don't steal focus if SweetAlert is visible (it usually has its own focus)
+                if (Swal.isVisible()) return;
+
+                // Don't steal focus if user is typing in ANY other input field
+                const active = document.activeElement;
+                if (active && active !== input && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)) {
+                    return;
+                }
+
+                // Focus it! We removed isTouchDevice check because we use inputmode="none"
+                if (active !== input) {
+                    input.focus();
+                }
+            }
+        };
+
+        // Compatibility legacy declaration
+        function refocusBarcode() { window.refocusBarcode(); }
+
+        // Auto-focus on load
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(refocusBarcode, 200);
+            setTimeout(refocusBarcode, 800); // Second attempt to be sure
+        });
+
+        // Final fallback focus
+        window.onload = () => setTimeout(refocusBarcode, 100);
+
+        // Refocus after SweetAlert closes
+        const originalFire = Swal.fire;
+        Swal.fire = function () {
+            return originalFire.apply(this, arguments).then((result) => {
+                setTimeout(refocusBarcode, 300);
+                return result;
+            });
+        };
+
+        // Refocus after Bootstrap Modals close
+        document.addEventListener('hidden.bs.modal', function () {
+            setTimeout(refocusBarcode, 300);
+        });
+
+        // Refocus after any click that isn't an input
+        document.addEventListener('click', function (e) {
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') {
+                refocusBarcode();
+            }
+        });
+
+        // Refocus after adding product
+        const originalAddToCart = window.addToCart;
+        if (typeof originalAddToCart === 'function') {
+            window.addToCart = function () {
+                originalAddToCart.apply(this, arguments);
+                setTimeout(refocusBarcode, 100);
+            };
+        }
     </script>
+
+    <!-- SCANNER (Global Overlay) -->
+    <div class="scanner-section" id="scannerSection">
+        <div class="scanner-header">
+            <span class="scanner-title"><i class="fas fa-barcode"></i> {{ __('pos.scanner_title') }}</span>
+        </div>
+        <div id="reader"></div>
+        <div class="scanner-footer">
+            <button class="btn-toggle-scanner" id="closeScannerBtn">{{ __('common.close') }}</button>
+        </div>
+    </div>
 
     <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf

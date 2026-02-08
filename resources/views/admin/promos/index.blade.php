@@ -202,7 +202,7 @@
                                     (Opsional)</label>
                                 <select name="category_id" class="form-select"
                                     style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
-                                    <option value="">-- Semua Kategori --</option>
+                                    <option value="">Semua Kategori</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
@@ -297,7 +297,7 @@
                                 <label class="form-label fw-semibold" style="color: #6f5849;">Target Kategori</label>
                                 <select name="category_id" id="edit_category_id" class="form-select"
                                     style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
-                                    <option value="">-- Semua Kategori --</option>
+                                    <option value="">Semua Kategori</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach

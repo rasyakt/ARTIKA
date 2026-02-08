@@ -156,7 +156,7 @@
                                 </h3>
                                 <small class="text-muted">{{ __('admin.per_transaction') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-success-soft">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-chart-line"></i>
                             </div>
                         </div>
@@ -179,7 +179,7 @@
                                 <small class="text-muted">{{ $summary['cash_count'] }}
                                     {{ __('admin.transactions_count') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-sienna-soft">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-coins"></i>
                             </div>
                         </div>
@@ -202,7 +202,7 @@
                                 <small class="text-muted">{{ $summary['non_cash_count'] }}
                                     {{ __('admin.transactions_count') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-info-soft">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-credit-card"></i>
                             </div>
                         </div>

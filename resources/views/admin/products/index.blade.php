@@ -53,25 +53,19 @@
 			overflow-x: auto;
 		}
 
-		@media (max-width:1199px) {
-			.page-header {
-				flex-direction: column;
-				align-items: flex-start;
-				gap: 1rem;
-			}
-
-			.search-filter {
-				flex-wrap: wrap;
-			}
-		}
-
 		@media (max-width:768px) {
 			.search-input {
-				min-width: 100%;
+				min-width: 140px;
 			}
 
 			.category-select {
-				min-width: 100%;
+				min-width: 140px;
+			}
+
+			.page-header {
+				flex-direction: column;
+				align-items: flex-start;
+				gap: 0.75rem;
 			}
 		}
 	</style>
@@ -81,7 +75,7 @@
 			<div>
 				<h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i
 						class="fa-solid fa-box me-2"></i>{{ __('admin.product_management') }}</h2>
-				<p class="text-muted mb-0">{{ __('admin.product_management_subtitle') }}</p>
+				<!-- <p class="text-muted mb-0">{{ __('admin.product_management_subtitle') }}</p> -->
 			</div>
 
 			<div class="d-flex align-items-center">
@@ -102,10 +96,9 @@
 					</select>
 				</form>
 
-				<a href="{{ route('admin.products.create') }}"
-					class="btn btn-primary shadow-sm d-inline-flex align-items-center"
-					style="background: #6f5849; border:none; border-radius:12px; padding:0.6rem 1rem; height: fit-content;">
-					<i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_product') }}
+				<a href="{{ route('admin.products.create') }}" class="btn btn-primary shadow-sm"
+					style="background: #6f5849; border:none; border-radius:12px; padding:0.6rem 1rem;">
+					<i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_product') }}
 				</a>
 			</div>
 		</div>
