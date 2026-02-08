@@ -134,6 +134,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/low-stock', [\App\Http\Controllers\WarehouseController::class, 'lowStock'])->name('low-stock');
         Route::get('/stock-movements', [\App\Http\Controllers\WarehouseController::class, 'stockMovements'])->name('stock-movements');
         Route::post('/stock/adjust', [\App\Http\Controllers\WarehouseController::class, 'adjustStock'])->name('stock.adjust');
+        Route::delete('/stock/{id}', [\App\Http\Controllers\WarehouseController::class, 'destroyStock'])->name('stock.destroy');
     });
 });
 

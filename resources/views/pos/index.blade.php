@@ -147,7 +147,8 @@
 
         /* NAVBAR */
         .pos-navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            /* background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); */
+            background: var(--primary-dark);
             color: white;
             padding: 0.75rem 1.5rem;
             height: 55px;
@@ -170,27 +171,31 @@
         }
 
         .profile-trigger {
-            transition: all 0.2s;
+            transition: all 0.25s;
             border-radius: 12px;
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
         }
 
-        .profile-trigger:hover .profile-avatar {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
+        .profile-trigger:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
         }
 
         .profile-avatar {
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            background: #7c6257ff;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.4rem;
+            border: none;
             transition: all 0.2s;
+            /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); */
         }
 
         .dropdown-menu {
@@ -514,7 +519,7 @@
         .cart-header {
             padding: 1rem;
             border-bottom: 1px solid var(--gray-200);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: var(--primary-dark);
             color: white;
         }
 
@@ -997,21 +1002,23 @@
                 transition: transform 0.2s ease;
             }
 
-            .profile-trigger:active {
-                transform: scale(0.92);
+            .profile-trigger {
+                padding: 0.35rem 0.5rem;
+                background: transparent !important;
+                border: none !important;
             }
 
             .profile-avatar {
                 width: 38px;
                 height: 38px;
-                background: rgba(255, 255, 255, 0.2);
-                border-radius: 12px;
+                background: #a18072;
+                border-radius: 10px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 color: white;
-                font-size: 1.4rem;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 1.3rem;
+                border: none;
             }
 
             .dropdown-item {
@@ -1534,10 +1541,14 @@
                 <div class="dropdown">
                     <button class="btn p-0 border-0 profile-trigger d-flex align-items-center" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="profile-avatar">
+                        <div class="profile-avatar me-3">
                             <i class="fas fa-user-circle"></i>
                         </div>
-                        <span class="ms-2 fw-600 text-white d-none d-lg-inline">{{ Auth::user()->name }}</span>
+                        <div class="d-none d-lg-flex flex-column align-items-start me-2">
+                            <span class="text-white fw-700 mb-0" style="font-size: 1rem; line-height: 1.1;">{{ Auth::user()->name }}</span>
+                            <span class="text-white-50 fw-700 text-uppercase" style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ Auth::user()->role->name }}</span>
+                        </div>
+                        <!-- <i class="fas fa-chevron-down text-white-50 small d-none d-lg-block"></i> -->
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
                         style="min-width: 240px; border-radius: 16px;">

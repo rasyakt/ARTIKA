@@ -83,4 +83,8 @@ return [
     'days_left' => 'hari lagi',
     'expired' => 'Kadaluarsa',
     'batch_info' => 'Informasi Batch',
+    'scrap_stock' => 'Hapus Batch (Scrap)',
+    'confirm_scrap' => 'Apakah Anda yakin ingin menghapus batch stok ini?',
+    'scrap_reason' => 'Alasan Penghapusan (Wajib)',
+    'stock_scrapped_successfully' => 'Batch stok berhasil dihapus',
 ];

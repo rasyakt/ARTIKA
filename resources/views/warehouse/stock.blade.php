@@ -90,15 +90,38 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                            data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"
-                                            data-product-id="{{ $stock->product_id }}"
-                                            data-product-name="{{ $stock->product->name }}"
-                                            data-current-qty="{{ $stock->quantity }}" data-batch-no="{{ $stock->batch_no }}"
-                                            data-expired-at="{{ $stock->expired_at ? $stock->expired_at->format('Y-m-d') : '' }}"
-                                            style="border-radius: 8px;">
-                                            <i class="fa-solid fa-gear me-1"></i> {{ __('common.adjust') }}
-                                        </button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                                style="border-radius: 10px; padding: 0.35rem 0.65rem; border: 1px solid #f2e8e5;">
+                                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0"
+                                                style="border-radius: 12px; font-size: 0.875rem;">
+                                                <li>
+                                                    <a class="dropdown-item py-2 px-3" href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"
+                                                        data-product-id="{{ $stock->product_id }}"
+                                                        data-product-name="{{ $stock->product->name }}"
+                                                        data-current-qty="{{ $stock->quantity }}"
+                                                        data-batch-no="{{ $stock->batch_no }}"
+                                                        data-expired-at="{{ $stock->expired_at ? $stock->expired_at->format('Y-m-d') : '' }}">
+                                                        <i class="fa-solid fa-gear me-2 text-primary"></i>
+                                                        {{ __('common.adjust') }}
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <hr class="dropdown-divider mx-3 my-1" style="opacity: 0.05;">
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item py-2 px-3 text-danger" href="#"
+                                                        onclick="scrapStock({{ $stock->id }})">
+                                                        <i class="fa-solid fa-trash-can me-2"></i>
+                                                        {{ __('common.delete') }}
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -240,9 +263,9 @@
                 setTimeout(() => {
                     let targetButton = null;
                     if (stockId) {
-                        targetButton = document.querySelector(`button[data-stock-id="${stockId}"]`);
+                        targetButton = document.querySelector(`[data-stock-id="${stockId}"]`);
                     } else if (productId) {
-                        targetButton = document.querySelector(`button[data-product-id="${productId}"]`);
+                        targetButton = document.querySelector(`[data-product-id="${productId}"]`);
                     }
 
                     if (targetButton) {
@@ -341,6 +364,65 @@
                     saveBtn.disabled = false;
                     saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> {{ __('warehouse.save_adjustment') }}';
                 });
+        }
+
+        function scrapStock(id) {
+            Swal.fire({
+                title: '{{ __('warehouse.scrap_stock') }}',
+                text: '{{ __('warehouse.confirm_scrap') }}',
+                icon: 'warning',
+                input: 'text',
+                inputPlaceholder: '{{ __('warehouse.scrap_reason') }}',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6f5849',
+                confirmButtonText: '{{ __('common.delete') }}',
+                cancelButtonText: '{{ __('common.cancel') }}',
+                customClass: {
+                    popup: 'artika-swal-popup',
+                    title: 'artika-swal-title',
+                    confirmButton: 'artika-swal-confirm-btn bg-danger border-0',
+                    cancelButton: 'artika-swal-cancel-btn'
+                },
+                inputValidator: (value) => {
+                    if (!value) {
+                        return '{{ __('warehouse.scrap_reason') }}'
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`{{ url('warehouse/stock') }}/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            reason: result.value
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '{{ __('common.success') }}',
+                                    text: data.message,
+                                    customClass: { popup: 'artika-swal-popup' }
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: '{{ __('common.error') }}',
+                                    text: data.message,
+                                    customClass: { popup: 'artika-swal-popup' }
+                                });
+                            }
+                        });
+                }
+            });
         }
     </script>
 @endsection

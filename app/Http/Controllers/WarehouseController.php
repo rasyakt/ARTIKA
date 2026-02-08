@@ -148,8 +148,36 @@ class WarehouseController extends Controller
                 ->first();
         }
 
-        // If it's an 'add' and we have expiry or no existing general batch, create a NEW one
-        if ($request->type === 'add' && ($request->expired_at || !$stock)) {
+        // If it's an 'add' and we have specific batch info, try to MERGE with existing batch first
+        if ($request->type === 'add' && $request->batch_no) {
+            $existingStock = Stock::where('product_id', $request->product_id)
+                ->where('batch_no', $request->batch_no)
+                ->first();
+
+            if ($existingStock) {
+                $quantityBefore = $existingStock->quantity;
+                return DB::transaction(function () use ($request, $existingStock, $quantityBefore) {
+                    $existingStock->quantity += $request->quantity;
+                    // Update expiry if provided, otherwise keep existing
+                    if ($request->expired_at) {
+                        $existingStock->expired_at = $request->expired_at;
+                    }
+                    $existingStock->save();
+
+                    $this->logStockMovement($existingStock, $request->quantity, 'in', $quantityBefore, $request->reason ?? 'Restock (Merged Batch)');
+                    $this->logAudit($existingStock, $quantityBefore, $request->quantity, 'add');
+
+                    return response()->json([
+                        'success' => true,
+                        'new_quantity' => $existingStock->quantity,
+                        'message' => __('warehouse.stock_adjusted_successfully')
+                    ]);
+                });
+            }
+        }
+
+        // If it's an 'add' and NO matching batch was found, or we have expiry info, create a NEW one
+        if ($request->type === 'add' && ($request->expired_at || $request->batch_no || !$stock)) {
             $quantityBefore = 0;
             return DB::transaction(function () use ($request, $quantityBefore) {
                 $stock = Stock::create([
@@ -160,8 +188,8 @@ class WarehouseController extends Controller
                     'min_stock' => 10 // Default
                 ]);
 
-                // Log movement... (rest of logic moved below for reuse)
                 $this->logStockMovement($stock, $request->quantity, 'in', $quantityBefore, $request->reason);
+                $this->logAudit($stock, 0, $request->quantity, 'add');
 
                 return response()->json([
                     'success' => true,
@@ -205,6 +233,40 @@ class WarehouseController extends Controller
                 'success' => true,
                 'new_quantity' => $stock->quantity,
                 'message' => __('warehouse.stock_adjusted_successfully')
+            ]);
+        });
+    }
+
+    public function destroyStock(Request $request, $id)
+    {
+        $stock = Stock::with('product')->findOrFail($id);
+
+        $request->validate([
+            'reason' => 'required|string|max:255'
+        ]);
+
+        return DB::transaction(function () use ($stock, $request) {
+            $quantityBefore = $stock->quantity;
+
+            // Log movement as "scrap"
+            $this->logStockMovement($stock, -$quantityBefore, 'out', $quantityBefore, 'Scrapped: ' . $request->reason);
+
+            // Audit Log
+            AuditLog::log(
+                'stock_scrapped',
+                'Stock',
+                $stock->id,
+                -$quantityBefore,
+                0,
+                ['reason' => $request->reason, 'batch' => $stock->batch_no],
+                'Stock batch deleted for ' . $stock->product->name
+            );
+
+            $stock->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => __('warehouse.stock_scrapped_successfully')
             ]);
         });
     }

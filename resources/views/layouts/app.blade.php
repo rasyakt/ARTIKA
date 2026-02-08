@@ -79,7 +79,8 @@
         }
 
         .main-navbar {
-            background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%);
+            /* background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%); */
+            background: var(--primary-dark);
             box-shadow: 0 4px 18px rgba(107, 83, 70, 0.08);
             padding: 0.75rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -248,11 +249,11 @@
         }
 
         .user-profile-link {
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            padding: 0.4rem 0.75rem;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.2s;
+            background: none;
+            border-radius: 12px;
+            padding: 0.5rem 1rem;
+            border: none;
+            transition: all 0.25s;
             color: white !important;
             text-decoration: none;
             display: inline-flex;
@@ -260,21 +261,27 @@
         }
 
         .user-profile-link:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .user-name {
+            font-size: 1.3rem;
+            font-weight: 600;
         }
 
         .profile-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #b2917f, #8a6b57);
+            width: 42px;
+            height: 42px;
+            border-radius: 3812px;
+            background: #7c6257ff;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: #fff;
             font-weight: 700;
-            box-shadow: 0 2px 6px rgba(107, 83, 70, 0.18);
-            font-size: 1rem;
+            /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); */
+            font-size: 1.1rem;
         }
 
         /* Pagination Styling */
@@ -480,10 +487,12 @@
 
                 <a class="nav-link user-profile-link" href="#" title="Profile Settings (Coming Soon)"
                     style="cursor: default;">
-                    <span class="profile-avatar me-2">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                    <span class="user-name">{{ Auth::user()->name }}</span>
-                    <span class="badge bg-light text-dark ms-2"
-                        style="font-size: 0.7rem;">{{ ucfirst(Auth::user()->role->name) }}</span>
+                    <div class="profile-avatar me-3">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
+                    <div class="d-flex flex-column">
+                        <span class="user-name line-height-1 mb-1">{{ Auth::user()->name }}</span>
+                        <span class="text-white-50 fw-700 text-uppercase"
+                            style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ Auth::user()->role->name }}</span>
+                    </div>
                 </a>
             </div>
         </div>
