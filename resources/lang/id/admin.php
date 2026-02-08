@@ -336,6 +336,8 @@ return [
     'total_refund' => 'Total Refund',
     'reason' => 'Alasan',
     'process_return' => 'Proses Retur',
+    'expiring_soon_alerts' => 'Peringatan Segera Expired',
+    'expires_on' => 'Expired Pada',
     'return_items' => 'Retur Barang',
     'return_reason' => 'Alasan Retur',
     'select_items_to_return' => 'Pilih item yang akan dikembalikan',

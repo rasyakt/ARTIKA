@@ -61,8 +61,28 @@ class AdminController extends Controller
 
         // Low Stock Alerts (quantity < 20)
         $lowStockProducts = Stock::with(['product.category'])
+            ->where('quantity', '>', 0)
             ->where('quantity', '<', 20)
             ->orderBy('quantity', 'asc')
+            ->limit(10)
+            ->get();
+
+        // Expiring Soon (within 30 days)
+        $expiringSoonProducts = Stock::with(['product.category'])
+            ->where('quantity', '>', 0)
+            ->whereNotNull('expired_at')
+            ->where('expired_at', '>', Carbon::today())
+            ->where('expired_at', '<=', Carbon::today()->addDays(30))
+            ->orderBy('expired_at', 'asc')
+            ->limit(10)
+            ->get();
+
+        // Expired Products
+        $expiredProducts = Stock::with(['product.category'])
+            ->where('quantity', '>', 0)
+            ->whereNotNull('expired_at')
+            ->where('expired_at', '<=', Carbon::today())
+            ->orderBy('expired_at', 'asc')
             ->limit(10)
             ->get();
 
@@ -70,13 +90,14 @@ class AdminController extends Controller
             'totalSales',
             'totalTransactions',
             'totalProducts',
-            // 'totalCustomers',
             'totalSuppliers',
             'recentSuppliers',
             'salesChartData',
             'topProducts',
             'recentTransactions',
-            'lowStockProducts'
+            'lowStockProducts',
+            'expiringSoonProducts',
+            'expiredProducts'
         ));
     }
 

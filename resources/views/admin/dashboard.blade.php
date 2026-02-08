@@ -213,8 +213,54 @@
                 </div>
             </div>
 
-            <!-- Low Stock Alerts -->
+            <!-- Low Stock & Expiry Alerts -->
             <div class="col-md-5">
+                <!-- Expired Products -->
+                @if($expiredProducts->count() > 0)
+                <div class="card shadow-sm border-danger mb-4">
+                    <div class="card-header bg-danger text-white"
+                        style="border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-xmark me-2"></i>{{ __('admin.expired_products') }}</h5>
+                    </div>
+                    <div class="card-body" style="max-height: 250px; overflow-y: auto;">
+                        @foreach($expiredProducts as $stock)
+                            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
+                                <div>
+                                    <div class="fw-bold text-danger">{{ $stock->product->name }}</div>
+                                    <small class="text-muted">{{ __('admin.expired_on') }}: {{ $stock->expired_at->format('d M Y') }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-danger">{{ $stock->quantity }} {{ __('common.left') }} </span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                <!-- Expiring Soon Products -->
+                @if($expiringSoonProducts->count() > 0)
+                <div class="card shadow-sm border-warning mb-4">
+                    <div class="card-header bg-warning"
+                        style="border-radius: 16px 16px 0 0; color: #4b382f;">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-clock me-2"></i>{{ __('admin.expiring_soon_alerts') }}</h5>
+                    </div>
+                    <div class="card-body" style="max-height: 250px; overflow-y: auto;">
+                        @foreach($expiringSoonProducts as $stock)
+                            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
+                                <div>
+                                    <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
+                                    <small class="text-muted">{{ __('admin.expires_on') }}: {{ $stock->expired_at->format('d M Y') }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-warning text-dark">{{ $stock->quantity }} {{ __('common.left') }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
                 <div class="card shadow-sm">
                     <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
@@ -238,11 +284,17 @@
                                 <p class="mb-0">{{ __('common.in_stock') }}</p>
                             </div>
                         @endforelse
+                    </div>
+                </div>
 
-                        {{-- Suppliers summary --}}
-                        @php $recentSuppliers = $recentSuppliers ?? ($suppliers ?? collect()); @endphp
-                        <hr style="border-color: #f2e8e5; margin: 1rem 0;">
-                        <h6 class="fw-bold mb-3" style="color: #6f5849;"><i class="fa-solid fa-truck me-2"></i>{{ __('common.recent_suppliers') }}</h6>
+                {{-- Separate Suppliers Card --}}
+                @php $recentSuppliers = $recentSuppliers ?? ($suppliers ?? collect()); @endphp
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header"
+                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-truck me-2"></i>{{ __('common.recent_suppliers') }}</h5>
+                    </div>
+                    <div class="card-body" style="max-height: 350px; overflow-y: auto;">
                         @forelse($recentSuppliers->take(5) as $supplier)
                             <div class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                                 <div>

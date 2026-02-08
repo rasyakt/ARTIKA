@@ -93,8 +93,86 @@
         </div>
 
         <div class="row g-4">
-            <!-- Low Stock Alerts Table -->
+            <!-- Low Stock & Expiry Alerts -->
             <div class="col-md-8">
+                <!-- Expired Items -->
+                @if($expiredItems->count() > 0)
+                <div class="card shadow-sm border-danger mb-4" style="border-radius: 16px; border: none;">
+                    <div class="card-header bg-danger text-white"
+                        style="border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-xmark me-2"></i>{{ __('warehouse.expired_items') }}</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background: #fff5f5;">
+                                    <tr>
+                                        <th class="border-0 fw-semibold text-danger">{{ __('common.product') }}</th>
+                                        <th class="border-0 fw-semibold text-danger">{{ __('common.expiry_date') }}</th>
+                                        <th class="border-0 fw-semibold text-danger">{{ __('common.stock') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($expiredItems as $stock)
+                                        <tr class="table-danger">
+                                            <td>
+                                                <div class="fw-bold">{{ $stock->product->name }}</div>
+                                                <small class="text-muted">{{ $stock->product->barcode }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="fw-bold">{{ $stock->expired_at->format('d M Y') }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-danger">{{ $stock->quantity }} {{ __('warehouse.units') }}</span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <!-- Expiring Soon Items -->
+                @if($expiringSoonItems->count() > 0)
+                <div class="card shadow-sm border-warning mb-4" style="border-radius: 16px; border: none;">
+                    <div class="card-header bg-warning"
+                        style="border-radius: 16px 16px 0 0; color: #4b382f;">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-clock me-2"></i>{{ __('warehouse.expiring_soon_alerts') }}</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background: #fffbeb;">
+                                    <tr>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.product') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.expiry_date') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.stock') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($expiringSoonItems as $stock)
+                                        <tr>
+                                            <td>
+                                                <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
+                                                <small class="text-muted">{{ $stock->product->barcode }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="fw-bold text-warning">{{ $stock->expired_at->format('d M Y') }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-warning text-dark">{{ $stock->quantity }} {{ __('warehouse.units') }}</span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">

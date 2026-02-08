@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\StockMovement;
 use App\Models\AuditLog;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,12 +55,31 @@ class WarehouseController extends Controller
             ->limit(10)
             ->get();
 
+        // Expiring Soon (within 30 days)
+        $expiringSoonItems = Stock::with(['product.category'])
+            ->where('quantity', '>', 0)
+            ->whereNotNull('expired_at')
+            ->where('expired_at', '>', Carbon::today())
+            ->where('expired_at', '<=', Carbon::today()->addDays(30))
+            ->orderBy('expired_at', 'asc')
+            ->get();
+
+        // Expired Items
+        $expiredItems = Stock::with(['product.category'])
+            ->where('quantity', '>', 0)
+            ->whereNotNull('expired_at')
+            ->where('expired_at', '<=', Carbon::today())
+            ->orderBy('expired_at', 'asc')
+            ->get();
+
         return view('warehouse.dashboard', compact(
             'lowStockItems',
             'totalProducts',
             'totalStockValue',
             'stockByCategory',
-            'recentProducts'
+            'recentProducts',
+            'expiringSoonItems',
+            'expiredItems'
         ));
     }
 
