@@ -230,7 +230,7 @@ class CashierReportController extends Controller
 
     public function getTransactionItems($id)
     {
-        $transaction = \App\Models\Transaction::with(['items.product', 'user'])->findOrFail($id);
+        $transaction = \App\Models\Transaction::with(['items.product', 'user', 'returns'])->findOrFail($id);
         return response()->json([
             'invoice_no' => $transaction->invoice_no,
             'cashier_name' => $transaction->user->name ?? 'System',
@@ -242,10 +242,13 @@ class CashierReportController extends Controller
             'cash_amount' => $transaction->cash_amount,
             'change_amount' => $transaction->change_amount,
             'status' => $transaction->status,
-            'items' => $transaction->items->map(function ($item) {
+            'total_refunded' => $transaction->total_refunded,
+            'items' => $transaction->items->map(function ($item) use ($transaction) {
                 return [
+                    'product_id' => $item->product_id,
                     'name' => $item->product->name,
                     'quantity' => $item->quantity,
+                    'returned_quantity' => $transaction->getReturnedQuantity($item->product_id),
                     'price' => $item->price,
                     'subtotal' => $item->subtotal
                 ];

@@ -212,6 +212,8 @@ return [
     'non_cash' => 'Non-Tunai',
     'cash' => 'Tunai',
     'rolled_back' => 'Dibatalkan (Rollback)',
+    'returned' => 'Dikembalikan (Full)',
+    'partial_return' => 'Retur Sebagian',
 
     // Finance Report
     'finance_reports_title' => 'Laporan Keuangan',
@@ -324,4 +326,21 @@ return [
     'active_periods' => 'Periode Aktif',
     'no_promos_found' => 'Belum ada program promo aktif',
     'add_first_promo' => 'Buat Promo Pertama',
+
+    // Returns
+    'returns_management' => 'Manajemen Retur',
+    'manage_returns_subtitle' => 'Kelola pengembalian barang dan pengembalian dana pelanggan',
+    'return_no' => 'No. Retur',
+    'return_date' => 'Tanggal Retur',
+    'total_refund' => 'Total Refund',
+    'reason' => 'Alasan',
+    'process_return' => 'Proses Retur',
+    'return_items' => 'Retur Barang',
+    'return_reason' => 'Alasan Retur',
+    'select_items_to_return' => 'Pilih item yang akan dikembalikan',
+    'return_quantity' => 'Qty Retur',
+    'no_returns_found' => 'Belum ada data retur',
+    'return_processed_success' => 'Retur berhasil diproses dan stok telah diperbarui.',
+    'cannot_return_rolled_back' => 'Tidak dapat melakukan retur pada transaksi yang telah dibatalkan.',
+    'return_qty_exceeds' => 'Jumlah retur melebihi jumlah yang terjual.',
 ];

@@ -100,6 +100,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/audit/export', [\App\Http\Controllers\AuditController::class, 'export'])->name('audit.export');
         Route::post('/audit/clear', [\App\Http\Controllers\AuditController::class, 'clear'])->name('audit.clear');
 
+        // Return Management
+        Route::get('/returns', [\App\Http\Controllers\Admin\ReturnController::class, 'index'])->name('returns.index');
+        Route::post('/returns', [\App\Http\Controllers\Admin\ReturnController::class, 'store'])->name('returns.store');
+        Route::get('/returns/{id}', [\App\Http\Controllers\Admin\ReturnController::class, 'show'])->name('returns.show');
+
         // Promo Management
         Route::get('/promos', [\App\Http\Controllers\PromoController::class, 'index'])->name('promos.index');
         Route::post('/promos', [\App\Http\Controllers\PromoController::class, 'store'])->name('promos.store');

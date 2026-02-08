@@ -566,6 +566,12 @@
                                         <i class="fa-solid fa-tags"></i> {{ __('menu.expense_categories') }}
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('admin.returns.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.returns.index') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-rotate-left"></i> {{ __('admin.returns_management') }}
+                                    </a>
+                                </li>
                             </ul>
                         </div>
 
