@@ -134,7 +134,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow" style="border-radius: 20px;">
                 <div class="modal-header border-0 pt-4 px-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">
+                    <h5 class="modal-title fw-bold">
                         <i class="fa-solid fa-circle-plus me-2"></i>{{ __('admin.add_category') }}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -172,7 +172,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow" style="border-radius: 20px;">
                 <div class="modal-header border-0 pt-4 px-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">
+                    <h5 class="modal-title fw-bold">
                         <i class="fa-solid fa-pen-to-square me-2"></i>{{ __('admin.edit_category') }}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

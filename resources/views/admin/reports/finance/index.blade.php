@@ -259,7 +259,7 @@
             <div class="modal-content" style="border-radius: 15px; border: none;">
                 <form action="{{ route('admin.reports.finance') }}" method="GET">
                     <div class="modal-header border-0">
-                        <h5 class="modal-title fw-bold" style="color: #6f5849;">{{ __('admin.filter_report') }}</h5>
+                        <h5 class="modal-title fw-bold">{{ __('admin.filter_report') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -316,7 +316,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content shadow border-0" style="border-radius: 16px;">
                 <div class="modal-header border-bottom-0 pb-0">
-                    <h5 class="modal-title fw-bold text-brown" id="exportPdfCustomModalLabel">
+                    <h5 class="modal-title fw-bold" id="exportPdfCustomModalLabel">
                         <i class="fa-solid fa-file-settings me-2"></i>Kustomisasi Laporan Keuangan
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

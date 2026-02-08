@@ -140,7 +140,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content shadow-lg" style="border-radius: 20px; border: none;">
                 <div class="modal-header border-bottom-0 p-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i
+                    <h5 class="modal-title fw-bold"><i
                             class="fa-solid fa-plus me-2"></i>{{ __('admin.add_promo') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -241,7 +241,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content shadow-lg" style="border-radius: 20px; border: none;">
                 <div class="modal-header border-bottom-0 p-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i
+                    <h5 class="modal-title fw-bold"><i
                             class="fa-solid fa-pen me-2"></i>{{ __('admin.edit_promo') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>

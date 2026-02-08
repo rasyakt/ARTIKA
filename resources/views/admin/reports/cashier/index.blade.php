@@ -586,7 +586,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content shadow-lg" style="border-radius: 20px; border: none;">
                 <div class="modal-header border-0 pb-0 pt-4 px-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">
+                    <h5 class="modal-title fw-bold">
                         <i class="fa-solid fa-receipt me-2"></i>Detail Transaksi <span id="tx-invoice-no" class="text-muted small"></span>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -674,7 +674,7 @@
                     @csrf
                     @method('PUT')
                     <div class="modal-header border-0 pb-0 pt-4 px-4">
-                        <h5 class="modal-title fw-bold" style="color: #6f5849;">
+                        <h5 class="modal-title fw-bold">
                             <i class="fa-solid fa-pen-to-square me-2"></i>Edit Transaksi
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -711,7 +711,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content shadow border-0" style="border-radius: 16px;">
                 <div class="modal-header border-bottom-0 pb-0">
-                    <h5 class="modal-title fw-bold text-brown" id="exportPdfModalLabel">
+                    <h5 class="modal-title fw-bold" id="exportPdfModalLabel">
                         <i class="fa-solid fa-file-settings me-2"></i>Kustomisasi Laporan PDF
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
