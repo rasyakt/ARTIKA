@@ -54,12 +54,28 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
         }
 
+        html {
+            zoom: 90%;
+            background: #faf9f8;
+        }
+
         body {
             background: #faf9f8;
             min-height: 100vh;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
             color: #4b382f;
-            zoom: 90%;
+        }
+
+        /* Fix for Bootstrap Modals & SweetAlert2 with CSS Zoom */
+        .modal-backdrop,
+        .swal2-container,
+        .modal {
+            width: auto !important;
+            height: auto !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
         }
 
         .main-navbar {

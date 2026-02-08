@@ -32,11 +32,10 @@ class TransactionService
     {
         // 0. Preliminary Stock Check (Prevent negative stock)
         foreach ($items as $item) {
-            $stock = Stock::where('product_id', $item['product_id'])->first();
-            $available = $stock ? $stock->quantity : 0;
+            $product = Product::with('stocks')->find($item['product_id']);
+            $available = $product ? $product->available_stock : 0;
 
             if ($available < $item['quantity']) {
-                $product = Product::find($item['product_id']);
                 $productName = $product ? $product->name : 'Unknown Product';
                 throw new \Exception(trans('pos.insufficient_stock') . " ({$productName}. Tersedia: {$available}, Diminta: {$item['quantity']})");
             }

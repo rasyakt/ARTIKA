@@ -90,6 +90,11 @@
             -webkit-overflow-scrolling: touch;
         }
 
+        html {
+            zoom: 90%;
+            background: var(--gray-100);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--gray-100);
@@ -99,6 +104,19 @@
         html,
         body {
             height: 100%;
+        }
+
+        /* Fixed Overlay Alignment Fix for Zoom */
+        .modal-backdrop,
+        .swal2-container,
+        .modal,
+        .scanner-section {
+            width: auto !important;
+            height: auto !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
         }
 
         @media (max-width: 1024px) {
@@ -1613,8 +1631,15 @@
                     <div class="products-grid" id="productsGrid">
                         @foreach($products as $product)
                             @php
-                                $totalStock = $product->stocks->sum('quantity');
+                                $totalStock = $product->available_stock;
+                                $actualTotalStock = $product->total_stock;
                                 $isOutOfStock = $totalStock <= 0;
+
+                                // Skip products that are effectively "All Expired" 
+                                // (If they have physical stock but 0 is available/non-expired)
+                                if ($actualTotalStock > 0 && $totalStock <= 0) {
+                                    continue;
+                                }
 
                                 // Find best active promo for this product
                                 $promo = $activePromos->where('product_id', $product->id)->first()
@@ -1632,9 +1657,8 @@
                                 }
                             @endphp
                             @php
-                                $expiry = $product->earliest_expiry;
-                                $isExpired = $expiry && \Carbon\Carbon::parse($expiry)->isPast();
-                                $isExpiringSoon = $expiry && \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) < 30 && !$isExpired;
+                                $expiry = $product->next_expiry;
+                                $isExpiringSoon = $expiry && \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) < 30;
                             @endphp
                             <div class="product-card {{ $isOutOfStock ? 'opacity-50' : '' }}"
                                 data-product-id="{{ $product->id }}" data-category="{{ $product->category_id }}"
@@ -1647,11 +1671,7 @@
                                         {{ $promo->type === 'percentage' ? '-' . round($promo->value) . '%' : '-Rp' . number_format($promo->value, 0, ',', '.') }}
                                     </div>
                                 @endif
-                                @if($isExpired)
-                                    <div class="expiry-badge expired bg-danger">
-                                        <i class="fas fa-calendar-times"></i> {{ __('warehouse.expired') }}
-                                    </div>
-                                @elseif($isExpiringSoon)
+                                @if($isExpiringSoon)
                                     <div class="expiry-badge expiring bg-warning text-dark">
                                         <i class="fas fa-hourglass-half"></i>
                                         {{ (int) \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) }}d
