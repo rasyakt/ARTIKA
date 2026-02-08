@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid py-4">
         <div class="row mb-4">
-            <div class="col-md-7">
+            <div class="col-xl-7">
                 <div class="d-flex align-items-center mb-1">
                     <a href="{{ route('admin.reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
                         style="border-radius: 10px; padding: 0.5rem 0.75rem;">
@@ -15,7 +15,7 @@
                 </div>
                 <p class="text-muted mb-0 ms-5 ps-3">{{ __('admin.audit_log_desc') }}</p>
             </div>
-            <div class="col-md-5 d-flex gap-2 justify-content-end align-items-center">
+            <div class="col-xl-5 d-flex gap-2 justify-content-xl-end justify-content-start align-items-center mt-3 mt-xl-0">
                 {{-- Maintenance Dropdown --}}
                 <div class="dropdown">
                     <button class="btn btn-outline-danger shadow-sm d-flex align-items-center" type="button" id="maintenanceDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
@@ -52,7 +52,7 @@
 
         <!-- Statistics Cards -->
         <div class="row mb-4">
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6 mb-4 mb-xl-0">
                 <div class="card border-left-primary">
                     <div class="card-body">
                         <div class="text-primary font-weight-bold text-uppercase mb-1">{{ __('admin.total_logs') }}</div>
@@ -60,7 +60,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6 mb-4 mb-xl-0">
                 <div class="card border-left-success">
                     <div class="card-body">
                         <div class="text-success font-weight-bold text-uppercase mb-1">{{ __('common.page') }}</div>
@@ -68,7 +68,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6 mb-4 mb-xl-0">
                 <div class="card border-left-info">
                     <div class="card-body">
                         <div class="text-info font-weight-bold text-uppercase mb-1">{{ __('common.period') }}</div>
@@ -77,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6 mb-4 mb-xl-0">
                 <div class="card border-left-warning">
                     <div class="card-body">
                         <div class="text-warning font-weight-bold text-uppercase mb-1">{{ __('common.user') }}</div>

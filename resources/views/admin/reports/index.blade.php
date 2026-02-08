@@ -35,7 +35,7 @@
 
     <div class="container-fluid py-4">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
                 <h2 class="fw-bold mb-1" style="color: #6f5849;">
                     <i class="fa-solid fa-chart-line me-2"></i>{{ __('admin.reports_hub') }}
@@ -55,7 +55,7 @@
         <!-- Report Cards -->
         <div class="row g-4 mb-4">
             <!-- Finance Report -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <a href="{{ route('admin.reports.finance') }}" class="text-decoration-none">
                     <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
@@ -81,7 +81,7 @@
             </div>
 
             <!-- Warehouse Report -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <a href="{{ route('admin.reports.warehouse') }}" class="text-decoration-none">
                     <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
@@ -109,7 +109,7 @@
             </div>
 
             <!-- Cashier Report -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <a href="{{ route('admin.reports.cashier') }}" class="text-decoration-none">
                     <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
@@ -137,7 +137,7 @@
             </div>
 
             <!-- Audit Logs -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <a href="{{ route('admin.audit.index') }}" class="text-decoration-none">
                     <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">

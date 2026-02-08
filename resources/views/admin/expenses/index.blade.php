@@ -3,16 +3,17 @@
 @section('content')
     <div class="container-fluid py-4">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
                 <h4 class="fw-bold mb-1" style="color: #6f5849;">
                     <i class="fa-solid fa-wallet me-2"></i>{{ __('admin.operational_expenses') }}
                 </h4>
                 <p class="text-muted mb-0 small">{{ __('admin.expenses_subtitle') }}</p>
             </div>
-            <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addExpenseModal"
-                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
-                <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_expense') }}
+            <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
+                data-bs-target="#addExpenseModal"
+                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
+                <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_expense') }}
             </button>
         </div>
 

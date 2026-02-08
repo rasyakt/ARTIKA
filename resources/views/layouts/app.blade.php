@@ -80,7 +80,7 @@
             top: 70px;
             left: 0;
             bottom: 0;
-            width: 16.666667%;
+            width: 260px;
             /* Matched to col-md-2 */
             border-right: 1px solid #f2e8e5;
             padding: 1.25rem 0;
@@ -216,11 +216,12 @@
         .main-content {
             padding: 0;
             background: #faf9f8;
-            margin-left: 16.666667%;
+            margin-left: 260px;
             /* Offset by fixed sidebar width */
             margin-top: 70px;
             /* Offset by fixed navbar height */
             min-height: calc(100vh - 70px);
+            width: calc(100% - 260px);
         }
 
         .navbar-brand {
@@ -489,24 +490,28 @@
                         </a>
 
                         <!-- Inventory Group -->
-                        <div class="sidebar-dropdown {{ request()->routeIs('admin.products*') || request()->routeIs('admin.categories*') || request()->routeIs('admin.promos*') ? 'active' : '' }}">
+                        <div
+                            class="sidebar-dropdown {{ request()->routeIs('admin.products*') || request()->routeIs('admin.categories*') || request()->routeIs('admin.promos*') ? 'active' : '' }}">
                             <div class="sidebar-link sidebar-dropdown-toggle">
                                 <i class="fa-solid fa-box-archive"></i> {{ __('admin.inventory') ?? 'Inventory' }}
                                 <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
                             </div>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="{{ route('admin.products') }}" class="submenu-link {{ request()->routeIs('admin.products*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.products') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.products*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-box"></i> {{ __('menu.products') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.categories') }}" class="submenu-link {{ request()->routeIs('admin.categories*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.categories') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.categories*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-folder"></i> {{ __('menu.categories') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.promos.index') }}" class="submenu-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.promos.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-tags"></i> {{ __('admin.promos') }}
                                     </a>
                                 </li>
@@ -521,17 +526,20 @@
                             </div>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="{{ route('warehouse.stock') }}" class="submenu-link {{ request()->routeIs('warehouse.stock*') ? 'active' : '' }}">
+                                    <a href="{{ route('warehouse.stock') }}"
+                                        class="submenu-link {{ request()->routeIs('warehouse.stock*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-boxes-stacked"></i> {{ __('menu.stock_management') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('warehouse.low-stock') }}" class="submenu-link {{ request()->routeIs('warehouse.low-stock*') ? 'active' : '' }}">
+                                    <a href="{{ route('warehouse.low-stock') }}"
+                                        class="submenu-link {{ request()->routeIs('warehouse.low-stock*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-triangle-exclamation"></i> {{ __('menu.low_stock_alerts') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('warehouse.stock-movements') }}" class="submenu-link {{ request()->routeIs('warehouse.stock-movements*') ? 'active' : '' }}">
+                                    <a href="{{ route('warehouse.stock-movements') }}"
+                                        class="submenu-link {{ request()->routeIs('warehouse.stock-movements*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-arrows-rotate"></i> {{ __('menu.stock_movements') }}
                                     </a>
                                 </li>
@@ -539,19 +547,22 @@
                         </div>
 
                         <!-- Finance Group -->
-                        <div class="sidebar-dropdown {{ request()->routeIs('admin.expenses*') || request()->routeIs('admin.expense-categories*') ? 'active' : '' }}">
+                        <div
+                            class="sidebar-dropdown {{ request()->routeIs('admin.expenses*') || request()->routeIs('admin.expense-categories*') ? 'active' : '' }}">
                             <div class="sidebar-link sidebar-dropdown-toggle">
                                 <i class="fa-solid fa-wallet"></i> {{ __('menu.finance') ?? 'Finance' }}
                                 <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
                             </div>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="{{ route('admin.expenses.index') }}" class="submenu-link {{ request()->routeIs('admin.expenses.index') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.expenses.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.expenses.index') ? 'active' : '' }}">
                                         <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('menu.operational_expenses') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.expense-categories.index') }}" class="submenu-link {{ request()->routeIs('admin.expense-categories.index') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.expense-categories.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.expense-categories.index') ? 'active' : '' }}">
                                         <i class="fa-solid fa-tags"></i> {{ __('menu.expense_categories') }}
                                     </a>
                                 </li>
@@ -559,19 +570,22 @@
                         </div>
 
                         <!-- People Group -->
-                        <div class="sidebar-dropdown {{ request()->routeIs('admin.users*') || request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
+                        <div
+                            class="sidebar-dropdown {{ request()->routeIs('admin.users*') || request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
                             <div class="sidebar-link sidebar-dropdown-toggle">
                                 <i class="fa-solid fa-user-group"></i> {{ __('admin.people') ?? 'People' }}
                                 <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
                             </div>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="{{ route('admin.users') }}" class="submenu-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.users') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-users"></i> {{ __('menu.users') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.suppliers') }}" class="submenu-link {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.suppliers') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-truck"></i> {{ __('menu.suppliers') }}
                                     </a>
                                 </li>
@@ -579,34 +593,40 @@
                         </div>
 
                         <!-- Reports Group -->
-                        <div class="sidebar-dropdown {{ request()->routeIs('admin.reports*') || request()->routeIs('admin.audit*') ? 'active' : '' }}">
+                        <div
+                            class="sidebar-dropdown {{ request()->routeIs('admin.reports*') || request()->routeIs('admin.audit*') ? 'active' : '' }}">
                             <div class="sidebar-link sidebar-dropdown-toggle">
                                 <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
                                 <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
                             </div>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="{{ route('admin.reports') }}" class="submenu-link {{ request()->is('admin/reports') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.reports') }}"
+                                        class="submenu-link {{ request()->is('admin/reports') ? 'active' : '' }}">
                                         <i class="fa-solid fa-th-large"></i> {{ __('admin.reports_hub') ?? 'Reports Hub' }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.reports.warehouse') }}" class="submenu-link {{ request()->routeIs('admin.reports.warehouse*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.reports.warehouse') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.reports.warehouse*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_report') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.reports.cashier') }}" class="submenu-link {{ request()->routeIs('admin.reports.cashier*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.reports.cashier') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.reports.cashier*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_report') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.reports.finance') }}" class="submenu-link {{ request()->routeIs('admin.reports.finance*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.reports.finance') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.reports.finance*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('admin.finance_report') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route('admin.audit.index') }}" class="submenu-link {{ request()->routeIs('admin.audit.index*') ? 'active' : '' }}">
+                                    <a href="{{ route('admin.audit.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.audit.index*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-clipboard-list"></i> {{ __('admin.logs_report') }}
                                     </a>
                                 </li>
@@ -717,7 +737,7 @@
             });
 
             // Ensure active dropdowns are open on load
-            document.addEventListener('DOMContentLoaded', function() {
+            document.addEventListener('DOMContentLoaded', function () {
                 const activeSubmenuLink = document.querySelector('.submenu-link.active');
                 if (activeSubmenuLink) {
                     const parentDropdown = activeSubmenuLink.closest('.sidebar-dropdown');

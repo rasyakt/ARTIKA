@@ -2,15 +2,15 @@
 
 @section('content')
     <div class="container-fluid py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
                 <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
                         class="fa-solid fa-truck me-2"></i>{{ __('admin.supplier_management') }}</h2>
                 <p class="text-muted mb-0">{{ __('admin.manage_suppliers_contacts') }}</p>
             </div>
-            <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addSupplierModal"
-                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
-                <span style="font-size: 1.25rem;">+</span> {{ __('admin.add_supplier') }}
+            <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addSupplierModal"
+                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_supplier') }}
             </button>
         </div>
 

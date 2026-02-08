@@ -3,13 +3,14 @@
 @section('content')
     <div class="container-fluid py-4">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
             <h4 class="fw-bold mb-0" style="color: #6f5849;">
                 <i class="fa-solid fa-folder me-2"></i>{{ __('common.categories') }}
             </h4>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal"
-                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
-                <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_category') }}
+            <button class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
+                data-bs-target="#addCategoryModal"
+                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
+                <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_category') }}
             </button>
         </div>
 
@@ -97,9 +98,10 @@
                             <i class="fa-solid fa-folder"></i>
                         </div>
                         <p class="text-muted mb-3">{{ __('admin.no_categories') }}</p>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal"
-                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600;">
-                            <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_first_category') }}
+                        <button class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
+                            data-bs-target="#addCategoryModal"
+                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600; height: fit-content;">
+                            <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_first_category') }}
                         </button>
                     </div>
                 @endif

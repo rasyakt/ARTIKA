@@ -27,7 +27,7 @@
         <!-- Statistics Cards -->
         <div class="row g-4 mb-4">
             <!-- Total Sales -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
@@ -46,7 +46,7 @@
             </div>
 
             <!-- Total Transactions -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
@@ -65,7 +65,7 @@
             </div>
 
             <!-- Total Products -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
@@ -84,7 +84,7 @@
             </div>
 
             <!-- Total Suppliers -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
@@ -106,7 +106,7 @@
         <!-- Charts Row -->
         <div class="row g-4 mb-4">
             <!-- Sales Chart -->
-            <div class="col-md-8">
+            <div class="col-xl-8">
                 <div class="card shadow-sm h-100">
                     <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
@@ -131,7 +131,7 @@
             </div>
 
             <!-- Top Products -->
-            <div class="col-md-4">
+            <div class="col-xl-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">

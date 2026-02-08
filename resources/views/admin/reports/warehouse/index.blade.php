@@ -43,7 +43,7 @@
                 <div class="card-body p-4">
                     <form action="{{ route('admin.reports.warehouse') }}" method="GET" class="row g-3 align-items-end">
                         <!-- Date Row -->
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="period" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-calendar me-1" style="color: #c17a5c;"></i> {{ __('admin.quick_period') }}
                             </label>
@@ -54,13 +54,13 @@
                                 <option value="year" {{ $period == 'year' ? 'selected' : '' }}>{{ __('admin.this_year') }}</option>
                             </select>
                         </div>
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="start_date" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.start_date') }}
                             </label>
                             <input type="date" class="form-select" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                         </div>
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="end_date" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.end_date') }}
                             </label>
@@ -68,7 +68,7 @@
                         </div>
 
                         <!-- Info Row -->
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="category_id" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-list me-1" style="color: #c17a5c;"></i> {{ __('common.category') }}
                             </label>
@@ -82,7 +82,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="stock_status" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-layer-group me-1" style="color: #c17a5c;"></i> {{ __('admin.stock_status') }}
                             </label>
@@ -96,7 +96,7 @@
                                     {{ __('admin.available') }}</option>
                             </select>
                         </div>
-                        <div class="col-lg-2 col-md-4 d-flex gap-2">
+                        <div class="col-xl-2 col-lg-4 col-md-6 d-flex gap-2">
                             <button type="submit" class="btn btn-brown flex-grow-1 fw-bold"
                                 style="border-radius: 8px; padding: 0.6rem;">
                                 <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}

@@ -53,7 +53,7 @@
         <div class="card shadow-sm mb-4">
             <div class="card-body p-4">
                 <form action="{{ route('admin.reports.cashier') }}" method="GET" class="row g-3 align-items-end">
-                    <div class="col-lg-2 col-md-4">
+                    <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="period" class="form-label text-dark fw-semibold">
                             <i class="fa-solid fa-calendar me-1" style="color: #c17a5c;"></i> {{ __('admin.quick_period') }}
                         </label>
@@ -64,25 +64,25 @@
                             <option value="year" {{ $period == 'year' ? 'selected' : '' }}>{{ __('admin.this_year') }}</option>
                         </select>
                     </div>
-                    <div class="col-lg-2 col-md-4">
+                    <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="start_date" class="form-label text-dark fw-semibold">
                             <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.start_date') }}
                         </label>
                         <input type="date" class="form-select" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                     </div>
-                    <div class="col-lg-2 col-md-4">
+                    <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="end_date" class="form-label text-dark fw-semibold">
                             <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.end_date') }}
                         </label>
                         <input type="date" class="form-select" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
                     </div>
-                    <div class="col-lg-2 col-md-6">
+                    <div class="col-xl-2 col-lg-6 col-md-6">
                         <label for="search" class="form-label text-dark fw-semibold">
                             <i class="fa-solid fa-user me-1" style="color: #c17a5c;"></i> {{ __('common.user') }}
                         </label>
                         <input type="text" name="search" class="form-control" placeholder="NIS/Username/Nama" value="{{ $search }}">
                     </div>
-                    <div class="col-lg-2 col-md-6">
+                    <div class="col-xl-2 col-lg-6 col-md-6">
                         <label for="action" class="form-label text-dark fw-semibold">
                             <i class="fa-solid fa-clipboard-list me-1" style="color: #c17a5c;"></i> {{ __('admin.action') }}
                         </label>
@@ -93,7 +93,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-2 col-md-12 d-flex gap-2">
+                    <div class="col-xl-2 col-lg-12 col-md-12 d-flex gap-2">
                         <button type="submit" class="btn btn-brown flex-grow-1 fw-bold" style="border-radius: 8px; padding: 0.6rem;">
                             <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                         </button>
