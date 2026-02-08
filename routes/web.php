@@ -111,6 +111,10 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'update'])->name('promos.update');
         Route::delete('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'destroy'])->name('promos.delete');
         Route::post('/promos/{id}/toggle', [\App\Http\Controllers\PromoController::class, 'toggleStatus'])->name('promos.toggle');
+
+        // Settings Management
+        Route::get('/settings', [\App\Http\Controllers\AdminSettingController::class, 'index'])->name('settings');
+        Route::post('/settings', [\App\Http\Controllers\AdminSettingController::class, 'update'])->name('settings.update');
     });
 
     // Cashier Routes (POS)

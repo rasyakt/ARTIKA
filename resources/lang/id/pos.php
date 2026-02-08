@@ -16,6 +16,7 @@ return [
     'cash_amount' => 'Jumlah Uang',
     'cancel' => 'Batal',
     'confirm' => 'Konfirmasi',
+    'scan_barcode' => 'Scan Barcode',
     'confirm_clear_cart' => 'Yakin ingin menghapus semua item?',
     'select_payment_method' => 'Pilih metode pembayaran',
     'enter_cash_amount' => 'Masukkan jumlah uang',
@@ -102,4 +103,6 @@ return [
     'insufficient_stock' => 'Stok tidak mencukupi!',
     'stock_limit_reached' => 'Batas stok tercapai untuk produk ini.',
     'available_stock' => 'Stok tersedia',
+    'barcode_scanned' => 'Barcode Berhasil Di-scan!',
+    'product_found' => 'Produk Ditemukan!',
 ];

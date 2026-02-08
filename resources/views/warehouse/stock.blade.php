@@ -10,10 +10,26 @@
 
         <!-- Stock Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-            <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3"
+                style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                 <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i
                         class="fa-solid fa-clipboard-list me-2"></i>{{ __('warehouse.stock_levels') }}
                 </h5>
+                <div class="d-flex align-items-center">
+                    <form action="{{ route('warehouse.stock') }}" method="GET" class="me-2">
+                        <div class="input-group">
+                            <input type="text" name="search" id="warehouseSearchInput" class="form-control form-control-sm"
+                                placeholder="{{ __('common.search_placeholder') }}" value="{{ $search ?? '' }}"
+                                style="border-radius: {{ App\Models\Setting::get('enable_camera', true) ? '10px 0 0 10px' : '10px' }}; border: 1px solid #e0cec7; min-width: 200px; {{ App\Models\Setting::get('enable_camera', true) ? 'border-right: none;' : '' }}">
+                            @if(App\Models\Setting::get('enable_camera', true))
+                                <button class="btn btn-sm btn-outline-secondary" type="button" id="btnScanner"
+                                    style="border: 1px solid #e0cec7; border-left: none; border-radius: 0 10px 10px 0; background: #fdf8f6; color: #6f5849;">
+                                    <i class="fa-solid fa-camera"></i>
+                                </button>
+                            @endif
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -226,6 +242,64 @@
         let currentProductId = null;
 
         document.addEventListener('DOMContentLoaded', function () {
+            // Scanner Integration
+            const btnScanner = document.getElementById('btnScanner');
+            if (btnScanner) {
+                btnScanner.addEventListener('click', function () {
+                    startArtikaScanner(function (barcode) {
+                        // 1. Try to find the barcode in the current table rows
+                        const rows = document.querySelectorAll('tbody tr');
+                        let found = false;
+
+                        rows.forEach(row => {
+                            const rowBarcode = row.querySelector('.text-muted')?.textContent?.trim();
+                            if (rowBarcode === barcode) {
+                                found = true;
+                                // Find the adjustment button in this row and click it
+                                const adjustBtn = row.querySelector('[data-bs-target="#adjustStockModal"]');
+                                if (adjustBtn) {
+                                    adjustBtn.click();
+                                    ArtikaToast.fire({
+                                        icon: 'success',
+                                        title: '{{ __("pos.product_found") ?? "Product Found!" }}'
+                                    });
+                                }
+                            }
+                        });
+
+                        // 2. If not found on current page, search for it
+                        if (!found) {
+                            const input = document.getElementById('warehouseSearchInput');
+                            input.value = barcode;
+                            // Add a flag to URL so we know to auto-open the modal after reload
+                            const form = input.form;
+                            const hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = 'auto_open';
+                            hiddenInput.value = '1';
+                            form.appendChild(hiddenInput);
+                            form.submit();
+                        }
+                    });
+                });
+            }
+
+            // Auto-open modal after search if auto_open flag is present
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('auto_open') === '1' && urlParams.get('search')) {
+                const searchBarcode = urlParams.get('search');
+                setTimeout(() => {
+                    const rows = document.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        const rowBarcode = row.querySelector('.text-muted')?.textContent?.trim();
+                        if (rowBarcode === searchBarcode) {
+                            const adjustBtn = row.querySelector('[data-bs-target="#adjustStockModal"]');
+                            if (adjustBtn) adjustBtn.click();
+                        }
+                    });
+                }, 500);
+            }
+
             var adjustStockModal = document.getElementById('adjustStockModal');
             if (adjustStockModal) {
                 adjustStockModal.addEventListener('show.bs.modal', function (event) {

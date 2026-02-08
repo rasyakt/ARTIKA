@@ -346,4 +346,14 @@ return [
     'return_processed_success' => 'Retur berhasil diproses dan stok telah diperbarui.',
     'cannot_return_rolled_back' => 'Tidak dapat melakukan retur pada transaksi yang telah dibatalkan.',
     'return_qty_exceeds' => 'Jumlah retur melebihi jumlah yang terjual.',
+
+    // Settings
+    'settings_updated' => 'Pengaturan berhasil diperbarui.',
+    'settings_description' => 'Kelola fitur aplikasi dan konfigurasi sistem.',
+    'feature_management' => 'Manajemen Fitur',
+    'camera_scanner' => 'Scanner Kamera',
+    'camera_scanner_hint' => 'Aktifkan atau nonaktifkan pemindaian barcode berbasis kamera di panel Admin dan Gudang.',
+    'settings_applied_here_are_global_and_will_affect_all_admin_manager_and_warehouse_users' => 'Pengaturan yang diterapkan di sini bersifat global dan akan memengaruhi semua pengguna Admin, Manajer, dan Gudang.',
+    'disabling_features_may_improve_performance_on_older_devices_but_will_limit_functionality_for_newer_tablets' => 'Menonaktifkan fitur dapat meningkatkan kinerja pada perangkat lama tetapi akan membatasi fungsionalitas untuk tablet baru.',
+    'more_settings_will_be_available_in_future_updates' => 'Pengaturan lainnya akan tersedia di pembaruan mendatang.',
 ];

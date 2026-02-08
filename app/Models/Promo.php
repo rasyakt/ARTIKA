@@ -35,4 +35,34 @@ class Promo extends Model
     {
         return $this->belongsTo(Category::class);
     }
+
+    /**
+     * Scope a query to only include active and non-expired promos.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true)
+            ->whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now());
+    }
+
+    /**
+     * Scope a query to include promos that should be deactivated (expired but still is_active).
+     */
+    public function scopeExpired($query)
+    {
+        return $query->where('is_active', true)
+            ->whereDate('end_date', '<', now());
+    }
+
+    /**
+     * Check if the promo is currently valid.
+     */
+    public function isValid()
+    {
+        $now = now();
+        return $this->is_active &&
+            \Carbon\Carbon::parse($this->start_date)->startOfDay()->lte($now) &&
+            \Carbon\Carbon::parse($this->end_date)->endOfDay()->gte($now);
+    }
 }

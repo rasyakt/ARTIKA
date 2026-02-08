@@ -99,13 +99,22 @@ class WarehouseController extends Controller
         return view('warehouse.low-stock', compact('lowStockItems', 'criticalCount', 'lowCount', 'totalAlerts'));
     }
 
-    public function stockManagement()
+    public function stockManagement(Request $request)
     {
-        $stocks = Stock::with(['product.category'])
-            ->orderBy('quantity', 'asc')
-            ->paginate(10);
+        $search = $request->get('search');
 
-        return view('warehouse.stock', compact('stocks'));
+        $stocks = Stock::with(['product.category'])
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('product', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('barcode', 'like', "%{$search}%");
+                });
+            })
+            ->orderBy('quantity', 'asc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('warehouse.stock', compact('stocks', 'search'));
     }
 
     public function stockMovements()

@@ -35,11 +35,19 @@
                             <div class="mb-4">
                                 <label for="barcode" class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.barcode') }}
                                     *</label>
-                                <input type="text" class="form-control @error('barcode') is-invalid @enderror" id="barcode"
-                                    name="barcode" value="{{ old('barcode') }}" placeholder="{{ __('common.barcode_placeholder') }}" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                <div class="input-group">
+                                    <input type="text" class="form-control @error('barcode') is-invalid @enderror" id="barcode"
+                                        name="barcode" value="{{ old('barcode') }}" placeholder="{{ __('common.barcode_placeholder') }}" required
+                                        style="border-radius: {{ App\Models\Setting::get('enable_camera', true) ? '12px 0 0 12px' : '12px' }}; border: 2px solid #e0cec7; padding: 0.75rem 1rem; {{ App\Models\Setting::get('enable_camera', true) ? 'border-right: none;' : '' }}">
+                                    @if(App\Models\Setting::get('enable_camera', true))
+                                        <button class="btn btn-outline-secondary" type="button" id="btnScanner"
+                                            style="border: 2px solid #e0cec7; border-left: none; border-radius: 0 12px 12px 0; background: #fdf8f6; color: #6f5849;">
+                                            <i class="fa-solid fa-camera"></i>
+                                        </button>
+                                    @endif
+                                </div>
                                 @error('barcode')
-                                    <div class="invalid-feedback">{{ $message }}</div>
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                                 <small class="text-muted">{{ __('common.barcode_help') }}</small>
                             </div>
@@ -158,5 +166,17 @@
 
         costInput.addEventListener('input', updateMargin);
         priceInput.addEventListener('input', updateMargin);
+
+        // Scanner Integration
+        document.getElementById('btnScanner').addEventListener('click', function() {
+            startArtikaScanner(function(barcode) {
+                document.getElementById('barcode').value = barcode;
+                // Optional: Provide visual feedback or sound
+                ArtikaToast.fire({
+                    icon: 'success',
+                    title: '{{ __("pos.barcode_scanned") ?? "Barcode Scanned!" }}'
+                });
+            });
+        });
     </script>
 @endsection

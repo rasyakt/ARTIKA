@@ -500,8 +500,8 @@
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar (only for admin and warehouse) -->
-            @if(Auth::user()->role->name === 'admin' || Auth::user()->role->name === 'warehouse')
+            <!-- Sidebar (only for admin, manager and warehouse) -->
+            @if(in_array(Auth::user()->role->name, ['admin', 'manager', 'warehouse']))
                 <div class="col-md-2 sidebar px-0" id="sidebar">
                     <!-- Mobile Sidebar Header -->
                     <div class="sidebar-header">
@@ -509,7 +509,7 @@
                         <button class="sidebar-close" id="sidebarClose">×</button>
                     </div>
 
-                    @if(Auth::user()->role->name === 'admin')
+                    @if(in_array(Auth::user()->role->name, ['admin', 'manager']))
                         <a href="{{ route('admin.dashboard') }}"
                             class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
@@ -665,6 +665,11 @@
                             </ul>
                         </div>
 
+                        <a href="{{ route('admin.settings') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-gear"></i> {{ __('menu.settings') ?? 'Settings' }}
+                        </a>
+
                         <hr style="margin: 0.5rem 0; opacity: 0.1;">
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                             @csrf
@@ -709,6 +714,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Shared Scanner Modal -->
+        @include('components.scanner-modal')
 
         <!-- Sidebar Overlay (Mobile) -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>

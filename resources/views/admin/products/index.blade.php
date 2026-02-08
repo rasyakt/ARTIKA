@@ -80,11 +80,18 @@
 
 			<div class="d-flex align-items-center">
 				<form action="{{ route('admin.products') }}" method="GET" class="search-filter me-3">
-					<div class="position-relative">
+					<div class="position-relative d-flex align-items-center">
 						<i class="fa-solid fa-magnifying-glass position-absolute"
 							style="left: 1rem; top: 50%; transform: translateY(-50%); opacity: 0.5;"></i>
-						<input name="search" class="search-input ps-5" type="text"
-							placeholder="{{ __('common.search_placeholder') }}" value="{{ request('search') }}">
+						<input name="search" id="searchInput" class="search-input ps-5" type="text"
+							placeholder="{{ __('common.search_placeholder') }}" value="{{ request('search') }}"
+							style="border-radius: {{ App\Models\Setting::get('enable_camera', true) ? '12px 0 0 12px' : '12px' }}; {{ App\Models\Setting::get('enable_camera', true) ? 'border-right: none;' : '' }}">
+						@if(App\Models\Setting::get('enable_camera', true))
+							<button class="btn btn-outline-secondary" type="button" id="btnScanner"
+								style="border: 1px solid #e9e2df; border-left: none; border-radius: 0 12px 12px 0; background: #fff; color: #6f5849; padding: 0.5rem 0.75rem;">
+								<i class="fa-solid fa-camera"></i>
+							</button>
+						@endif
 					</div>
 					<select name="category_id" class="form-select category-select" onchange="this.form.submit()">
 						<option value="">{{ __('common.all_categories') }}</option>
@@ -249,6 +256,19 @@
 					searchInput.value = '';
 					searchInput.value = val;
 				}
+			}
+
+			// Scanner Integration
+			const btnScanner = document.getElementById('btnScanner');
+			if (btnScanner) {
+				btnScanner.addEventListener('click', function () {
+					startArtikaScanner(function (barcode) {
+						const input = document.getElementById('searchInput');
+						input.value = barcode;
+						// Submit the form automatically
+						input.form.submit();
+					});
+				});
 			}
 		});
 

@@ -307,4 +307,7 @@ return [
     'active_periods' => 'Active Period',
     'no_promos_found' => 'No active promotion programs found',
     'add_first_promo' => 'Create First Promo',
+    'more_settings_will_be_available_in_future_updates' => 'More settings will be available in future updates.',
+    'disabling_features_may_improve_performance_on_older_devices_but_will_limit_functionality_for_newer_tablets' => 'Disabling features may improve performance on older devices but will limit functionality for newer tablets.',
+    'settings_applied_here_are_global_and_will_affect_all_admin_manager_and_warehouse_users' => 'Settings applied here are global and will affect all Admin, Manager, and Warehouse users.',
 ];
