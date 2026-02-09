@@ -1657,12 +1657,14 @@
                                 <span class="fw-600">Riwayat Transaksi</span>
                             </a>
                         </li>
-                        <li>
-                            <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ route('pos.logs') }}">
-                                <i class="fa-solid fa-list-check me-3 text-primary opacity-75"></i>
-                                <span class="fw-600">Log Aktivitas</span>
-                            </a>
-                        </li>
+                        @if(App\Models\Setting::get('cashier_enable_audit_logs', true))
+                            <li>
+                                <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ route('pos.logs') }}">
+                                    <i class="fa-solid fa-list-check me-3 text-primary opacity-75"></i>
+                                    <span class="fw-600">Log Aktivitas</span>
+                                </a>
+                            </li>
+                        @endif
                         <li class="border-top mt-1">
                             <button type="button" class="dropdown-item py-3 px-3 d-flex align-items-center text-danger"
                                 id="btnLogout">

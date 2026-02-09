@@ -132,7 +132,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Cashier Routes (POS)
     Route::middleware(['role:cashier'])->prefix('pos')->name('pos.')->group(function () {
-        Route::get('/logs', [\App\Http\Controllers\PosController::class, 'logs'])->name('logs');
+        Route::get('/logs', [\App\Http\Controllers\PosController::class, 'logs'])
+            ->middleware(['feature:cashier_enable_audit_logs'])
+            ->name('logs');
         Route::get('/history', [\App\Http\Controllers\PosController::class, 'history'])->name('history');
         Route::get('/', [\App\Http\Controllers\PosController::class, 'index'])->name('index');
         Route::get('/scanner', [\App\Http\Controllers\PosController::class, 'scanner'])->name('scanner');
