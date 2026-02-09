@@ -80,9 +80,10 @@ class SuperadminController extends Controller
             ]);
 
             // Log the secret link for the developer
-            \Illuminate\Support\Facades\Log::info("Maintenance Mode enabled. Access via: " . url('/' . $token));
+            $secretUrl = url('/' . $token);
+            \Illuminate\Support\Facades\Log::warning("Maintenance Mode enabled by Superadmin. Bypass access via: " . $secretUrl);
 
-            return back()->with('success', 'Application is now in MAINTENANCE MODE. Secret token: ' . $token);
+            return back()->with('success', 'Application is now in MAINTENANCE MODE. Your secret bypass link is: ' . $secretUrl);
         }
     }
 
@@ -92,10 +93,22 @@ class SuperadminController extends Controller
     private function getDbVersion()
     {
         try {
-            $results = \Illuminate\Support\Facades\DB::select('SELECT VERSION() as version');
-            return $results[0]->version ?? 'Unknown';
+            $driver = config('database.default');
+
+            if ($driver === 'mysql') {
+                $results = \Illuminate\Support\Facades\DB::select('SELECT VERSION() as version');
+            } elseif ($driver === 'pgsql') {
+                $results = \Illuminate\Support\Facades\DB::select('SELECT version()');
+            } elseif ($driver === 'sqlite') {
+                $results = \Illuminate\Support\Facades\DB::select('SELECT sqlite_version() as version');
+            } else {
+                return 'Driver: ' . $driver;
+            }
+
+            $resultsArray = (array) ($results[0] ?? []);
+            return reset($resultsArray) ?: 'Unknown';
         } catch (\Exception $e) {
-            return 'Unknown';
+            return 'Error: ' . substr($e->getMessage(), 0, 30);
         }
     }
 
@@ -104,12 +117,10 @@ class SuperadminController extends Controller
      */
     public function clearCache()
     {
-        Artisan::call('cache:clear');
-        Artisan::call('view:clear');
-        Artisan::call('config:clear');
-        Artisan::call('route:clear');
+        // optimize:clear is more thorough as it clears everything in one go
+        Artisan::call('optimize:clear');
 
-        return back()->with('success', 'System cache cleared successfully!');
+        return back()->with('success', 'All system caches have been cleared successfully!');
     }
 
     /**

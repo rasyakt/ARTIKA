@@ -11,6 +11,16 @@
             </div>
         </div>
 
+        @if($systemInfo['is_maintenance'])
+            <div class="alert alert-warning border-0 shadow-sm mb-4"
+                style="border-radius: 12px; border-left: 5px solid #ffc107;">
+                <h6 class="fw-bold mb-1"><i class="fa-solid fa-triangle-exclamation me-2"></i>Maintenance Mode is Active</h6>
+                <p class="small mb-0">The application is currently locked. To access the site, you must use your secret token.
+                    If you lose it, check the latest entries in the <strong>System Logs</strong> or run
+                    <code>php artisan up</code> in the terminal.</p>
+            </div>
+        @endif
+
         @if(session('success'))
             <div class="alert alert-success border-0 shadow-sm mb-4" style="border-radius: 12px;">
                 <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
