@@ -34,6 +34,7 @@ return [
     'weekly' => 'Mingguan',
     'monthly' => 'Bulanan',
     'yearly' => 'Tahunan',
+    'expiry_date' => 'Tanggal Kadaluarsa',
     'search_placeholder' => 'Cari produk berdasarkan nama atau barcode...',
     'all_categories' => 'Semua Kategori',
     'add_new' => 'Tambah Baru',

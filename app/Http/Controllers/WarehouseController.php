@@ -154,6 +154,10 @@ class WarehouseController extends Controller
 
     public function adjustStock(Request $request)
     {
+        if (!\App\Models\Setting::get('warehouse_enable_adjust', true)) {
+            return response()->json(['success' => false, 'message' => 'Stock adjustment is currently disabled by administrator.'], 403);
+        }
+
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'stock_id' => 'nullable|exists:stocks,id',
@@ -269,6 +273,10 @@ class WarehouseController extends Controller
     public function destroyStock(Request $request, $id)
     {
         $stock = Stock::with('product')->findOrFail($id);
+
+        if (!\App\Models\Setting::get('warehouse_enable_scrap', true)) {
+            return response()->json(['success' => false, 'message' => 'Scrap/Delete batch is currently disabled by administrator.'], 403);
+        }
 
         $request->validate([
             'reason' => 'required|string|max:255'

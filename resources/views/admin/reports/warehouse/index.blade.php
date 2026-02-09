@@ -410,6 +410,7 @@
             </div>
 
             <!-- Audit Logs Section -->
+            @if(App\Models\Setting::get('admin_enable_audit_logs', true))
             <div class="card shadow-sm mb-4" id="audit-section">
                 <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                     <h5 class="mb-0 fw-bold" style="color: #6f5849;">
@@ -465,6 +466,7 @@
                     {{ $auditLogs->fragment('audit-section')->links('vendor.pagination.custom-brown') }}
                 </div>
             </div>
+            @endif
         </div>
     <!-- PDF Customization Modal -->
     <div class="modal fade" id="exportPdfModal" tabindex="-1" aria-labelledby="exportPdfModalLabel" aria-hidden="true">

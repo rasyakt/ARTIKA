@@ -22,33 +22,55 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Roles
-        $adminRole = Role::create(['name' => 'admin', 'description' => 'Administrator']);
-        $managerRole = Role::create(['name' => 'manager', 'description' => 'Kepala Toko']);
-        $cashierRole = Role::create(['name' => 'cashier', 'description' => 'Kasir']);
-        $warehouseRole = Role::create(['name' => 'warehouse', 'description' => 'Staff Gudang']);
+        $superadminRole = Role::firstOrCreate(['name' => 'superadmin'], [
+            'description' => 'Developer / System Administrator with full access to technical tools.'
+        ]);
+        $adminRole = Role::firstOrCreate(['name' => 'admin'], ['description' => 'Administrator']);
+        $managerRole = Role::firstOrCreate(['name' => 'manager'], ['description' => 'Kepala Toko']);
+        $cashierRole = Role::firstOrCreate(['name' => 'cashier'], ['description' => 'Kasir']);
+        $warehouseRole = Role::firstOrCreate(['name' => 'warehouse'], ['description' => 'Staff Gudang']);
 
         // Users
-        User::create([
-            'name' => 'Admin',
-            'username' => 'admin',
-            'password' => bcrypt('password'), // password
-            'role_id' => $adminRole->id,
-        ]);
+        // 1. Superadmin
+        User::firstOrCreate(
+            ['username' => 'superadmin'],
+            [
+                'name' => 'Superadmin Developer',
+                'password' => bcrypt('superadmin nih bos senggol dong'),
+                'role_id' => $superadminRole->id,
+            ]
+        );
 
-        User::create([
-            'name' => 'Kasir 01',
-            'username' => 'kasir1',
-            'nis' => '12345',
-            'password' => bcrypt('password'),
-            'role_id' => $cashierRole->id,
-        ]);
+        // 2. Admin
+        User::firstOrCreate(
+            ['username' => 'admin'],
+            [
+                'name' => 'Admin',
+                'password' => bcrypt('password'), // password
+                'role_id' => $adminRole->id,
+            ]
+        );
 
-        User::create([
-            'name' => 'Staff Gudang',
-            'username' => 'gudang',
-            'password' => bcrypt('password'),
-            'role_id' => $warehouseRole->id,
-        ]);
+        // 3. Cashier
+        User::firstOrCreate(
+            ['username' => 'kasir1'],
+            [
+                'name' => 'Kasir 01',
+                'nis' => '12345',
+                'password' => bcrypt('password'),
+                'role_id' => $cashierRole->id,
+            ]
+        );
+
+        // 4. Warehouse
+        User::firstOrCreate(
+            ['username' => 'gudang'],
+            [
+                'name' => 'Staff Gudang',
+                'password' => bcrypt('password'),
+                'role_id' => $warehouseRole->id,
+            ]
+        );
         // Categories
         $catSnack = Category::create(['name' => 'Snack', 'slug' => 'snack']);
         $catDrink = Category::create(['name' => 'Minuman', 'slug' => 'drink']);

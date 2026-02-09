@@ -252,12 +252,14 @@
                             <i class="fa-solid fa-percent me-2"></i>Diskon
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded-pill fw-bold" id="audit-tab" data-bs-toggle="tab"
-                            data-bs-target="#audit-pane" type="button" role="tab">
-                            <i class="fa-solid fa-clipboard-list me-2"></i>{{ __('admin.audit_log') }}
-                        </button>
-                    </li>
+                    @if(App\Models\Setting::get('admin_enable_audit_logs', true))
+                        <li class="nav-item flex-sm-fill text-center" role="presentation">
+                            <button class="nav-link w-100 fw-bold py-3" id="audit-tab" data-bs-toggle="tab"
+                                data-bs-target="#audit-pane" type="button" role="tab" aria-selected="false">
+                                <i class="fa-solid fa-clipboard-list me-2"></i>{{ __('admin.audit_log') }}
+                            </button>
+                        </li>
+                    @endif
                 </ul>
             </div>
             <div class="card-body p-0">
@@ -312,7 +314,7 @@
                                                 @endif
                                             </td>
                                             <td class="text-end fw-bold" style="color: #c17a5c;">
-                                                @if($transaction->total_refunded > 0)
+                                                @if(\App\Models\Setting::get('cashier_enable_returns', true) && $transaction->total_refunded > 0)
                                                     <div class="small text-muted text-decoration-line-through">Rp
                                                         {{ number_format($transaction->total_amount, 0, ',', '.') }}
                                                     </div>
@@ -573,71 +575,73 @@
                         </div>
                     </div>
 
-                    <!-- Audit Tab -->
-                    <div class="tab-pane fade" id="audit-pane" role="tabpanel" tabindex="0">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead style="background: #fdf8f6;">
-                                    <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.user') }}</th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                            {{ __('admin.action') }}
-                                        </th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.details') }}
-                                        </th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">View</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse($auditLogs as $log)
+                    @if(App\Models\Setting::get('admin_enable_audit_logs', true))
+                        <!-- Audit Tab -->
+                        <div class="tab-pane fade" id="audit-pane" role="tabpanel" tabindex="0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead style="background: #fdf8f6;">
                                         <tr>
-                                            <td class="text-muted small">{{ $log->created_at->format('d M Y H:i') }}</td>
-                                            <td>
-                                                <div class="fw-bold" style="color: #6f5849;">{{ $log->user->name ?? 'System' }}
-                                                </div>
-                                                <small class="text-muted">{{ $log->user->role->name ?? '' }}</small>
-                                            </td>
-                                            <td class="text-center"><span class="badge"
-                                                    style="background: #e0cec7; color: #6f5849;">{{ strtoupper($log->action) }}</span>
-                                            </td>
-                                            <td><span class="small">{{ Str::limit($log->notes, 40) }}</span></td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-brown rounded-circle"
-                                                    data-bs-toggle="modal" data-bs-target="#detailModal"
-                                                    data-id="{{ $log->id }}" data-user="{{ $log->user?->name ?? 'System' }}"
-                                                    data-role="{{ $log->user?->role->name ?? '' }}"
-                                                    data-nis="{{ $log->user?->nis ?? '-' }}"
-                                                    data-username="{{ $log->user?->username ?? '-' }}"
-                                                    data-action="{{ $log->action }}" data-model="{{ $log->model_type }}"
-                                                    data-model-id="{{ $log->model_id }}"
-                                                    data-amount="{{ $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '-' }}"
-                                                    data-method="{{ $log->payment_method ?? '-' }}"
-                                                    data-ip="{{ $log->ip_address }}" data-mac="{{ $log->mac_address ?? '-' }}"
-                                                    data-device="{{ $log->device_name ?? 'Unknown' }}"
-                                                    data-agent="{{ $log->user_agent }}"
-                                                    data-date="{{ $log->created_at->format('d M Y H:i:s') }}"
-                                                    data-changes="{{ json_encode($log->changes ?? []) }}"
-                                                    data-notes="{{ $log->notes ?? '-' }}">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
-                                            </td>
+                                            <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
+                                            <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.user') }}</th>
+                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                                {{ __('admin.action') }}
+                                            </th>
+                                            <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.details') }}
+                                            </th>
+                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849;">View</th>
                                         </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center text-muted py-5"><i
-                                                    class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i><br>{{ __('admin.no_audit_logs') }}
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        @forelse($auditLogs as $log)
+                                            <tr>
+                                                <td class="text-muted small">{{ $log->created_at->format('d M Y H:i') }}</td>
+                                                <td>
+                                                    <div class="fw-bold" style="color: #6f5849;">{{ $log->user->name ?? 'System' }}
+                                                    </div>
+                                                    <small class="text-muted">{{ $log->user->role->name ?? '' }}</small>
+                                                </td>
+                                                <td class="text-center"><span class="badge"
+                                                        style="background: #e0cec7; color: #6f5849;">{{ strtoupper($log->action) }}</span>
+                                                </td>
+                                                <td><span class="small">{{ Str::limit($log->notes, 40) }}</span></td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-sm btn-outline-brown rounded-circle"
+                                                        data-bs-toggle="modal" data-bs-target="#detailModal"
+                                                        data-id="{{ $log->id }}" data-user="{{ $log->user?->name ?? 'System' }}"
+                                                        data-role="{{ $log->user?->role->name ?? '' }}"
+                                                        data-nis="{{ $log->user?->nis ?? '-' }}"
+                                                        data-username="{{ $log->user?->username ?? '-' }}"
+                                                        data-action="{{ $log->action }}" data-model="{{ $log->model_type }}"
+                                                        data-model-id="{{ $log->model_id }}"
+                                                        data-amount="{{ $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '-' }}"
+                                                        data-method="{{ $log->payment_method ?? '-' }}"
+                                                        data-ip="{{ $log->ip_address }}" data-mac="{{ $log->mac_address ?? '-' }}"
+                                                        data-device="{{ $log->device_name ?? 'Unknown' }}"
+                                                        data-agent="{{ $log->user_agent }}"
+                                                        data-date="{{ $log->created_at->format('d M Y H:i:s') }}"
+                                                        data-changes="{{ json_encode($log->changes ?? []) }}"
+                                                        data-notes="{{ $log->notes ?? '-' }}">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="text-center text-muted py-5"><i
+                                                        class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i><br>{{ __('admin.no_audit_logs') }}
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="px-3 py-2 border-top bg-white d-flex justify-content-end"
+                                style="border-radius: 0 0 16px 16px;">
+                                {{ $auditLogs->fragment('audit-pane')->links('vendor.pagination.custom-brown') }}
+                            </div>
                         </div>
-                        <div class="px-3 py-2 border-top bg-white d-flex justify-content-end"
-                            style="border-radius: 0 0 16px 16px;">
-                            {{ $auditLogs->fragment('audit-pane')->links('vendor.pagination.custom-brown') }}
-                        </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -727,10 +731,12 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0">
-                    <button type="button" id="btn-initiate-return-audit" class="btn btn-outline-danger px-4"
-                        style="border-radius: 10px; display: none;">
-                        <i class="fa-solid fa-rotate-left me-2"></i>{{ __('admin.return_items') }}
-                    </button>
+                    @if(\App\Models\Setting::get('cashier_enable_returns', true))
+                        <button type="button" id="btn-initiate-return-audit" class="btn btn-outline-danger px-4"
+                            style="border-radius: 10px; display: none;">
+                            <i class="fa-solid fa-rotate-left me-2"></i>{{ __('admin.return_items') }}
+                        </button>
+                    @endif
                     <button type="button" class="btn btn-brown px-4" style="border-radius: 10px;"
                         data-bs-dismiss="modal">{{ __('common.close') }}</button>
                 </div>
@@ -814,11 +820,13 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 p-4">
-                    <button type="button" class="btn btn-outline-danger px-4 me-auto d-none" id="btn-initiate-return-tx"
-                        style="border-radius: 10px;">
-                        <i class="fa-solid fa-rotate-left me-2"></i>{{ __('admin.return_items') }}
-                    </button>
-                    <button type="button" class="btn btn-outline-brown px-4" id="btn-print-receipt"
+                    @if(\App\Models\Setting::get('cashier_enable_returns', true))
+                        <button type="button" class="btn btn-outline-danger px-4 me-auto d-none" id="btn-initiate-return-tx"
+                            style="border-radius: 10px;">
+                            <i class="fa-solid fa-rotate-left me-2"></i>{{ __('admin.return_items') }}
+                        </button>
+                    @endif
+                    drum <button type="button" class="btn btn-outline-brown px-4" id="btn-print-receipt"
                         style="border-radius: 10px;">
                         <i class="fa-solid fa-print me-2"></i>Cetak Struk
                     </button>
@@ -1189,27 +1197,27 @@
                                         const retQty = parseInt(item.returned_quantity) || 0;
                                         const availableToReturn = qty - retQty;
                                         returnItemsHtml += `
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <div class="fw-bold">${item.name}</div>
-                                                                                        <div class="small text-muted">Rp ${formatIDR(item.price)} / unit</div>
-                                                                                        ${retQty > 0 ? `<div class="badge bg-light text-brown border" style="font-size: 0.65rem;">${retQty} Terkumpul</div>` : ''}
-                                                                                        <input type="hidden" name="items[${index}][product_id]" value="${item.product_id}">
-                                                                                    </td>
-                                                                                    <td class="text-center">
-                                                                                        ${availableToReturn}
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <div class="input-group input-group-sm">
-                                                                                            <button type="button" class="btn btn-outline-brown btn-qty" data-type="minus" ${availableToReturn <= 0 ? 'disabled' : ''}>-</button>
-                                                                                            <input type="number" name="items[${index}][quantity]" class="form-control text-center input-qty" 
-                                                                                                value="0" min="0" max="${availableToReturn}" data-price="${item.price}" readonly>
-                                                                                            <button type="button" class="btn btn-outline-brown btn-qty" data-type="plus" ${availableToReturn <= 0 ? 'disabled' : ''}>+</button>
-                                                                                            </div>
-                                                                                    </td>
-                                                                                    <td class="text-end fw-bold text-brown">Rp <span class="item-refund-est">0</span></td>
-                                                                                </tr>
-                                                                            `;
+                                                                                        <tr>
+                                                                                            <td>
+                                                                                                <div class="fw-bold">${item.name}</div>
+                                                                                                <div class="small text-muted">Rp ${formatIDR(item.price)} / unit</div>
+                                                                                                ${retQty > 0 ? `<div class="badge bg-light text-brown border" style="font-size: 0.65rem;">${retQty} Terkumpul</div>` : ''}
+                                                                                                <input type="hidden" name="items[${index}][product_id]" value="${item.product_id}">
+                                                                                            </td>
+                                                                                            <td class="text-center">
+                                                                                                ${availableToReturn}
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <div class="input-group input-group-sm">
+                                                                                                    <button type="button" class="btn btn-outline-brown btn-qty" data-type="minus" ${availableToReturn <= 0 ? 'disabled' : ''}>-</button>
+                                                                                                    <input type="number" name="items[${index}][quantity]" class="form-control text-center input-qty" 
+                                                                                                        value="0" min="0" max="${availableToReturn}" data-price="${item.price}" readonly>
+                                                                                                    <button type="button" class="btn btn-outline-brown btn-qty" data-type="plus" ${availableToReturn <= 0 ? 'disabled' : ''}>+</button>
+                                                                                                    </div>
+                                                                                            </td>
+                                                                                            <td class="text-end fw-bold text-brown">Rp <span class="item-refund-est">0</span></td>
+                                                                                        </tr>
+                                                                                    `;
                                     });
                                     document.getElementById('return-items-body').innerHTML = returnItemsHtml;
                                     document.getElementById('return-total-refund').textContent = '0';
@@ -1238,28 +1246,28 @@
                             data.items.forEach(item => {
                                 const netQuantity = item.quantity - item.returned_quantity;
                                 itemsBody.innerHTML += `
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="fw-bold text-brown">${item.name}</div>
-                                                                                <div class="small text-muted">Rp ${formatIDR(item.price)}</div>
-                                                                            </td>
-                                                                            <td class="text-center text-brown">
-                                                                                ${item.returned_quantity > 0
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <div class="fw-bold text-brown">${item.name}</div>
+                                                                                        <div class="small text-muted">Rp ${formatIDR(item.price)}</div>
+                                                                                    </td>
+                                                                                    <td class="text-center text-brown">
+                                                                                        ${item.returned_quantity > 0
                                         ? `<span class="text-decoration-line-through text-muted small">${item.quantity}</span><br><b>${netQuantity}</b>`
                                         : `<b>${item.quantity}</b>`}
-                                                                            </td>
-                                                                            <td class="text-center text-brown">
-                                                                                ${item.returned_quantity > 0
+                                                                                    </td>
+                                                                                    <td class="text-center text-brown">
+                                                                                        ${item.returned_quantity > 0
                                         ? `<span class="text-decoration-line-through text-muted small">Rp ${formatIDR(item.subtotal)}</span><br><b>Rp ${formatIDR(netQuantity * item.price)}</b>`
                                         : `<b>Rp ${formatIDR(item.subtotal)}</b>`}
-                                                                            </td>
-                                                                            <td class="text-end">
-                                                                                ${item.returned_quantity > 0
+                                                                                    </td>
+                                                                                    <td class="text-end">
+                                                                                        ${item.returned_quantity > 0
                                         ? `<span class="badge bg-danger-soft text-danger border border-danger-subtle">- ${item.returned_quantity} Retur</span>`
                                         : '<i class="fa-solid fa-check text-success"></i>'}
-                                                                            </td>
-                                                                        </tr>
-                                                                    `;
+                                                                                    </td>
+                                                                                </tr>
+                                                                            `;
                             });
                         })
                         .catch(err => {

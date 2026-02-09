@@ -20,6 +20,7 @@ return [
     'recent_transactions' => 'Recent Transactions',
     'invoice' => 'Invoice',
     'cashier' => 'Cashier',
+    'expiry_date' => 'Expiry Date',
     'amount' => 'Amount',
     'payment' => 'Payment',
     'time' => 'Time',

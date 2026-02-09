@@ -52,6 +52,9 @@ class ReturnController extends Controller
         ]);
 
         try {
+            if (\App\Models\Setting::get('cashier_enable_returns', true) === 'false') {
+                throw new \Exception('Return functionality is currently disabled by administrator.');
+            }
             // Filter out items with quantity 0
             $items = array_filter($request->items, function ($item) {
                 return isset($item['quantity']) && $item['quantity'] > 0;

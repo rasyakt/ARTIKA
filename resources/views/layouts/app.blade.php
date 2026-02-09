@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Dashboard') - ARTIKA POS</title>
+    <title>@yield('title', 'Dashboard') - {{ App\Models\Setting::get('system_name', 'ARTIKA POS') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -459,7 +459,11 @@
             @endif
 
             <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}">
-                <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 35px; width: auto;">
+                <img src="{{ asset('img/logo2.png') }}"
+                    alt="{{ App\Models\Setting::get('system_name', 'ARTIKA Logo') }}"
+                    style="height: 35px; width: auto;">
+                <span
+                    class="ms-2 text-white fw-bold d-none d-sm-inline">{{ App\Models\Setting::get('system_name', 'ARTIKA') }}</span>
             </a>
 
             <div class="ms-auto d-flex align-items-center">
@@ -501,7 +505,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar (only for admin, manager and warehouse) -->
-            @if(in_array(Auth::user()->role->name, ['admin', 'manager', 'warehouse']))
+            @if(in_array(Auth::user()->role->name, ['superadmin', 'admin', 'warehouse']))
                 <div class="col-md-2 sidebar px-0" id="sidebar">
                     <!-- Mobile Sidebar Header -->
                     <div class="sidebar-header">
@@ -509,7 +513,7 @@
                         <button class="sidebar-close" id="sidebarClose">×</button>
                     </div>
 
-                    @if(in_array(Auth::user()->role->name, ['admin', 'manager']))
+                    @if(in_array(Auth::user()->role->name, ['superadmin', 'admin']))
                         <a href="{{ route('admin.dashboard') }}"
                             class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
@@ -535,12 +539,14 @@
                                         <i class="fa-solid fa-folder"></i> {{ __('menu.categories') }}
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="{{ route('admin.promos.index') }}"
-                                        class="submenu-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
-                                        <i class="fa-solid fa-tags"></i> {{ __('admin.promos') }}
-                                    </a>
-                                </li>
+                                @if(App\Models\Setting::get('admin_enable_promos', true))
+                                    <li>
+                                        <a href="{{ route('admin.promos.index') }}"
+                                            class="submenu-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-tags"></i> {{ __('admin.promos') }}
+                                        </a>
+                                    </li>
+                                @endif
                             </ul>
                         </div>
 
@@ -625,50 +631,71 @@
                         </div>
 
                         <!-- Reports Group -->
-                        <div
-                            class="sidebar-dropdown {{ request()->routeIs('admin.reports*') || request()->routeIs('admin.audit*') ? 'active' : '' }}">
-                            <div class="sidebar-link sidebar-dropdown-toggle">
-                                <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
-                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                        @if(App\Models\Setting::get('admin_enable_reports', true))
+                            <div
+                                class="sidebar-dropdown {{ request()->routeIs('admin.reports*') || request()->routeIs('admin.audit*') ? 'active' : '' }}">
+                                <div class="sidebar-link sidebar-dropdown-toggle">
+                                    <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
+                                    <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                                </div>
+                                <ul class="sidebar-submenu">
+                                    <li>
+                                        <a href="{{ route('admin.reports') }}"
+                                            class="submenu-link {{ request()->is('admin/reports') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-th-large"></i> {{ __('admin.reports_hub') ?? 'Reports Hub' }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.reports.warehouse') }}"
+                                            class="submenu-link {{ request()->routeIs('admin.reports.warehouse*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_report') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.reports.cashier') }}"
+                                            class="submenu-link {{ request()->routeIs('admin.reports.cashier*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_report') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.reports.finance') }}"
+                                            class="submenu-link {{ request()->routeIs('admin.reports.finance*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('admin.finance_report') }}
+                                        </a>
+                                    </li>
+                                    @if(App\Models\Setting::get('admin_enable_audit_logs', true))
+                                        <li>
+                                            <a href="{{ route('admin.audit.index') }}"
+                                                class="submenu-link {{ request()->routeIs('admin.audit.index*') ? 'active' : '' }}">
+                                                <i class="fa-solid fa-clipboard-list"></i> {{ __('admin.logs_report') }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
                             </div>
-                            <ul class="sidebar-submenu">
-                                <li>
-                                    <a href="{{ route('admin.reports') }}"
-                                        class="submenu-link {{ request()->is('admin/reports') ? 'active' : '' }}">
-                                        <i class="fa-solid fa-th-large"></i> {{ __('admin.reports_hub') ?? 'Reports Hub' }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('admin.reports.warehouse') }}"
-                                        class="submenu-link {{ request()->routeIs('admin.reports.warehouse*') ? 'active' : '' }}">
-                                        <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_report') }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('admin.reports.cashier') }}"
-                                        class="submenu-link {{ request()->routeIs('admin.reports.cashier*') ? 'active' : '' }}">
-                                        <i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_report') }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('admin.reports.finance') }}"
-                                        class="submenu-link {{ request()->routeIs('admin.reports.finance*') ? 'active' : '' }}">
-                                        <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('admin.finance_report') }}
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('admin.audit.index') }}"
-                                        class="submenu-link {{ request()->routeIs('admin.audit.index*') ? 'active' : '' }}">
-                                        <i class="fa-solid fa-clipboard-list"></i> {{ __('admin.logs_report') }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                        @endif
 
-                        <a href="{{ route('admin.settings') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-gear"></i> {{ __('menu.settings') ?? 'Settings' }}
-                        </a>
+                        @if(App\Models\Setting::get('admin_enable_camera', true))
+                            <a href="{{ route('admin.settings') }}"
+                                class="sidebar-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
+                                <i class="fa-solid fa-gear"></i> {{ __('menu.settings') ?? 'Settings' }}
+                            </a>
+                        @endif
+
+                        @if(auth()->user()->role->name === 'superadmin')
+                            <div class="sidebar-group mt-3">
+                                <span class="text-muted small px-3 text-uppercase fw-bold"
+                                    style="font-size: 0.7rem; opacity: 0.6;">System Admin</span>
+                                <a href="{{ route('superadmin.dashboard') }}"
+                                    class="sidebar-link {{ request()->is('superadmin/dashboard') || request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-code"></i> Developer Tools
+                                </a>
+                                <a href="{{ route('superadmin.settings') }}"
+                                    class="sidebar-link {{ request()->routeIs('superadmin.settings*') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-gears"></i> Advanced Settings
+                                </a>
+                            </div>
+                        @endif
 
                         <hr style="margin: 0.5rem 0; opacity: 0.1;">
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">

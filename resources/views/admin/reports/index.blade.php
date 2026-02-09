@@ -137,28 +137,30 @@
             </div>
 
             <!-- Audit Logs -->
-            <div class="col-xl-3 col-md-6">
-                <a href="{{ route('admin.audit.index') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100">
-                        <div class="card-body text-center p-4">
-                            <div class="report-icon mx-auto bg-sienna-soft">
-                                <i class="fa-solid fa-clipboard-list"></i>
+            @if(App\Models\Setting::get('admin_enable_audit_logs', true))
+                <div class="col-xl-3 col-md-6">
+                    <a href="{{ route('admin.audit.index') }}" class="text-decoration-none">
+                        <div class="card report-card shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="report-icon mx-auto bg-sienna-soft">
+                                    <i class="fa-solid fa-clipboard-list"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.logs_report') }}</h5>
+                                <p class="text-muted mb-3 small">{{ __('admin.logs_report_desc') }}</p>
+                                <ul class="list-unstyled text-start small" style="color: #78716c; font-size: 0.75rem;">
+                                    <li class="mb-1"><i
+                                            class="fa-solid fa-check text-success me-2"></i>{{ __('admin.user_management') }}
+                                    </li>
+                                    <li class="mb-1"><i
+                                            class="fa-solid fa-check text-success me-2"></i>{{ __('admin.ip_address') }}</li>
+                                    <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Security</li>
+                                    <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Tracking</li>
+                                </ul>
                             </div>
-                            <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.logs_report') }}</h5>
-                            <p class="text-muted mb-3 small">{{ __('admin.logs_report_desc') }}</p>
-                            <ul class="list-unstyled text-start small" style="color: #78716c; font-size: 0.75rem;">
-                                <li class="mb-1"><i
-                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.user_management') }}
-                                </li>
-                                <li class="mb-1"><i
-                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.ip_address') }}</li>
-                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Security</li>
-                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Tracking</li>
-                            </ul>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+            @endif
         </div>
 
         <!-- Quick Stats -->

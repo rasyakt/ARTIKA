@@ -1693,13 +1693,15 @@
                                 placeholder="Scan Barcode Di Sini..." autofocus autocomplete="off" inputmode="none">
                         </div>
 
-                        <!-- Mobile/Tablet Scanner Button (Takes 2nd slot or stacks) -->
-                        <div class="scanner-btn-group">
-                            <button id="openScannerBtn"
-                                class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
-                                <i class="fas fa-camera"></i> <span>Scan Barcode</span>
-                            </button>
-                        </div>
+                        @if(\App\Models\Setting::get('cashier_enable_camera', true))
+                            <!-- Mobile/Tablet Scanner Button (Takes 2nd slot or stacks) -->
+                            <div class="scanner-btn-group">
+                                <button id="openScannerBtn"
+                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
+                                    <i class="fas fa-camera"></i> <span>Scan Barcode</span>
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -1813,6 +1815,30 @@
                 <div class="cart-footer">
                     <!-- TOTALS -->
                     <div class="totals-section">
+                        @if(\App\Models\Setting::get('cashier_enable_discounts', true))
+                            <div class="total-row discount-row"
+                                style="border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 5px; margin-bottom: 5px;">
+                                <span style="font-size: 0.8rem; color: #666;"><i
+                                        class="fas fa-tag me-1"></i>{{ __('pos.discount') }}:</span>
+                                <div class="d-flex align-items-center">
+                                    <span class="text-danger fw-bold me-2" id="discountDisplay">-Rp0</span>
+                                    <button class="btn btn-sm btn-outline-secondary py-0 px-1"
+                                        style="font-size: 0.7rem; height: 18px;" onclick="toggleManualDiscount()"><i
+                                            class="fas fa-edit"></i></button>
+                                </div>
+                            </div>
+                            <div id="manualDiscountInputSection" style="display: none; margin-bottom: 10px;">
+                                <div class="input-group input-group-sm">
+                                    <select id="discountType" class="form-select form-select-sm"
+                                        style="max-width: 60px; font-size: 0.75rem;" onchange="updateTotals()">
+                                        <option value="nominal">Rp</option>
+                                        <option value="percentage">%</option>
+                                    </select>
+                                    <input type="number" id="manualDiscountValue" class="form-control form-control-sm"
+                                        placeholder="0" min="0" oninput="updateTotals()">
+                                </div>
+                            </div>
+                        @endif
                         <div class="total-row">
                             <span>{{ __('common.total') }}:</span>
                             <span class="totalDisplay" id="totalDisplay">Rp0</span>
@@ -1865,6 +1891,16 @@
                 </div>
                 <div class="cart-footer">
                     <div class="totals-section">
+                        @if(\App\Models\Setting::get('cashier_enable_discounts', true))
+                            <div class="total-row" style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">
+                                <span>{{ __('pos.discount') }}:</span>
+                                <div class="d-flex align-items-center">
+                                    <span class="text-danger fw-bold me-2" id="discountDisplayMobile">-Rp0</span>
+                                    <button class="btn btn-sm btn-outline-secondary py-0 px-1"
+                                        onclick="toggleManualDiscount()"><i class="fas fa-edit"></i></button>
+                                </div>
+                            </div>
+                        @endif
                         <div class="total-row final">
                             <span>{{ __('common.total') }}:</span>
                             <span class="totalDisplay">Rp0</span>
@@ -1910,11 +1946,13 @@
                 <i class="fas fa-shopping-basket"></i>
                 <span>Keranjang</span>
             </a>
-            <a href="#" class="nav-item" id="navScannerMobile">
-                <i class="fas fa-barcode"></i>
-                <span>Scan</span>
-            </a>
-            <a href="{{ route('pos.history') }}" class="nav-item">
+            @if(\App\Models\Setting::get('cashier_enable_camera', true))
+                <a href="#" class="nav-item" id="navScannerMobile">
+                    <i class="fas fa-barcode"></i>
+                    <span>Scan</span>
+                </a>
+            @endif
+            drum <a href="{{ route('pos.history') }}" class="nav-item">
                 <i class="fas fa-history"></i>
                 <span>Riwayat</span>
             </a>
@@ -2244,13 +2282,20 @@
                 }
             }
 
-            // Scanner handlers
-            document.getElementById('openScannerBtn').addEventListener('click', openScanner);
-            document.getElementById('closeScannerBtn').addEventListener('click', closeScanner);
-            document.getElementById('navScannerMobile').addEventListener('click', (e) => {
-                e.preventDefault();
-                openScanner();
-            });
+            // Scanner handlers with safeties
+            const openScannerBtn = document.getElementById('openScannerBtn');
+            if (openScannerBtn) openScannerBtn.addEventListener('click', openScanner);
+
+            const closeScannerBtn = document.getElementById('closeScannerBtn');
+            if (closeScannerBtn) closeScannerBtn.addEventListener('click', closeScanner);
+
+            const navScannerMobile = document.getElementById('navScannerMobile');
+            if (navScannerMobile) {
+                navScannerMobile.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openScanner();
+                });
+            }
 
             // Mobile Navigation and Cart logic
             const mobileCartView = document.getElementById('mobileCartView');
@@ -2485,13 +2530,43 @@
             }
         }
 
+        function toggleManualDiscount() {
+            const section = document.getElementById('manualDiscountInputSection');
+            if (section) {
+                section.style.display = section.style.display === 'none' ? 'block' : 'none';
+                if (section.style.display === 'block') {
+                    document.getElementById('manualDiscountValue').focus();
+                }
+            }
+        }
+
         function updateTotals() {
             const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
             const qtyCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-            document.querySelectorAll('.totalDisplay').forEach(el => el.textContent = 'Rp' + formatCurrency(subtotal));
+            let manualDiscount = 0;
+            const discountValueInput = document.getElementById('manualDiscountValue');
+            const discountTypeSelect = document.getElementById('discountType');
+
+            if (discountValueInput && discountValueInput.value > 0) {
+                const value = parseFloat(discountValueInput.value);
+                if (discountTypeSelect.value === 'percentage') {
+                    manualDiscount = subtotal * (value / 100);
+                } else {
+                    manualDiscount = value;
+                }
+            }
+
+            const total = Math.max(0, subtotal - manualDiscount);
+
+            document.querySelectorAll('.totalDisplay').forEach(el => el.textContent = 'Rp' + formatCurrency(total));
             document.querySelectorAll('.cartItemCount').forEach(el => el.textContent = cart.length);
             document.querySelectorAll('.cartQtyCount').forEach(el => el.textContent = qtyCount);
+
+            const discountDisplays = [document.getElementById('discountDisplay'), document.getElementById('discountDisplayMobile')];
+            discountDisplays.forEach(el => {
+                if (el) el.textContent = '-Rp' + formatCurrency(manualDiscount);
+            });
         }
 
         function selectPaymentMethod(method) {
@@ -2568,10 +2643,25 @@
 
             // Setup confirm button
             document.getElementById('keypadConfirm').onclick = () => {
-                const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0); // Discounted subtotal
+                const itemSubtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
                 const originalSubtotal = cart.reduce((sum, item) => sum + (item.quantity * (item.originalPrice || item.price)), 0);
-                const discountAmount = originalSubtotal - subtotal;
-                const total = subtotal;
+
+                // Calculate Manual Discount
+                let manualDiscount = 0;
+                const discountValueInput = document.getElementById('manualDiscountValue');
+                const discountTypeSelect = document.getElementById('discountType');
+
+                if (discountValueInput && discountValueInput.value > 0) {
+                    const value = parseFloat(discountValueInput.value);
+                    if (discountTypeSelect.value === 'percentage') {
+                        manualDiscount = itemSubtotal * (value / 100);
+                    } else {
+                        manualDiscount = value;
+                    }
+                }
+
+                const total = Math.max(0, itemSubtotal - manualDiscount);
+                const totalDiscountAmount = (originalSubtotal - itemSubtotal) + manualDiscount;
 
                 if (isCash) {
                     const cashAmount = parseFloat(document.getElementById('keypadDisplay').value.replace(/[^0-9]/g, ''));
@@ -2584,7 +2674,7 @@
                         return;
                     }
                     modal.hide();
-                    processCheckout(cart, subtotal, total, cashAmount, null, discountAmount, originalSubtotal);
+                    processCheckout(cart, itemSubtotal, total, cashAmount, null, totalDiscountAmount, originalSubtotal);
                 } else {
                     const inputCamera = document.getElementById('inputCamera');
                     const inputGallery = document.getElementById('inputGallery');

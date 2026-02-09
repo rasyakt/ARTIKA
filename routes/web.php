@@ -16,7 +16,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
         $role = Auth::user()->role->name ?? 'user';
-        if ($role === 'admin' || $role === 'manager')
+        if ($role === 'superadmin' || $role === 'admin')
             return redirect()->route('admin.dashboard');
         if ($role === 'cashier')
             return redirect()->route('pos.index');
@@ -25,8 +25,8 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    // Admin & Manager Routes
-    Route::middleware(['role:admin,manager'])->prefix('admin')->name('admin.')->group(function () {
+    // Admin & Superadmin Routes
+    Route::middleware(['role:superadmin,admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
 
         // Product Management
@@ -106,15 +106,28 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/returns/{id}', [\App\Http\Controllers\Admin\ReturnController::class, 'show'])->name('returns.show');
 
         // Promo Management
-        Route::get('/promos', [\App\Http\Controllers\PromoController::class, 'index'])->name('promos.index');
-        Route::post('/promos', [\App\Http\Controllers\PromoController::class, 'store'])->name('promos.store');
-        Route::put('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'update'])->name('promos.update');
-        Route::delete('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'destroy'])->name('promos.delete');
-        Route::post('/promos/{id}/toggle', [\App\Http\Controllers\PromoController::class, 'toggleStatus'])->name('promos.toggle');
+        Route::middleware(['feature:admin_enable_promos'])->group(function () {
+            Route::get('/promos', [\App\Http\Controllers\PromoController::class, 'index'])->name('promos.index');
+            Route::post('/promos', [\App\Http\Controllers\PromoController::class, 'store'])->name('promos.store');
+            Route::put('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'update'])->name('promos.update');
+            Route::delete('/promos/{id}', [\App\Http\Controllers\PromoController::class, 'destroy'])->name('promos.delete');
+            Route::post('/promos/{id}/toggle', [\App\Http\Controllers\PromoController::class, 'toggleStatus'])->name('promos.toggle');
+        });
 
         // Settings Management
         Route::get('/settings', [\App\Http\Controllers\AdminSettingController::class, 'index'])->name('settings');
         Route::post('/settings', [\App\Http\Controllers\AdminSettingController::class, 'update'])->name('settings.update');
+    });
+
+    // Superadmin / Developer Routes
+    Route::middleware(['role:superadmin'])->prefix('superadmin')->name('superadmin.')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\SuperadminController::class, 'index'])->name('dashboard');
+        Route::post('/clear-cache', [\App\Http\Controllers\SuperadminController::class, 'clearCache'])->name('clear-cache');
+        Route::post('/optimize', [\App\Http\Controllers\SuperadminController::class, 'optimize'])->name('optimize');
+        Route::post('/toggle-maintenance', [\App\Http\Controllers\SuperadminController::class, 'toggleMaintenance'])->name('toggle-maintenance');
+        Route::get('/logs', [\App\Http\Controllers\SuperadminController::class, 'logs'])->name('logs');
+        Route::get('/settings', [\App\Http\Controllers\SuperadminController::class, 'settings'])->name('settings');
+        Route::post('/settings', [\App\Http\Controllers\SuperadminController::class, 'updateSettings'])->name('settings.update');
     });
 
     // Cashier Routes (POS)

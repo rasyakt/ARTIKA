@@ -90,7 +90,9 @@ class PosController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('pos.history', compact('transactions', 'totalRevenue', 'soldItems'));
+        $enableReturns = \App\Models\Setting::get('cashier_enable_returns', true);
+
+        return view('pos.history', compact('transactions', 'totalRevenue', 'soldItems', 'enableReturns'));
     }
 
     public function showReceipt($id)

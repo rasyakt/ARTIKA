@@ -81,6 +81,8 @@ return [
     'expiring_soon' => 'Segera Kadaluarsa',
     'already_expired' => 'Sudah Kadaluarsa',
     'days_left' => 'hari lagi',
+    'expired_items' => 'Item Kadaluarsa',
+    'expired_products' => 'Produk Kadaluarsa',
     'expired' => 'Kadaluarsa',
     'batch_info' => 'Informasi Batch',
     'scrap_stock' => 'Hapus Batch (Scrap)',

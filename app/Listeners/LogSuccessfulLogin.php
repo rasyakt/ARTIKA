@@ -31,5 +31,14 @@ class LogSuccessfulLogin
             null,
             'User logged in'
         );
+
+        // Sustainability & Performance: Auto-Optimize if enabled
+        try {
+            if (\App\Models\Setting::get('auto_optimize', false) === 'true') {
+                \Illuminate\Support\Facades\Artisan::call('optimize');
+            }
+        } catch (\Exception $e) {
+            // Silently fail to not block login
+        }
     }
 }

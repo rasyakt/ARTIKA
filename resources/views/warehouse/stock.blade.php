@@ -20,8 +20,8 @@
                         <div class="input-group">
                             <input type="text" name="search" id="warehouseSearchInput" class="form-control form-control-sm"
                                 placeholder="{{ __('common.search_placeholder') }}" value="{{ $search ?? '' }}"
-                                style="border-radius: {{ App\Models\Setting::get('enable_camera', true) ? '10px 0 0 10px' : '10px' }}; border: 1px solid #e0cec7; min-width: 200px; {{ App\Models\Setting::get('enable_camera', true) ? 'border-right: none;' : '' }}">
-                            @if(App\Models\Setting::get('enable_camera', true))
+                                style="border-radius: {{ App\Models\Setting::get('admin_enable_camera', true) ? '10px 0 0 10px' : '10px' }}; border: 1px solid #e0cec7; min-width: 200px; {{ App\Models\Setting::get('admin_enable_camera', true) ? 'border-right: none;' : '' }}">
+                            @if(App\Models\Setting::get('admin_enable_camera', true))
                                 <button class="btn btn-sm btn-outline-secondary" type="button" id="btnScanner"
                                     style="border: 1px solid #e0cec7; border-left: none; border-radius: 0 10px 10px 0; background: #fdf8f6; color: #6f5849;">
                                     <i class="fa-solid fa-camera"></i>
@@ -270,15 +270,18 @@
                         // 2. If not found on current page, search for it
                         if (!found) {
                             const input = document.getElementById('warehouseSearchInput');
-                            input.value = barcode;
-                            // Add a flag to URL so we know to auto-open the modal after reload
-                            const form = input.form;
-                            const hiddenInput = document.createElement('input');
-                            hiddenInput.type = 'hidden';
-                            hiddenInput.name = 'auto_open';
-                            hiddenInput.value = '1';
-                            form.appendChild(hiddenInput);
-                            form.submit();
+                            if (input) {
+                                input.value = barcode;
+                                const form = input.form;
+                                if (form) {
+                                    const hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = 'auto_open';
+                                    hiddenInput.value = '1';
+                                    form.appendChild(hiddenInput);
+                                    form.submit();
+                                }
+                            }
                         }
                     });
                 });
@@ -300,17 +303,18 @@
                 }, 500);
             }
 
-            var adjustStockModal = document.getElementById('adjustStockModal');
+            const adjustStockModal = document.getElementById('adjustStockModal');
             if (adjustStockModal) {
                 adjustStockModal.addEventListener('show.bs.modal', function (event) {
-                    var button = event.relatedTarget;
+                    const button = event.relatedTarget;
+                    if (!button) return;
 
                     currentStockId = button.getAttribute('data-stock-id');
                     currentProductId = button.getAttribute('data-product-id');
-                    var productName = button.getAttribute('data-product-name');
-                    var currentQty = button.getAttribute('data-current-qty');
-                    var batchNo = button.getAttribute('data-batch-no');
-                    var expiredAt = button.getAttribute('data-expired-at');
+                    const productName = button.getAttribute('data-product-name');
+                    const currentQty = button.getAttribute('data-current-qty');
+                    const batchNo = button.getAttribute('data-batch-no');
+                    const expiredAt = button.getAttribute('data-expired-at');
 
                     document.getElementById('product_name').value = productName;
                     document.getElementById('current_stock').value = currentQty + ' {{ __('warehouse.units') }}';
@@ -329,7 +333,6 @@
             }
 
             // Auto-trigger adjustment modal if stock_id or product_id is in URL
-            const urlParams = new URLSearchParams(window.location.search);
             const stockId = urlParams.get('stock_id');
             const productId = urlParams.get('product_id');
 
@@ -343,7 +346,6 @@
                     }
 
                     if (targetButton) {
-                        // Scroll to the button slowly then click it
                         targetButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
                         setTimeout(() => targetButton.click(), 500);
                     }
@@ -352,10 +354,11 @@
         });
 
         function toggleBatchFields() {
-            const type = document.getElementById('adjustment_type').value;
+            const typeEl = document.getElementById('adjustment_type');
             const batchFields = document.getElementById('batch_fields');
+            if (!typeEl || !batchFields) return;
 
-            // Only show/allow editing batch/expiry for "add" type
+            const type = typeEl.value;
             if (type === 'add') {
                 batchFields.style.opacity = '1';
                 batchFields.style.pointerEvents = 'auto';
@@ -366,8 +369,11 @@
         }
 
         function saveAdjustment() {
+            const qtyInput = document.getElementById('adjustment_qty');
+            if (!qtyInput) return;
+
             const type = document.getElementById('adjustment_type').value;
-            const quantity = parseInt(document.getElementById('adjustment_qty').value);
+            const quantity = parseInt(qtyInput.value);
             const reason = document.getElementById('adjustment_reason').value;
             const expired_at = document.getElementById('expired_at').value;
             const batch_no = document.getElementById('batch_no').value;

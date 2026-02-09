@@ -56,6 +56,7 @@
                                     <td>
                                         @php
                                             $roleColors = [
+                                                'superadmin' => 'bg-dark',
                                                 'admin' => 'bg-danger',
                                                 'cashier' => 'bg-success',
                                                 'warehouse' => 'bg-primary'
@@ -80,7 +81,15 @@
                                                         <i class="fa-solid fa-pen-to-square me-1"></i> {{ __('common.edit') }}
                                                     </button>
                                                 </li>
-                                                @if($user->role->name === 'cashier')
+                                                @php
+                                                    $canDelete = false;
+                                                    if (auth()->user()->role->name === 'superadmin') {
+                                                        $canDelete = $user->role->name !== 'superadmin';
+                                                    } else {
+                                                        $canDelete = $user->role->name === 'cashier';
+                                                    }
+                                                @endphp
+                                                @if($canDelete)
                                                     <li>
                                                         <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
                                                             class="delete-form">
@@ -190,7 +199,15 @@
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     <option value="">{{ __('common.select_role') }}</option>
                                     @foreach($roles as $role)
-                                        @if($role->name === 'cashier')
+                                        @php
+                                            $isAllowed = false;
+                                            if (auth()->user()->role->name === 'superadmin') {
+                                                $isAllowed = $role->name !== 'superadmin';
+                                            } else {
+                                                $isAllowed = !in_array($role->name, ['superadmin', 'admin']);
+                                            }
+                                        @endphp
+                                        @if($isAllowed)
                                             <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
                                         @endif
                                     @endforeach
@@ -261,7 +278,15 @@
                                 <select class="form-select" id="edit_role_id" name="role_id" required
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     @foreach($roles as $role)
-                                        @if($role->name !== 'admin')
+                                        @php
+                                            $isAllowed = false;
+                                            if (auth()->user()->role->name === 'superadmin') {
+                                                $isAllowed = $role->name !== 'superadmin';
+                                            } else {
+                                                $isAllowed = !in_array($role->name, ['superadmin', 'admin']);
+                                            }
+                                        @endphp
+                                        @if($isAllowed)
                                             <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
                                         @endif
                                     @endforeach

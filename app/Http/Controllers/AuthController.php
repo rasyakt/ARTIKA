@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -22,7 +23,7 @@ class AuthController extends Controller
         return view('auth.login', ['role' => 'warehouse', 'title' => 'Warehouse Login']);
     }
 
-    public function login(\Illuminate\Http\Request $request)
+    public function login(Request $request)
     {
         $credentials = $request->validate([
             'username' => 'required',
@@ -37,15 +38,21 @@ class AuthController extends Controller
             $loginType = 'nis';
         }
 
-        if (\Illuminate\Support\Facades\Auth::attempt([$loginType => $input, 'password' => $request->password])) {
-            $user = \Illuminate\Support\Facades\Auth::user();
+        if (Auth::attempt([$loginType => $input, 'password' => $request->password])) {
+            $user = Auth::user();
 
             // Check if loop user role matches the requested login page role
             // If strictly enforcing that Admin MUST login at /login/admin:
             if ($request->has('role')) {
                 $requiredRole = $request->role;
-                if ($user->role->name !== $requiredRole) {
-                    \Illuminate\Support\Facades\Auth::logout();
+                $userRole = $user->role->name;
+
+                // Superadmins can login anywhere that requires 'admin' role
+                $isAuthorized = ($userRole === $requiredRole) ||
+                    ($requiredRole === 'admin' && $userRole === 'superadmin');
+
+                if (!$isAuthorized) {
+                    Auth::logout();
                     return back()->withErrors(['username' => 'Access denied: You are not a ' . ucfirst($requiredRole)]);
                 }
             }
@@ -54,7 +61,7 @@ class AuthController extends Controller
 
             // Redirect based on role
             $role = $user->role->name;
-            if ($role === 'admin')
+            if ($role === 'superadmin' || $role === 'admin')
                 return redirect()->route('admin.dashboard');
             if ($role === 'cashier')
                 return redirect()->route('pos.index');
@@ -69,9 +76,9 @@ class AuthController extends Controller
         ])->onlyInput('username');
     }
 
-    public function logout(\Illuminate\Http\Request $request)
+    public function logout(Request $request)
     {
-        \Illuminate\Support\Facades\Auth::logout();
+        Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');

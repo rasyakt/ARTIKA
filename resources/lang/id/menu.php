@@ -5,7 +5,7 @@ return [
     'products' => 'Produk',
     'categories' => 'Kategori',
     'users' => 'Pengguna',
-    'suppliers' => 'Supplier',
+    'suppliers' => 'Pemasok',
     'transactions' => 'Transaksi',
     'sales' => 'Penjualan',
     'returns' => 'Pengembalian',

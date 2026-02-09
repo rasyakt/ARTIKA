@@ -85,8 +85,8 @@
 							style="left: 1rem; top: 50%; transform: translateY(-50%); opacity: 0.5;"></i>
 						<input name="search" id="searchInput" class="search-input ps-5" type="text"
 							placeholder="{{ __('common.search_placeholder') }}" value="{{ request('search') }}"
-							style="border-radius: {{ App\Models\Setting::get('enable_camera', true) ? '12px 0 0 12px' : '12px' }}; {{ App\Models\Setting::get('enable_camera', true) ? 'border-right: none;' : '' }}">
-						@if(App\Models\Setting::get('enable_camera', true))
+							style="border-radius: {{ App\Models\Setting::get('admin_enable_camera', true) ? '12px 0 0 12px' : '12px' }}; {{ App\Models\Setting::get('admin_enable_camera', true) ? 'border-right: none;' : '' }}">
+						@if(App\Models\Setting::get('admin_enable_camera', true))
 							<button class="btn btn-outline-secondary" type="button" id="btnScanner"
 								style="border: 1px solid #e9e2df; border-left: none; border-radius: 0 12px 12px 0; background: #fff; color: #6f5849; padding: 0.5rem 0.75rem;">
 								<i class="fa-solid fa-camera"></i>
@@ -260,13 +260,15 @@
 
 			// Scanner Integration
 			const btnScanner = document.getElementById('btnScanner');
-			if (btnScanner) {
+			if (btnScanner && typeof startArtikaScanner === 'function') {
 				btnScanner.addEventListener('click', function () {
 					startArtikaScanner(function (barcode) {
 						const input = document.getElementById('searchInput');
-						input.value = barcode;
-						// Submit the form automatically
-						input.form.submit();
+						if (input) {
+							input.value = barcode;
+							// Submit the form automatically
+							input.form && input.form.submit();
+						}
 					});
 				});
 			}
