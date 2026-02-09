@@ -1832,7 +1832,7 @@
                             <div id="manualDiscountInputSection" style="display: none; margin-bottom: 10px;">
                                 <div class="input-group input-group-sm">
                                     <select id="discountType" class="form-select form-select-sm"
-                                        style="max-width: 60px; font-size: 0.75rem;" onchange="updateTotals()">
+                                        style="max-width: 80px; font-size: 0.75rem;" onchange="updateTotals()">
                                         <option value="nominal">Rp</option>
                                         <option value="percentage">%</option>
                                     </select>
@@ -3212,7 +3212,7 @@
 
                 // Don't steal focus if user is typing in ANY other input field
                 const active = document.activeElement;
-                if (active && active !== input && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.isContentEditable)) {
+                if (active && active !== input && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable)) {
                     return;
                 }
 
