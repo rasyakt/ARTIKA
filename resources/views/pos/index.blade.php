@@ -1954,7 +1954,7 @@
                     <span>Scan</span>
                 </a>
             @endif
-            drum <a href="{{ route('pos.history') }}" class="nav-item">
+            <a href="{{ route('pos.history') }}" class="nav-item">
                 <i class="fas fa-history"></i>
                 <span>Riwayat</span>
             </a>
@@ -2085,6 +2085,9 @@
         const activePromos = {!! json_encode($activePromos) !!};
 
         document.addEventListener('DOMContentLoaded', function () {
+            const productSearch = document.getElementById('productSearch');
+            const barcodeInput = document.getElementById('barcodeScannerInput');
+
             document.querySelectorAll('.paymentMethodBtn').forEach((btn, idx) => {
                 if (idx === 0) {
                     btn.classList.add('active');
@@ -2119,7 +2122,6 @@
                 productSearch.addEventListener('keyup', searchProducts);
             }
 
-            const barcodeInput = document.getElementById('barcodeScannerInput');
             // Periodic Focus Enforcement (Faster 1s check)
             // Disable auto-focus on touch devices (tablets/phones) to prevent keyboard popup
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -2350,7 +2352,11 @@
                 });
             }
 
-            initializeKeypad();
+            try {
+                initializeKeypad();
+            } catch (e) {
+                console.error('Failed to initialize keypad:', e);
+            }
         });
 
         function addToCart(productCard) {
@@ -2843,103 +2849,107 @@
         }
 
         function initializeKeypad() {
-            console.log('Initializing keypad...');
-
             const display = document.getElementById('keypadDisplay');
             const keypadBtns = document.querySelectorAll('.keypad-btn[data-key]');
-            console.log('Found keypad buttons:', keypadBtns.length);
+            const deleteBtn = document.getElementById('keypadDelete');
 
-            // [REFINED] Auto-scroll and modal repositioning on focus for mobile
-            if (display) {
-                // Centralized Robust Formatting Helper
-                const updateFormattedValue = (inputEl, newValue) => {
-                    let numeric = (newValue || '').toString().replace(/[^0-9]/g, '');
-                    if (!numeric) {
-                        inputEl.value = '';
-                        return;
-                    }
-                    // Prevent leading zeros unless it's just "0"
-                    const parsed = parseInt(numeric);
-                    inputEl.value = 'Rp' + parsed.toLocaleString('id-ID');
-                };
+            console.log('Keypad Init:', { display: !!display, buttons: keypadBtns.length, deleteBtn: !!deleteBtn });
 
-                display.addEventListener('input', function () {
-                    let cursor = this.selectionStart;
-                    let oldLen = this.value.length;
-                    updateFormattedValue(this, this.value);
-                    let newLen = this.value.length;
-                    // Adjust cursor if it shifted
-                    this.setSelectionRange(cursor + (newLen - oldLen), cursor + (newLen - oldLen));
-                });
+            if (!display) return;
 
-                display.addEventListener('focus', function () {
-                    if (window.innerWidth < 1024) {
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                        document.body.classList.add('keyboard-active');
-                        const modalDialog = document.querySelector('#keypadModal .modal-dialog');
-                        if (modalDialog) {
-                            modalDialog.style.marginTop = '2rem';
-                            modalDialog.style.transition = 'margin-top 0.3s ease';
-                        }
-                    }
-                });
+            // 1. Centralized Formatting Helper (Now accessible in whole function scope)
+            const updateFormattedValue = (inputEl, newValue) => {
+                if (!inputEl) return;
+                let numeric = (newValue || '').toString().replace(/[^0-9]/g, '');
+                if (!numeric || numeric === '0') {
+                    inputEl.value = '';
+                    return;
+                }
+                const parsed = parseInt(numeric);
+                inputEl.value = 'Rp' + parsed.toLocaleString('id-ID');
+            };
 
-                display.addEventListener('blur', function () {
-                    document.body.classList.remove('keyboard-active');
-                    const modalDialog = document.querySelector('#keypadModal .modal-dialog');
-                    if (modalDialog) {
-                        modalDialog.style.marginTop = '0.5rem';
-                    }
-                });
-            }
+            // 2. Button Press Handler
+            const handleKeypadPress = (e, key, isDelete = false) => {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
 
-            // Button click handlers (Re-use centralized logic)
+                let currentNumeric = display.value.replace(/[^0-9]/g, '');
+                if (isDelete) {
+                    updateFormattedValue(display, currentNumeric.slice(0, -1));
+                } else {
+                    updateFormattedValue(display, currentNumeric + key);
+                }
+
+                // Keep focus and trigger input event for any other listeners
+                display.dispatchEvent(new Event('input'));
+                setTimeout(() => display.focus(), 5);
+            };
+
+            // 3. Attach Listeners to Buttons
             keypadBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (display) {
-                        let currentNumeric = display.value.replace(/[^0-9]/g, '');
-                        updateFormattedValue(display, currentNumeric + btn.dataset.key);
-                        display.focus();
-                    }
+                ['mousedown', 'touchstart'].forEach(type => {
+                    btn.addEventListener(type, (e) => handleKeypadPress(e, btn.dataset.key), { passive: false });
                 });
             });
 
-            // Delete button handler
-            const deleteBtn = document.getElementById('keypadDelete');
             if (deleteBtn) {
-                deleteBtn.addEventListener('click', () => {
-                    if (display) {
-                        let currentNumeric = display.value.replace(/[^0-9]/g, '');
-                        updateFormattedValue(display, currentNumeric.slice(0, -1));
-                        display.focus();
-                    }
+                ['mousedown', 'touchstart'].forEach(type => {
+                    deleteBtn.addEventListener(type, (e) => handleKeypadPress(e, null, true), { passive: false });
                 });
             }
 
-            // Keyboard input handler
-            if (display) {
-                display.addEventListener('keydown', (e) => {
-                    // Allow Enter to confirm payment
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        const confirmBtn = document.getElementById('keypadConfirm');
-                        if (confirmBtn) confirmBtn.click();
-                    }
-                });
+            // 4. Input Field Specifics
+            display.addEventListener('input', function () {
+                let cursor = this.selectionStart;
+                let oldLen = this.value.length;
+                updateFormattedValue(this, this.value);
+                let newLen = this.value.length;
+                this.setSelectionRange(cursor + (newLen - oldLen), cursor + (newLen - oldLen));
+            });
 
-                // Prevent pasting non-numeric content
-                display.addEventListener('paste', (e) => {
+            display.addEventListener('focus', function () {
+                if (window.innerWidth < 1024) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    document.body.classList.add('keyboard-active');
+                    const modalDialog = document.querySelector('#keypadModal .modal-dialog');
+                    if (modalDialog) {
+                        modalDialog.style.marginTop = '2rem';
+                        modalDialog.style.transition = 'margin-top 0.3s ease';
+                    }
+                }
+            });
+
+            display.addEventListener('blur', function () {
+                document.body.classList.remove('keyboard-active');
+                const modalDialog = document.querySelector('#keypadModal .modal-dialog');
+                if (modalDialog) {
+                    modalDialog.style.marginTop = '0.5rem';
+                }
+            });
+
+            display.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
                     e.preventDefault();
-                    const pastedText = (e.clipboardData || window.clipboardData).getData('text');
-                    const numericOnly = pastedText.replace(/[^0-9]/g, '');
-                    if (numericOnly) {
-                        updateFormattedValue(display, display.value + numericOnly);
-                    }
-                });
-            }
+                    const confirmBtn = document.getElementById('keypadConfirm');
+                    if (confirmBtn) confirmBtn.click();
+                }
+            });
 
-            console.log('Keypad initialized');
+            display.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                const numericOnly = pastedText.replace(/[^0-9]/g, '');
+                if (numericOnly) {
+                    updateFormattedValue(display, display.value + numericOnly);
+                }
+            });
+
+            console.log('Keypad initialized successfully');
         }
+
 
         function formatCurrency(value) {
             return Math.round(value).toLocaleString('id-ID');
@@ -3212,7 +3222,13 @@
 
                 // Don't steal focus if user is typing in ANY other input field
                 const active = document.activeElement;
-                if (active && active !== input && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT' || active.isContentEditable)) {
+                if (active && active !== input && (
+                    active.tagName === 'INPUT' ||
+                    active.tagName === 'TEXTAREA' ||
+                    active.tagName === 'SELECT' ||
+                    active.isContentEditable ||
+                    active.id === 'keypadDisplay'
+                )) {
                     return;
                 }
 
