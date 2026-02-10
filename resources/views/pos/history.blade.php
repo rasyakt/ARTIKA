@@ -334,14 +334,14 @@
                             <a class="dropdown-item py-2 px-3 d-flex align-items-center"
                                 href="{{ route('pos.history') }}">
                                 <i class="fa-solid fa-clock-rotate-left me-3 text-primary opacity-75"></i>
-                                <span class="fw-600">Riwayat Transaksi</span>
+                                <span class="fw-600">{{ __('pos.transaction_history') }}</span>
                             </a>
                         </li>
                         @if(App\Models\Setting::get('cashier_enable_audit_logs', true))
                             <li>
                                 <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ route('pos.logs') }}">
                                     <i class="fa-solid fa-list-check me-3 text-primary opacity-75"></i>
-                                    <span class="fw-600">Log Aktivitas</span>
+                                    <span class="fw-600">{{ __('pos.activity_logs') }}</span>
                                 </a>
                             </li>
                         @endif
@@ -349,7 +349,7 @@
                             <button type="button" class="dropdown-item py-3 px-3 d-flex align-items-center text-danger"
                                 id="btnLogout">
                                 <i class="fas fa-sign-out-alt me-3"></i>
-                                <span class="fw-700">Keluar Sistem</span>
+                                <span class="fw-700">{{ __('pos.exit_system') }}</span>
                             </button>
                         </li>
                     </ul>
@@ -405,7 +405,7 @@
             <div class="card mb-4 border-0">
                 <div class="card-header bg-white border-bottom py-3 px-4">
                     <h6 class="mb-0 fw-700 text-primary-dark">
-                        <i class="fa-solid fa-fire me-2 text-warning"></i>Top Sold Items
+                        <i class="fa-solid fa-fire me-2 text-warning"></i>{{ __('pos.top_sold_items') }}
                     </h6>
                 </div>
                 <div class="card-body p-0">
@@ -413,9 +413,9 @@
                         <table class="table table-sm mb-0">
                             <thead>
                                 <tr>
-                                    <th class="ps-4">Item Name</th>
-                                    <th class="text-center">Qty</th>
-                                    <th class="text-end pe-4">Total Sales</th>
+                                    <th class="ps-4">{{ __('pos.item_name') }}</th>
+                                    <th class="text-center">{{ __('pos.qty') }}</th>
+                                    <th class="text-end pe-4">{{ __('pos.total_sales') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="border-top-0">
@@ -442,12 +442,12 @@
                     <table class="table table-hover mb-0 align-middle">
                         <thead>
                             <tr>
-                                <th class="ps-4">Invoice</th>
-                                <th>Date & Time</th>
-                                <th class="text-end">Total</th>
-                                <th class="text-center">Method</th>
-                                <th class="text-center">Items</th>
-                                <th class="text-center pe-4">Actions</th>
+                                <th class="ps-4">{{ __('pos.invoice') }}</th>
+                                <th>{{ __('pos.date_time') }}</th>
+                                <th class="text-end">{{ __('pos.total') }}</th>
+                                <th class="text-center">{{ __('pos.method') }}</th>
+                                <th class="text-center">{{ __('pos.items') }}</th>
+                                <th class="text-center pe-4">{{ __('pos.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -485,22 +485,24 @@
                                             <div class="transaction-details">
                                                 <div class="row mb-4">
                                                     <div class="col-md-6">
-                                                        <h6 class="fw-800 mb-2">Order Details</h6>
+                                                        <h6 class="fw-800 mb-2">{{ __('pos.order_details') }}</h6>
                                                         <p class="mb-1 small text-muted">Customer: <span
-                                                                class="text-dark fw-600">Walk-in Customer</span></p>
-                                                        <p class="mb-1 small text-muted">Cashier: <span
+                                                                class="text-dark fw-600">{{ __('pos.walk_in_customer') }}</span>
+                                                        </p>
+                                                        <p class="mb-1 small text-muted">{{ __('pos.cashier') }}: <span
                                                                 class="text-dark fw-600">{{ $transaction->user->name ?? 'System' }}</span>
                                                         </p>
-                                                        <p class="mb-0 small text-muted">Status: <span
-                                                                class="badge bg-success">Completed</span></p>
+                                                        <p class="mb-0 small text-muted">{{ __('pos.status') }}: <span
+                                                                class="badge bg-success">{{ __('pos.completed') }}</span>
+                                                        </p>
                                                     </div>
                                                     <div class="col-md-6 text-md-end">
-                                                        <h6 class="fw-800 mb-2">Payment Summary</h6>
-                                                        <p class="mb-1 small text-muted">Subtotal: <span
+                                                        <h6 class="fw-800 mb-2">{{ __('pos.payment_summary') }}</h6>
+                                                        <p class="mb-1 small text-muted">{{ __('pos.subtotal') }}: <span
                                                                 class="text-dark">Rp
                                                                 {{ number_format($transaction->subtotal, 0, ',', '.') }}</span>
                                                         </p>
-                                                        <p class="mb-0 small text-muted">Total: <span
+                                                        <p class="mb-0 small text-muted">{{ __('pos.total') }}: <span
                                                                 class="text-primary fw-800 fs-5">Rp
                                                                 {{ number_format($transaction->total_amount, 0, ',', '.') }}</span>
                                                         </p>
@@ -509,9 +511,9 @@
                                                 <table class="table table-sm border-0">
                                                     <thead class="bg-light">
                                                         <tr>
-                                                            <th class="ps-3 border-0">Product</th>
-                                                            <th class="text-center border-0">Qty</th>
-                                                            <th class="text-end pe-3 border-0">Subtotal</th>
+                                                            <th class="ps-3 border-0">{{ __('pos.product') }}</th>
+                                                            <th class="text-center border-0">{{ __('pos.qty') }}</th>
+                                                            <th class="text-end pe-3 border-0">{{ __('pos.subtotal') }}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="border-top-0">
@@ -534,9 +536,9 @@
                             @empty
                                 <tr>
                                     <td colspan="6" class="text-center py-5">
-                                        <img src="https://cdni.iconscout.com/illustration/premium/thumb/empty-cart-2130356-1800917.png"
-                                            alt="Empty" style="width: 150px; opacity: 0.5;">
-                                        <p class="mt-3 text-muted">No transactions found for this period.</p>
+                                        <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-receipt"></i>
+                                        </div>
+                                        <p class="mt-3 text-muted">{{ __('pos.no_transactions_period') }}</p>
                                     </td>
                                 </tr>
                             @endforelse
@@ -562,7 +564,7 @@
                         </div>
                         <div class="t-card-body">
                             <div>
-                                <div class="text-muted small">Total Amount</div>
+                                <div class="text-muted small">{{ __('pos.total_amount') }}</div>
                                 <div class="t-card-price">Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}
                                 </div>
                             </div>
@@ -581,12 +583,13 @@
                         <div class="collapse mt-3 pt-3 border-top" id="m-details-{{ $transaction->id }}">
                             <div class="small mb-3">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Cashier:</span>
+                                    <span class="text-muted">{{ __('pos.cashier') }}:</span>
                                     <span class="fw-600">{{ $transaction->user->name ?? 'System' }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between mb-2">
-                                    <span class="text-muted">Items ({{ $transaction->items->count() }})</span>
-                                    <span class="fw-700">Subtotal: Rp
+                                    <span class="text-muted">{{ __('pos.items') }}
+                                        ({{ $transaction->items->count() }})</span>
+                                    <span class="fw-700">{{ __('pos.subtotal') }}: Rp
                                         {{ number_format($transaction->subtotal, 0, ',', '.') }}</span>
                                 </div>
                                 <ul class="list-unstyled mb-0">
@@ -603,7 +606,7 @@
                 @empty
                     <div class="text-center py-5 bg-white rounded-16 shadow-sm">
                         <i class="fa-solid fa-receipt fa-3x mb-3 text-muted opacity-25"></i>
-                        <p class="text-muted">No transactions found.</p>
+                        <p class="text-muted">{{ __('pos.no_transactions_period') }}</p>
                     </div>
                 @endforelse
             </div>
@@ -629,14 +632,14 @@
         // Logout confirmation handler
         document.getElementById('btnLogout')?.addEventListener('click', function () {
             Swal.fire({
-                title: 'Konfirmasi Keluar',
-                text: "Apakah Anda yakin ingin keluar dari sistem?",
+                title: '{{ __('pos.exit_confirm') }}',
+                text: "{{ __('pos.exit_confirm_message') }}",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#6f5849',
                 cancelButtonColor: '#f1f1f1',
-                confirmButtonText: 'Ya, Keluar',
-                cancelButtonText: 'Batal',
+                confirmButtonText: '{{ __('pos.yes_exit') }}',
+                cancelButtonText: '{{ __('pos.cancel') }}',
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'btn btn-primary px-4 py-2 me-3',

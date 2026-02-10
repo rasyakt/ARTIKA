@@ -313,4 +313,10 @@ return [
 
     // expired
     'expiry_date' => 'Expiry Date',
+
+    // Receipt Settings
+    'receipt_paper_size' => 'Receipt Paper Size',
+    'receipt_paper_size_hint' => 'Select the paper width that matches your thermal printer. Most portable/Bluetooth printers use 58mm, larger desktop printers use 80mm.',
+    'paper_58mm' => '58mm (Small / Portable)',
+    'paper_80mm' => '80mm (Standard / Desktop)',
 ];

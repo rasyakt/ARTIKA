@@ -79,7 +79,7 @@ class PosController extends Controller
         $totalRevenue = $summaryQuery->sum('total_amount') ?? 0;
 
         // Get Sold Items Summary
-        $soldItems = TransactionItem::whereIn('transaction_id', $summaryQuery->pluck('id'))
+        $soldItems = TransactionItem::whereIn('transaction_id', $summaryQuery->select('id'))
             ->join('products', 'transaction_items.product_id', '=', 'products.id')
             ->select('products.name', DB::raw('SUM(transaction_items.quantity) as total_qty'), DB::raw('SUM(transaction_items.subtotal) as total_sales'))
             ->groupBy('products.name')
@@ -268,7 +268,9 @@ class PosController extends Controller
         $transaction = Transaction::with(['user', 'items.product'])
             ->findOrFail($transactionId);
 
-        return view('pos.receipt', compact('transaction'));
+        $paperSize = \App\Models\Setting::get('receipt_paper_size', '58mm');
+
+        return view('pos.receipt', compact('transaction', 'paperSize'));
     }
 }
 

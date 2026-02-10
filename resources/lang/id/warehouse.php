@@ -89,4 +89,8 @@ return [
     'confirm_scrap' => 'Apakah Anda yakin ingin menghapus batch stok ini?',
     'scrap_reason' => 'Alasan Penghapusan (Wajib)',
     'stock_scrapped_successfully' => 'Batch stok berhasil dihapus',
+    'search_product' => 'Cari nama produk atau barcode...',
+    'filter_by_type' => 'Filter Tipe',
+    'all_types' => 'Semua Tipe',
+    'reset_filter' => 'Reset',
 ];

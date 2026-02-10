@@ -103,36 +103,54 @@ class AdminController extends Controller
 
     private function getSalesChartData()
     {
-        // Daily data (last 7 days)
-        $dailyData = [];
+        // Daily data (last 7 days) — 1 query instead of 7
+        $dailyData = ['labels' => [], 'values' => []];
+        $startDate = Carbon::now()->subDays(6)->startOfDay();
+
+        $dailyResults = Transaction::where('created_at', '>=', $startDate)
+            ->where('status', 'completed')
+            ->selectRaw('DATE(created_at) as sale_date, COALESCE(SUM(total_amount), 0) as total')
+            ->groupBy('sale_date')
+            ->pluck('total', 'sale_date');
+
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::now()->subDays($i);
             $dailyData['labels'][] = $date->format('D, M j');
-            $dailyData['values'][] = Transaction::whereDate('created_at', $date)
-                ->where('status', 'completed')
-                ->sum('total_amount');
+            $dailyData['values'][] = (float) ($dailyResults[$date->toDateString()] ?? 0);
         }
 
-        // Weekly data (last 4 weeks)
-        $weeklyData = [];
+        // Weekly data (last 4 weeks) — 1 query instead of 4
+        $weeklyData = ['labels' => [], 'values' => []];
+        $weekStart = Carbon::now()->subWeeks(3)->startOfWeek();
+
+        $weeklyResults = Transaction::where('created_at', '>=', $weekStart)
+            ->where('status', 'completed')
+            ->selectRaw("TO_CHAR(DATE_TRUNC('week', created_at), 'IYYY-IW') as sale_week, COALESCE(SUM(total_amount), 0) as total")
+            ->groupBy('sale_week')
+            ->pluck('total', 'sale_week');
+
         for ($i = 3; $i >= 0; $i--) {
-            $weekStart = Carbon::now()->subWeeks($i)->startOfWeek();
-            $weekEnd = Carbon::now()->subWeeks($i)->endOfWeek();
-            $weeklyData['labels'][] = 'Week ' . $weekStart->format('M j');
-            $weeklyData['values'][] = Transaction::whereBetween('created_at', [$weekStart, $weekEnd])
-                ->where('status', 'completed')
-                ->sum('total_amount');
+            $ws = Carbon::now()->subWeeks($i)->startOfWeek();
+            $weekKey = $ws->format('o-W');
+            $weeklyData['labels'][] = 'Week ' . $ws->format('M j');
+            $weeklyData['values'][] = (float) ($weeklyResults[$weekKey] ?? 0);
         }
 
-        // Monthly data (last 6 months)
-        $monthlyData = [];
+        // Monthly data (last 6 months) — 1 query instead of 6
+        $monthlyData = ['labels' => [], 'values' => []];
+        $monthStart = Carbon::now()->subMonths(5)->startOfMonth();
+
+        $monthlyResults = Transaction::where('created_at', '>=', $monthStart)
+            ->where('status', 'completed')
+            ->selectRaw("TO_CHAR(created_at, 'YYYY-MM') as sale_month, COALESCE(SUM(total_amount), 0) as total")
+            ->groupBy('sale_month')
+            ->pluck('total', 'sale_month');
+
         for ($i = 5; $i >= 0; $i--) {
             $month = Carbon::now()->subMonths($i);
+            $monthKey = $month->format('Y-m');
             $monthlyData['labels'][] = $month->format('M Y');
-            $monthlyData['values'][] = Transaction::whereYear('created_at', $month->year)
-                ->whereMonth('created_at', $month->month)
-                ->where('status', 'completed')
-                ->sum('total_amount');
+            $monthlyData['values'][] = (float) ($monthlyResults[$monthKey] ?? 0);
         }
 
         return [
@@ -183,7 +201,7 @@ class AdminController extends Controller
         ]);
 
         return DB::transaction(function () use ($request) {
-            $product = Product::create($request->all());
+            $product = Product::create($request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']));
 
             // Create initial stock
             Stock::create([
@@ -226,7 +244,7 @@ class AdminController extends Controller
             'cost_price' => 'required|numeric|min:0',
         ]);
 
-        $product->update($request->all());
+        $product->update($request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']));
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
     }

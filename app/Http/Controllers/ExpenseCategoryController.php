@@ -23,7 +23,7 @@ class ExpenseCategoryController extends Controller
             'description' => 'nullable|string|max:500',
         ]);
 
-        ExpenseCategory::create($request->all());
+        ExpenseCategory::create($request->only(['name', 'description']));
 
         return redirect()->route('admin.expense-categories.index')
             ->with('success', __('admin.category_created_success'));
@@ -36,7 +36,7 @@ class ExpenseCategoryController extends Controller
             'description' => 'nullable|string|max:500',
         ]);
 
-        $expenseCategory->update($request->all());
+        $expenseCategory->update($request->only(['name', 'description']));
 
         return redirect()->route('admin.expense-categories.index')
             ->with('success', __('admin.category_updated_success'));

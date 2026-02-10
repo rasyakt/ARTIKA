@@ -117,29 +117,51 @@ class WarehouseController extends Controller
         return view('warehouse.stock', compact('stocks', 'search'));
     }
 
-    public function stockMovements()
+    public function stockMovements(Request $request)
     {
-        $movements = StockMovement::with(['product', 'user'])
-            ->latest()
-            ->paginate(10);
-
-        // Statistics for today
+        // Single aggregate query for today's statistics (replaces 3 separate queries)
         $today = now()->startOfDay();
-        $stockInToday = StockMovement::where('type', 'in')
-            ->where('created_at', '>=', $today)
-            ->sum('quantity_change');
+        $todayStats = StockMovement::where('created_at', '>=', $today)
+            ->selectRaw("
+                COALESCE(SUM(CASE WHEN type = 'in' THEN quantity_change ELSE 0 END), 0) as stock_in,
+                COALESCE(SUM(CASE WHEN type = 'out' THEN ABS(quantity_change) ELSE 0 END), 0) as stock_out,
+                COALESCE(SUM(CASE WHEN type = 'adjustment' THEN 1 ELSE 0 END), 0) as adjustments
+            ")->first();
 
-        $stockOutToday = StockMovement::where('type', 'out')
-            ->where('created_at', '>=', $today)
-            ->sum('quantity_change');
+        $stockInToday = $todayStats->stock_in;
+        $stockOutToday = $todayStats->stock_out;
+        $adjustmentsToday = $todayStats->adjustments;
 
-        $adjustmentsToday = StockMovement::where('type', 'adjustment')
-            ->where('created_at', '>=', $today)
-            ->count();
+        // Filtered & paginated movements query
+        $query = StockMovement::with(['product', 'user']);
 
-        $totalMovements = StockMovement::count();
+        // Search by product name or barcode
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('product', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('barcode', 'like', "%{$search}%");
+            });
+        }
 
-        // Rename for the view
+        // Filter by movement type
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Filter by date range
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('created_at', [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]);
+        }
+
+        $movements = $query->latest()
+            ->paginate(10)
+            ->appends($request->all());
+
+        // $movements->total() replaces the old StockMovement::count()
         $recentMovements = $movements;
 
         return view('warehouse.stock-movements', compact(
@@ -147,8 +169,7 @@ class WarehouseController extends Controller
             'recentMovements',
             'stockInToday',
             'stockOutToday',
-            'adjustmentsToday',
-            'totalMovements'
+            'adjustmentsToday'
         ));
     }
 

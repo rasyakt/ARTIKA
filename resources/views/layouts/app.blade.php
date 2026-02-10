@@ -675,12 +675,10 @@
                             </div>
                         @endif
 
-                        @if(App\Models\Setting::get('admin_enable_camera', true))
-                            <a href="{{ route('admin.settings') }}"
-                                class="sidebar-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
-                                <i class="fa-solid fa-gear"></i> {{ __('menu.settings') ?? 'Settings' }}
-                            </a>
-                        @endif
+                        <a href="{{ route('admin.settings') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-gear"></i> {{ __('menu.settings') ?? 'Settings' }}
+                        </a>
 
                         @if(auth()->user()->role->name === 'superadmin')
                             <div class="sidebar-group mt-3">

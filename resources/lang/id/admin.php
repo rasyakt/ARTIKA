@@ -361,4 +361,10 @@ return [
     'expired' => 'Expired',
     'expired_on' => 'Kadaluarsa pada',
     'expired_products' => 'Produk Kadaluarsa',
+
+    // Receipt Settings
+    'receipt_paper_size' => 'Ukuran Kertas Struk',
+    'receipt_paper_size_hint' => 'Pilih lebar kertas yang sesuai dengan printer thermal Anda. Printer portable/Bluetooth umumnya 58mm, printer desktop 80mm.',
+    'paper_58mm' => '58mm (Kecil / Portabel)',
+    'paper_80mm' => '80mm (Standar / Desktop)',
 ];

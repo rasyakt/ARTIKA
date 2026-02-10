@@ -25,7 +25,7 @@ class SupplierController extends Controller
             'address' => 'nullable|string',
         ]);
 
-        Supplier::create($request->all());
+        Supplier::create($request->only(['name', 'phone', 'email', 'address']));
 
         return redirect()->route('admin.suppliers')->with('success', 'Supplier created successfully!');
     }
@@ -41,7 +41,7 @@ class SupplierController extends Controller
             'address' => 'nullable|string',
         ]);
 
-        $supplier->update($request->all());
+        $supplier->update($request->only(['name', 'phone', 'email', 'address']));
 
         return redirect()->route('admin.suppliers')->with('success', 'Supplier updated successfully!');
     }

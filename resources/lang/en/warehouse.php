@@ -77,4 +77,8 @@ return [
     'no_movements' => 'No stock movements yet',
     'no_movements_desc' => 'Stock movements will appear here when products are adjusted',
     'by' => 'By',
+    'search_product' => 'Search product name or barcode...',
+    'filter_by_type' => 'Filter Type',
+    'all_types' => 'All Types',
+    'reset_filter' => 'Reset',
 ];

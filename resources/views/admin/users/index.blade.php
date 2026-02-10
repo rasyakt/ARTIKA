@@ -108,7 +108,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-5">
+                                    <td colspan="5" class="text-center py-5">
                                         <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-users"></i></div>
                                         <p class="text-muted mb-0">{{ __('admin.no_users_found') }}</p>
                                     </td>
