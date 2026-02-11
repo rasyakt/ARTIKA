@@ -114,28 +114,30 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0"
                                                 style="border-radius: 12px; font-size: 0.875rem;">
-                                                <li>
-                                                    <a class="dropdown-item py-2 px-3" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"
-                                                        data-product-id="{{ $stock->product_id }}"
-                                                        data-product-name="{{ $stock->product->name }}"
-                                                        data-current-qty="{{ $stock->quantity }}"
-                                                        data-batch-no="{{ $stock->batch_no }}"
-                                                        data-expired-at="{{ $stock->expired_at ? $stock->expired_at->format('Y-m-d') : '' }}">
-                                                        <i class="fa-solid fa-gear me-2 text-primary"></i>
-                                                        {{ __('common.adjust') }}
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <hr class="dropdown-divider mx-3 my-1" style="opacity: 0.05;">
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item py-2 px-3 text-danger" href="#"
-                                                        onclick="scrapStock({{ $stock->id }})">
-                                                        <i class="fa-solid fa-trash-can me-2"></i>
-                                                        {{ __('common.delete') }}
-                                                    </a>
-                                                </li>
+                                                @if(Auth::user()->role->name !== 'manager')
+                                                    <li>
+                                                        <a class="dropdown-item py-2 px-3" href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"
+                                                            data-product-id="{{ $stock->product_id }}"
+                                                            data-product-name="{{ $stock->product->name }}"
+                                                            data-current-qty="{{ $stock->quantity }}"
+                                                            data-batch-no="{{ $stock->batch_no }}"
+                                                            data-expired-at="{{ $stock->expired_at ? $stock->expired_at->format('Y-m-d') : '' }}">
+                                                            <i class="fa-solid fa-gear me-2 text-primary"></i>
+                                                            {{ __('common.adjust') }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <hr class="dropdown-divider mx-3 my-1" style="opacity: 0.05;">
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item py-2 px-3 text-danger" href="#"
+                                                            onclick="scrapStock({{ $stock->id }})">
+                                                            <i class="fa-solid fa-trash-can me-2"></i>
+                                                            {{ __('common.delete') }}
+                                                        </a>
+                                                    </li>
+                                                @endif
                                             </ul>
                                         </div>
                                     </td>

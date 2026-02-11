@@ -505,7 +505,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar (only for admin, manager and warehouse) -->
-            @if(in_array(Auth::user()->role->name, ['superadmin', 'admin', 'warehouse']))
+            @if(in_array(Auth::user()->role->name, ['superadmin', 'admin', 'manager', 'warehouse']))
                 <div class="col-md-2 sidebar px-0" id="sidebar">
                     <!-- Mobile Sidebar Header -->
                     <div class="sidebar-header">
@@ -695,14 +695,55 @@
                             </div>
                         @endif
 
-                        <hr style="margin: 0.5rem 0; opacity: 0.1;">
-                        <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                            @csrf
-                            <button type="submit" class="sidebar-link text-danger"
-                                style="width: 100%; border: none; background: none; text-align: left;">
-                                <i class="fa-solid fa-right-from-bracket"></i> {{ __('menu.logout') }}
-                            </button>
-                        </form>
+                    @elseif(Auth::user()->role->name === 'manager')
+                        <a href="{{ route($routePrefix . 'dashboard') }}"
+                            class="sidebar-link {{ request()->routeIs($routePrefix . 'dashboard') ? 'active' : '' }}">
+                            <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
+                        </a>
+
+                        <!-- Reports Group (Read-only for Manager) -->
+                        <div class="sidebar-dropdown {{ request()->routeIs($routePrefix . 'reports*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route($routePrefix . 'reports') }}"
+                                        class="submenu-link {{ request()->is($routePrefix . 'reports') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-th-large"></i> {{ __('admin.reports_hub') ?? 'Reports Hub' }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route($routePrefix . 'reports.warehouse') }}"
+                                        class="submenu-link {{ request()->routeIs($routePrefix . 'reports.warehouse*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_report') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route($routePrefix . 'reports.cashier') }}"
+                                        class="submenu-link {{ request()->routeIs($routePrefix . 'reports.cashier*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_report') }} /
+                                        {{ __('admin.transaction_correction') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route($routePrefix . 'reports.finance') }}"
+                                        class="submenu-link {{ request()->routeIs($routePrefix . 'reports.finance*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('admin.finance_report') }}
+                                    </a>
+                                </li>
+                                @if(App\Models\Setting::get('admin_enable_audit_logs', true))
+                                    <li>
+                                        <a href="{{ route('manager.audit.index') }}"
+                                            class="submenu-link {{ request()->routeIs('manager.audit.index*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-clipboard-list"></i> {{ __('admin.logs_report') }}
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+
                     @elseif(Auth::user()->role->name === 'warehouse')
                         <a href="{{ route('warehouse.dashboard') }}"
                             class="sidebar-link {{ request()->routeIs('warehouse.dashboard') ? 'active' : '' }}">
@@ -720,15 +761,19 @@
                             class="sidebar-link {{ request()->routeIs('warehouse.stock-movements') ? 'active' : '' }}">
                             <i class="fa-solid fa-arrows-rotate"></i> {{ __('menu.stock_movements') }}
                         </a>
-                        <hr style="margin: 1rem 0; border-color: #f2e8e5;">
+                    @endif
+
+                    <div class="mt-auto px-1 py-3">
+                        <hr style="margin: 0.5rem 0; border-color: #f2e8e5; opacity: 0.1;">
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                             @csrf
-                            <button type="submit" class="sidebar-link text-danger"
-                                style="width: 100%; border: none; background: none; text-align: left;">
-                                <i class="fa-solid fa-right-from-bracket"></i> {{ __('menu.logout') }}
+                            <button type="submit"
+                                class="sidebar-link text-danger border-0 bg-transparent w-100 text-start py-2 px-3"
+                                style="transition: all 0.3s;">
+                                <i class="fa-solid fa-right-from-bracket me-2"></i> {{ __('menu.logout') }}
                             </button>
                         </form>
-                    @endif
+                    </div>
                 </div>
                 <div class="col-md-10 main-content">
             @else
@@ -910,6 +955,7 @@
                 }
             });
         </script>
+
 </body>
 
 </html>

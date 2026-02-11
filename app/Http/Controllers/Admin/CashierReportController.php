@@ -261,7 +261,9 @@ class CashierReportController extends Controller
         $transaction = \App\Models\Transaction::with(['user', 'items.product'])
             ->findOrFail($id);
 
-        return view('pos.receipt', compact('transaction'));
+        $paperSize = \App\Models\Setting::get('receipt_paper_size', '58mm');
+
+        return view('pos.receipt', compact('transaction', 'paperSize'));
     }
 
     public function update(Request $request, $id)

@@ -58,6 +58,7 @@
                                             $roleColors = [
                                                 'superadmin' => 'bg-dark',
                                                 'admin' => 'bg-danger',
+                                                'manager' => 'bg-info',
                                                 'cashier' => 'bg-success',
                                                 'warehouse' => 'bg-primary'
                                             ];

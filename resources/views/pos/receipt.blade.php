@@ -1,3 +1,6 @@
+@php
+    $paperSize = $paperSize ?? \App\Models\Setting::get('receipt_paper_size', '58mm');
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 

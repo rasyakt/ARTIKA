@@ -46,7 +46,7 @@ class UserController extends Controller
         $targetRole = Role::findOrFail($request->role_id);
 
         if ($currentUser->role->name !== 'superadmin' && in_array($targetRole->name, ['superadmin', 'admin'])) {
-            return redirect()->back()->with('error', 'Only Warehouse or Cashier accounts can be added!');
+            return redirect()->back()->with('error', 'Only Manager, Warehouse or Cashier accounts can be added!');
         }
 
         if ($targetRole->name === 'superadmin') {

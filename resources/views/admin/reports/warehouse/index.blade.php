@@ -16,10 +16,11 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <div class="d-flex align-items-center mb-1">
-                        <a href="{{ route('admin.reports') }}" class="btn btn-light me-3 shadow-sm"
-                            style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
-                            <i class="fas fa-arrow-left"></i>
-                        </a>
+
+                    <a href="{{ route($routePrefix . 'reports') }}" class="btn btn-light me-3 shadow-sm"
+                        style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
                         <h2 class="fw-bold mb-0" style="color: #6f5849;">
                             <i class="fa-solid fa-warehouse me-2"></i>{{ __('admin.warehouse_reports_title') }}
                         </h2>
@@ -30,7 +31,7 @@
                     <button type="button" class="btn btn-outline-brown shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;" data-bs-toggle="modal" data-bs-target="#exportPdfModal">
                         <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
                     </button>
-                    <a href="{{ route('admin.reports.warehouse.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
+                    <a href="{{ route($routePrefix . 'reports.warehouse.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
                         class="btn btn-brown shadow-sm"
                         style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                         <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
@@ -41,7 +42,7 @@
             <!-- Filters -->
             <div class="card shadow-sm mb-4">
                 <div class="card-body p-4">
-                    <form action="{{ route('admin.reports.warehouse') }}" method="GET" class="row g-3 align-items-end">
+                    <form action="{{ route($routePrefix . 'reports.warehouse') }}" method="GET" class="row g-3 align-items-end">
                         <!-- Date Row -->
                         <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="period" class="form-label text-dark fw-semibold">
@@ -102,7 +103,7 @@
                                 <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                             </button>
                             @if ($categoryId || $stockStatus || $search || request('start_date'))
-                                <a href="{{ route('admin.reports.warehouse') }}" class="btn btn-outline-brown"
+                                <a href="{{ route($routePrefix . 'reports.warehouse') }}" class="btn btn-outline-brown"
                                     style="border-radius: 8px; padding: 0.6rem;">
                                     <i class="fa-solid fa-rotate-left"></i>
                                 </a>
@@ -317,10 +318,14 @@
                                                     <span class="badge bg-danger">{{ $item->current_stock }}</span>
                                                 </td>
                                                 <td class="text-end">
-                                                    <a href="{{ route('warehouse.stock', ['product_id' => $item->id]) }}"
-                                                        class="btn btn-outline-primary" style="border-radius: 8px; padding: 0.25rem 0.75rem; font-size: 0.85rem;">
-                                                        <i class="fa-solid fa-plus-circle me-1"></i> Restock
-                                                    </a>
+                                                    @if(strtolower(Auth::user()->role->name) !== 'manager')
+                                                        <a href="{{ route('warehouse.stock', ['product_id' => $item->id]) }}"
+                                                            class="btn btn-outline-primary" style="border-radius: 8px; padding: 0.25rem 0.75rem; font-size: 0.85rem;">
+                                                            <i class="fa-solid fa-plus-circle me-1"></i> Restock
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted small">Read Only</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @empty
@@ -478,7 +483,7 @@
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('admin.reports.warehouse.export') }}" method="GET">
+                <form action="{{ route($routePrefix . 'reports.warehouse.export') }}" method="GET">
                     <input type="hidden" name="format" value="pdf">
                     <input type="hidden" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                     <input type="hidden" name="end_date" value="{{ $endDate->format('Y-m-d') }}">

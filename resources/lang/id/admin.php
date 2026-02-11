@@ -367,4 +367,11 @@ return [
     'receipt_paper_size_hint' => 'Pilih lebar kertas yang sesuai dengan printer thermal Anda. Printer portable/Bluetooth umumnya 58mm, printer desktop 80mm.',
     'paper_58mm' => '58mm (Kecil / Portabel)',
     'paper_80mm' => '80mm (Standar / Desktop)',
+
+    // Manager Role
+    'manager_dashboard' => 'Dashboard Manager',
+    'subtotal' => 'Subtotal',
+    'today_sales' => 'Penjualan Hari Ini',
+    'transaction_correction' => 'Koreksi Transaksi',
+    'manage_store_oversight' => 'Pantau performa toko dan koreksi kesalahan transaksi.',
 ];

@@ -47,9 +47,9 @@ class AuthController extends Controller
                 $requiredRole = $request->role;
                 $userRole = $user->role->name;
 
-                // Superadmins can login anywhere that requires 'admin' role
+                // Superadmins and managers can login at the admin login page
                 $isAuthorized = ($userRole === $requiredRole) ||
-                    ($requiredRole === 'admin' && $userRole === 'superadmin');
+                    ($requiredRole === 'admin' && in_array(strtolower($userRole), ['superadmin', 'manager']));
 
                 if (!$isAuthorized) {
                     Auth::logout();
@@ -59,10 +59,12 @@ class AuthController extends Controller
 
             $request->session()->regenerate();
 
-            // Redirect based on role
-            $role = $user->role->name;
+            // Redirect based on role (case-insensitive)
+            $role = strtolower($user->role->name);
             if ($role === 'superadmin' || $role === 'admin')
                 return redirect()->route('admin.dashboard');
+            if ($role === 'manager')
+                return redirect()->route('manager.dashboard');
             if ($role === 'cashier')
                 return redirect()->route('pos.index');
             if ($role === 'warehouse')

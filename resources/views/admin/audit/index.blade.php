@@ -5,7 +5,8 @@
         <div class="row mb-4">
             <div class="col-xl-7">
                 <div class="d-flex align-items-center mb-1">
-                    <a href="{{ route('admin.reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
+
+                    <a href="{{ route($routePrefix . 'reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
                         style="border-radius: 10px; padding: 0.5rem 0.75rem;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
@@ -16,19 +17,21 @@
                 <p class="text-muted mb-0 ms-5 ps-3">{{ __('admin.audit_log_desc') }}</p>
             </div>
             <div class="col-xl-5 d-flex gap-2 justify-content-xl-end justify-content-start align-items-center mt-3 mt-xl-0">
-                {{-- Maintenance Dropdown --}}
-                <div class="dropdown">
-                    <button class="btn btn-outline-danger shadow-sm d-flex align-items-center" type="button" id="maintenanceDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
-                        <i class="fas fa-tools me-2"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="maintenanceDropdown" style="border-radius: 12px; padding: 0.5rem;">
-                        <li>
-                            <button class="dropdown-item py-2 px-3 text-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#clearLogsModal" style="border-radius: 8px;">
-                                <i class="fas fa-trash-alt me-2"></i> {{ __('admin.clear_logs') }}
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+                {{-- Maintenance Dropdown (Superadmin/Admin Only) --}}
+                @if(in_array(Auth::user()->role->name, ['superadmin', 'admin']))
+                    <div class="dropdown">
+                        <button class="btn btn-outline-danger shadow-sm d-flex align-items-center" type="button" id="maintenanceDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                            <i class="fas fa-tools me-2"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="maintenanceDropdown" style="border-radius: 12px; padding: 0.5rem;">
+                            <li>
+                                <button class="dropdown-item py-2 px-3 text-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#clearLogsModal" style="border-radius: 8px;">
+                                    <i class="fas fa-trash-alt me-2"></i> {{ __('admin.clear_logs') }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
 
                 {{-- Filter Button --}}
                 <button class="btn btn-outline-brown shadow-sm" data-bs-toggle="modal"
@@ -450,11 +453,8 @@
         function exportReport(format) {
             const params = new URLSearchParams(window.location.search);
             params.set('format', format);
-            if (format === 'csv') {
-                window.location.href = "{{ route('admin.audit.export') }}?" + params.toString();
-            } else {
-                window.location.href = "{{ route('admin.audit.export') }}?" + params.toString();
-            }
+
+            window.location.href = "{{ route($routePrefix . 'audit.export') }}?" + params.toString();
         }
 
         function confirmClear(type) {

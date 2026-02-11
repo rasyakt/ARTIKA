@@ -101,7 +101,9 @@ class PosController extends Controller
             ->with(['user', 'items.product'])
             ->findOrFail($id);
 
-        return view('pos.receipt', compact('transaction'));
+        $paperSize = \App\Models\Setting::get('receipt_paper_size', '58mm');
+
+        return view('pos.receipt', compact('transaction', 'paperSize'));
     }
 
     public function scanner()

@@ -10,7 +10,8 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="d-flex align-items-center">
-                <a href="{{ route('admin.reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
+
+                <a href="{{ route($routePrefix . 'reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
                     style="border-radius: 10px;">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
@@ -28,7 +29,7 @@
                     data-bs-target="#exportPdfCustomModal">
                     <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
                 </button>
-                <a href="{{ route('admin.reports.finance.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
+                <a href="{{ route($routePrefix . 'reports.finance.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
                     class="btn btn-brown shadow-sm">
                     <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
                 </a>
@@ -257,7 +258,7 @@
     <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 15px; border: none;">
-                <form action="{{ route('admin.reports.finance') }}" method="GET">
+                <form action="{{ route($routePrefix . 'reports.finance') }}" method="GET">
                     <div class="modal-header border-0">
                         <h5 class="modal-title fw-bold">{{ __('admin.filter_report') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -317,11 +318,12 @@
             <div class="modal-content shadow border-0" style="border-radius: 16px;">
                 <div class="modal-header border-bottom-0 pb-0">
                     <h5 class="modal-title fw-bold" id="exportPdfCustomModalLabel">
-                        <i class="fa-solid fa-file-settings me-2"></i>Kustomisasi Laporan Keuangan
+                        <i
+                            class="fa-solid fa-file-settings me-2"></i>{{ __('admin.finance_report_customization') ?? 'Kustomisasi Laporan Keuangan' }}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('admin.reports.finance.export') }}" method="GET">
+                <form action="{{ route($routePrefix . 'reports.finance.export') }}" method="GET">
                     <input type="hidden" name="format" value="pdf">
                     <input type="hidden" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                     <input type="hidden" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
@@ -368,7 +370,7 @@
                     </div>
                     <div class="modal-footer border-top-0 pt-0 pb-4 justify-content-center">
                         <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal"
-                            style="border-radius: 10px;">Batal</button>
+                            style="border-radius: 10px;">{{ __('admin.cancel') }}</button>
                         <button type="submit" class="btn btn-brown px-4" style="border-radius: 10px;">
                             <i class="fa-solid fa-download me-2"></i>Generate PDF
                         </button>

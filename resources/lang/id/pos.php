@@ -56,7 +56,7 @@ return [
     'change_label' => 'Kembalian',
     'thank_you' => 'Terima kasih telah berbelanja!',
     'come_again' => 'Silakan datang kembali',
-    'print_receipt' => '🖨️ Cetak Struk',
+    'print_receipt' => 'Cetak Struk',
     'cash' => 'Tunai',
     'non_cash' => 'Non-Tunai',
     'qris' => 'QRIS',

@@ -52,11 +52,13 @@
             </div>
         </div>
 
+
+
         <!-- Report Cards -->
         <div class="row g-4 mb-4">
             <!-- Finance Report -->
             <div class="col-xl-3 col-md-6">
-                <a href="{{ route('admin.reports.finance') }}" class="text-decoration-none">
+                <a href="{{ route($routePrefix . 'reports.finance') }}" class="text-decoration-none">
                     <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto bg-brown-soft">
@@ -136,10 +138,9 @@
                 </a>
             </div>
 
-            <!-- Audit Logs -->
             @if(App\Models\Setting::get('admin_enable_audit_logs', true))
                 <div class="col-xl-3 col-md-6">
-                    <a href="{{ route('admin.audit.index') }}" class="text-decoration-none">
+                    <a href="{{ route($routePrefix . 'audit.index') }}" class="text-decoration-none">
                         <div class="card report-card shadow-sm h-100">
                             <div class="card-body text-center p-4">
                                 <div class="report-icon mx-auto bg-sienna-soft">
@@ -200,7 +201,7 @@
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="{{ route('admin.reports.print-all') }}" method="GET" id="printForm">
+                <form action="{{ route($routePrefix . 'reports.print-all') }}" method="GET" id="printForm">
                     <div class="modal-body p-4">
                         <div class="mb-4">
                             <label class="form-label fw-bold" style="color: #6f5849;">
@@ -238,7 +239,8 @@
 
                         <div class="mb-4">
                             <label class="form-label fw-bold" style="color: #6f5849;">
-                                <i class="fa-solid fa-layer-group me-2"></i>Bagian Laporan
+                                <i
+                                    class="fa-solid fa-layer-group me-2"></i>{{ __('admin.report_sections') ?? 'Report Sections' }}
                             </label>
                             <div class="list-group list-group-flush border rounded-12">
                                 <label class="list-group-item d-flex align-items-center py-2">

@@ -28,7 +28,8 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <div class="d-flex align-items-center mb-1">
-                    <a href="{{ route('admin.reports') }}" class="btn btn-light me-3 shadow-sm"
+
+                    <a href="{{ route($routePrefix . 'reports') }}" class="btn btn-light me-3 shadow-sm"
                         style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
@@ -44,7 +45,7 @@
                     data-bs-target="#exportPdfModal">
                     <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
                 </button>
-                <a href="{{ route('admin.reports.cashier.export', array_merge(request()->all(), ['format' => 'csv', 'search' => $search, 'action' => $action])) }}"
+                <a href="{{ route($routePrefix . 'reports.cashier.export', array_merge(request()->all(), ['format' => 'csv', 'search' => $search, 'action' => $action])) }}"
                     class="btn btn-brown shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                     <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
                 </a>
@@ -54,7 +55,7 @@
         <!-- Filters -->
         <div class="card shadow-sm mb-4">
             <div class="card-body p-4">
-                <form action="{{ route('admin.reports.cashier') }}" method="GET" class="row g-3 align-items-end">
+                <form action="{{ route($routePrefix . 'reports.cashier') }}" method="GET" class="row g-3 align-items-end">
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="period" class="form-label text-dark fw-semibold">
                             <i class="fa-solid fa-calendar me-1" style="color: #c17a5c;"></i> {{ __('admin.quick_period') }}
@@ -107,7 +108,7 @@
                             <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                         </button>
                         @if($search || $action || request('start_date') || request('end_date'))
-                            <a href="{{ route('admin.reports.cashier') }}" class="btn btn-outline-brown"
+                            <a href="{{ route($routePrefix . 'reports.cashier') }}" class="btn btn-outline-brown"
                                 style="border-radius: 8px; padding: 0.6rem;">
                                 <i class="fa-solid fa-rotate-left"></i>
                             </a>
@@ -351,7 +352,7 @@
                                                                 data-id="{{ $transaction->id }}"><i
                                                                     class="fas fa-print me-2 text-secondary"></i> Cetak</button>
                                                         </li>
-                                                        @if($transaction->status !== 'rolled_back')
+                                                        @if($transaction->status !== 'rolled_back' && strtolower(Auth::user()->role->name) !== 'manager')
                                                             <li>
                                                                 <hr class="dropdown-divider">
                                                             </li>
@@ -361,13 +362,15 @@
                                                                     data-cash="{{ $transaction->cash_amount }}"><i
                                                                         class="fas fa-edit me-2"></i> Edit</button></li>
                                                         @endif
-                                                        <li>
-                                                            <hr class="dropdown-divider">
-                                                        </li>
-                                                        <li><button type="button"
-                                                                class="dropdown-item py-2 text-danger btn-delete-tx"
-                                                                data-id="{{ $transaction->id }}"><i
-                                                                    class="fas fa-trash me-2"></i> Hapus</button></li>
+                                                        @if(strtolower(Auth::user()->role->name) !== 'manager')
+                                                            <li>
+                                                                <hr class="dropdown-divider">
+                                                            </li>
+                                                            <li><button type="button"
+                                                                    class="dropdown-item py-2 text-danger btn-delete-tx"
+                                                                    data-id="{{ $transaction->id }}"><i
+                                                                        class="fas fa-trash me-2"></i> Hapus</button></li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </td>
@@ -455,7 +458,7 @@
                                         <tr>
                                             <td class="fw-bold" style="color: #6f5849;">{{ $cat->name }}</td>
                                             <td class="text-center"><span
-                                                    class="badge bg-brown-soft text-brown">{{ $cat->total_sold }}</span></td>
+                                                    class="badge" style="background: #e0cec7; color: #6f5849;">{{ $cat->total_sold }}</span></td>
                                             <td class="text-end fw-bold" style="color: #c17a5c;">Rp
                                                 {{ number_format($cat->total_revenue, 0, ',', '.') }}
                                             </td>
@@ -826,7 +829,7 @@
                             <i class="fa-solid fa-rotate-left me-2"></i>{{ __('admin.return_items') }}
                         </button>
                     @endif
-                    drum <button type="button" class="btn btn-outline-brown px-4" id="btn-print-receipt"
+                    <button type="button" class="btn btn-outline-brown px-4" id="btn-print-receipt"
                         style="border-radius: 10px;">
                         <i class="fa-solid fa-print me-2"></i>Cetak Struk
                     </button>
@@ -946,11 +949,12 @@
             <div class="modal-content shadow border-0" style="border-radius: 16px;">
                 <div class="modal-header border-bottom-0 pb-0">
                     <h5 class="modal-title fw-bold" id="exportPdfModalLabel">
-                        <i class="fa-solid fa-file-settings me-2"></i>Kustomisasi Laporan PDF
+                        <i
+                            class="fa-solid fa-file-settings me-2"></i>{{ __('admin.pdf_report_customization') ?? 'Kustomisasi Laporan PDF' }}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('admin.reports.cashier.export') }}" method="GET">
+                <form action="{{ route($routePrefix . 'reports.cashier.export') }}" method="GET">
                     <input type="hidden" name="format" value="pdf">
                     <input type="hidden" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                     <input type="hidden" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
@@ -958,7 +962,9 @@
                     <input type="hidden" name="action" value="{{ $action }}">
 
                     <div class="modal-body py-4">
-                        <p class="text-muted mb-4 small">Pilih bagian laporan yang ingin ditampilkan dalam dokumen PDF:</p>
+                        <p class="text-muted mb-4 small">
+                            {{ __('admin.select_report_sections') ?? 'Pilih bagian laporan yang ingin ditampilkan dalam dokumen PDF:' }}
+                        </p>
 
                         <div class="list-group list-group-flush border rounded-12">
                             <label class="list-group-item d-flex align-items-center py-3">
@@ -1128,7 +1134,7 @@
                     itemsBody.innerHTML = '<tr><td colspan="4" class="text-center py-4"><i class="fas fa-spinner fa-spin me-2"></i>Loading...</td></tr>';
                     bootstrap.Modal.getOrCreateInstance(transactionDetailModal).show();
 
-                    fetch(`/admin/reports/cashier/items/${id}`)
+                    fetch(`{{ route($routePrefix . 'reports.cashier.items', ['id' => ':id']) }}`.replace(':id', id))
                         .then(response => response.json())
                         .then(data => {
                             invoiceSpan.textContent = `#${data.invoice_no}`;
@@ -1197,27 +1203,27 @@
                                         const retQty = parseInt(item.returned_quantity) || 0;
                                         const availableToReturn = qty - retQty;
                                         returnItemsHtml += `
-                                                                                        <tr>
-                                                                                            <td>
-                                                                                                <div class="fw-bold">${item.name}</div>
-                                                                                                <div class="small text-muted">Rp ${formatIDR(item.price)} / unit</div>
-                                                                                                ${retQty > 0 ? `<div class="badge bg-light text-brown border" style="font-size: 0.65rem;">${retQty} Terkumpul</div>` : ''}
-                                                                                                <input type="hidden" name="items[${index}][product_id]" value="${item.product_id}">
-                                                                                            </td>
-                                                                                            <td class="text-center">
-                                                                                                ${availableToReturn}
-                                                                                            </td>
-                                                                                            <td>
-                                                                                                <div class="input-group input-group-sm">
-                                                                                                    <button type="button" class="btn btn-outline-brown btn-qty" data-type="minus" ${availableToReturn <= 0 ? 'disabled' : ''}>-</button>
-                                                                                                    <input type="number" name="items[${index}][quantity]" class="form-control text-center input-qty" 
-                                                                                                        value="0" min="0" max="${availableToReturn}" data-price="${item.price}" readonly>
-                                                                                                    <button type="button" class="btn btn-outline-brown btn-qty" data-type="plus" ${availableToReturn <= 0 ? 'disabled' : ''}>+</button>
-                                                                                                    </div>
-                                                                                            </td>
-                                                                                            <td class="text-end fw-bold text-brown">Rp <span class="item-refund-est">0</span></td>
-                                                                                        </tr>
-                                                                                    `;
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                                <div class="fw-bold">${item.name}</div>
+                                                                                                                <div class="small text-muted">Rp ${formatIDR(item.price)} / unit</div>
+                                                                                                                ${retQty > 0 ? `<div class="badge bg-light text-brown border" style="font-size: 0.65rem;">${retQty} Terkumpul</div>` : ''}
+                                                                                                                <input type="hidden" name="items[${index}][product_id]" value="${item.product_id}">
+                                                                                                            </td>
+                                                                                                            <td class="text-center">
+                                                                                                                ${availableToReturn}
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div class="input-group input-group-sm">
+                                                                                                                    <button type="button" class="btn btn-outline-brown btn-qty" data-type="minus" ${availableToReturn <= 0 ? 'disabled' : ''}>-</button>
+                                                                                                                    <input type="number" name="items[${index}][quantity]" class="form-control text-center input-qty" 
+                                                                                                                        value="0" min="0" max="${availableToReturn}" data-price="${item.price}" readonly>
+                                                                                                                    <button type="button" class="btn btn-outline-brown btn-qty" data-type="plus" ${availableToReturn <= 0 ? 'disabled' : ''}>+</button>
+                                                                                                                    </div>
+                                                                                                            </td>
+                                                                                                            <td class="text-end fw-bold text-brown">Rp <span class="item-refund-est">0</span></td>
+                                                                                                        </tr>
+                                                                                                    `;
                                     });
                                     document.getElementById('return-items-body').innerHTML = returnItemsHtml;
                                     document.getElementById('return-total-refund').textContent = '0';
@@ -1238,7 +1244,7 @@
                                 const height = 600;
                                 const left = (window.screen.width / 2) - (width / 2);
                                 const top = (window.screen.height / 2) - (height / 2);
-                                window.open(`/admin/reports/cashier/receipt/${id}`, 'Receipt', `width=${width},height=${height},top=${top},left=${left},scrollbars=yes`);
+                                window.open(`{{ route($routePrefix . 'reports.cashier.receipt', ['id' => ':id']) }}`.replace(':id', id), 'Receipt', `width=${width},height=${height},top=${top},left=${left},scrollbars=yes`);
                             };
 
                             // Table body
@@ -1246,28 +1252,28 @@
                             data.items.forEach(item => {
                                 const netQuantity = item.quantity - item.returned_quantity;
                                 itemsBody.innerHTML += `
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <div class="fw-bold text-brown">${item.name}</div>
-                                                                                        <div class="small text-muted">Rp ${formatIDR(item.price)}</div>
-                                                                                    </td>
-                                                                                    <td class="text-center text-brown">
-                                                                                        ${item.returned_quantity > 0
+                                                                                                <tr>
+                                                                                                    <td>
+                                                                                                        <div class="fw-bold text-brown">${item.name}</div>
+                                                                                                        <div class="small text-muted">Rp ${formatIDR(item.price)}</div>
+                                                                                                    </td>
+                                                                                                    <td class="text-center text-brown">
+                                                                                                        ${item.returned_quantity > 0
                                         ? `<span class="text-decoration-line-through text-muted small">${item.quantity}</span><br><b>${netQuantity}</b>`
                                         : `<b>${item.quantity}</b>`}
-                                                                                    </td>
-                                                                                    <td class="text-center text-brown">
-                                                                                        ${item.returned_quantity > 0
+                                                                                                    </td>
+                                                                                                    <td class="text-center text-brown">
+                                                                                                        ${item.returned_quantity > 0
                                         ? `<span class="text-decoration-line-through text-muted small">Rp ${formatIDR(item.subtotal)}</span><br><b>Rp ${formatIDR(netQuantity * item.price)}</b>`
                                         : `<b>Rp ${formatIDR(item.subtotal)}</b>`}
-                                                                                    </td>
-                                                                                    <td class="text-end">
-                                                                                        ${item.returned_quantity > 0
+                                                                                                    </td>
+                                                                                                    <td class="text-end">
+                                                                                                        ${item.returned_quantity > 0
                                         ? `<span class="badge bg-danger-soft text-danger border border-danger-subtle">- ${item.returned_quantity} Retur</span>`
                                         : '<i class="fa-solid fa-check text-success"></i>'}
-                                                                                    </td>
-                                                                                </tr>
-                                                                            `;
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            `;
                             });
                         })
                         .catch(err => {
@@ -1286,7 +1292,7 @@
                     const height = 600;
                     const left = (window.screen.width / 2) - (width / 2);
                     const top = (window.screen.height / 2) - (height / 2);
-                    window.open(`/admin/reports/cashier/receipt/${id}`, 'Receipt', `width=${width},height=${height},top=${top},left=${left},scrollbars=yes`);
+                    window.open(`{{ route($routePrefix . 'reports.cashier.receipt', ['id' => ':id']) }}`.replace(':id', id), 'Receipt', `width=${width},height=${height},top=${top},left=${left},scrollbars=yes`);
                 });
             });
 
@@ -1298,7 +1304,7 @@
                     const method = this.getAttribute('data-method');
                     const cash = this.getAttribute('data-cash');
 
-                    document.getElementById('tx-edit-form').action = `/admin/reports/cashier/update/${id}`;
+                    document.getElementById('tx-edit-form').action = `{{ route($routePrefix . 'reports.cashier.update', ['id' => ':id']) }}`.replace(':id', id);
                     document.getElementById('tx-edit-method').value = method;
                     document.getElementById('tx-edit-cash').value = cash;
 

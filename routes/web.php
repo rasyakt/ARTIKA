@@ -15,9 +15,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        $role = Auth::user()->role->name ?? 'user';
+        $role = strtolower(Auth::user()->role->name ?? 'user');
         if ($role === 'superadmin' || $role === 'admin')
             return redirect()->route('admin.dashboard');
+        if ($role === 'manager')
+            return redirect()->route('manager.dashboard');
         if ($role === 'cashier')
             return redirect()->route('pos.index');
         if ($role === 'warehouse')
@@ -144,6 +146,32 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/held/{id}/resume', [\App\Http\Controllers\PosController::class, 'resumeHeldTransaction'])->name('held.resume');
         Route::delete('/held/{id}', [\App\Http\Controllers\PosController::class, 'deleteHeldTransaction'])->name('held.delete');
         Route::get('/receipt/{id}', [\App\Http\Controllers\PosController::class, 'printReceipt'])->name('receipt');
+    });
+
+    // Manager Routes (Kepala Toko)
+    Route::middleware(['role:manager'])->prefix('manager')->name('manager.')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\ManagerController::class, 'index'])->name('dashboard');
+
+        // Reports (read-only — reuses admin report controllers)
+        Route::get('/reports', [\App\Http\Controllers\Admin\ReportsHubController::class, 'index'])->name('reports');
+        Route::get('/reports/print-all', [\App\Http\Controllers\Admin\ReportsHubController::class, 'printAll'])->name('reports.print-all');
+        Route::get('/reports/warehouse', [\App\Http\Controllers\Admin\WarehouseReportController::class, 'index'])->name('reports.warehouse');
+        Route::get('/reports/warehouse/export', [\App\Http\Controllers\Admin\WarehouseReportController::class, 'export'])->name('reports.warehouse.export');
+        Route::get('/reports/cashier', [\App\Http\Controllers\Admin\CashierReportController::class, 'index'])->name('reports.cashier');
+        Route::get('/reports/cashier/export', [\App\Http\Controllers\Admin\CashierReportController::class, 'export'])->name('reports.cashier.export');
+        Route::get('/reports/finance', [\App\Http\Controllers\Admin\FinanceReportController::class, 'index'])->name('reports.finance');
+        Route::get('/reports/finance/export', [\App\Http\Controllers\Admin\FinanceReportController::class, 'export'])->name('reports.finance.export');
+
+        // Audit Logs (read-only)
+        Route::get('/audit', [\App\Http\Controllers\AuditController::class, 'index'])->name('audit.index');
+        Route::get('/audit/export', [\App\Http\Controllers\AuditController::class, 'export'])->name('audit.export');
+
+        // Transaction Correction (edit, rollback, view items, print receipt)
+        Route::get('/reports/cashier/items/{id}', [\App\Http\Controllers\Admin\CashierReportController::class, 'getTransactionItems'])->name('reports.cashier.items');
+        Route::put('/reports/cashier/update/{id}', [\App\Http\Controllers\Admin\CashierReportController::class, 'update'])->name('reports.cashier.update');
+        Route::post('/reports/cashier/rollback/{id}', [\App\Http\Controllers\Admin\CashierReportController::class, 'rollback'])->name('reports.cashier.rollback');
+        Route::get('/reports/cashier/receipt/{id}', [\App\Http\Controllers\Admin\CashierReportController::class, 'printReceipt'])->name('reports.cashier.receipt');
+        Route::post('/returns', [\App\Http\Controllers\Admin\ReturnController::class, 'store'])->name('returns.store');
     });
 
     // Warehouse Routes

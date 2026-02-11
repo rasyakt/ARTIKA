@@ -33,9 +33,7 @@ class AppServiceProvider extends ServiceProvider
             \App\Listeners\LogSuccessfulLogin::class,
         );
 
-        View::composer('layouts.app', function ($view) {
-            $view->with('user', Auth::user());
-        });
+
 
         Paginator::useBootstrap();
 
