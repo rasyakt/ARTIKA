@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -311,7 +312,7 @@
                         <div class="profile-avatar">
                             <i class="fas fa-user-circle"></i>
                         </div>
-                        <span class="ms-2 fw-600 text-white d-none d-lg-inline">{{ Auth::user()->name }}</span>
+                        <span class="ms-2 fw-600 text-white d-none d-lg-inline">{{ $user?->name }}</span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
                         style="min-width: 240px; border-radius: 16px;">
@@ -319,13 +320,13 @@
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
                                     style="width: 42px; height: 42px; font-size: 1.2rem;">
-                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                    {{ substr($user?->name ?? '', 0, 1) }}
                                 </div>
                                 <div class="overflow-hidden">
-                                    <h6 class="mb-0 fw-800 text-truncate">{{ Auth::user()->name }}</h6>
-                                    <div class="small text-muted text-truncate">@ {{ Auth::user()->username }}</div>
+                                    <h6 class="mb-0 fw-800 text-truncate">{{ $user?->name }}</h6>
+                                    <div class="small text-muted text-truncate">@ {{ $user?->username }}</div>
                                     <div class="small fw-700 text-primary" style="font-size: 0.7rem;">NIS:
-                                        {{ Auth::user()->nis ?? '-' }}
+                                        {{ $user?->nis ?? '-' }}
                                     </div>
                                 </div>
                             </div>

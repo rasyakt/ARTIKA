@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 @extends('layouts.app')
 
 @section('content')
@@ -114,7 +115,7 @@
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0"
                                                 style="border-radius: 12px; font-size: 0.875rem;">
-                                                @if(Auth::user()->role->name !== 'manager')
+                                                @if($user?->role?->name !== 'manager')
                                                     <li>
                                                         <a class="dropdown-item py-2 px-3" href="#" data-bs-toggle="modal"
                                                             data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"

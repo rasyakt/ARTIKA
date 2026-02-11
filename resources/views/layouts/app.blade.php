@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -452,7 +453,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark main-navbar">
         <div class="container-fluid px-4">
             <!-- Hamburger Menu (Mobile) -->
-            @if(Auth::user()->role->name === 'admin' || Auth::user()->role->name === 'warehouse')
+            @if($user?->role?->name === 'admin' || $user?->role?->name === 'warehouse')
                 <button class="hamburger-btn me-3" id="hamburgerBtn" type="button">
                     ☰
                 </button>
@@ -491,11 +492,11 @@
 
                 <a class="nav-link user-profile-link" href="#" title="Profile Settings (Coming Soon)"
                     style="cursor: default;">
-                    <div class="profile-avatar me-3">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</div>
+                    <div class="profile-avatar me-3">{{ strtoupper(substr($user?->name ?? '', 0, 1)) }}</div>
                     <div class="d-flex flex-column">
-                        <span class="user-name line-height-1 mb-1">{{ Auth::user()->name }}</span>
+                        <span class="user-name line-height-1 mb-1">{{ $user?->name }}</span>
                         <span class="text-white-50 fw-700 text-uppercase"
-                            style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ Auth::user()->role->name }}</span>
+                            style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
                     </div>
                 </a>
             </div>
@@ -505,7 +506,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar (only for admin, manager and warehouse) -->
-            @if(in_array(Auth::user()->role->name, ['superadmin', 'admin', 'manager', 'warehouse']))
+            @if(in_array($user?->role?->name, ['superadmin', 'admin', 'manager', 'warehouse']))
                 <div class="col-md-2 sidebar px-0" id="sidebar">
                     <!-- Mobile Sidebar Header -->
                     <div class="sidebar-header">
@@ -513,7 +514,7 @@
                         <button class="sidebar-close" id="sidebarClose">×</button>
                     </div>
 
-                    @if(in_array(Auth::user()->role->name, ['superadmin', 'admin']))
+                    @if(in_array($user?->role?->name, ['superadmin', 'admin']))
                         <a href="{{ route('admin.dashboard') }}"
                             class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
@@ -680,7 +681,7 @@
                             <i class="fa-solid fa-gear"></i> {{ __('menu.settings') ?? 'Settings' }}
                         </a>
 
-                        @if(auth()->user()->role->name === 'superadmin')
+                        @if($user?->role?->name === 'superadmin')
                             <div class="sidebar-group mt-3">
                                 <span class="text-muted small px-3 text-uppercase fw-bold"
                                     style="font-size: 0.7rem; opacity: 0.6;">System Admin</span>
@@ -695,7 +696,7 @@
                             </div>
                         @endif
 
-                    @elseif(Auth::user()->role->name === 'manager')
+                    @elseif($user?->role?->name === 'manager')
                         <a href="{{ route($routePrefix . 'dashboard') }}"
                             class="sidebar-link {{ request()->routeIs($routePrefix . 'dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
@@ -744,7 +745,7 @@
                             </ul>
                         </div>
 
-                    @elseif(Auth::user()->role->name === 'warehouse')
+                    @elseif($user?->role?->name === 'warehouse')
                         <a href="{{ route('warehouse.dashboard') }}"
                             class="sidebar-link {{ request()->routeIs('warehouse.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}

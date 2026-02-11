@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 @extends('layouts.app')
 
 @section('content')
@@ -318,7 +319,7 @@
                                                     <span class="badge bg-danger">{{ $item->current_stock }}</span>
                                                 </td>
                                                 <td class="text-end">
-                                                    @if(strtolower(Auth::user()->role->name) !== 'manager')
+                                                    @if(strtolower($user?->role?->name ?? '') !== 'manager')
                                                         <a href="{{ route('warehouse.stock', ['product_id' => $item->id]) }}"
                                                             class="btn btn-outline-primary" style="border-radius: 8px; padding: 0.25rem 0.75rem; font-size: 0.85rem;">
                                                             <i class="fa-solid fa-plus-circle me-1"></i> Restock

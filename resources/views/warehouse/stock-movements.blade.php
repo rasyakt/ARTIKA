@@ -140,11 +140,14 @@
                             <select name="type" class="form-select">
                                 <option value="">{{ __('warehouse.all_types') }}</option>
                                 <option value="in" {{ request('type') === 'in' ? 'selected' : '' }}>
-                                    {{ __('warehouse.stock_in') }}</option>
+                                    {{ __('warehouse.stock_in') }}
+                                </option>
                                 <option value="out" {{ request('type') === 'out' ? 'selected' : '' }}>
-                                    {{ __('warehouse.stock_out') }}</option>
+                                    {{ __('warehouse.stock_out') }}
+                                </option>
                                 <option value="adjustment" {{ request('type') === 'adjustment' ? 'selected' : '' }}>
-                                    {{ __('warehouse.adjustment') }}</option>
+                                    {{ __('warehouse.adjustment') }}
+                                </option>
                             </select>
                         </div>
                         <div class="col-md-2">

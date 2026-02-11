@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 @extends('layouts.app')
 
 @section('content')
@@ -352,7 +353,7 @@
                                                                 data-id="{{ $transaction->id }}"><i
                                                                     class="fas fa-print me-2 text-secondary"></i> Cetak</button>
                                                         </li>
-                                                        @if($transaction->status !== 'rolled_back' && strtolower(Auth::user()->role->name) !== 'manager')
+                                                        @if($transaction->status !== 'rolled_back' && strtolower($user?->role?->name ?? '') !== 'manager')
                                                             <li>
                                                                 <hr class="dropdown-divider">
                                                             </li>
@@ -362,7 +363,7 @@
                                                                     data-cash="{{ $transaction->cash_amount }}"><i
                                                                         class="fas fa-edit me-2"></i> Edit</button></li>
                                                         @endif
-                                                        @if(strtolower(Auth::user()->role->name) !== 'manager')
+                                                        @if(strtolower($user?->role?->name ?? '') !== 'manager')
                                                             <li>
                                                                 <hr class="dropdown-divider">
                                                             </li>
@@ -457,8 +458,9 @@
                                     @forelse($categorySales as $cat)
                                         <tr>
                                             <td class="fw-bold" style="color: #6f5849;">{{ $cat->name }}</td>
-                                            <td class="text-center"><span
-                                                    class="badge" style="background: #e0cec7; color: #6f5849;">{{ $cat->total_sold }}</span></td>
+                                            <td class="text-center"><span class="badge"
+                                                    style="background: #e0cec7; color: #6f5849;">{{ $cat->total_sold }}</span>
+                                            </td>
                                             <td class="text-end fw-bold" style="color: #c17a5c;">Rp
                                                 {{ number_format($cat->total_revenue, 0, ',', '.') }}
                                             </td>
@@ -1203,27 +1205,27 @@
                                         const retQty = parseInt(item.returned_quantity) || 0;
                                         const availableToReturn = qty - retQty;
                                         returnItemsHtml += `
-                                                                                                        <tr>
-                                                                                                            <td>
-                                                                                                                <div class="fw-bold">${item.name}</div>
-                                                                                                                <div class="small text-muted">Rp ${formatIDR(item.price)} / unit</div>
-                                                                                                                ${retQty > 0 ? `<div class="badge bg-light text-brown border" style="font-size: 0.65rem;">${retQty} Terkumpul</div>` : ''}
-                                                                                                                <input type="hidden" name="items[${index}][product_id]" value="${item.product_id}">
-                                                                                                            </td>
-                                                                                                            <td class="text-center">
-                                                                                                                ${availableToReturn}
-                                                                                                            </td>
-                                                                                                            <td>
-                                                                                                                <div class="input-group input-group-sm">
-                                                                                                                    <button type="button" class="btn btn-outline-brown btn-qty" data-type="minus" ${availableToReturn <= 0 ? 'disabled' : ''}>-</button>
-                                                                                                                    <input type="number" name="items[${index}][quantity]" class="form-control text-center input-qty" 
-                                                                                                                        value="0" min="0" max="${availableToReturn}" data-price="${item.price}" readonly>
-                                                                                                                    <button type="button" class="btn btn-outline-brown btn-qty" data-type="plus" ${availableToReturn <= 0 ? 'disabled' : ''}>+</button>
-                                                                                                                    </div>
-                                                                                                            </td>
-                                                                                                            <td class="text-end fw-bold text-brown">Rp <span class="item-refund-est">0</span></td>
-                                                                                                        </tr>
-                                                                                                    `;
+                                                                                                                <tr>
+                                                                                                                    <td>
+                                                                                                                        <div class="fw-bold">${item.name}</div>
+                                                                                                                        <div class="small text-muted">Rp ${formatIDR(item.price)} / unit</div>
+                                                                                                                        ${retQty > 0 ? `<div class="badge bg-light text-brown border" style="font-size: 0.65rem;">${retQty} Terkumpul</div>` : ''}
+                                                                                                                        <input type="hidden" name="items[${index}][product_id]" value="${item.product_id}">
+                                                                                                                    </td>
+                                                                                                                    <td class="text-center">
+                                                                                                                        ${availableToReturn}
+                                                                                                                    </td>
+                                                                                                                    <td>
+                                                                                                                        <div class="input-group input-group-sm">
+                                                                                                                            <button type="button" class="btn btn-outline-brown btn-qty" data-type="minus" ${availableToReturn <= 0 ? 'disabled' : ''}>-</button>
+                                                                                                                            <input type="number" name="items[${index}][quantity]" class="form-control text-center input-qty" 
+                                                                                                                                value="0" min="0" max="${availableToReturn}" data-price="${item.price}" readonly>
+                                                                                                                            <button type="button" class="btn btn-outline-brown btn-qty" data-type="plus" ${availableToReturn <= 0 ? 'disabled' : ''}>+</button>
+                                                                                                                            </div>
+                                                                                                                    </td>
+                                                                                                                    <td class="text-end fw-bold text-brown">Rp <span class="item-refund-est">0</span></td>
+                                                                                                                </tr>
+                                                                                                            `;
                                     });
                                     document.getElementById('return-items-body').innerHTML = returnItemsHtml;
                                     document.getElementById('return-total-refund').textContent = '0';
@@ -1252,28 +1254,28 @@
                             data.items.forEach(item => {
                                 const netQuantity = item.quantity - item.returned_quantity;
                                 itemsBody.innerHTML += `
-                                                                                                <tr>
-                                                                                                    <td>
-                                                                                                        <div class="fw-bold text-brown">${item.name}</div>
-                                                                                                        <div class="small text-muted">Rp ${formatIDR(item.price)}</div>
-                                                                                                    </td>
-                                                                                                    <td class="text-center text-brown">
-                                                                                                        ${item.returned_quantity > 0
+                                                                                                        <tr>
+                                                                                                            <td>
+                                                                                                                <div class="fw-bold text-brown">${item.name}</div>
+                                                                                                                <div class="small text-muted">Rp ${formatIDR(item.price)}</div>
+                                                                                                            </td>
+                                                                                                            <td class="text-center text-brown">
+                                                                                                                ${item.returned_quantity > 0
                                         ? `<span class="text-decoration-line-through text-muted small">${item.quantity}</span><br><b>${netQuantity}</b>`
                                         : `<b>${item.quantity}</b>`}
-                                                                                                    </td>
-                                                                                                    <td class="text-center text-brown">
-                                                                                                        ${item.returned_quantity > 0
+                                                                                                            </td>
+                                                                                                            <td class="text-center text-brown">
+                                                                                                                ${item.returned_quantity > 0
                                         ? `<span class="text-decoration-line-through text-muted small">Rp ${formatIDR(item.subtotal)}</span><br><b>Rp ${formatIDR(netQuantity * item.price)}</b>`
                                         : `<b>Rp ${formatIDR(item.subtotal)}</b>`}
-                                                                                                    </td>
-                                                                                                    <td class="text-end">
-                                                                                                        ${item.returned_quantity > 0
+                                                                                                            </td>
+                                                                                                            <td class="text-end">
+                                                                                                                ${item.returned_quantity > 0
                                         ? `<span class="badge bg-danger-soft text-danger border border-danger-subtle">- ${item.returned_quantity} Retur</span>`
                                         : '<i class="fa-solid fa-check text-success"></i>'}
-                                                                                                    </td>
-                                                                                                </tr>
-                                                                                            `;
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    `;
                             });
                         })
                         .catch(err => {

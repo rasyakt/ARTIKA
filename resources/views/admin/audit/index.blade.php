@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 @extends('layouts.app')
 
 @section('content')
@@ -18,7 +19,7 @@
             </div>
             <div class="col-xl-5 d-flex gap-2 justify-content-xl-end justify-content-start align-items-center mt-3 mt-xl-0">
                 {{-- Maintenance Dropdown (Superadmin/Admin Only) --}}
-                @if(in_array(Auth::user()->role->name, ['superadmin', 'admin']))
+                @if(in_array($user?->role?->name, ['superadmin', 'admin']))
                     <div class="dropdown">
                         <button class="btn btn-outline-danger shadow-sm d-flex align-items-center" type="button" id="maintenanceDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                             <i class="fas fa-tools me-2"></i>
@@ -84,7 +85,7 @@
                 <div class="card border-left-warning">
                     <div class="card-body">
                         <div class="text-warning font-weight-bold text-uppercase mb-1">{{ __('common.user') }}</div>
-                        <div class="small">{{ Auth::user()->name }}</div>
+                        <div class="small">{{ $user?->name }}</div>
                     </div>
                 </div>
             </div>

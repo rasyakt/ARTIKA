@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -1627,9 +1628,9 @@
                         </div>
                         <div class="d-none d-lg-flex flex-column align-items-start me-2">
                             <span class="text-white fw-700 mb-0"
-                                style="font-size: 1rem; line-height: 1.1;">{{ Auth::user()->name }}</span>
+                                style="font-size: 1rem; line-height: 1.1;">{{ $user?->name }}</span>
                             <span class="text-white-50 fw-700 text-uppercase"
-                                style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ Auth::user()->role->name }}</span>
+                                style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
                         </div>
                         <!-- <i class="fas fa-chevron-down text-white-50 small d-none d-lg-block"></i> -->
                     </button>
@@ -1639,13 +1640,13 @@
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
                                     style="width: 42px; height: 42px; font-size: 1.2rem;">
-                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                    {{ substr($user?->name ?? '', 0, 1) }}
                                 </div>
                                 <div class="overflow-hidden">
-                                    <h6 class="mb-0 fw-800 text-truncate">{{ Auth::user()->name }}</h6>
-                                    <div class="small text-muted text-truncate">@ {{ Auth::user()->username }}</div>
+                                    <h6 class="mb-0 fw-800 text-truncate">{{ $user?->name }}</h6>
+                                    <div class="small text-muted text-truncate">@ {{ $user?->username }}</div>
                                     <div class="small fw-700 text-primary" style="font-size: 0.7rem;">NIS:
-                                        {{ Auth::user()->nis ?? '-' }}
+                                        {{ $user?->nis ?? '-' }}
                                     </div>
                                 </div>
                             </div>
