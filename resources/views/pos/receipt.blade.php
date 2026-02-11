@@ -324,7 +324,7 @@
                 max-width: 100% !important;
                 margin: 0 auto !important;
                 box-shadow: none !important;
-                padding: 2mm 0 !important;
+                padding: 2mm 5mm 2mm 1mm !important;
                 height: auto !important;
                 min-height: auto !important;
                 overflow: visible !important;

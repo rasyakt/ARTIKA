@@ -2134,8 +2134,10 @@
             let barcodeBuffer = '';
             let lastKeyTime = Date.now();
             let isProcessing = false; // Flag to prevent double triggers
-            const SCAN_THRESHOLD = 200;
+            let scanTimeout = null;
+            const SCAN_THRESHOLD = 500; // [RELAXED] Increased from 200ms to 500ms for slower scanners
             const MIN_BARCODE_LENGTH = 3;
+            const SUBMIT_INACTIVITY_MS = 500; // [RELAXED] Increased from 300ms to 500ms for very slow scanners
 
             document.addEventListener('keydown', function (e) {
                 // Ignore if currently processing a scan
@@ -2155,6 +2157,9 @@
                 const currentTime = Date.now();
                 const timeDiff = currentTime - lastKeyTime;
                 lastKeyTime = currentTime;
+
+                // Reset inactivity timeout on every key
+                if (scanTimeout) clearTimeout(scanTimeout);
 
                 const isNumeric = /^[0-9]$/.test(e.key);
                 const isAlpha = /^[a-zA-Z]$/.test(e.key);
@@ -2194,7 +2199,6 @@
                             if (barcodeInput) barcodeInput.value = barcodeBuffer;
                         } else {
                             // If focused, the browser adds the key to input natively.
-                            // We just sync the buffer to be safe for non-Enter triggers.
                             barcodeBuffer = barcodeInput.value + e.key;
                         }
                     } else {
@@ -2205,17 +2209,34 @@
                         }
                     }
 
-                    // [NEW] Consolidated Instant Match - only if length matches common barcode patterns
-                    // We check both the buffer and the input value
+                    // [NEW] Set inactivity timeout to auto-submit 
+                    // This helps if the scanner doesn't send Enter or sends it very slowly
+                    if (barcodeBuffer.length >= MIN_BARCODE_LENGTH) {
+                        scanTimeout = setTimeout(() => {
+                            const currentVal = isFocused ? barcodeInput.value.trim() : barcodeBuffer.trim();
+                            // Auto-process if long enough and no match found yet via instant match
+                            if (currentVal.length >= 8 && !isProcessing) {
+                                console.log(`[Timeout] Auto-processing: ${currentVal}`);
+                                isProcessing = true;
+                                handleScannedBarcode(currentVal);
+                                barcodeBuffer = '';
+                                if (barcodeInput) barcodeInput.value = '';
+                                setTimeout(() => { isProcessing = false; }, 500);
+                            }
+                        }, SUBMIT_INACTIVITY_MS);
+                    }
+
+                    // [REFINED] Instant Match - Works for any length >= 8 if perfect match found
                     const currentVal = isFocused ? (barcodeInput.value + e.key) : barcodeBuffer;
-                    if (currentVal.length >= 8) { // Only instant match for long barcodes to avoid partials
+                    if (currentVal.length >= 8) {
                         const instantMatch = document.querySelector(`.product-card[data-barcode="${currentVal}"]`) ||
                             document.querySelector(`.product-card[data-product-id="${currentVal}"]`);
 
                         if (instantMatch) {
-                            console.log(`[Instant] Match found: ${currentVal}`);
+                            console.log(`[Instant] Perfect match found for length ${currentVal.length}: ${currentVal}`);
                             e.preventDefault();
                             isProcessing = true;
+                            if (scanTimeout) clearTimeout(scanTimeout);
                             handleScannedBarcode(currentVal);
 
                             barcodeBuffer = '';
@@ -2695,7 +2716,7 @@
                     }
 
                     modal.hide();
-                    processCheckout(cart, subtotal, total, total, file, discountAmount, originalSubtotal);
+                    processCheckout(cart, itemSubtotal, total, total, file, totalDiscountAmount, originalSubtotal);
                 }
             };
         }
@@ -2820,10 +2841,10 @@
                             },
                             buttonsStyling: false
                         }).then((result_swal) => {
-                            if (result_swal.isConfirmed && result.transaction_id) {
+                            if (result_swal.isConfirmed && transaction_id) {
                                 // Only auto-print if NOT on mobile/tablet (width >= 1024px)
                                 const isMobile = window.innerWidth < 1024;
-                                const printUrl = '{{ url("pos/receipt") }}/' + result.transaction_id + (isMobile ? '' : '?auto_print=true');
+                                const printUrl = '{{ url("pos/receipt") }}/' + transaction_id + (isMobile ? '' : '?auto_print=true');
                                 window.open(printUrl, '_blank');
                             }
                             // Auto-refresh stock by reloading page
