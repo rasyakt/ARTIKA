@@ -2148,6 +2148,12 @@
                     return;
                 }
 
+                // [NEW] Ignore if typing in another input field (e.g., manual discount)
+                const isTargetInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
+                if (isTargetInput && e.target !== barcodeInput) {
+                    return;
+                }
+
                 // Ignore if in keypad modal, unless it's Enter 
                 const keypadModal = document.getElementById('keypadModal');
                 if (keypadModal && keypadModal.classList.contains('show')) {
