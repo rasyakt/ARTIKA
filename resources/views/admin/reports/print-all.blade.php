@@ -177,163 +177,171 @@
     </div>
 
     <!-- FINANCE SECTION -->
-    <div class="section-divider">{{ __('admin.finance_reports_title') }}</div>
-    <table class="summary-grid">
-        <tr>
-            <td class="summary-box" width="20%">
-                <h3>{{ __('admin.gross_revenue') }}</h3>
-                <div class="value">Rp {{ number_format($financeSummary['gross_revenue'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box" width="20%">
-                <h3>{{ __('admin.cogs') }}</h3>
-                <div class="value">Rp {{ number_format($financeSummary['cogs'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box" width="20%">
-                <h3>{{ __('admin.operational_expenses') }}</h3>
-                <div class="value text-danger">Rp {{ number_format($financeSummary['total_expenses'], 0, ',', '.') }}
-                </div>
-            </td>
-            <td class="summary-box" width="20%">
-                <h3>{{ __('admin.stock_procurement') }}</h3>
-                <div class="value text-danger">Rp {{ number_format($financeSummary['total_procurement'], 0, ',', '.') }}
-                </div>
-            </td>
-            <td class="summary-box" width="20%">
-                <h3>{{ __('admin.net_profit') }}</h3>
-                <div class="value {{ $financeSummary['net_profit'] >= 0 ? 'text-success' : 'text-danger' }}">
-                    Rp {{ number_format($financeSummary['net_profit'], 0, ',', '.') }}
-                </div>
-            </td>
-        </tr>
-    </table>
+    @if(in_array('finance', $modules))
+        <div class="section-divider">{{ __('admin.finance_reports_title') }}</div>
+        <table class="summary-grid">
+            <tr>
+                <td class="summary-box" width="20%">
+                    <h3>{{ __('admin.gross_revenue') }}</h3>
+                    <div class="value">Rp {{ number_format($financeSummary['gross_revenue'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="20%">
+                    <h3>{{ __('admin.cogs') }}</h3>
+                    <div class="value">Rp {{ number_format($financeSummary['cogs'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="20%">
+                    <h3>{{ __('admin.operational_expenses') }}</h3>
+                    <div class="value text-danger">Rp {{ number_format($financeSummary['total_expenses'], 0, ',', '.') }}
+                    </div>
+                </td>
+                <td class="summary-box" width="20%">
+                    <h3>{{ __('admin.stock_procurement') }}</h3>
+                    <div class="value text-danger">Rp {{ number_format($financeSummary['total_procurement'], 0, ',', '.') }}
+                    </div>
+                </td>
+                <td class="summary-box" width="20%">
+                    <h3>{{ __('admin.net_profit') }}</h3>
+                    <div class="value {{ $financeSummary['net_profit'] >= 0 ? 'text-success' : 'text-danger' }}">
+                        Rp {{ number_format($financeSummary['net_profit'], 0, ',', '.') }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    @endif
 
     <!-- WAREHOUSE SECTION -->
-    <div class="section-divider">{{ __('admin.warehouse_management_report') }}</div>
-    <table class="summary-grid">
-        <tr>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.total_valuation') }}</h3>
-                <div class="value">Rp {{ number_format($warehouseSummary['total_valuation'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.total_stock') }}</h3>
-                <div class="value">{{ number_format($warehouseSummary['total_items']) }} unit</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.low_stock_items') }}</h3>
-                <div class="value text-danger">{{ number_format($warehouseSummary['low_stock_count']) }} item</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.movements') }}</h3>
-                <div class="value">
-                    <span class="text-success">{{ $warehouseSummary['movements_in'] }}↑</span> /
-                    <span class="text-danger">{{ $warehouseSummary['movements_out'] }}↓</span>
-                </div>
-            </td>
-        </tr>
-    </table>
-
-    <div class="subsection-title">{{ __('admin.top_moving_items') }}</div>
-    <table class="data">
-        <thead>
+    @if(in_array('warehouse', $modules))
+        <div class="section-divider">{{ __('admin.warehouse_management_report') }}</div>
+        <table class="summary-grid">
             <tr>
-                <th width="8%">RANK</th>
-                <th>PRODUCT</th>
-                <th width="20%" class="text-center">{{ __('admin.total_movements') }}</th>
-                <th width="20%" class="text-center">{{ __('common.quantity') }}</th>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.total_valuation') }}</h3>
+                    <div class="value">Rp {{ number_format($warehouseSummary['total_valuation'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.total_stock') }}</h3>
+                    <div class="value">{{ number_format($warehouseSummary['total_items']) }} unit</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.low_stock_items') }}</h3>
+                    <div class="value text-danger">{{ number_format($warehouseSummary['low_stock_count']) }} item</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.movements') }}</h3>
+                    <div class="value">
+                        <span class="text-success">{{ $warehouseSummary['movements_in'] }}↑</span> /
+                        <span class="text-danger">{{ $warehouseSummary['movements_out'] }}↓</span>
+                    </div>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($topMovers as $index => $mover)
-                <tr>
-                    <td class="text-center">#{{ $index + 1 }}</td>
-                    <td><strong>{{ $mover->product->name }}</strong><br><small>{{ $mover->product->barcode }}</small></td>
-                    <td class="text-center"><span class="badge">{{ $mover->total_movements }}</span></td>
-                    <td class="text-center text-success"><strong>{{ number_format($mover->total_quantity) }}</strong></td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+        </table>
 
-    <div class="page-break"></div>
+        <div class="subsection-title">{{ __('admin.top_moving_items') }}</div>
+        <table class="data">
+            <thead>
+                <tr>
+                    <th width="8%">RANK</th>
+                    <th>PRODUCT</th>
+                    <th width="20%" class="text-center">{{ __('admin.total_movements') }}</th>
+                    <th width="20%" class="text-center">{{ __('common.quantity') }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($topMovers as $index => $mover)
+                    <tr>
+                        <td class="text-center">#{{ $index + 1 }}</td>
+                        <td><strong>{{ $mover->product->name }}</strong><br><small>{{ $mover->product->barcode }}</small></td>
+                        <td class="text-center"><span class="badge">{{ $mover->total_movements }}</span></td>
+                        <td class="text-center text-success"><strong>{{ number_format($mover->total_quantity) }}</strong></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
     <!-- CASHIER SECTION -->
-    <div class="section-divider">{{ __('admin.cashier_sales_report') }}</div>
-    <table class="summary-grid">
-        <tr>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.total_sales') }}</h3>
-                <div class="value text-success">Rp {{ number_format($cashierSummary['total_sales'], 0, ',', '.') }}
-                </div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>{{ __('admin.transactions') }}</h3>
-                <div class="value">{{ number_format($cashierSummary['total_transactions']) }} trx</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>CASH SALES</h3>
-                <div class="value">Rp {{ number_format($cashierSummary['cash_sales'], 0, ',', '.') }}</div>
-            </td>
-            <td class="summary-box" width="25%">
-                <h3>NON-CASH</h3>
-                <div class="value">Rp {{ number_format($cashierSummary['non_cash_sales'], 0, ',', '.') }}</div>
-            </td>
-        </tr>
-    </table>
-
-    <div class="subsection-title">{{ __('admin.top_selling_products') }}</div>
-    <table class="data">
-        <thead>
+    @if(in_array('cashier', $modules))
+        <div class="section-divider">{{ __('admin.cashier_sales_report') }}</div>
+        <table class="summary-grid">
             <tr>
-                <th width="8%">RANK</th>
-                <th>PRODUCT</th>
-                <th width="15%" class="text-center">{{ __('admin.sold') }}</th>
-                <th width="25%" class="text-right">{{ __('admin.revenue') }}</th>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.total_sales') }}</h3>
+                    <div class="value text-success">Rp {{ number_format($cashierSummary['total_sales'], 0, ',', '.') }}
+                    </div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.transactions') }}</h3>
+                    <div class="value">{{ number_format($cashierSummary['total_transactions']) }} trx</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.cash_sales') }}</h3>
+                    <div class="value">Rp {{ number_format($cashierSummary['cash_sales'], 0, ',', '.') }}</div>
+                </td>
+                <td class="summary-box" width="25%">
+                    <h3>{{ __('admin.non_cash_sales') }}</h3>
+                    <div class="value">Rp {{ number_format($cashierSummary['non_cash_sales'], 0, ',', '.') }}</div>
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach($topProducts as $index => $product)
+        </table>
+
+        <div class="subsection-title">{{ __('admin.top_selling_products') }}</div>
+        <table class="data">
+            <thead>
                 <tr>
-                    <td class="text-center">#{{ $index + 1 }}</td>
-                    <td><strong>{{ $product->name }}</strong><br><small>{{ $product->barcode }}</small></td>
-                    <td class="text-center"><span
-                            class="badge badge-success">{{ number_format($product->total_sold) }}</span></td>
-                    <td class="text-right text-success"><strong>Rp
-                            {{ number_format($product->total_revenue, 0, ',', '.') }}</strong></td>
+                    <th width="8%">RANK</th>
+                    <th>PRODUCT</th>
+                    <th width="15%" class="text-center">{{ __('admin.sold') }}</th>
+                    <th width="25%" class="text-right">{{ __('admin.revenue') }}</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($topProducts as $index => $product)
+                    <tr>
+                        <td class="text-center">#{{ $index + 1 }}</td>
+                        <td><strong>{{ $product->name }}</strong><br><small>{{ $product->barcode }}</small></td>
+                        <td class="text-center"><span
+                                class="badge badge-success">{{ number_format($product->total_sold) }}</span></td>
+                        <td class="text-right text-success"><strong>Rp
+                                {{ number_format($product->total_revenue, 0, ',', '.') }}</strong></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
     <!-- AUDIT SECTION -->
-    <div class="section-divider">{{ __('admin.system_audit_logs') }} (Recent 20)</div>
-    <table class="data">
-        <thead>
-            <tr>
-                <th width="15%">DATE & TIME</th>
-                <th width="15%">USER</th>
-                <th width="12%">ACTION</th>
-                <th width="12%">TARGET</th>
-                <th width="15%">NETWORK</th>
-                <th>DETAILS</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($auditLogs as $log)
+    {{-- Always show basic audit logs if any module is selected, or only if cashier/warehouse selected? Let's show it if
+    anything is selected since it's a "Complete Store Report" --}}
+    @if(!empty($modules))
+        <div class="section-divider">{{ __('admin.system_audit_logs') }} (Recent 20)</div>
+        <table class="data">
+            <thead>
                 <tr>
-                    <td>{{ $log->created_at->format('d/m/Y H:i') }}</td>
-                    <td><strong>{{ $log->user?->name ?? 'System' }}</strong></td>
-                    <td><span class="badge">{{ strtoupper(str_replace('_', ' ', $log->action)) }}</span></td>
-                    <td>{{ $log->model_type }} #{{ $log->model_id }}</td>
-                    <td><code>{{ $log->ip_address }}</code></td>
-                    <td>{{ Str::limit($log->notes, 40) }}</td>
+                    <th width="15%">DATE & TIME</th>
+                    <th width="15%">USER</th>
+                    <th width="12%">ACTION</th>
+                    <th width="12%">TARGET</th>
+                    <th width="15%">NETWORK</th>
+                    <th>DETAILS</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach($auditLogs as $log)
+                    <tr>
+                        <td>{{ $log->created_at->format('d/m/Y H:i') }}</td>
+                        <td><strong>{{ $log->user?->name ?? 'System' }}</strong></td>
+                        <td><span class="badge">{{ strtoupper(str_replace('_', ' ', $log->action)) }}</span></td>
+                        <td>{{ $log->model_type }} #{{ $log->model_id }}</td>
+                        <td><code>{{ $log->ip_address }}</code></td>
+                        <td>{{ Str::limit($log->notes, 40) }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
 
     <div class="footer">
-        <p><strong>ARTIKA POS SYSTEM</strong> - Consolidated Report</p>
+        <p><strong>ARTIKA POS SYSTEM</strong></p>
         <p>This document is generated automatically by the system. Page totals may reflect the specified period only.
         </p>
         <p>Printed on: {{ now()->format('d/m/Y H:i:s') }}</p>

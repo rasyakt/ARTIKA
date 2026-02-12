@@ -27,14 +27,14 @@
         <!-- Statistics Cards -->
         <div class="row g-4 mb-4">
             <!-- Total Sales -->
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm accent-brown">
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.total_sales') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($totalSales, 0, ',', '.') }}</h3>
+                                <h4 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($totalSales, 0, ',', '.') }}</h4>
                                 <small class="text-muted">{{ __('common.this_month') }}</small>
                             </div>
                             <div class="icon-box-premium bg-brown-soft">
@@ -46,17 +46,17 @@
             </div>
 
             <!-- Total Transactions -->
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm accent-success">
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.transactions') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($totalTransactions) }}</h3>
+                                <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($totalTransactions) }}</h4>
                                 <small class="text-muted">{{ __('common.completed') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-success-soft">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-chart-pie"></i>
                             </div>
                         </div>
@@ -65,17 +65,17 @@
             </div>
 
             <!-- Total Products -->
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm accent-sienna">
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.products') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalProducts }}</h3>
+                                <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalProducts }}</h4>
                                 <small class="text-muted">{{ __('common.in_catalog') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-sienna-soft">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-box"></i>
                             </div>
                         </div>
@@ -84,17 +84,17 @@
             </div>
 
             <!-- Total Suppliers -->
-            <div class="col-md-3">
-                <div class="card h-100 shadow-sm accent-info">
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('common.suppliers') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalSuppliers ?? $totalCustomers ?? 0 }}</h3>
+                                <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalSuppliers ?? $totalCustomers ?? 0 }}</h4>
                                 <small class="text-muted">{{ __('common.registered_suppliers') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-info-soft">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-truck"></i>
                             </div>
                         </div>
@@ -106,7 +106,7 @@
         <!-- Charts Row -->
         <div class="row g-4 mb-4">
             <!-- Sales Chart -->
-            <div class="col-md-8">
+            <div class="col-xl-8">
                 <div class="card shadow-sm h-100">
                     <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
@@ -131,7 +131,7 @@
             </div>
 
             <!-- Top Products -->
-            <div class="col-md-4">
+            <div class="col-xl-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
@@ -143,7 +143,7 @@
                                 class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                                 <div class="d-flex align-items-center">
                                     <div class="me-3"
-                                        style="width: 30px; height: 30px; background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
+                                        style="width: 30px; height: 30px; background: #85695a; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
                                         {{ $index + 1 }}
                                     </div>
                                     <div>
@@ -213,8 +213,54 @@
                 </div>
             </div>
 
-            <!-- Low Stock Alerts -->
+            <!-- Low Stock & Expiry Alerts -->
             <div class="col-md-5">
+                <!-- Expired Products -->
+                @if($expiredProducts->count() > 0)
+                <div class="card shadow-sm border-danger mb-4">
+                    <div class="card-header bg-danger text-white"
+                        style="border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-xmark me-2"></i>{{ __('admin.expired_products') }}</h5>
+                    </div>
+                    <div class="card-body" style="max-height: 250px; overflow-y: auto;">
+                        @foreach($expiredProducts as $stock)
+                            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
+                                <div>
+                                    <div class="fw-bold text-danger">{{ $stock->product->name }}</div>
+                                    <small class="text-muted">{{ __('admin.expired_on') }}: {{ $stock->expired_at->format('d M Y') }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-danger">{{ $stock->quantity }} {{ __('common.left') }} </span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
+                <!-- Expiring Soon Products -->
+                @if($expiringSoonProducts->count() > 0)
+                <div class="card shadow-sm border-warning mb-4">
+                    <div class="card-header bg-warning"
+                        style="border-radius: 16px 16px 0 0; color: #4b382f;">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-clock me-2"></i>{{ __('admin.expiring_soon_alerts') }}</h5>
+                    </div>
+                    <div class="card-body" style="max-height: 250px; overflow-y: auto;">
+                        @foreach($expiringSoonProducts as $stock)
+                            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
+                                <div>
+                                    <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
+                                    <small class="text-muted">{{ __('admin.expires_on') }}: {{ $stock->expired_at->format('d M Y') }}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-warning text-dark">{{ $stock->quantity }} {{ __('common.left') }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+
                 <div class="card shadow-sm">
                     <div class="card-header"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
@@ -238,11 +284,17 @@
                                 <p class="mb-0">{{ __('common.in_stock') }}</p>
                             </div>
                         @endforelse
+                    </div>
+                </div>
 
-                        {{-- Suppliers summary --}}
-                        @php $recentSuppliers = $recentSuppliers ?? ($suppliers ?? collect()); @endphp
-                        <hr style="border-color: #f2e8e5; margin: 1rem 0;">
-                        <h6 class="fw-bold mb-3" style="color: #6f5849;"><i class="fa-solid fa-truck me-2"></i>{{ __('common.recent_suppliers') }}</h6>
+                {{-- Separate Suppliers Card --}}
+                @php $recentSuppliers = $recentSuppliers ?? ($suppliers ?? collect()); @endphp
+                <div class="card shadow-sm mt-4">
+                    <div class="card-header"
+                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-truck me-2"></i>{{ __('common.recent_suppliers') }}</h5>
+                    </div>
+                    <div class="card-body" style="max-height: 350px; overflow-y: auto;">
                         @forelse($recentSuppliers->take(5) as $supplier)
                             <div class="d-flex justify-content-between align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                                 <div>

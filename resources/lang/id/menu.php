@@ -5,7 +5,7 @@ return [
     'products' => 'Produk',
     'categories' => 'Kategori',
     'users' => 'Pengguna',
-    'suppliers' => 'Supplier',
+    'suppliers' => 'Pemasok',
     'transactions' => 'Transaksi',
     'sales' => 'Penjualan',
     'returns' => 'Pengembalian',
@@ -27,4 +27,5 @@ return [
     'menu' => 'Menu',
     'operational_expenses' => 'Biaya Operasional',
     'expense_categories' => 'Kategori Biaya',
+    'finance' => 'Keuangan',
 ];

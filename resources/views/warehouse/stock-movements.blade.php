@@ -115,11 +115,61 @@
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">{{ __('warehouse.total_movements') }}</h6>
-                                <h3 class="mb-0 fw-bold" style="color: #6f5849;">{{ $totalMovements }}</h3>
+                                <h3 class="mb-0 fw-bold" style="color: #6f5849;">{{ $movements->total() }}</h3>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="card shadow-sm mb-4" style="border-radius: 16px; border: none;">
+            <div class="card-body py-3">
+                <form method="GET" action="{{ route('warehouse.stock-movements') }}">
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-4">
+                            <label class="form-label small text-muted mb-1"><i
+                                    class="fa-solid fa-search me-1"></i>{{ __('warehouse.search_product') }}</label>
+                            <input type="text" name="search" class="form-control"
+                                placeholder="{{ __('warehouse.search_product') }}" value="{{ request('search') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small text-muted mb-1"><i
+                                    class="fa-solid fa-filter me-1"></i>{{ __('warehouse.filter_by_type') }}</label>
+                            <select name="type" class="form-select">
+                                <option value="">{{ __('warehouse.all_types') }}</option>
+                                <option value="in" {{ request('type') === 'in' ? 'selected' : '' }}>
+                                    {{ __('warehouse.stock_in') }}
+                                </option>
+                                <option value="out" {{ request('type') === 'out' ? 'selected' : '' }}>
+                                    {{ __('warehouse.stock_out') }}
+                                </option>
+                                <option value="adjustment" {{ request('type') === 'adjustment' ? 'selected' : '' }}>
+                                    {{ __('warehouse.adjustment') }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small text-muted mb-1">{{ __('admin.start_date') }}</label>
+                            <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label small text-muted mb-1">{{ __('admin.end_date') }}</label>
+                            <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                        </div>
+                        <div class="col-md-2">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn w-100 text-white" style="background-color: #6f5849;">
+                                    <i class="fa-solid fa-filter me-1"></i>{{ __('admin.apply_filter') }}
+                                </button>
+                                <a href="{{ route('warehouse.stock-movements') }}" class="btn btn-outline-secondary">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -183,7 +233,7 @@
 
                     @if($recentMovements->hasPages())
                         <div class="mt-4 d-flex justify-content-end">
-                            {{ $recentMovements->links('vendor.pagination.no-prevnext') }}
+                            {{ $recentMovements->links('vendor.pagination.custom-brown') }}
                         </div>
                     @endif
                 @else

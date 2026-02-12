@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 @extends('layouts.app')
 
 @section('content')
@@ -10,10 +11,26 @@
 
         <!-- Stock Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-            <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3"
+                style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                 <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i
                         class="fa-solid fa-clipboard-list me-2"></i>{{ __('warehouse.stock_levels') }}
                 </h5>
+                <div class="d-flex align-items-center">
+                    <form action="{{ route('warehouse.stock') }}" method="GET" class="me-2">
+                        <div class="input-group">
+                            <input type="text" name="search" id="warehouseSearchInput" class="form-control form-control-sm"
+                                placeholder="{{ __('common.search_placeholder') }}" value="{{ $search ?? '' }}"
+                                style="border-radius: {{ App\Models\Setting::get('admin_enable_camera', true) ? '10px 0 0 10px' : '10px' }}; border: 1px solid #e0cec7; min-width: 200px; {{ App\Models\Setting::get('admin_enable_camera', true) ? 'border-right: none;' : '' }}">
+                            @if(App\Models\Setting::get('admin_enable_camera', true))
+                                <button class="btn btn-sm btn-outline-secondary" type="button" id="btnScanner"
+                                    style="border: 1px solid #e0cec7; border-left: none; border-radius: 0 10px 10px 0; background: #fdf8f6; color: #6f5849;">
+                                    <i class="fa-solid fa-camera"></i>
+                                </button>
+                            @endif
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
@@ -26,11 +43,14 @@
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.expired_at') }}
                                 </th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('warehouse.current_stock') }}</th>
+                                    {{ __('warehouse.current_stock') }}
+                                </th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('common.status') }}</th>
+                                    {{ __('common.status') }}
+                                </th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('common.actions') }}</th>
+                                    {{ __('common.actions') }}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,15 +107,40 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                            data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"
-                                            data-product-id="{{ $stock->product_id }}"
-                                            data-product-name="{{ $stock->product->name }}"
-                                            data-current-qty="{{ $stock->quantity }}" data-batch-no="{{ $stock->batch_no }}"
-                                            data-expired-at="{{ $stock->expired_at ? $stock->expired_at->format('Y-m-d') : '' }}"
-                                            style="border-radius: 8px;">
-                                            <i class="fa-solid fa-gear me-1"></i> {{ __('common.adjust') }}
-                                        </button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                                style="border-radius: 10px; padding: 0.35rem 0.65rem; border: 1px solid #f2e8e5;">
+                                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0"
+                                                style="border-radius: 12px; font-size: 0.875rem;">
+                                                @if($user?->role?->name !== 'manager')
+                                                    <li>
+                                                        <a class="dropdown-item py-2 px-3" href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#adjustStockModal" data-stock-id="{{ $stock->id }}"
+                                                            data-product-id="{{ $stock->product_id }}"
+                                                            data-product-name="{{ $stock->product->name }}"
+                                                            data-current-qty="{{ $stock->quantity }}"
+                                                            data-batch-no="{{ $stock->batch_no }}"
+                                                            data-expired-at="{{ $stock->expired_at ? $stock->expired_at->format('Y-m-d') : '' }}">
+                                                            <i class="fa-solid fa-gear me-2 text-primary"></i>
+                                                            {{ __('common.adjust') }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <hr class="dropdown-divider mx-3 my-1" style="opacity: 0.05;">
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item py-2 px-3 text-danger" href="#"
+                                                            onclick="scrapStock({{ $stock->id }})">
+                                                            <i class="fa-solid fa-trash-can me-2"></i>
+                                                            {{ __('common.delete') }}
+                                                        </a>
+                                                    </li>
+                                                @endif
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -105,7 +150,7 @@
             </div>
             @if($stocks->hasPages())
                 <div class="card-footer bg-white border-0 d-flex justify-content-end py-3">
-                    {{ $stocks->links('vendor.pagination.no-prevnext') }}
+                    {{ $stocks->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>
@@ -200,21 +245,83 @@
         let currentProductId = null;
 
         document.addEventListener('DOMContentLoaded', function () {
-            var adjustStockModal = document.getElementById('adjustStockModal');
+            // Scanner Integration
+            const btnScanner = document.getElementById('btnScanner');
+            if (btnScanner) {
+                btnScanner.addEventListener('click', function () {
+                    startArtikaScanner(function (barcode) {
+                        // 1. Try to find the barcode in the current table rows
+                        const rows = document.querySelectorAll('tbody tr');
+                        let found = false;
+
+                        rows.forEach(row => {
+                            const rowBarcode = row.querySelector('.text-muted')?.textContent?.trim();
+                            if (rowBarcode === barcode) {
+                                found = true;
+                                // Find the adjustment button in this row and click it
+                                const adjustBtn = row.querySelector('[data-bs-target="#adjustStockModal"]');
+                                if (adjustBtn) {
+                                    adjustBtn.click();
+                                    ArtikaToast.fire({
+                                        icon: 'success',
+                                        title: '{{ __("pos.product_found") ?? "Product Found!" }}'
+                                    });
+                                }
+                            }
+                        });
+
+                        // 2. If not found on current page, search for it
+                        if (!found) {
+                            const input = document.getElementById('warehouseSearchInput');
+                            if (input) {
+                                input.value = barcode;
+                                const form = input.form;
+                                if (form) {
+                                    const hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = 'auto_open';
+                                    hiddenInput.value = '1';
+                                    form.appendChild(hiddenInput);
+                                    form.submit();
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Auto-open modal after search if auto_open flag is present
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('auto_open') === '1' && urlParams.get('search')) {
+                const searchBarcode = urlParams.get('search');
+                setTimeout(() => {
+                    const rows = document.querySelectorAll('tbody tr');
+                    rows.forEach(row => {
+                        const rowBarcode = row.querySelector('.text-muted')?.textContent?.trim();
+                        if (rowBarcode === searchBarcode) {
+                            const adjustBtn = row.querySelector('[data-bs-target="#adjustStockModal"]');
+                            if (adjustBtn) adjustBtn.click();
+                        }
+                    });
+                }, 500);
+            }
+
+            const adjustStockModal = document.getElementById('adjustStockModal');
             if (adjustStockModal) {
                 adjustStockModal.addEventListener('show.bs.modal', function (event) {
-                    var button = event.relatedTarget;
+                    const button = event.relatedTarget;
+                    if (!button) return;
 
                     currentStockId = button.getAttribute('data-stock-id');
                     currentProductId = button.getAttribute('data-product-id');
-                    var productName = button.getAttribute('data-product-name');
-                    var currentQty = button.getAttribute('data-current-qty');
-                    var batchNo = button.getAttribute('data-batch-no');
-                    var expiredAt = button.getAttribute('data-expired-at');
+                    const productName = button.getAttribute('data-product-name');
+                    const currentQty = button.getAttribute('data-current-qty');
+                    const batchNo = button.getAttribute('data-batch-no');
+                    const expiredAt = button.getAttribute('data-expired-at');
 
                     document.getElementById('product_name').value = productName;
                     document.getElementById('current_stock').value = currentQty + ' {{ __('warehouse.units') }}';
-                    
+
                     // Pre-fill existing batch info if adjusting specific record
                     document.getElementById('batch_no').value = batchNo || '';
                     document.getElementById('expired_at').value = expiredAt || '';
@@ -223,17 +330,38 @@
                     document.getElementById('adjustment_qty').value = '';
                     document.getElementById('adjustment_reason').value = '';
                     document.getElementById('adjustment_type').value = 'add';
-                    
+
                     toggleBatchFields();
                 });
+            }
+
+            // Auto-trigger adjustment modal if stock_id or product_id is in URL
+            const stockId = urlParams.get('stock_id');
+            const productId = urlParams.get('product_id');
+
+            if (stockId || productId) {
+                setTimeout(() => {
+                    let targetButton = null;
+                    if (stockId) {
+                        targetButton = document.querySelector(`[data-stock-id="${stockId}"]`);
+                    } else if (productId) {
+                        targetButton = document.querySelector(`[data-product-id="${productId}"]`);
+                    }
+
+                    if (targetButton) {
+                        targetButton.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        setTimeout(() => targetButton.click(), 500);
+                    }
+                }, 300);
             }
         });
 
         function toggleBatchFields() {
-            const type = document.getElementById('adjustment_type').value;
+            const typeEl = document.getElementById('adjustment_type');
             const batchFields = document.getElementById('batch_fields');
-            
-            // Only show/allow editing batch/expiry for "add" type
+            if (!typeEl || !batchFields) return;
+
+            const type = typeEl.value;
             if (type === 'add') {
                 batchFields.style.opacity = '1';
                 batchFields.style.pointerEvents = 'auto';
@@ -244,8 +372,11 @@
         }
 
         function saveAdjustment() {
+            const qtyInput = document.getElementById('adjustment_qty');
+            if (!qtyInput) return;
+
             const type = document.getElementById('adjustment_type').value;
-            const quantity = parseInt(document.getElementById('adjustment_qty').value);
+            const quantity = parseInt(qtyInput.value);
             const reason = document.getElementById('adjustment_reason').value;
             const expired_at = document.getElementById('expired_at').value;
             const batch_no = document.getElementById('batch_no').value;
@@ -316,6 +447,65 @@
                     saveBtn.disabled = false;
                     saveBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-1"></i> {{ __('warehouse.save_adjustment') }}';
                 });
+        }
+
+        function scrapStock(id) {
+            Swal.fire({
+                title: '{{ __('warehouse.scrap_stock') }}',
+                text: '{{ __('warehouse.confirm_scrap') }}',
+                icon: 'warning',
+                input: 'text',
+                inputPlaceholder: '{{ __('warehouse.scrap_reason') }}',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6f5849',
+                confirmButtonText: '{{ __('common.delete') }}',
+                cancelButtonText: '{{ __('common.cancel') }}',
+                customClass: {
+                    popup: 'artika-swal-popup',
+                    title: 'artika-swal-title',
+                    confirmButton: 'artika-swal-confirm-btn bg-danger border-0',
+                    cancelButton: 'artika-swal-cancel-btn'
+                },
+                inputValidator: (value) => {
+                    if (!value) {
+                        return '{{ __('warehouse.scrap_reason') }}'
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`{{ url('warehouse/stock') }}/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            reason: result.value
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: '{{ __('common.success') }}',
+                                    text: data.message,
+                                    customClass: { popup: 'artika-swal-popup' }
+                                }).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: '{{ __('common.error') }}',
+                                    text: data.message,
+                                    customClass: { popup: 'artika-swal-popup' }
+                                });
+                            }
+                        });
+                }
+            });
         }
     </script>
 @endsection

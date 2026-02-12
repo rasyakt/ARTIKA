@@ -75,16 +75,23 @@
 			<div>
 				<h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i
 						class="fa-solid fa-box me-2"></i>{{ __('admin.product_management') }}</h2>
-				<p class="text-muted mb-0">{{ __('admin.product_management_subtitle') }}</p>
+				<!-- <p class="text-muted mb-0">{{ __('admin.product_management_subtitle') }}</p> -->
 			</div>
 
 			<div class="d-flex align-items-center">
 				<form action="{{ route('admin.products') }}" method="GET" class="search-filter me-3">
-					<div class="position-relative">
+					<div class="position-relative d-flex align-items-center">
 						<i class="fa-solid fa-magnifying-glass position-absolute"
 							style="left: 1rem; top: 50%; transform: translateY(-50%); opacity: 0.5;"></i>
-						<input name="search" class="search-input ps-5" type="text"
-							placeholder="{{ __('common.search_placeholder') }}" value="{{ request('search') }}">
+						<input name="search" id="searchInput" class="search-input ps-5" type="text"
+							placeholder="{{ __('common.search_placeholder') }}" value="{{ request('search') }}"
+							style="border-radius: {{ App\Models\Setting::get('admin_enable_camera', true) ? '12px 0 0 12px' : '12px' }}; {{ App\Models\Setting::get('admin_enable_camera', true) ? 'border-right: none;' : '' }}">
+						@if(App\Models\Setting::get('admin_enable_camera', true))
+							<button class="btn btn-outline-secondary" type="button" id="btnScanner"
+								style="border: 1px solid #e9e2df; border-left: none; border-radius: 0 12px 12px 0; background: #fff; color: #6f5849; padding: 0.5rem 0.75rem;">
+								<i class="fa-solid fa-camera"></i>
+							</button>
+						@endif
 					</div>
 					<select name="category_id" class="form-select category-select" onchange="this.form.submit()">
 						<option value="">{{ __('common.all_categories') }}</option>
@@ -223,7 +230,7 @@
 
 			@if(method_exists($products, 'links'))
 				<div class="card-footer border-0 d-flex justify-content-end">
-					{{ $products->links('vendor.pagination.no-prevnext') }}
+					{{ $products->links('vendor.pagination.custom-brown') }}
 				</div>
 			@endif
 		</div>
@@ -249,6 +256,21 @@
 					searchInput.value = '';
 					searchInput.value = val;
 				}
+			}
+
+			// Scanner Integration
+			const btnScanner = document.getElementById('btnScanner');
+			if (btnScanner && typeof startArtikaScanner === 'function') {
+				btnScanner.addEventListener('click', function () {
+					startArtikaScanner(function (barcode) {
+						const input = document.getElementById('searchInput');
+						if (input) {
+							input.value = barcode;
+							// Submit the form automatically
+							input.form && input.form.submit();
+						}
+					});
+				});
 			}
 		});
 

@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 @extends('layouts.app')
 
 @section('content')
@@ -16,10 +17,11 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
                     <div class="d-flex align-items-center mb-1">
-                        <a href="{{ route('admin.reports') }}" class="btn btn-light me-3 shadow-sm"
-                            style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
-                            <i class="fas fa-arrow-left"></i>
-                        </a>
+
+                    <a href="{{ route($routePrefix . 'reports') }}" class="btn btn-light me-3 shadow-sm"
+                        style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
                         <h2 class="fw-bold mb-0" style="color: #6f5849;">
                             <i class="fa-solid fa-warehouse me-2"></i>{{ __('admin.warehouse_reports_title') }}
                         </h2>
@@ -27,11 +29,10 @@
                     <p class="text-muted mb-0 ms-5 ps-4">{{ __('admin.warehouse_reports_subtitle') }}</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="{{ route('admin.reports.warehouse.export', array_merge(request()->all(), ['format' => 'pdf'])) }}"
-                        class="btn btn-outline-brown shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                    <button type="button" class="btn btn-outline-brown shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;" data-bs-toggle="modal" data-bs-target="#exportPdfModal">
                         <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
-                    </a>
-                    <a href="{{ route('admin.reports.warehouse.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
+                    </button>
+                    <a href="{{ route($routePrefix . 'reports.warehouse.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
                         class="btn btn-brown shadow-sm"
                         style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                         <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
@@ -42,9 +43,9 @@
             <!-- Filters -->
             <div class="card shadow-sm mb-4">
                 <div class="card-body p-4">
-                    <form action="{{ route('admin.reports.warehouse') }}" method="GET" class="row g-3 align-items-end">
+                    <form action="{{ route($routePrefix . 'reports.warehouse') }}" method="GET" class="row g-3 align-items-end">
                         <!-- Date Row -->
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="period" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-calendar me-1" style="color: #c17a5c;"></i> {{ __('admin.quick_period') }}
                             </label>
@@ -55,13 +56,13 @@
                                 <option value="year" {{ $period == 'year' ? 'selected' : '' }}>{{ __('admin.this_year') }}</option>
                             </select>
                         </div>
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="start_date" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.start_date') }}
                             </label>
                             <input type="date" class="form-select" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                         </div>
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="end_date" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.end_date') }}
                             </label>
@@ -69,12 +70,12 @@
                         </div>
 
                         <!-- Info Row -->
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="category_id" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-list me-1" style="color: #c17a5c;"></i> {{ __('common.category') }}
                             </label>
                             <select name="category_id" id="category_id" class="form-select">
-                                <option value="">-- {{ __('admin.all_categories') }} --</option>
+                                <option value="">{{ __('admin.all_categories') }}</option>
                                 @foreach ($categories as $category)
                                     <option value="{{ $category->id }}"
                                         {{ $categoryId == $category->id ? 'selected' : '' }}>
@@ -83,12 +84,12 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-lg-2 col-md-4">
+                        <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="stock_status" class="form-label text-dark fw-semibold">
                                 <i class="fa-solid fa-layer-group me-1" style="color: #c17a5c;"></i> {{ __('admin.stock_status') }}
                             </label>
                             <select name="stock_status" id="stock_status" class="form-select">
-                                <option value="">-- {{ __('admin.all_status') }} --</option>
+                                <option value="">{{ __('admin.all_status') }}</option>
                                 <option value="low" {{ $stockStatus == 'low' ? 'selected' : '' }}>
                                     {{ __('admin.low_stock') }}</option>
                                 <option value="out" {{ $stockStatus == 'out' ? 'selected' : '' }}>
@@ -97,13 +98,13 @@
                                     {{ __('admin.available') }}</option>
                             </select>
                         </div>
-                        <div class="col-lg-2 col-md-4 d-flex gap-2">
+                        <div class="col-xl-2 col-lg-4 col-md-6 d-flex gap-2">
                             <button type="submit" class="btn btn-brown flex-grow-1 fw-bold"
                                 style="border-radius: 8px; padding: 0.6rem;">
                                 <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                             </button>
                             @if ($categoryId || $stockStatus || $search || request('start_date'))
-                                <a href="{{ route('admin.reports.warehouse') }}" class="btn btn-outline-brown"
+                                <a href="{{ route($routePrefix . 'reports.warehouse') }}" class="btn btn-outline-brown"
                                     style="border-radius: 8px; padding: 0.6rem;">
                                     <i class="fa-solid fa-rotate-left"></i>
                                 </a>
@@ -127,16 +128,16 @@
             <!-- Summary Cards -->
             <div class="row g-4 mb-4">
                 <div class="col-md-3">
-                    <div class="card shadow-sm accent-brown">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1 me-3">
                                     <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.total_valuation') }}</p>
-                                    <h4 class="fw-bold mb-0" style="color: #4b382f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <h5 class="fw-bold mb-0" style="color: #4b382f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         Rp {{ number_format($summary['total_valuation'], 0, ',', '.') }}
-                                    </h4>
+                                    </h5>
                                     <small class="text-muted">{{ __('admin.based_on_cost') }}</small>
                                 </div>
                                 <div class="icon-box-premium bg-brown-soft">
@@ -148,17 +149,17 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card shadow-sm accent-success">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1 me-3">
                                     <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.total_items') }}</p>
-                                    <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['total_items']) }}</h4>
+                                    <h5 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['total_items']) }}</h5>
                                     <small class="text-muted">{{ __('admin.units_in_stock') }}</small>
                                 </div>
-                                <div class="icon-box-premium bg-success-soft">
+                                <div class="icon-box-premium bg-brown-soft">
                                     <i class="fa-solid fa-box"></i>
                                 </div>
                             </div>
@@ -167,7 +168,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card shadow-sm accent-danger">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1 me-3">
@@ -175,10 +176,10 @@
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.low_stock_alerts') }}
                                     </p>
-                                    <h4 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['low_stock_count']) }}</h4>
+                                    <h5 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['low_stock_count']) }}</h5>
                                     <small class="text-muted">{{ __('admin.items_need_restocking') }}</small>
                                 </div>
-                                <div class="icon-box-premium bg-danger-soft">
+                                <div class="icon-box-premium bg-brown-soft">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                 </div>
                             </div>
@@ -187,7 +188,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <div class="card shadow-sm accent-info">
+                    <div class="card shadow-sm">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
@@ -208,7 +209,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="icon-box-premium bg-info-soft">
+                                <div class="icon-box-premium bg-brown-soft">
                                     <i class="fa-solid fa-arrows-rotate"></i>
                                 </div>
                             </div>
@@ -318,10 +319,14 @@
                                                     <span class="badge bg-danger">{{ $item->current_stock }}</span>
                                                 </td>
                                                 <td class="text-end">
-                                                    <a href="{{ route('admin.products.edit', $item->id) }}"
-                                                        class="btn btn-outline-primary" style="border-radius: 8px; padding: 0.25rem 0.75rem; font-size: 0.85rem;">
-                                                        <i class="fa-solid fa-plus-circle me-1"></i> Restock
-                                                    </a>
+                                                    @if(strtolower($user?->role?->name ?? '') !== 'manager')
+                                                        <a href="{{ route('warehouse.stock', ['product_id' => $item->id]) }}"
+                                                            class="btn btn-outline-primary" style="border-radius: 8px; padding: 0.25rem 0.75rem; font-size: 0.85rem;">
+                                                            <i class="fa-solid fa-plus-circle me-1"></i> Restock
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted small">Read Only</span>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @empty
@@ -338,7 +343,7 @@
                             </div>
                         </div>
                         <div class="px-3 py-2 border-top d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
-                            {{ $lowStockItems->fragment('low-stock-section')->links('vendor.pagination.no-prevnext') }}
+                            {{ $lowStockItems->fragment('low-stock-section')->links('vendor.pagination.custom-brown') }}
                         </div>
                     </div>
                 </div>
@@ -405,12 +410,13 @@
                         </table>
                     </div>
                     <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
-                        {{ $movements->fragment('movements-section')->links('vendor.pagination.no-prevnext') }}
+                        {{ $movements->fragment('movements-section')->links('vendor.pagination.custom-brown') }}
                     </div>
                 </div>
             </div>
 
             <!-- Audit Logs Section -->
+            @if(App\Models\Setting::get('admin_enable_audit_logs', true))
             <div class="card shadow-sm mb-4" id="audit-section">
                 <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
                     <h5 class="mb-0 fw-bold" style="color: #6f5849;">
@@ -463,8 +469,78 @@
                     </div>
                 </div>
                 <div class="px-3 py-2 border-top bg-white d-flex justify-content-end" style="border-radius: 0 0 16px 16px;">
-                    {{ $auditLogs->fragment('audit-section')->links('vendor.pagination.no-prevnext') }}
+                    {{ $auditLogs->fragment('audit-section')->links('vendor.pagination.custom-brown') }}
                 </div>
             </div>
+            @endif
         </div>
+    <!-- PDF Customization Modal -->
+    <div class="modal fade" id="exportPdfModal" tabindex="-1" aria-labelledby="exportPdfModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow border-0" style="border-radius: 16px;">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="exportPdfModalLabel">
+                        <i class="fa-solid fa-file-settings me-2"></i>Kustomisasi Laporan Gudang
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route($routePrefix . 'reports.warehouse.export') }}" method="GET">
+                    <input type="hidden" name="format" value="pdf">
+                    <input type="hidden" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
+                    <input type="hidden" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
+                    <input type="hidden" name="search" value="{{ $search }}">
+                    <input type="hidden" name="category_id" value="{{ $categoryId }}">
+                    <input type="hidden" name="stock_status" value="{{ $stockStatus }}">
+                    
+                    <div class="modal-body py-4">
+                        <p class="text-muted mb-4 small">Pilih bagian laporan yang ingin ditampilkan dalam dokumen PDF:</p>
+                        
+                        <div class="list-group list-group-flush border rounded-12">
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="summary" checked>
+                                <div>
+                                    <div class="fw-bold">Ringkasan Persediaan</div>
+                                    <small class="text-muted small">Valuasi stok, total item, peringatan stok rendah, dll.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="top_movers" checked>
+                                <div>
+                                    <div class="fw-bold">Produk Paling Aktif</div>
+                                    <small class="text-muted small">Item dengan pergerakan stok tertinggi.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="low_stock" checked>
+                                <div>
+                                    <div class="fw-bold">Peringatan Stok Rendah</div>
+                                    <small class="text-muted small">Daftar produk yang perlu restock segera.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="movements" checked>
+                                <div>
+                                    <div class="fw-bold">Riwayat Pergerakan Stok</div>
+                                    <small class="text-muted small">Daftar transaksi IN/OUT/ADJ terakhir.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="audit_logs">
+                                <div>
+                                    <div class="fw-bold">Audit Log Gudang</div>
+                                    <small class="text-muted small">Catatan sistem untuk pergerakan gudang.</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0 pb-4 justify-content-center">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 10px;">Batal</button>
+                        <button type="submit" class="btn btn-brown px-4" style="border-radius: 10px;">
+                            <i class="fa-solid fa-download me-2"></i>Generate PDF
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection

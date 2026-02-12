@@ -48,7 +48,7 @@ Ikuti langkah-langkah ini untuk menjalankan proyek di lokal Anda:
     ```
 2. **Setup Environment**:
     ```bash
-    composer install
+    composer install or composer dump-autoload
     npm install
     cp .env.example .env
     php artisan key:generate
@@ -56,6 +56,7 @@ Ikuti langkah-langkah ini untuk menjalankan proyek di lokal Anda:
 3. **Database & Seeding**:
    _Pastikan database sudah dibuat di server (MySQL/PostgreSQL)._
     ```bash
+    php artisan migrate
     php artisan migrate --seed
     ```
 4. **Jalankan Aplikasi**:

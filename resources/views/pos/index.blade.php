@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -90,26 +91,74 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        html {
+            zoom: 90%;
             background: var(--gray-100);
-            overflow: hidden;
         }
 
         html,
         body {
-            height: 100%;
+            height: 100% !important;
+            margin: 0;
+            padding: 0;
+            overflow: hidden !important;
+        }
+
+        /* Prevent SweetAlert2 from breaking 100% height layout */
+        html.swal2-shown,
+        body.swal2-shown {
+            height: 100% !important;
+            overflow: hidden !important;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--gray-100);
+        }
+
+        /* Fixed Overlay Alignment Fix for Zoom & Mobile Stacking */
+        .modal-backdrop {
+            z-index: 3000 !important;
+        }
+
+        .modal {
+            z-index: 3001 !important;
+        }
+
+        .swal2-container {
+            z-index: 5000 !important;
+        }
+
+        .modal-backdrop,
+        .swal2-container,
+        .modal {
+            width: auto !important;
+            height: auto !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
         }
 
         .pos-container {
-            height: 100vh;
+            height: 100%;
             display: flex;
             flex-direction: column;
+            overflow: hidden !important;
+        }
+
+        .pos-main {
+            flex: 1;
+            display: flex;
+            gap: 0;
+            overflow: hidden !important;
+            height: 100%;
         }
 
         /* NAVBAR */
         .pos-navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            /* background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); */
+            background: var(--primary-dark);
             color: white;
             padding: 0.75rem 1.5rem;
             height: 55px;
@@ -132,27 +181,31 @@
         }
 
         .profile-trigger {
-            transition: all 0.2s;
+            transition: all 0.25s;
             border-radius: 12px;
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
         }
 
-        .profile-trigger:hover .profile-avatar {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-1px);
+        .profile-trigger:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
         }
 
         .profile-avatar {
             width: 40px;
             height: 40px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
+            background: #7c6257ff;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 1.4rem;
+            border: none;
             transition: all 0.2s;
+            /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); */
         }
 
         .dropdown-menu {
@@ -177,21 +230,13 @@
             color: var(--primary-dark);
         }
 
-        /* MAIN LAYOUT */
-        .pos-main {
-            flex: 1;
-            display: flex;
-            gap: 0;
-            overflow: hidden;
-        }
-
         .products-section {
             flex: 1;
             display: flex;
             flex-direction: column;
             background: white;
             border-right: 1px solid var(--gray-300);
-            overflow: hidden;
+            overflow: hidden !important;
         }
 
         /* SEARCH */
@@ -254,15 +299,33 @@
             color: var(--primary-dark);
         }
 
-        @media (max-width: 768px) {
-            .dual-search-container {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
-            }
-
+        /* Hide barcode input on smaller tablets and touch devices to prevent keyboard popup */
+        @media (max-width: 1024px),
+        (pointer: coarse) {
             .barcode-input-group {
                 display: none !important;
             }
+        }
+
+        /* Hide camera button on non-touch desktop screens (>= 1025px) */
+        @media (min-width: 1025px) and (pointer: fine) {
+            .scanner-btn-group {
+                display: none !important;
+            }
+        }
+
+        .scanner-btn-group button {
+            padding: 0.6rem;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(133, 105, 90, 0.1);
+            transition: all 0.2s;
+            height: 100%;
+            /* Match height of search input */
+        }
+
+        .scanner-btn-group button:active {
+            transform: scale(0.98);
         }
 
         /* CATEGORIES */
@@ -458,7 +521,7 @@
         .cart-header {
             padding: 1rem;
             border-bottom: 1px solid var(--gray-200);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            background: var(--primary-dark);
             color: white;
         }
 
@@ -607,8 +670,15 @@
         .cart-empty {
             text-align: center;
             color: var(--gray-700);
-            padding: 2rem 1rem;
+            padding: 4rem 1rem;
+            /* Increased padding for better visual stability */
             font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            opacity: 0.6;
         }
 
         /* FOOTER */
@@ -803,57 +873,179 @@
             background: #dc2626;
         }
 
-        /* SCANNER */
+        /* SCANNER REFINED (Unified Overlay) */
         .scanner-section {
             display: none;
-            padding: 1rem;
-            border-bottom: 1px solid var(--gray-200);
-            background: var(--brown-50);
+            position: fixed;
+            inset: 0;
+            /* Use inset for true full-screen */
+            width: 100%;
+            height: 100%;
+            /* Dynamic viewport height for mobile */
+            background: rgba(0, 0, 0, 0.85);
+            /* Darker for better contrast */
+            backdrop-filter: blur(8px);
+            /* Stronger blur */
+            z-index: 5000;
+            /* Extremely high to stay on top of everything */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
         }
 
         .scanner-section.active {
-            display: block;
+            display: flex;
+            animation: fadeInScanner 0.3s ease-out;
+        }
+
+        @keyframes fadeInScanner {
+            from {
+                opacity: 0;
+                transform: scale(1.02);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .scanner-header {
+            width: 100%;
+            max-width: 500px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            z-index: 5001;
         }
 
         .scanner-title {
-            font-weight: 600;
-            color: var(--gray-700);
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .btn-toggle-scanner {
-            padding: 0.4rem 0.8rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-
-        .btn-toggle-scanner:hover {
-            background: var(--primary-dark);
+        .scanner-title i {
+            color: #10b981;
+            filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
         }
 
         #reader {
-            width: 100%;
-            max-height: 250px;
-            border-radius: 6px;
-            overflow: hidden;
+            width: 100% !important;
+            max-width: 500px !important;
+            aspect-ratio: 1/1;
+            border: 4px solid rgba(255, 255, 255, 0.2) !important;
+            border-radius: 24px !important;
+            /* Slightly more rounded */
+            overflow: hidden !important;
+            background: #000 !important;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 5001;
         }
 
-        @media (max-width: 1024px) {
+        @media (max-width: 768px) {
+            .scanner-section {
+                padding: 0;
+            }
+
+            #reader {
+                position: absolute;
+                inset: 0;
+                width: 100vw !important;
+                height: 100dvh !important;
+                max-width: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                aspect-ratio: none;
+                z-index: 5000;
+            }
+
+            #reader video {
+                object-fit: cover !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            .scanner-header {
+                max-width: none;
+                padding: 1.5rem 2rem;
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), transparent);
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 5002;
+            }
+
+            .scanner-footer {
+                max-width: none;
+                padding: 2.5rem 2rem;
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                z-index: 5002;
+                margin-top: 0;
+            }
+        }
+
+        .scanner-footer {
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .btn-toggle-scanner {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.25s;
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-toggle-scanner:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-toggle-scanner:active {
+            transform: scale(0.98);
+        }
+
+        .btn-toggle-scanner:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(133, 105, 90, 0.3);
+        }
+
+        /* #reader {
+            width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+        } */
+
+        @media (max-width: 576px) {
             .cart-section {
-                width: 300px;
+                width: 100%;
             }
 
             .products-grid {
@@ -861,109 +1053,42 @@
             }
         }
 
-        /* TABLET - MEDIUM SCREENS */
-        @media (max-width: 768px) {
-            .pos-navbar {
-                padding: 0.5rem 1rem;
-                height: 50px;
-            }
-
-            .navbar-brand {
-                font-size: 1rem;
-            }
-
-            .navbar-right {
-                gap: 0.75rem;
-            }
-
-            .navbar-user {
-                font-size: 0.75rem;
-            }
-
-            .btn-logout {
-                padding: 0.3rem 0.6rem;
-                font-size: 0.7rem;
-            }
-
+        /* TABLET - MEDIUM SCREENS (Preserve Desktop Layout) */
+        @media (max-width: 1023px) and (min-width: 577px) {
             .cart-section {
-                width: 280px;
+                width: 320px;
             }
 
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-                gap: 0.75rem;
-            }
-
-            .product-icon {
-                font-size: 1.5rem;
-            }
-
-            .category-filter {
-                padding: 0.75rem 0.75rem;
-                gap: 0.45rem;
-                border-bottom: 2px solid var(--gray-200);
-                background: linear-gradient(to right, white 0%, white 95%, rgba(255, 255, 255, 0.8) 100%);
-                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-            }
-
-            .category-btn {
-                padding: 0.55rem 1rem;
-                font-size: 0.8rem;
-                min-height: 37px;
-                border-radius: 9px;
-                border: 2px solid var(--gray-300);
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-            }
-
-            .category-btn:hover {
-                box-shadow: 0 4px 12px rgba(133, 105, 90, 0.15);
-                border-color: var(--primary-light);
-            }
-
-            .category-btn.active {
-                box-shadow: 0 6px 16px rgba(133, 105, 90, 0.25);
-                border-color: transparent;
-            }
-
-            .cart-items::-webkit-scrollbar {
-                width: 4px;
-            }
-
-            .payment-methods {
-                gap: 0.3rem;
-            }
-
-            .payment-method-btn {
-                padding: 0.4rem;
-                font-size: 0.7rem;
-            }
-
-            .numeric-keypad {
-                gap: 0.4rem;
-            }
-
-            .keypad-btn {
-                padding: 0.6rem;
-                font-size: 0.9rem;
+                grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
             }
         }
 
         /* MOBILE - SMALL SCREENS */
         @media (max-width: 576px) {
-            body {
-                overflow: hidden !important;
+            .dual-search-container {
+                grid-template-columns: 1fr;
+                /* Stack search and camera button */
+                gap: 0.75rem;
+            }
+
+            /* body {
+                overflow-y: auto !important;
             }
 
             html,
             body {
                 height: 100%;
-            }
+            } */
 
-            .pos-container {
+            /* .pos-container {
                 height: 100%;
-                display: flex;
+                /* Ensure full height on mobile */
+            /* display: flex;
                 flex-direction: column;
-            }
+                overflow: hidden; */
+            /* Prevent body scroll */
+            /* } */
 
             .pos-navbar {
                 padding: 0 1rem;
@@ -988,21 +1113,23 @@
                 transition: transform 0.2s ease;
             }
 
-            .profile-trigger:active {
-                transform: scale(0.92);
+            .profile-trigger {
+                padding: 0.35rem 0.5rem;
+                background: transparent !important;
+                border: none !important;
             }
 
             .profile-avatar {
                 width: 38px;
                 height: 38px;
-                background: rgba(255, 255, 255, 0.2);
-                border-radius: 12px;
+                background: #a18072;
+                border-radius: 10px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 color: white;
-                font-size: 1.4rem;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: 1.3rem;
+                border: none;
             }
 
             .dropdown-item {
@@ -1012,14 +1139,6 @@
             .dropdown-item:active {
                 background-color: var(--brown-50);
                 color: var(--primary-dark);
-            }
-
-            /* Main layout stays flexible */
-            .pos-main {
-                flex-direction: column;
-                flex: 1;
-                overflow: hidden;
-                position: relative;
             }
 
             .products-section {
@@ -1198,14 +1317,19 @@
             }
 
             /* Bottom Navigation */
+            /* Bottom Navigation */
             .bottom-nav {
                 display: flex;
                 height: 65px;
                 background: white;
                 border-top: 1px solid var(--gray-200);
                 padding-bottom: env(safe-area-inset-bottom);
-                flex-shrink: 0;
-                z-index: 200;
+                /* Fixed positioning */
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                z-index: 1000;
                 box-shadow: 0 -3px 12px rgba(0, 0, 0, 0.06);
             }
 
@@ -1235,7 +1359,7 @@
 
             /* Floating Cart Button */
             .fab-cart {
-                position: absolute;
+                position: fixed;
                 bottom: 85px;
                 right: 20px;
                 width: 60px;
@@ -1293,37 +1417,6 @@
                 font-size: 1.05rem;
             }
 
-            .scanner-section {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                background: black;
-                z-index: 1000;
-                flex-direction: column;
-            }
-
-            .scanner-section.active {
-                display: flex;
-            }
-
-            .scanner-header {
-                padding: 1rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                color: white;
-                background: rgba(0, 0, 0, 0.5);
-            }
-
-            #reader {
-                flex: 1;
-                width: 100% !important;
-                border: none !important;
-                border-radius: 0 !important;
-            }
         }
 
         /* Responsive Visibility Helpers */
@@ -1364,6 +1457,18 @@
                 border-radius: 24px;
                 border: none;
                 box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+                max-height: 90vh;
+                overflow-y: auto !important;
+            }
+
+            .keyboard-active {
+                height: 100vh !important;
+                overflow: hidden !important;
+            }
+
+            .keyboard-active #keypadModal {
+                padding-bottom: 300px;
+                /* Space for virtual keyboard */
             }
 
             .products-grid {
@@ -1395,12 +1500,9 @@
             }
         }
 
-        /* MOBILE ONLY SCANNER UI */
-        @media (min-width: 768px) {
-
-            #openScannerBtn,
-            #navScannerMobile,
-            #scannerSection {
+        /* MOBILE ONLY SCANNER UI - Enabled for all sizes but styled differently */
+        @media (min-width: 1024px) {
+            #navScannerMobile {
                 display: none !important;
             }
         }
@@ -1458,6 +1560,55 @@
             background: #f59e0b;
             color: #4b382f;
         }
+
+        .expiry-badge.expiring {
+            background: #f59e0b;
+            color: #4b382f;
+        }
+
+        /* FIX TABLET SCROLLING */
+        @media (max-width: 1024px) {
+            .products-section {
+                /* Ensure section takes full available height */
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            .products-grid-container {
+                /* Force container to take remaining space and scroll */
+                flex: 1;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+                height: 0;
+                /* Important for flex child scrolling */
+                min-height: 0;
+            }
+        }
+
+        /* FIX MOBILE CART VIEW OVERLAP */
+        #mobileCartView {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1100;
+            /* Higher than fixed bottom nav (1000) */
+            display: none;
+            flex-direction: column;
+        }
+
+        #mobileCartView.active {
+            display: flex;
+        }
+
+        #mobileCartView .cart-footer {
+            padding-bottom: 2rem;
+            /* Ensure buttons have space */
+        }
     </style>
 </head>
 
@@ -1472,10 +1623,16 @@
                 <div class="dropdown">
                     <button class="btn p-0 border-0 profile-trigger d-flex align-items-center" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="profile-avatar">
+                        <div class="profile-avatar me-3">
                             <i class="fas fa-user-circle"></i>
                         </div>
-                        <span class="ms-2 fw-600 text-white d-none d-lg-inline">{{ Auth::user()->name }}</span>
+                        <div class="d-none d-lg-flex flex-column align-items-start me-2">
+                            <span class="text-white fw-700 mb-0"
+                                style="font-size: 1rem; line-height: 1.1;">{{ $user?->name }}</span>
+                            <span class="text-white-50 fw-700 text-uppercase"
+                                style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
+                        </div>
+                        <!-- <i class="fas fa-chevron-down text-white-50 small d-none d-lg-block"></i> -->
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
                         style="min-width: 240px; border-radius: 16px;">
@@ -1483,13 +1640,13 @@
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
                                     style="width: 42px; height: 42px; font-size: 1.2rem;">
-                                    {{ substr(Auth::user()->name, 0, 1) }}
+                                    {{ substr($user?->name ?? '', 0, 1) }}
                                 </div>
                                 <div class="overflow-hidden">
-                                    <h6 class="mb-0 fw-800 text-truncate">{{ Auth::user()->name }}</h6>
-                                    <div class="small text-muted text-truncate">@ {{ Auth::user()->username }}</div>
+                                    <h6 class="mb-0 fw-800 text-truncate">{{ $user?->name }}</h6>
+                                    <div class="small text-muted text-truncate">@ {{ $user?->username }}</div>
                                     <div class="small fw-700 text-primary" style="font-size: 0.7rem;">NIS:
-                                        {{ Auth::user()->nis ?? '-' }}
+                                        {{ $user?->nis ?? '-' }}
                                     </div>
                                 </div>
                             </div>
@@ -1501,12 +1658,14 @@
                                 <span class="fw-600">Riwayat Transaksi</span>
                             </a>
                         </li>
-                        <li>
-                            <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ route('pos.logs') }}">
-                                <i class="fa-solid fa-list-check me-3 text-primary opacity-75"></i>
-                                <span class="fw-600">Log Aktivitas</span>
-                            </a>
-                        </li>
+                        @if(App\Models\Setting::get('cashier_enable_audit_logs', true))
+                            <li>
+                                <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ route('pos.logs') }}">
+                                    <i class="fa-solid fa-list-check me-3 text-primary opacity-75"></i>
+                                    <span class="fw-600">Log Aktivitas</span>
+                                </a>
+                            </li>
+                        @endif
                         <li class="border-top mt-1">
                             <button type="button" class="dropdown-item py-3 px-3 d-flex align-items-center text-danger"
                                 id="btnLogout">
@@ -1534,26 +1693,21 @@
                         <div class="barcode-input-group">
                             <span class="search-icon"><i class="fas fa-barcode"></i></span>
                             <input type="text" id="barcodeScannerInput" class="barcode-input"
-                                placeholder="Scan Barcode Di Sini..." autofocus autocomplete="off">
+                                placeholder="Scan Barcode Di Sini..." autofocus autocomplete="off" inputmode="none">
                         </div>
+
+                        @if(\App\Models\Setting::get('cashier_enable_camera', true))
+                            <!-- Mobile/Tablet Scanner Button (Takes 2nd slot or stacks) -->
+                            <div class="scanner-btn-group">
+                                <button id="openScannerBtn"
+                                    class="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2">
+                                    <i class="fas fa-camera"></i> <span>Scan Barcode</span>
+                                </button>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
-                <!-- SCANNER TOGGLE -->
-                <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--gray-200); text-align: right;">
-                    <button id="openScannerBtn" class="btn-toggle-scanner">
-                        <i class="fas fa-barcode "></i> {{ __('pos.open_scanner') }}
-                    </button>
-                </div>
-
-                <!-- SCANNER -->
-                <div class="scanner-section" id="scannerSection">
-                    <div class="scanner-header">
-                        <span class="scanner-title"><i class="fas fa-barcode"></i> {{ __('pos.scanner_title') }}</span>
-                        <button class="btn-toggle-scanner" id="closeScannerBtn">{{ __('common.close') }}</button>
-                    </div>
-                    <div id="reader"></div>
-                </div>
 
                 <!-- CATEGORIES -->
                 <div class="category-filter">
@@ -1568,8 +1722,15 @@
                     <div class="products-grid" id="productsGrid">
                         @foreach($products as $product)
                             @php
-                                $totalStock = $product->stocks->sum('quantity');
+                                $totalStock = $product->available_stock;
+                                $actualTotalStock = $product->total_stock;
                                 $isOutOfStock = $totalStock <= 0;
+
+                                // Skip products that are effectively "All Expired" 
+                                // (If they have physical stock but 0 is available/non-expired)
+                                if ($actualTotalStock > 0 && $totalStock <= 0) {
+                                    continue;
+                                }
 
                                 // Find best active promo for this product
                                 $promo = $activePromos->where('product_id', $product->id)->first()
@@ -1587,9 +1748,8 @@
                                 }
                             @endphp
                             @php
-                                $expiry = $product->earliest_expiry;
-                                $isExpired = $expiry && \Carbon\Carbon::parse($expiry)->isPast();
-                                $isExpiringSoon = $expiry && \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) < 30 && !$isExpired;
+                                $expiry = $product->next_expiry;
+                                $isExpiringSoon = $expiry && \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) < 30;
                             @endphp
                             <div class="product-card {{ $isOutOfStock ? 'opacity-50' : '' }}"
                                 data-product-id="{{ $product->id }}" data-category="{{ $product->category_id }}"
@@ -1602,11 +1762,7 @@
                                         {{ $promo->type === 'percentage' ? '-' . round($promo->value) . '%' : '-Rp' . number_format($promo->value, 0, ',', '.') }}
                                     </div>
                                 @endif
-                                @if($isExpired)
-                                    <div class="expiry-badge expired bg-danger">
-                                        <i class="fas fa-calendar-times"></i> {{ __('warehouse.expired') }}
-                                    </div>
-                                @elseif($isExpiringSoon)
+                                @if($isExpiringSoon)
                                     <div class="expiry-badge expiring bg-warning text-dark">
                                         <i class="fas fa-hourglass-half"></i>
                                         {{ (int) \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) }}d
@@ -1662,6 +1818,30 @@
                 <div class="cart-footer">
                     <!-- TOTALS -->
                     <div class="totals-section">
+                        @if(\App\Models\Setting::get('cashier_enable_discounts', true))
+                            <div class="total-row discount-row"
+                                style="border-bottom: 1px dashed rgba(0,0,0,0.1); padding-bottom: 5px; margin-bottom: 5px;">
+                                <span style="font-size: 0.8rem; color: #666;"><i
+                                        class="fas fa-tag me-1"></i>{{ __('pos.discount') }}:</span>
+                                <div class="d-flex align-items-center">
+                                    <span class="text-danger fw-bold me-2" id="discountDisplay">-Rp0</span>
+                                    <button class="btn btn-sm btn-outline-secondary py-0 px-1"
+                                        style="font-size: 0.7rem; height: 18px;" onclick="toggleManualDiscount()"><i
+                                            class="fas fa-edit"></i></button>
+                                </div>
+                            </div>
+                            <div id="manualDiscountInputSection" style="display: none; margin-bottom: 10px;">
+                                <div class="input-group input-group-sm">
+                                    <select id="discountType" class="form-select form-select-sm"
+                                        style="max-width: 80px; font-size: 0.75rem;" onchange="updateTotals()">
+                                        <option value="nominal">Rp</option>
+                                        <option value="percentage">%</option>
+                                    </select>
+                                    <input type="number" id="manualDiscountValue" class="form-control form-control-sm"
+                                        placeholder="0" min="0" oninput="updateTotals()">
+                                </div>
+                            </div>
+                        @endif
                         <div class="total-row">
                             <span>{{ __('common.total') }}:</span>
                             <span class="totalDisplay" id="totalDisplay">Rp0</span>
@@ -1714,6 +1894,16 @@
                 </div>
                 <div class="cart-footer">
                     <div class="totals-section">
+                        @if(\App\Models\Setting::get('cashier_enable_discounts', true))
+                            <div class="total-row" style="font-size: 0.85rem; color: #666; margin-bottom: 5px;">
+                                <span>{{ __('pos.discount') }}:</span>
+                                <div class="d-flex align-items-center">
+                                    <span class="text-danger fw-bold me-2" id="discountDisplayMobile">-Rp0</span>
+                                    <button class="btn btn-sm btn-outline-secondary py-0 px-1"
+                                        onclick="toggleManualDiscount()"><i class="fas fa-edit"></i></button>
+                                </div>
+                            </div>
+                        @endif
                         <div class="total-row final">
                             <span>{{ __('common.total') }}:</span>
                             <span class="totalDisplay">Rp0</span>
@@ -1759,10 +1949,12 @@
                 <i class="fas fa-shopping-basket"></i>
                 <span>Keranjang</span>
             </a>
-            <a href="#" class="nav-item" id="navScannerMobile">
-                <i class="fas fa-barcode"></i>
-                <span>Scan</span>
-            </a>
+            @if(\App\Models\Setting::get('cashier_enable_camera', true))
+                <a href="#" class="nav-item" id="navScannerMobile">
+                    <i class="fas fa-barcode"></i>
+                    <span>Scan</span>
+                </a>
+            @endif
             <a href="{{ route('pos.history') }}" class="nav-item">
                 <i class="fas fa-history"></i>
                 <span>Riwayat</span>
@@ -1783,7 +1975,7 @@
                     <div id="cashInputSection">
                         <input type="text" id="keypadDisplay" class="form-control"
                             style="font-size: 1.2rem; font-weight: bold; text-align: right; margin-bottom: 1rem; padding: 10px;"
-                            placeholder="0" autocomplete="off" inputmode="decimal">
+                            placeholder="0" autocomplete="off" inputmode="numeric">
                         <div class="numeric-keypad">
                             <button class="keypad-btn" data-key="1">1</button>
                             <button class="keypad-btn" data-key="2">2</button>
@@ -1894,6 +2086,9 @@
         const activePromos = {!! json_encode($activePromos) !!};
 
         document.addEventListener('DOMContentLoaded', function () {
+            const productSearch = document.getElementById('productSearch');
+            const barcodeInput = document.getElementById('barcodeScannerInput');
+
             document.querySelectorAll('.paymentMethodBtn').forEach((btn, idx) => {
                 if (idx === 0) {
                     btn.classList.add('active');
@@ -1928,24 +2123,22 @@
                 productSearch.addEventListener('keyup', searchProducts);
             }
 
-            const barcodeInput = document.getElementById('barcodeScannerInput');
             // Periodic Focus Enforcement (Faster 1s check)
+            // Disable auto-focus on touch devices (tablets/phones) to prevent keyboard popup
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
             setInterval(() => {
-                const barcodeInput = document.getElementById('barcodeScannerInput');
-                if (barcodeInput &&
-                    document.activeElement.tagName !== 'INPUT' &&
-                    document.activeElement.tagName !== 'TEXTAREA' &&
-                    !document.querySelector('.modal.show')) {
-                    barcodeInput.focus();
-                }
-            }, 1000);
+                if (typeof refocusBarcode === 'function') refocusBarcode();
+            }, 1500);
 
             // Global Barcode Scanner Listener (Take 5 - Consolidated & Safe)
             let barcodeBuffer = '';
             let lastKeyTime = Date.now();
             let isProcessing = false; // Flag to prevent double triggers
-            const SCAN_THRESHOLD = 200;
+            let scanTimeout = null;
+            const SCAN_THRESHOLD = 500; // [RELAXED] Increased from 200ms to 500ms for slower scanners
             const MIN_BARCODE_LENGTH = 3;
+            const SUBMIT_INACTIVITY_MS = 500; // [RELAXED] Increased from 300ms to 500ms for very slow scanners
 
             document.addEventListener('keydown', function (e) {
                 // Ignore if currently processing a scan
@@ -1953,6 +2146,12 @@
 
                 // Ignore modifier keys
                 if (['Shift', 'Control', 'Alt', 'Meta', 'CapsLock', 'Tab', 'Escape'].includes(e.key)) {
+                    return;
+                }
+
+                // [NEW] Ignore if typing in another input field (e.g., manual discount)
+                const isTargetInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName);
+                if (isTargetInput && e.target !== barcodeInput) {
                     return;
                 }
 
@@ -1965,6 +2164,9 @@
                 const currentTime = Date.now();
                 const timeDiff = currentTime - lastKeyTime;
                 lastKeyTime = currentTime;
+
+                // Reset inactivity timeout on every key
+                if (scanTimeout) clearTimeout(scanTimeout);
 
                 const isNumeric = /^[0-9]$/.test(e.key);
                 const isAlpha = /^[a-zA-Z]$/.test(e.key);
@@ -2004,7 +2206,6 @@
                             if (barcodeInput) barcodeInput.value = barcodeBuffer;
                         } else {
                             // If focused, the browser adds the key to input natively.
-                            // We just sync the buffer to be safe for non-Enter triggers.
                             barcodeBuffer = barcodeInput.value + e.key;
                         }
                     } else {
@@ -2015,17 +2216,34 @@
                         }
                     }
 
-                    // [NEW] Consolidated Instant Match - only if length matches common barcode patterns
-                    // We check both the buffer and the input value
+                    // [NEW] Set inactivity timeout to auto-submit 
+                    // This helps if the scanner doesn't send Enter or sends it very slowly
+                    if (barcodeBuffer.length >= MIN_BARCODE_LENGTH) {
+                        scanTimeout = setTimeout(() => {
+                            const currentVal = isFocused ? barcodeInput.value.trim() : barcodeBuffer.trim();
+                            // Auto-process if long enough and no match found yet via instant match
+                            if (currentVal.length >= 8 && !isProcessing) {
+                                console.log(`[Timeout] Auto-processing: ${currentVal}`);
+                                isProcessing = true;
+                                handleScannedBarcode(currentVal);
+                                barcodeBuffer = '';
+                                if (barcodeInput) barcodeInput.value = '';
+                                setTimeout(() => { isProcessing = false; }, 500);
+                            }
+                        }, SUBMIT_INACTIVITY_MS);
+                    }
+
+                    // [REFINED] Instant Match - Works for any length >= 8 if perfect match found
                     const currentVal = isFocused ? (barcodeInput.value + e.key) : barcodeBuffer;
-                    if (currentVal.length >= 8) { // Only instant match for long barcodes to avoid partials
+                    if (currentVal.length >= 8) {
                         const instantMatch = document.querySelector(`.product-card[data-barcode="${currentVal}"]`) ||
                             document.querySelector(`.product-card[data-product-id="${currentVal}"]`);
 
                         if (instantMatch) {
-                            console.log(`[Instant] Match found: ${currentVal}`);
+                            console.log(`[Instant] Perfect match found for length ${currentVal.length}: ${currentVal}`);
                             e.preventDefault();
                             isProcessing = true;
+                            if (scanTimeout) clearTimeout(scanTimeout);
                             handleScannedBarcode(currentVal);
 
                             barcodeBuffer = '';
@@ -2096,13 +2314,20 @@
                 }
             }
 
-            // Scanner handlers
-            document.getElementById('openScannerBtn').addEventListener('click', openScanner);
-            document.getElementById('closeScannerBtn').addEventListener('click', closeScanner);
-            document.getElementById('navScannerMobile').addEventListener('click', (e) => {
-                e.preventDefault();
-                openScanner();
-            });
+            // Scanner handlers with safeties
+            const openScannerBtn = document.getElementById('openScannerBtn');
+            if (openScannerBtn) openScannerBtn.addEventListener('click', openScanner);
+
+            const closeScannerBtn = document.getElementById('closeScannerBtn');
+            if (closeScannerBtn) closeScannerBtn.addEventListener('click', closeScanner);
+
+            const navScannerMobile = document.getElementById('navScannerMobile');
+            if (navScannerMobile) {
+                navScannerMobile.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openScanner();
+                });
+            }
 
             // Mobile Navigation and Cart logic
             const mobileCartView = document.getElementById('mobileCartView');
@@ -2151,11 +2376,15 @@
                 // [NEW] Refocus barcode input after modal is closed
                 keypadModal.addEventListener('hidden.bs.modal', function () {
                     const barcodeInput = document.getElementById('barcodeScannerInput');
-                    if (barcodeInput) barcodeInput.focus();
+                    if (barcodeInput && !isTouchDevice && window.innerWidth >= 1025) barcodeInput.focus();
                 });
             }
 
-            initializeKeypad();
+            try {
+                initializeKeypad();
+            } catch (e) {
+                console.error('Failed to initialize keypad:', e);
+            }
         });
 
         function addToCart(productCard) {
@@ -2337,13 +2566,43 @@
             }
         }
 
+        function toggleManualDiscount() {
+            const section = document.getElementById('manualDiscountInputSection');
+            if (section) {
+                section.style.display = section.style.display === 'none' ? 'block' : 'none';
+                if (section.style.display === 'block') {
+                    document.getElementById('manualDiscountValue').focus();
+                }
+            }
+        }
+
         function updateTotals() {
             const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
             const qtyCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
-            document.querySelectorAll('.totalDisplay').forEach(el => el.textContent = 'Rp' + formatCurrency(subtotal));
+            let manualDiscount = 0;
+            const discountValueInput = document.getElementById('manualDiscountValue');
+            const discountTypeSelect = document.getElementById('discountType');
+
+            if (discountValueInput && discountValueInput.value > 0) {
+                const value = parseFloat(discountValueInput.value);
+                if (discountTypeSelect.value === 'percentage') {
+                    manualDiscount = subtotal * (value / 100);
+                } else {
+                    manualDiscount = value;
+                }
+            }
+
+            const total = Math.max(0, subtotal - manualDiscount);
+
+            document.querySelectorAll('.totalDisplay').forEach(el => el.textContent = 'Rp' + formatCurrency(total));
             document.querySelectorAll('.cartItemCount').forEach(el => el.textContent = cart.length);
             document.querySelectorAll('.cartQtyCount').forEach(el => el.textContent = qtyCount);
+
+            const discountDisplays = [document.getElementById('discountDisplay'), document.getElementById('discountDisplayMobile')];
+            discountDisplays.forEach(el => {
+                if (el) el.textContent = '-Rp' + formatCurrency(manualDiscount);
+            });
         }
 
         function selectPaymentMethod(method) {
@@ -2420,13 +2679,28 @@
 
             // Setup confirm button
             document.getElementById('keypadConfirm').onclick = () => {
-                const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0); // Discounted subtotal
+                const itemSubtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
                 const originalSubtotal = cart.reduce((sum, item) => sum + (item.quantity * (item.originalPrice || item.price)), 0);
-                const discountAmount = originalSubtotal - subtotal;
-                const total = subtotal;
+
+                // Calculate Manual Discount
+                let manualDiscount = 0;
+                const discountValueInput = document.getElementById('manualDiscountValue');
+                const discountTypeSelect = document.getElementById('discountType');
+
+                if (discountValueInput && discountValueInput.value > 0) {
+                    const value = parseFloat(discountValueInput.value);
+                    if (discountTypeSelect.value === 'percentage') {
+                        manualDiscount = itemSubtotal * (value / 100);
+                    } else {
+                        manualDiscount = value;
+                    }
+                }
+
+                const total = Math.max(0, itemSubtotal - manualDiscount);
+                const totalDiscountAmount = (originalSubtotal - itemSubtotal) + manualDiscount;
 
                 if (isCash) {
-                    const cashAmount = parseFloat(document.getElementById('keypadDisplay').value);
+                    const cashAmount = parseFloat(document.getElementById('keypadDisplay').value.replace(/[^0-9]/g, ''));
                     if (!cashAmount || cashAmount === 0) {
                         showToast('warning', '{{ __('pos.enter_cash_amount') }}');
                         return;
@@ -2436,7 +2710,7 @@
                         return;
                     }
                     modal.hide();
-                    processCheckout(cart, subtotal, total, cashAmount, null, discountAmount, originalSubtotal);
+                    processCheckout(cart, itemSubtotal, total, cashAmount, null, totalDiscountAmount, originalSubtotal);
                 } else {
                     const inputCamera = document.getElementById('inputCamera');
                     const inputGallery = document.getElementById('inputGallery');
@@ -2449,7 +2723,7 @@
                     }
 
                     modal.hide();
-                    processCheckout(cart, subtotal, total, total, file, discountAmount, originalSubtotal);
+                    processCheckout(cart, itemSubtotal, total, total, file, totalDiscountAmount, originalSubtotal);
                 }
             };
         }
@@ -2539,7 +2813,9 @@
                     checkoutBtn.disabled = false;
 
                     if (result.success) {
-                        const isCash = selectedPaymentMethod === 'cash';
+                        const transaction_id = result.transaction_id || result.transaction?.id;
+                        const change = result.change || 0;
+                        const cashAmount = parseFloat(document.getElementById('keypadDisplay').value.replace(/[^0-9]/g, '')) || 0;
                         let swalOptions = {
                             icon: 'success',
                             title: '{{ __('pos.transaction_success') }}',
@@ -2572,10 +2848,10 @@
                             },
                             buttonsStyling: false
                         }).then((result_swal) => {
-                            if (result_swal.isConfirmed && result.transaction_id) {
-                                // Only auto-print if NOT on mobile (width >= 768px)
-                                const isMobile = window.innerWidth < 768;
-                                const printUrl = '{{ url("pos/receipt") }}/' + result.transaction_id + (isMobile ? '' : '?auto_print=true');
+                            if (result_swal.isConfirmed && transaction_id) {
+                                // Only auto-print if NOT on mobile/tablet (width >= 1024px)
+                                const isMobile = window.innerWidth < 1024;
+                                const printUrl = '{{ url("pos/receipt") }}/' + transaction_id + (isMobile ? '' : '?auto_print=true');
                                 window.open(printUrl, '_blank');
                             }
                             // Auto-refresh stock by reloading page
@@ -2601,94 +2877,107 @@
         }
 
         function initializeKeypad() {
-            console.log('Initializing keypad...');
-
             const display = document.getElementById('keypadDisplay');
             const keypadBtns = document.querySelectorAll('.keypad-btn[data-key]');
-            console.log('Found keypad buttons:', keypadBtns.length);
+            const deleteBtn = document.getElementById('keypadDelete');
 
-            // [NEW] Auto-scroll and modal repositioning on focus for mobile
-            if (display) {
-                display.addEventListener('focus', function () {
-                    if (window.innerWidth < 768) {
-                        // Scroll page to top
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
+            console.log('Keypad Init:', { display: !!display, buttons: keypadBtns.length, deleteBtn: !!deleteBtn });
 
-                        // Shift modal up slightly to ensure bottom buttons are clear of keyboard
-                        const modalDialog = document.querySelector('#keypadModal .modal-dialog');
-                        if (modalDialog) {
-                            modalDialog.style.transform = 'translateY(-25%)';
-                            modalDialog.style.transition = 'transform 0.3s ease';
-                        }
-                    }
-                });
+            if (!display) return;
 
-                display.addEventListener('blur', function () {
-                    const modalDialog = document.querySelector('#keypadModal .modal-dialog');
-                    if (modalDialog) {
-                        modalDialog.style.transform = 'translateY(0)';
-                    }
-                });
-            }
+            // 1. Centralized Formatting Helper (Now accessible in whole function scope)
+            const updateFormattedValue = (inputEl, newValue) => {
+                if (!inputEl) return;
+                let numeric = (newValue || '').toString().replace(/[^0-9]/g, '');
+                if (!numeric || numeric === '0') {
+                    inputEl.value = '';
+                    return;
+                }
+                const parsed = parseInt(numeric);
+                inputEl.value = 'Rp' + parsed.toLocaleString('id-ID');
+            };
 
-            // Button click handlers
+            // 2. Button Press Handler
+            const handleKeypadPress = (e, key, isDelete = false) => {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
+                let currentNumeric = display.value.replace(/[^0-9]/g, '');
+                if (isDelete) {
+                    updateFormattedValue(display, currentNumeric.slice(0, -1));
+                } else {
+                    updateFormattedValue(display, currentNumeric + key);
+                }
+
+                // Keep focus and trigger input event for any other listeners
+                display.dispatchEvent(new Event('input'));
+                setTimeout(() => display.focus(), 5);
+            };
+
+            // 3. Attach Listeners to Buttons
             keypadBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    if (display) {
-                        display.value += btn.dataset.key;
-                        display.focus();
-                    }
+                ['mousedown', 'touchstart'].forEach(type => {
+                    btn.addEventListener(type, (e) => handleKeypadPress(e, btn.dataset.key), { passive: false });
                 });
             });
 
-            // Delete button handler
-            const deleteBtn = document.getElementById('keypadDelete');
             if (deleteBtn) {
-                deleteBtn.addEventListener('click', () => {
-                    if (display) {
-                        display.value = display.value.slice(0, -1);
-                        display.focus();
-                    }
+                ['mousedown', 'touchstart'].forEach(type => {
+                    deleteBtn.addEventListener(type, (e) => handleKeypadPress(e, null, true), { passive: false });
                 });
             }
 
-            // Keyboard input handler - only accept numbers and backspace
-            if (display) {
-                display.addEventListener('keydown', (e) => {
-                    console.log('Keypress:', e.key);
+            // 4. Input Field Specifics
+            display.addEventListener('input', function () {
+                let cursor = this.selectionStart;
+                let oldLen = this.value.length;
+                updateFormattedValue(this, this.value);
+                let newLen = this.value.length;
+                this.setSelectionRange(cursor + (newLen - oldLen), cursor + (newLen - oldLen));
+            });
 
-                    // Allow Enter to confirm payment
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        document.getElementById('keypadConfirm').click();
-                        return;
+            display.addEventListener('focus', function () {
+                if (window.innerWidth < 1024) {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    document.body.classList.add('keyboard-active');
+                    const modalDialog = document.querySelector('#keypadModal .modal-dialog');
+                    if (modalDialog) {
+                        modalDialog.style.marginTop = '2rem';
+                        modalDialog.style.transition = 'margin-top 0.3s ease';
                     }
+                }
+            });
 
-                    // Allow: numbers (0-9), backspace, delete
-                    if (!/^[0-9]$/.test(e.key) &&
-                        e.key !== 'Backspace' &&
-                        e.key !== 'Delete' &&
-                        e.key !== 'ArrowLeft' &&
-                        e.key !== 'ArrowRight' &&
-                        e.key !== 'Home' &&
-                        e.key !== 'End') {
-                        e.preventDefault();
-                    }
-                });
+            display.addEventListener('blur', function () {
+                document.body.classList.remove('keyboard-active');
+                const modalDialog = document.querySelector('#keypadModal .modal-dialog');
+                if (modalDialog) {
+                    modalDialog.style.marginTop = '0.5rem';
+                }
+            });
 
-                // Prevent pasting non-numeric content
-                display.addEventListener('paste', (e) => {
+            display.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
                     e.preventDefault();
-                    const pastedText = (e.clipboardData || window.clipboardData).getData('text');
-                    const numericOnly = pastedText.replace(/[^0-9]/g, '');
-                    if (numericOnly) {
-                        display.value += numericOnly;
-                    }
-                });
-            }
+                    const confirmBtn = document.getElementById('keypadConfirm');
+                    if (confirmBtn) confirmBtn.click();
+                }
+            });
 
-            console.log('Keypad initialized');
+            display.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+                const numericOnly = pastedText.replace(/[^0-9]/g, '');
+                if (numericOnly) {
+                    updateFormattedValue(display, display.value + numericOnly);
+                }
+            });
+
+            console.log('Keypad initialized successfully');
         }
+
 
         function formatCurrency(value) {
             return Math.round(value).toLocaleString('id-ID');
@@ -2702,6 +2991,8 @@
         // Professional Scanner Beep using Web Audio API
         function playBeep() {
             try {
+                // Ensure focus returns after interaction
+                setTimeout(refocusBarcode, 100);
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 if (audioCtx.state === 'suspended') {
                     audioCtx.resume();
@@ -2759,21 +3050,55 @@
         }
 
         // SCANNER FUNCTIONS
+        let isScannerStarting = false;
+
         function openScanner() {
+            if (isScannerStarting) return;
             const scannerSection = document.getElementById('scannerSection');
-            scannerSection.classList.add('active');
+            if (scannerSection) scannerSection.classList.add('active');
 
             if (!scanner) {
+                isScannerStarting = true;
                 scanner = new Html5Qrcode("reader");
-                scanner.start(
-                    { facingMode: "environment" },
-                    {
-                        fps: 10,
-                        qrbox: { width: 250, height: 250 }
+
+                // Advanced constraints for sharpness and focus
+                const videoConstraints = {
+                    facingMode: "environment",
+                    width: { min: 640, ideal: 1280, max: 1920 },
+                    height: { min: 480, ideal: 720, max: 1080 },
+                    aspectRatio: { ideal: 1.7777777778 } // 16:9 ideal for mobile
+                };
+
+                const config = {
+                    fps: 20, // Higher FPS for smoother focus response
+                    qrbox: (viewWidth, viewHeight) => {
+                        // Dynamic box size relative to viewport
+                        const minDim = Math.min(viewWidth, viewHeight);
+                        const boxSize = Math.floor(minDim * 0.7);
+                        return { width: boxSize, height: boxSize };
                     },
+                    aspectRatio: 1.0, // Square guide
+                    // Try to enable continuous focus if supported
+                    videoConstraints: {
+                        ...videoConstraints,
+                        advanced: [{ focusMode: "continuous" }]
+                    }
+                };
+
+                scanner.start(
+                    videoConstraints,
+                    config,
                     onScanSuccess,
                     onScanFailure
-                ).catch(err => console.log("Camera error:", err));
+                ).then(() => {
+                    isScannerStarting = false;
+                    console.log("[Scanner] Started with advanced constraints");
+                }).catch(err => {
+                    console.error("Camera error:", err);
+                    isScannerStarting = false;
+                    // Fallback to basic start if advanced fails
+                    scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess, onScanFailure);
+                });
             }
         }
 
@@ -2782,11 +3107,26 @@
             scannerSection.classList.remove('active');
 
             if (scanner) {
-                scanner.stop().then(() => {
-                    scanner = null;
-                }).catch(err => console.log("Stop scanner error:", err));
+                const s = scanner;
+                scanner = null; // Prevent race conditions
+                s.stop().catch(err => console.log("Stop scanner error:", err));
             }
         }
+
+        // Handle Orientation Change / Resize for Scanner
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const scannerSection = document.getElementById('scannerSection');
+                if (scannerSection && scannerSection.classList.contains('active')) {
+                    console.log('[Scanner] Orientation/Resize detected, restarting scanner...');
+                    // Restart scanner to pick up new aspect ratio
+                    closeScanner();
+                    setTimeout(openScanner, 300); // Give it a moment to clear
+                }
+            }, 500);
+        });
 
         function onScanSuccess(decodedText, decodedResult) {
             const currentTime = Date.now();
@@ -2855,7 +3195,8 @@
 
         // Global Numeric Input Validation for POS
         document.addEventListener('keydown', function (e) {
-            if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+            if (e.target.id === 'keypadDisplay') return; // Skip for formatted payment input
+            if (e.target.tagName === 'INPUT' && (e.target.type === 'number' || e.target.inputMode === 'numeric')) {
                 // Block 'e', 'E', '-', '+', '.', ','
                 const blockedKeys = ['e', 'E', '-', '+', '.', ','];
                 if (blockedKeys.includes(e.key)) {
@@ -2864,8 +3205,22 @@
             }
         });
 
+        // Strict input sanitization (handles copy-paste & mobile keyboards)
+        document.addEventListener('input', function (e) {
+            const target = e.target;
+            if (target.id === 'keypadDisplay') return; // Skip for formatted payment input
+            if (target.tagName === 'INPUT' && (target.type === 'number' || target.inputMode === 'numeric')) {
+                // Remove any non-numeric characters immediately
+                const val = target.value;
+                if (/[^0-9]/.test(val)) {
+                    target.value = val.replace(/[^0-9]/g, '');
+                }
+            }
+        });
+
         // Prevent paste of non-numeric characters for POS
         document.addEventListener('paste', function (e) {
+            if (e.target.id === 'keypadDisplay') return; // Skip for formatted payment input
             if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
                 const pasteData = (e.clipboardData || window.clipboardData).getData('text');
                 if (!/^\d+$/.test(pasteData)) {
@@ -2876,7 +3231,95 @@
                 }
             }
         });
+        // BARCODE FOCUS MANAGEMENT
+        // Create a global reference immediately
+        window.refocusBarcode = function () {
+            const input = document.getElementById('barcodeScannerInput');
+            if (!input) return;
+
+            // Only focus if no other input is active and offline scanner is closed
+            const scannerSection = document.getElementById('scannerSection');
+            const isScannerActive = scannerSection && scannerSection.classList.contains('active');
+
+            if (!isScannerActive) {
+                // Don't steal focus if any modal is open
+                if (document.querySelector('.modal.show')) return;
+
+                // Don't steal focus if SweetAlert is visible (it usually has its own focus)
+                if (Swal.isVisible()) return;
+
+                // Don't steal focus if user is typing in ANY other input field
+                const active = document.activeElement;
+                if (active && active !== input && (
+                    active.tagName === 'INPUT' ||
+                    active.tagName === 'TEXTAREA' ||
+                    active.tagName === 'SELECT' ||
+                    active.isContentEditable ||
+                    active.id === 'keypadDisplay'
+                )) {
+                    return;
+                }
+
+                // Focus it! We removed isTouchDevice check because we use inputmode="none"
+                if (active !== input) {
+                    input.focus();
+                }
+            }
+        };
+
+        // Compatibility legacy declaration
+        function refocusBarcode() { window.refocusBarcode(); }
+
+        // Auto-focus on load
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(refocusBarcode, 200);
+            setTimeout(refocusBarcode, 800); // Second attempt to be sure
+        });
+
+        // Final fallback focus
+        window.onload = () => setTimeout(refocusBarcode, 100);
+
+        // Refocus after SweetAlert closes
+        const originalFire = Swal.fire;
+        Swal.fire = function () {
+            return originalFire.apply(this, arguments).then((result) => {
+                setTimeout(refocusBarcode, 300);
+                return result;
+            });
+        };
+
+        // Refocus after Bootstrap Modals close
+        document.addEventListener('hidden.bs.modal', function () {
+            setTimeout(refocusBarcode, 300);
+        });
+
+        // Refocus after any click that isn't an input
+        document.addEventListener('click', function (e) {
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') {
+                refocusBarcode();
+            }
+        });
+
+        // Refocus after adding product
+        const originalAddToCart = window.addToCart;
+        if (typeof originalAddToCart === 'function') {
+            window.addToCart = function () {
+                originalAddToCart.apply(this, arguments);
+                setTimeout(refocusBarcode, 100);
+            };
+        }
     </script>
+
+    <!-- SCANNER (Global Overlay) -->
+    <div class="scanner-section" id="scannerSection">
+        <div class="scanner-header">
+            <span class="scanner-title"><i class="fas fa-barcode"></i> {{ __('pos.scanner_title') }}</span>
+        </div>
+        <div id="reader"></div>
+        <div class="scanner-footer">
+            <button class="btn-toggle-scanner" id="closeScannerBtn">{{ __('common.close') }}</button>
+        </div>
+    </div>
 
     <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf

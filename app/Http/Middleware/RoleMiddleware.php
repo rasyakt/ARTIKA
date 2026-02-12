@@ -19,7 +19,17 @@ class RoleMiddleware
             abort(403, 'Unauthorized');
         }
 
-        if (!in_array($request->user()->role->name, $roles)) {
+        $userRole = strtolower(trim($request->user()->role->name));
+
+        // Superadmin bypass: grant access to all role-protected routes
+        if ($userRole === 'superadmin') {
+            return $next($request);
+        }
+
+        // Normalize roles to check against
+        $roles = array_map(fn($role) => strtolower(trim($role)), $roles);
+
+        if (!in_array($userRole, $roles)) {
             abort(403, 'Unauthorized Access');
         }
 

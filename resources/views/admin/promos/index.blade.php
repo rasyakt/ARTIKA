@@ -129,7 +129,7 @@
             </div>
             @if($promos->hasPages())
                 <div class="card-footer bg-white border-0 d-flex justify-content-end py-3">
-                    {{ $promos->links('vendor.pagination.no-prevnext') }}
+                    {{ $promos->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>
@@ -140,7 +140,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content shadow-lg" style="border-radius: 20px; border: none;">
                 <div class="modal-header border-bottom-0 p-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i
+                    <h5 class="modal-title fw-bold"><i
                             class="fa-solid fa-plus me-2"></i>{{ __('admin.add_promo') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -202,7 +202,7 @@
                                     (Opsional)</label>
                                 <select name="category_id" class="form-select"
                                     style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
-                                    <option value="">-- Semua Kategori --</option>
+                                    <option value="">Semua Kategori</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
@@ -241,7 +241,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content shadow-lg" style="border-radius: 20px; border: none;">
                 <div class="modal-header border-bottom-0 p-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i
+                    <h5 class="modal-title fw-bold"><i
                             class="fa-solid fa-pen me-2"></i>{{ __('admin.edit_promo') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -297,7 +297,7 @@
                                 <label class="form-label fw-semibold" style="color: #6f5849;">Target Kategori</label>
                                 <select name="category_id" id="edit_category_id" class="form-select"
                                     style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
-                                    <option value="">-- Semua Kategori --</option>
+                                    <option value="">Semua Kategori</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach

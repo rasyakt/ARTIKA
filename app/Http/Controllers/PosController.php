@@ -35,10 +35,7 @@ class PosController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $activePromos = \App\Models\Promo::where('is_active', true)
-            ->whereDate('start_date', '<=', now())
-            ->whereDate('end_date', '>=', now())
-            ->get();
+        $activePromos = \App\Models\Promo::active()->get();
 
         return view('pos.index', compact('products', 'categories', 'paymentMethods', 'heldTransactions', 'activePromos'));
     }
@@ -82,7 +79,7 @@ class PosController extends Controller
         $totalRevenue = $summaryQuery->sum('total_amount') ?? 0;
 
         // Get Sold Items Summary
-        $soldItems = TransactionItem::whereIn('transaction_id', $summaryQuery->pluck('id'))
+        $soldItems = TransactionItem::whereIn('transaction_id', $summaryQuery->select('id'))
             ->join('products', 'transaction_items.product_id', '=', 'products.id')
             ->select('products.name', DB::raw('SUM(transaction_items.quantity) as total_qty'), DB::raw('SUM(transaction_items.subtotal) as total_sales'))
             ->groupBy('products.name')
@@ -93,7 +90,9 @@ class PosController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return view('pos.history', compact('transactions', 'totalRevenue', 'soldItems'));
+        $enableReturns = \App\Models\Setting::get('cashier_enable_returns', true);
+
+        return view('pos.history', compact('transactions', 'totalRevenue', 'soldItems', 'enableReturns'));
     }
 
     public function showReceipt($id)
@@ -102,7 +101,9 @@ class PosController extends Controller
             ->with(['user', 'items.product'])
             ->findOrFail($id);
 
-        return view('pos.receipt', compact('transaction'));
+        $paperSize = \App\Models\Setting::get('receipt_paper_size', '58mm');
+
+        return view('pos.receipt', compact('transaction', 'paperSize'));
     }
 
     public function scanner()
@@ -269,7 +270,9 @@ class PosController extends Controller
         $transaction = Transaction::with(['user', 'items.product'])
             ->findOrFail($transactionId);
 
-        return view('pos.receipt', compact('transaction'));
+        $paperSize = \App\Models\Setting::get('receipt_paper_size', '58mm');
+
+        return view('pos.receipt', compact('transaction', 'paperSize'));
     }
 }
 

@@ -33,10 +33,20 @@ class AppServiceProvider extends ServiceProvider
             \App\Listeners\LogSuccessfulLogin::class,
         );
 
-        View::composer('layouts.app', function ($view) {
-            $view->with('user', Auth::user());
-        });
+
 
         Paginator::useBootstrap();
+
+        // Dynamically set session lifetime based on database setting
+        try {
+            if (class_exists('App\Models\Setting')) {
+                $sessionDuration = \App\Models\Setting::get('session_duration');
+                if ($sessionDuration && is_numeric($sessionDuration)) {
+                    config(['session.lifetime' => (int) $sessionDuration]);
+                }
+            }
+        } catch (\Exception $e) {
+            // Avoid breaking during migrations or if table doesn't exist
+        }
     }
 }

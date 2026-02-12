@@ -35,7 +35,7 @@
 
     <div class="container-fluid py-4">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
                 <h2 class="fw-bold mb-1" style="color: #6f5849;">
                     <i class="fa-solid fa-chart-line me-2"></i>{{ __('admin.reports_hub') }}
@@ -52,12 +52,14 @@
             </div>
         </div>
 
+
+
         <!-- Report Cards -->
         <div class="row g-4 mb-4">
             <!-- Finance Report -->
-            <div class="col-md-3">
-                <a href="{{ route('admin.reports.finance') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100 accent-brown">
+            <div class="col-xl-3 col-md-6">
+                <a href="{{ route($routePrefix . 'reports.finance') }}" class="text-decoration-none">
+                    <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto bg-brown-soft">
                                 <i class="fa-solid fa-file-invoice-dollar"></i>
@@ -81,9 +83,9 @@
             </div>
 
             <!-- Warehouse Report -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <a href="{{ route('admin.reports.warehouse') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100 accent-success">
+                    <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto bg-success-soft">
                                 <i class="fa-solid fa-warehouse"></i>
@@ -109,9 +111,9 @@
             </div>
 
             <!-- Cashier Report -->
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6">
                 <a href="{{ route('admin.reports.cashier') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100 accent-info">
+                    <div class="card report-card shadow-sm h-100">
                         <div class="card-body text-center p-4">
                             <div class="report-icon mx-auto bg-info-soft">
                                 <i class="fa-solid fa-cash-register"></i>
@@ -136,29 +138,30 @@
                 </a>
             </div>
 
-            <!-- Audit Logs -->
-            <div class="col-md-3">
-                <a href="{{ route('admin.audit.index') }}" class="text-decoration-none">
-                    <div class="card report-card shadow-sm h-100 accent-sienna">
-                        <div class="card-body text-center p-4">
-                            <div class="report-icon mx-auto bg-sienna-soft">
-                                <i class="fa-solid fa-clipboard-list"></i>
+            @if(App\Models\Setting::get('admin_enable_audit_logs', true))
+                <div class="col-xl-3 col-md-6">
+                    <a href="{{ route($routePrefix . 'audit.index') }}" class="text-decoration-none">
+                        <div class="card report-card shadow-sm h-100">
+                            <div class="card-body text-center p-4">
+                                <div class="report-icon mx-auto bg-sienna-soft">
+                                    <i class="fa-solid fa-clipboard-list"></i>
+                                </div>
+                                <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.logs_report') }}</h5>
+                                <p class="text-muted mb-3 small">{{ __('admin.logs_report_desc') }}</p>
+                                <ul class="list-unstyled text-start small" style="color: #78716c; font-size: 0.75rem;">
+                                    <li class="mb-1"><i
+                                            class="fa-solid fa-check text-success me-2"></i>{{ __('admin.user_management') }}
+                                    </li>
+                                    <li class="mb-1"><i
+                                            class="fa-solid fa-check text-success me-2"></i>{{ __('admin.ip_address') }}</li>
+                                    <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Security</li>
+                                    <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Tracking</li>
+                                </ul>
                             </div>
-                            <h5 class="fw-bold mb-2" style="color: #6f5849;">{{ __('admin.logs_report') }}</h5>
-                            <p class="text-muted mb-3 small">{{ __('admin.logs_report_desc') }}</p>
-                            <ul class="list-unstyled text-start small" style="color: #78716c; font-size: 0.75rem;">
-                                <li class="mb-1"><i
-                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.user_management') }}
-                                </li>
-                                <li class="mb-1"><i
-                                        class="fa-solid fa-check text-success me-2"></i>{{ __('admin.ip_address') }}</li>
-                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Security</li>
-                                <li class="mb-1"><i class="fa-solid fa-check text-success me-2"></i>Tracking</li>
-                            </ul>
                         </div>
-                    </div>
-                </a>
-            </div>
+                    </a>
+                </div>
+            @endif
         </div>
 
         <!-- Quick Stats -->
@@ -198,7 +201,7 @@
                     </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="{{ route('admin.reports.print-all') }}" method="GET" id="printForm">
+                <form action="{{ route($routePrefix . 'reports.print-all') }}" method="GET" id="printForm">
                     <div class="modal-body p-4">
                         <div class="mb-4">
                             <label class="form-label fw-bold" style="color: #6f5849;">
@@ -231,6 +234,41 @@
                                     </label>
                                     <input type="date" name="end_date" class="form-control">
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold" style="color: #6f5849;">
+                                <i
+                                    class="fa-solid fa-layer-group me-2"></i>{{ __('admin.report_sections') ?? 'Report Sections' }}
+                            </label>
+                            <div class="list-group list-group-flush border rounded-12">
+                                <label class="list-group-item d-flex align-items-center py-2">
+                                    <input class="form-check-input me-3" type="checkbox" name="modules[]" value="finance"
+                                        checked>
+                                    <div>
+                                        <div class="fw-bold small">Laporan Keuangan</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Ringkasan KPI & Trend</small>
+                                    </div>
+                                </label>
+                                <label class="list-group-item d-flex align-items-center py-2">
+                                    <input class="form-check-input me-3" type="checkbox" name="modules[]" value="warehouse"
+                                        checked>
+                                    <div>
+                                        <div class="fw-bold small">Laporan Gudang</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Stok, Pergerakan &
+                                            Valuasi</small>
+                                    </div>
+                                </label>
+                                <label class="list-group-item d-flex align-items-center py-2">
+                                    <input class="form-check-input me-3" type="checkbox" name="modules[]" value="cashier"
+                                        checked>
+                                    <div>
+                                        <div class="fw-bold small">Laporan Kasir</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Penjualan, Produk &
+                                            Performa</small>
+                                    </div>
+                                </label>
                             </div>
                         </div>
 

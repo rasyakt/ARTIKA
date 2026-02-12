@@ -3,16 +3,17 @@
 @section('content')
     <div class="container-fluid py-4">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
                 <h4 class="fw-bold mb-1" style="color: #6f5849;">
                     <i class="fa-solid fa-wallet me-2"></i>{{ __('admin.operational_expenses') }}
                 </h4>
                 <p class="text-muted mb-0 small">{{ __('admin.expenses_subtitle') }}</p>
             </div>
-            <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addExpenseModal"
-                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
-                <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_expense') }}
+            <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
+                data-bs-target="#addExpenseModal"
+                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
+                <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_expense') }}
             </button>
         </div>
 
@@ -122,7 +123,7 @@
             </div>
             @if($expenses->hasPages())
                 <div class="card-footer border-0 d-flex justify-content-end py-3 px-4">
-                    {{ $expenses->links('vendor.pagination.no-prevnext') }}
+                    {{ $expenses->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>
@@ -133,7 +134,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow" style="border-radius: 20px;">
                 <div class="modal-header border-0 pt-4 px-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">
+                    <h5 class="modal-title fw-bold">
                         <i class="fa-solid fa-circle-plus me-2"></i>{{ __('admin.add_expense') }}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -186,7 +187,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow" style="border-radius: 20px;">
                 <div class="modal-header border-0 pt-4 px-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">
+                    <h5 class="modal-title fw-bold">
                         <i class="fa-solid fa-pen-to-square me-2"></i>{{ __('admin.edit_expense') }}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

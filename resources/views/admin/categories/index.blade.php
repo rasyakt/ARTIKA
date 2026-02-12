@@ -3,13 +3,14 @@
 @section('content')
     <div class="container-fluid py-4">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
             <h4 class="fw-bold mb-0" style="color: #6f5849;">
                 <i class="fa-solid fa-folder me-2"></i>{{ __('common.categories') }}
             </h4>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal"
-                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
-                <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_category') }}
+            <button class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
+                data-bs-target="#addCategoryModal"
+                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
+                <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_category') }}
             </button>
         </div>
 
@@ -97,16 +98,17 @@
                             <i class="fa-solid fa-folder"></i>
                         </div>
                         <p class="text-muted mb-3">{{ __('admin.no_categories') }}</p>
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal"
-                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600;">
-                            <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_first_category') }}
+                        <button class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
+                            data-bs-target="#addCategoryModal"
+                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600; height: fit-content;">
+                            <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_first_category') }}
                         </button>
                     </div>
                 @endif
             </div>
             @if($categories->hasPages())
                 <div class="card-footer border-0 d-flex justify-content-end py-3">
-                    {{ $categories->links('vendor.pagination.no-prevnext') }}
+                    {{ $categories->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>
@@ -117,7 +119,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i>
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-plus me-1"></i>
                         {{ __('admin.add_category') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -150,7 +152,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i>
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen me-1"></i>
                         {{ __('admin.edit_category') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>

@@ -87,6 +87,8 @@ class WarehouseReportController extends Controller
         $topMovers = $this->warehouseReportService->getTopMovingItems($startDate, $endDate);
         $auditLogs = $this->warehouseReportService->getWarehouseAuditLogs($startDate, $endDate);
 
+        $sections = $request->input('sections', ['summary', 'top_movers', 'low_stock', 'movements']);
+
         if ($request->input('format') === 'pdf') {
             $pdf = Pdf::loadView('admin.reports.warehouse.print', [
                 'summary' => $summary,
@@ -96,6 +98,7 @@ class WarehouseReportController extends Controller
                 'auditLogs' => $auditLogs,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
+                'sections' => $sections,
                 'isPdf' => true
             ]);
             return $pdf->download('warehouse-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');

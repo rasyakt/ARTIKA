@@ -31,19 +31,6 @@
     --radius-lg: #{$radius-lg};
 }
 
-/* Hide default paginator Previous / Next controls globally (visually) */
-.pagination .page-item:first-child,
-.pagination .page-item:last-child,
-.pagination .page-link[rel="prev"],
-.pagination .page-link[rel="next"] {
-    display: none !important;
-}
-
-/* If paginator uses aria-label attributes, also hide those */
-.pagination .page-item[aria-label*="Previous"],
-.pagination .page-item[aria-label*="Next"] {
-    display: none !important;
-}
 // ============================================
 // Global Styles
 // ============================================

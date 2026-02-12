@@ -59,6 +59,8 @@ class CashierReportController extends Controller
         $cashierPerformance = $this->cashierReportService->getTransactionsByUser($startDate, $endDate);
         $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 20, $search, 10, 'transactions_page');
         $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate, $search, $action, 10, 'audit_page');
+        $categorySales = $this->cashierReportService->getSalesByCategory($startDate, $endDate);
+        $discountSummary = $this->cashierReportService->getDiscountSummary($startDate, $endDate);
 
         $actions = \App\Models\AuditLog::distinct()->pluck('action');
 
@@ -69,6 +71,8 @@ class CashierReportController extends Controller
             'cashierPerformance',
             'recentTransactions',
             'auditLogs',
+            'categorySales',
+            'discountSummary',
             'startDate',
             'endDate',
             'period',
@@ -92,6 +96,11 @@ class CashierReportController extends Controller
         $recentTransactions = $this->cashierReportService->getRecentTransactions($startDate, $endDate, 50, $search);
         $auditLogs = $this->cashierReportService->getCashierAuditLogs($startDate, $endDate, $search, $action);
 
+        $sections = $request->input('sections', ['summary', 'payment_methods', 'top_products', 'cashier_performance', 'recent_transactions']);
+
+        $categorySales = $this->cashierReportService->getSalesByCategory($startDate, $endDate);
+        $discountSummary = $this->cashierReportService->getDiscountSummary($startDate, $endDate);
+
         if ($request->input('format') === 'pdf') {
             $pdf = Pdf::loadView('admin.reports.cashier.print', [
                 'summary' => $summary,
@@ -100,8 +109,11 @@ class CashierReportController extends Controller
                 'cashierPerformance' => $cashierPerformance,
                 'recentTransactions' => $recentTransactions,
                 'auditLogs' => $auditLogs,
+                'categorySales' => $categorySales,
+                'discountSummary' => $discountSummary,
                 'startDate' => $startDate,
                 'endDate' => $endDate,
+                'sections' => $sections,
                 'isPdf' => true,
                 'search' => $search,
                 'action' => $action
@@ -218,7 +230,7 @@ class CashierReportController extends Controller
 
     public function getTransactionItems($id)
     {
-        $transaction = \App\Models\Transaction::with(['items.product', 'user'])->findOrFail($id);
+        $transaction = \App\Models\Transaction::with(['items.product', 'user', 'returns'])->findOrFail($id);
         return response()->json([
             'invoice_no' => $transaction->invoice_no,
             'cashier_name' => $transaction->user->name ?? 'System',
@@ -230,10 +242,13 @@ class CashierReportController extends Controller
             'cash_amount' => $transaction->cash_amount,
             'change_amount' => $transaction->change_amount,
             'status' => $transaction->status,
-            'items' => $transaction->items->map(function ($item) {
+            'total_refunded' => $transaction->total_refunded,
+            'items' => $transaction->items->map(function ($item) use ($transaction) {
                 return [
+                    'product_id' => $item->product_id,
                     'name' => $item->product->name,
                     'quantity' => $item->quantity,
+                    'returned_quantity' => $transaction->getReturnedQuantity($item->product_id),
                     'price' => $item->price,
                     'subtotal' => $item->subtotal
                 ];
@@ -246,7 +261,9 @@ class CashierReportController extends Controller
         $transaction = \App\Models\Transaction::with(['user', 'items.product'])
             ->findOrFail($id);
 
-        return view('pos.receipt', compact('transaction'));
+        $paperSize = \App\Models\Setting::get('receipt_paper_size', '58mm');
+
+        return view('pos.receipt', compact('transaction', 'paperSize'));
     }
 
     public function update(Request $request, $id)

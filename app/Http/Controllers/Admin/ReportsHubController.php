@@ -91,6 +91,8 @@ class ReportsHubController extends Controller
         // Finance Report Data
         $financeSummary = $this->financeService->getFinancialSummary($startDate, $endDate);
 
+        $modules = $request->input('modules', ['finance', 'warehouse', 'cashier']);
+
         if ($request->input('format') === 'pdf') {
             $pdf = Pdf::loadView('admin.reports.print-all', [
                 'startDate' => $startDate,
@@ -105,6 +107,7 @@ class ReportsHubController extends Controller
                 'recentTransactions' => $recentTransactions,
                 'auditLogs' => $auditLogs,
                 'financeSummary' => $financeSummary,
+                'modules' => $modules,
                 'isPdf' => true
             ]);
             return $pdf->download('full-store-report-' . $startDate->format('Y-m-d') . '-to-' . $endDate->format('Y-m-d') . '.pdf');

@@ -3,15 +3,16 @@
 @section('content')
     <div class="container-fluid py-4">
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
                 <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
                         class="fa-solid fa-users me-2"></i>{{ __('admin.user_management') }}</h2>
                 <p class="text-muted mb-0">{{ __('admin.manage_users_permissions') }}</p>
             </div>
-            <button class="btn btn-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#addUserModal"
-                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600;">
-                <span style="font-size: 1.25rem;">+</span> {{ __('admin.add_user') }}
+            <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
+                data-bs-target="#addUserModal"
+                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_user') }}
             </button>
         </div>
 
@@ -55,7 +56,9 @@
                                     <td>
                                         @php
                                             $roleColors = [
+                                                'superadmin' => 'bg-dark',
                                                 'admin' => 'bg-danger',
+                                                'manager' => 'bg-info',
                                                 'cashier' => 'bg-success',
                                                 'warehouse' => 'bg-primary'
                                             ];
@@ -79,7 +82,15 @@
                                                         <i class="fa-solid fa-pen-to-square me-1"></i> {{ __('common.edit') }}
                                                     </button>
                                                 </li>
-                                                @if($user->role->name === 'cashier')
+                                                @php
+                                                    $canDelete = false;
+                                                    if (auth()->user()->role->name === 'superadmin') {
+                                                        $canDelete = $user->role->name !== 'superadmin';
+                                                    } else {
+                                                        $canDelete = $user->role->name === 'cashier';
+                                                    }
+                                                @endphp
+                                                @if($canDelete)
                                                     <li>
                                                         <form action="{{ route('admin.users.delete', $user->id) }}" method="POST"
                                                             class="delete-form">
@@ -98,7 +109,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-5">
+                                    <td colspan="5" class="text-center py-5">
                                         <div style="font-size: 4rem; opacity: 0.2;"><i class="fa-solid fa-users"></i></div>
                                         <p class="text-muted mb-0">{{ __('admin.no_users_found') }}</p>
                                     </td>
@@ -110,7 +121,7 @@
             </div>
             @if($users->hasPages())
                 <div class="card-footer border-0 d-flex justify-content-end py-3">
-                    {{ $users->links('vendor.pagination.no-prevnext') }}
+                    {{ $users->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>
@@ -144,7 +155,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-plus me-1"></i>
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-plus me-1"></i>
                         {{ __('admin.add_new_user') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -189,7 +200,15 @@
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     <option value="">{{ __('common.select_role') }}</option>
                                     @foreach($roles as $role)
-                                        @if($role->name === 'cashier')
+                                        @php
+                                            $isAllowed = false;
+                                            if (auth()->user()->role->name === 'superadmin') {
+                                                $isAllowed = $role->name !== 'superadmin';
+                                            } else {
+                                                $isAllowed = !in_array($role->name, ['superadmin', 'admin']);
+                                            }
+                                        @endphp
+                                        @if($isAllowed)
                                             <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
                                         @endif
                                     @endforeach
@@ -215,7 +234,7 @@
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-pen me-1"></i>
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen me-1"></i>
                         {{ __('admin.edit_user') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
@@ -260,7 +279,15 @@
                                 <select class="form-select" id="edit_role_id" name="role_id" required
                                     style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
                                     @foreach($roles as $role)
-                                        @if($role->name !== 'admin')
+                                        @php
+                                            $isAllowed = false;
+                                            if (auth()->user()->role->name === 'superadmin') {
+                                                $isAllowed = $role->name !== 'superadmin';
+                                            } else {
+                                                $isAllowed = !in_array($role->name, ['superadmin', 'admin']);
+                                            }
+                                        @endphp
+                                        @if($isAllowed)
                                             <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
                                         @endif
                                     @endforeach

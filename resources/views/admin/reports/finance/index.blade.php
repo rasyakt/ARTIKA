@@ -10,7 +10,8 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="d-flex align-items-center">
-                <a href="{{ route('admin.reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
+
+                <a href="{{ route($routePrefix . 'reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
                     style="border-radius: 10px;">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
@@ -24,11 +25,11 @@
                     data-bs-target="#filterModal">
                     <i class="fa-solid fa-filter me-2"></i> {{ __('admin.apply_filter') }}
                 </button>
-                <a href="{{ route('admin.reports.finance.export', array_merge(request()->all(), ['format' => 'pdf'])) }}"
-                    class="btn btn-outline-brown shadow-sm">
+                <button type="button" class="btn btn-outline-brown shadow-sm" data-bs-toggle="modal"
+                    data-bs-target="#exportPdfCustomModal">
                     <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
-                </a>
-                <a href="{{ route('admin.reports.finance.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
+                </button>
+                <a href="{{ route($routePrefix . 'reports.finance.export', array_merge(request()->all(), ['format' => 'csv'])) }}"
                     class="btn btn-brown shadow-sm">
                     <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
                 </a>
@@ -49,7 +50,7 @@
         <div class="row g-3 mb-4">
             <!-- Gross Revenue -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm accent-brown">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="p-2 rounded-3 me-2" style="background: #fdf8f6; color: #6f5849;">
@@ -66,7 +67,7 @@
 
             <!-- Total Cost (COGS) -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm accent-sienna">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="p-2 rounded-3 me-2" style="background: #fff5f2; color: #c17a5c;">
@@ -83,7 +84,7 @@
 
             <!-- Operating Expenses -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm accent-gold">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="p-2 rounded-3 me-2" style="background: #fef9c3; color: #a16207;">
@@ -101,7 +102,7 @@
 
             <!-- Stock Procurement -->
             <div class="col-md col-sm-6">
-                <div class="card h-100 shadow-sm accent-purple">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
                             <div class="p-2 rounded-3 me-2" style="background: #f3e8ff; color: #7e22ce;">
@@ -118,7 +119,7 @@
 
             <!-- Net Profit -->
             <div class="col-md-3 col-sm-12">
-                <div class="card h-100 shadow-sm {{ $summary['net_profit'] >= 0 ? 'accent-success' : 'accent-danger' }}">
+                <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -247,7 +248,7 @@
                     </table>
                 </div>
                 <div class="px-3 py-2 border-top d-flex justify-content-end">
-                    {{ $dailyData->fragment('daily-profit-section')->links('vendor.pagination.no-prevnext') }}
+                    {{ $dailyData->fragment('daily-profit-section')->links('vendor.pagination.custom-brown') }}
                 </div>
             </div>
         </div>
@@ -257,9 +258,9 @@
     <div class="modal fade" id="filterModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content" style="border-radius: 15px; border: none;">
-                <form action="{{ route('admin.reports.finance') }}" method="GET">
+                <form action="{{ route($routePrefix . 'reports.finance') }}" method="GET">
                     <div class="modal-header border-0">
-                        <h5 class="modal-title fw-bold" style="color: #6f5849;">{{ __('admin.filter_report') }}</h5>
+                        <h5 class="modal-title fw-bold">{{ __('admin.filter_report') }}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -309,6 +310,75 @@
                 </form>
             </div>
         </div>
+    </div>
+    <!-- PDF Customization Modal -->
+    <div class="modal fade" id="exportPdfCustomModal" tabindex="-1" aria-labelledby="exportPdfCustomModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow border-0" style="border-radius: 16px;">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title fw-bold" id="exportPdfCustomModalLabel">
+                        <i
+                            class="fa-solid fa-file-settings me-2"></i>{{ __('admin.finance_report_customization') ?? 'Kustomisasi Laporan Keuangan' }}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route($routePrefix . 'reports.finance.export') }}" method="GET">
+                    <input type="hidden" name="format" value="pdf">
+                    <input type="hidden" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
+                    <input type="hidden" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
+                    <input type="hidden" name="period" value="{{ $period }}">
+
+                    <div class="modal-body py-4">
+                        <p class="text-muted mb-4 small">Pilih bagian laporan yang ingin ditampilkan dalam dokumen PDF:
+                        </p>
+
+                        <div class="list-group list-group-flush border rounded-12">
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="summary"
+                                    checked>
+                                <div>
+                                    <div class="fw-bold">Ringkasan KPI Keuangan</div>
+                                    <small class="text-muted small">Pendapatan kotor, COGS, Laba bersih, dll.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="quick_info"
+                                    checked>
+                                <div>
+                                    <div class="fw-bold">Info Cepat & Margin</div>
+                                    <small class="text-muted small">Margin profit, Gross profit, Retur & Refund.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="trend_chart"
+                                    checked>
+                                <div>
+                                    <div class="fw-bold">Grafik Tren Keuangan</div>
+                                    <small class="text-muted small">Visualisasi tren pendapatan vs keuntungan.</small>
+                                </div>
+                            </label>
+                            <label class="list-group-item d-flex align-items-center py-3">
+                                <input class="form-check-input me-3" type="checkbox" name="sections[]" value="daily_data"
+                                    checked>
+                                <div>
+                                    <div class="fw-bold">Data Harian Detail</div>
+                                    <small class="text-muted small">Tabel rincian keuangan setiap harinya.</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top-0 pt-0 pb-4 justify-content-center">
+                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal"
+                            style="border-radius: 10px;">{{ __('admin.cancel') }}</button>
+                        <button type="submit" class="btn btn-brown px-4" style="border-radius: 10px;">
+                            <i class="fa-solid fa-download me-2"></i>Generate PDF
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     </div>
 
     <style>

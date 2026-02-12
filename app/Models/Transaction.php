@@ -64,7 +64,41 @@ class Transaction extends Model
      */
     public function returns(): HasMany
     {
-        return $this->hasMany(ReturnTransaction::class);
+        return $this->hasMany(ReturnTransaction::class, 'transaction_id');
+    }
+
+    /**
+     * Get the total amount already refunded for this transaction
+     */
+    public function getTotalRefundedAttribute(): float
+    {
+        return (float) $this->returns()->where('status', 'approved')->sum('total_refund');
+    }
+
+    /**
+     * Check if the transaction has been fully returned
+     */
+    public function getIsFullyReturnedAttribute(): bool
+    {
+        return $this->status === 'returned' || ($this->total_amount > 0 && $this->total_refunded >= $this->total_amount);
+    }
+
+    /**
+     * Get the total returned quantity for a specific product in this transaction
+     */
+    public function getReturnedQuantity($productId): int
+    {
+        $total = 0;
+        foreach ($this->returns as $return) {
+            if ($return->status === 'approved' && is_array($return->items)) {
+                foreach ($return->items as $item) {
+                    if ((int) $item['product_id'] === (int) $productId) {
+                        $total += (int) $item['quantity'];
+                    }
+                }
+            }
+        }
+        return $total;
     }
 
     /**

@@ -139,7 +139,7 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
-                                        <a href="{{ route('warehouse.stock') }}" class="btn btn-sm btn-outline-primary"
+                                        <a href="{{ route('warehouse.stock', ['stock_id' => $stock->id]) }}" class="btn btn-sm btn-outline-primary"
                                             style="border-radius: 8px;">
                                             <i class="fa-solid fa-gear me-1"></i> {{ __('warehouse.adjust_stock') }}
                                         </a>
@@ -160,7 +160,7 @@
             </div>
             @if($lowStockItems->hasPages())
                 <div class="card-footer bg-white d-flex justify-content-end" style="border-top: 2px solid #f2e8e5;">
-                    {{ $lowStockItems->links('vendor.pagination.no-prevnext') }}
+                    {{ $lowStockItems->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>

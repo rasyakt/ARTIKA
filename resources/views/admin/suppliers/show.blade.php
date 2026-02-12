@@ -176,7 +176,7 @@
                     </div>
                     @if($purchases->hasPages())
                         <div class="card-footer border-0 d-flex justify-content-end py-3 px-4">
-                            {{ $purchases->links('vendor.pagination.no-prevnext') }}
+                            {{ $purchases->links('vendor.pagination.custom-brown') }}
                         </div>
                     @endif
                 </div>
@@ -271,7 +271,7 @@
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content border-0 shadow" style="border-radius: 20px;">
                 <div class="modal-header border-0 pt-4 px-4">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;">
+                    <h5 class="modal-title fw-bold">
                         <i class="fa-solid fa-circle-plus me-2"></i>{{ __('admin.add_supply') }}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>

@@ -36,17 +36,16 @@
         <div class="row g-4 mb-4">
             <!-- Total Products -->
             <div class="col-md-4">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('warehouse.total_products') }}</p>
-                                <h3 class="fw-bold mb-0">{{ $totalProducts }}</h3>
-                                <small class="opacity-75">{{ __('warehouse.in_catalog') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalProducts }}</h3>
+                                <small class="text-muted">{{ __('warehouse.in_catalog') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-box"></i>
                             </div>
                         </div>
@@ -56,17 +55,16 @@
 
             <!-- Stock Value -->
             <div class="col-md-4">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('warehouse.stock_value') }}</p>
-                                <h3 class="fw-bold mb-0">Rp {{ number_format($totalStockValue, 0, ',', '.') }}</h3>
-                                <small class="opacity-75">{{ __('warehouse.total_inventory') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($totalStockValue, 0, ',', '.') }}</h3>
+                                <small class="text-muted">{{ __('warehouse.total_inventory') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-money-bill-wave"></i>
                             </div>
                         </div>
@@ -76,17 +74,16 @@
 
             <!-- Low Stock Alerts -->
             <div class="col-md-4">
-                <div class="card stats-card shadow-sm"
-                    style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);">
-                    <div class="card-body text-white">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
                         <div class="d-flex justify-content-between align-items-start">
                             <div>
-                                <p class="mb-2 opacity-75 text-uppercase"
+                                <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('warehouse.low_stock') }}</p>
-                                <h3 class="fw-bold mb-0">{{ $lowStockItems->count() }}</h3>
-                                <small class="opacity-75">{{ __('warehouse.items_need_restock') }}</small>
+                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $lowStockItems->count() }}</h3>
+                                <small class="text-muted">{{ __('warehouse.items_need_restock') }}</small>
                             </div>
-                            <div class="stats-icon" style="background: rgba(255, 255, 255, 0.2);">
+                            <div class="icon-box-premium bg-brown-soft">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                             </div>
                         </div>
@@ -96,8 +93,86 @@
         </div>
 
         <div class="row g-4">
-            <!-- Low Stock Alerts Table -->
+            <!-- Low Stock & Expiry Alerts -->
             <div class="col-md-8">
+                <!-- Expired Items -->
+                @if($expiredItems->count() > 0)
+                <div class="card shadow-sm border-danger mb-4" style="border-radius: 16px; border: none;">
+                    <div class="card-header bg-danger text-white"
+                        style="border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-calendar-xmark me-2"></i>{{ __('warehouse.expired_items') }}</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background: #fff5f5;">
+                                    <tr>
+                                        <th class="border-0 fw-semibold text-danger">{{ __('common.product') }}</th>
+                                        <th class="border-0 fw-semibold text-danger">{{ __('common.expiry_date') }}</th>
+                                        <th class="border-0 fw-semibold text-danger">{{ __('common.stock') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($expiredItems as $stock)
+                                        <tr class="table-danger">
+                                            <td>
+                                                <div class="fw-bold">{{ $stock->product->name }}</div>
+                                                <small class="text-muted">{{ $stock->product->barcode }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="fw-bold">{{ $stock->expired_at->format('d M Y') }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-danger">{{ $stock->quantity }} {{ __('warehouse.units') }}</span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
+                <!-- Expiring Soon Items -->
+                @if($expiringSoonItems->count() > 0)
+                <div class="card shadow-sm border-warning mb-4" style="border-radius: 16px; border: none;">
+                    <div class="card-header bg-warning"
+                        style="border-radius: 16px 16px 0 0; color: #4b382f;">
+                        <h5 class="mb-0 fw-bold"><i class="fa-solid fa-clock me-2"></i>{{ __('warehouse.expiring_soon_alerts') }}</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead style="background: #fffbeb;">
+                                    <tr>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.product') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.expiry_date') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.stock') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($expiringSoonItems as $stock)
+                                        <tr>
+                                            <td>
+                                                <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
+                                                <small class="text-muted">{{ $stock->product->barcode }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="fw-bold text-warning">{{ $stock->expired_at->format('d M Y') }}</span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-warning text-dark">{{ $stock->quantity }} {{ __('warehouse.units') }}</span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
                         style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">

@@ -1,11 +1,13 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 @extends('layouts.app')
 
 @section('content')
     <div class="container-fluid py-4">
         <div class="row mb-4">
-            <div class="col-md-7">
+            <div class="col-xl-7">
                 <div class="d-flex align-items-center mb-1">
-                    <a href="{{ route('admin.reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
+
+                    <a href="{{ route($routePrefix . 'reports') }}" class="btn btn-outline-brown me-3 shadow-sm"
                         style="border-radius: 10px; padding: 0.5rem 0.75rem;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
@@ -15,20 +17,22 @@
                 </div>
                 <p class="text-muted mb-0 ms-5 ps-3">{{ __('admin.audit_log_desc') }}</p>
             </div>
-            <div class="col-md-5 d-flex gap-2 justify-content-end align-items-center">
-                {{-- Maintenance Dropdown --}}
-                <div class="dropdown">
-                    <button class="btn btn-outline-danger shadow-sm d-flex align-items-center" type="button" id="maintenanceDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
-                        <i class="fas fa-tools me-2"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="maintenanceDropdown" style="border-radius: 12px; padding: 0.5rem;">
-                        <li>
-                            <button class="dropdown-item py-2 px-3 text-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#clearLogsModal" style="border-radius: 8px;">
-                                <i class="fas fa-trash-alt me-2"></i> {{ __('admin.clear_logs') }}
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+            <div class="col-xl-5 d-flex gap-2 justify-content-xl-end justify-content-start align-items-center mt-3 mt-xl-0">
+                {{-- Maintenance Dropdown (Superadmin/Admin Only) --}}
+                @if(in_array($user?->role?->name, ['superadmin', 'admin']))
+                    <div class="dropdown">
+                        <button class="btn btn-outline-danger shadow-sm d-flex align-items-center" type="button" id="maintenanceDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                            <i class="fas fa-tools me-2"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="maintenanceDropdown" style="border-radius: 12px; padding: 0.5rem;">
+                            <li>
+                                <button class="dropdown-item py-2 px-3 text-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#clearLogsModal" style="border-radius: 8px;">
+                                    <i class="fas fa-trash-alt me-2"></i> {{ __('admin.clear_logs') }}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
 
                 {{-- Filter Button --}}
                 <button class="btn btn-outline-brown shadow-sm" data-bs-toggle="modal"
@@ -52,7 +56,7 @@
 
         <!-- Statistics Cards -->
         <div class="row mb-4">
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6 mb-4 mb-xl-0">
                 <div class="card border-left-primary">
                     <div class="card-body">
                         <div class="text-primary font-weight-bold text-uppercase mb-1">{{ __('admin.total_logs') }}</div>
@@ -60,7 +64,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6 mb-4 mb-xl-0">
                 <div class="card border-left-success">
                     <div class="card-body">
                         <div class="text-success font-weight-bold text-uppercase mb-1">{{ __('common.page') }}</div>
@@ -68,7 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6 mb-4 mb-xl-0">
                 <div class="card border-left-info">
                     <div class="card-body">
                         <div class="text-info font-weight-bold text-uppercase mb-1">{{ __('common.period') }}</div>
@@ -77,11 +81,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-xl-3 col-md-6 mb-4 mb-xl-0">
                 <div class="card border-left-warning">
                     <div class="card-body">
                         <div class="text-warning font-weight-bold text-uppercase mb-1">{{ __('common.user') }}</div>
-                        <div class="small">{{ Auth::user()->name }}</div>
+                        <div class="small">{{ $user?->name }}</div>
                     </div>
                 </div>
             </div>
@@ -138,7 +142,11 @@
                                     </td>
                                     <td>
                                         @if($log->amount)
-                                            <strong>Rp{{ number_format($log->amount, 0, ',', '.') }}</strong>
+                                            @if(in_array($log->action, ['transaction_created', 'payment_received', 'refund', 'expense_created']))
+                                                <strong>Rp{{ number_format($log->amount, 0, ',', '.') }}</strong>
+                                            @else
+                                                <span class="fw-bold">{{ number_format($log->amount, 0, ',', '.') }}</span>
+                                            @endif
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
@@ -161,7 +169,7 @@
                                             data-username="{{ $log->user?->username ?? '-' }}"
                                             data-action="{{ $log->action }}" data-model="{{ $log->model_type }}"
                                             data-model-id="{{ $log->model_id }}"
-                                            data-amount="{{ $log->amount ? 'Rp' . number_format($log->amount, 0, ',', '.') : '-' }}"
+                                            data-amount="{{ $log->amount ? (in_array($log->action, ['transaction_created', 'payment_received', 'refund', 'expense_created']) ? 'Rp' . number_format($log->amount, 0, ',', '.') : number_format($log->amount, 0, ',', '.')) : '-' }}"
                                             data-method="{{ $log->payment_method ?? '-' }}" 
                                             data-ip="{{ $log->ip_address }}"
                                             data-mac="{{ $log->mac_address ?? 'Not Available' }}"
@@ -186,7 +194,7 @@
                 </div>
             </div>
             <div class="card-footer bg-light d-flex justify-content-end">
-                {{ $logs->links('vendor.pagination.no-prevnext') }}
+                {{ $logs->links('vendor.pagination.custom-brown') }}
             </div>
         </div>
     </div>
@@ -446,11 +454,8 @@
         function exportReport(format) {
             const params = new URLSearchParams(window.location.search);
             params.set('format', format);
-            if (format === 'csv') {
-                window.location.href = "{{ route('admin.audit.export') }}?" + params.toString();
-            } else {
-                window.location.href = "{{ route('admin.audit.export') }}?" + params.toString();
-            }
+
+            window.location.href = "{{ route($routePrefix . 'audit.export') }}?" + params.toString();
         }
 
         function confirmClear(type) {

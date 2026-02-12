@@ -25,11 +25,16 @@ class ProductRepository implements ProductRepositoryInterface
 
         $stocks = Stock::where('product_id', $productId)
             ->where('quantity', '>', 0)
+            ->where(function ($query) {
+                $query->whereNull('expired_at')
+                    ->orWhere('expired_at', '>', now());
+            })
             ->orderBy('expired_at', 'asc')
             ->orderBy('created_at', 'asc')
             ->get();
 
         foreach ($stocks as $stock) {
+            /** @var Stock $stock */
             if ($remainingToDeduct <= 0)
                 break;
 

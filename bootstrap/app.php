@@ -15,10 +15,13 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->web(append: [
             \App\Http\Middleware\SetLanguage::class,
+            \App\Http\Middleware\ShareRoutePrefix::class,
         ]);
 
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'superadmin' => \App\Http\Middleware\SuperadminMiddleware::class,
+            'feature' => \App\Http\Middleware\CheckFeature::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

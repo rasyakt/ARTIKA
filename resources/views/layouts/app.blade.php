@@ -1,10 +1,11 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'Dashboard') - ARTIKA POS</title>
+    <title>@yield('title', 'Dashboard') - {{ App\Models\Setting::get('system_name', 'ARTIKA POS') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -54,6 +55,11 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
         }
 
+        html {
+            zoom: 90%;
+            background: #faf9f8;
+        }
+
         body {
             background: #faf9f8;
             min-height: 100vh;
@@ -61,8 +67,21 @@
             color: #4b382f;
         }
 
+        /* Fix for Bootstrap Modals & SweetAlert2 with CSS Zoom */
+        .modal-backdrop,
+        .swal2-container,
+        .modal {
+            width: auto !important;
+            height: auto !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: 0 !important;
+        }
+
         .main-navbar {
-            background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%);
+            /* background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%); */
+            background: var(--primary-dark);
             box-shadow: 0 4px 18px rgba(107, 83, 70, 0.08);
             padding: 0.75rem 0;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -80,7 +99,7 @@
             top: 70px;
             left: 0;
             bottom: 0;
-            width: 16.666667%;
+            width: 260px;
             /* Matched to col-md-2 */
             border-right: 1px solid #f2e8e5;
             padding: 1.25rem 0;
@@ -136,14 +155,92 @@
             border-left-color: #ef4444 !important;
         }
 
+        /* Sidebar Dropdown Styles */
+        .sidebar-dropdown {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-dropdown-toggle {
+            cursor: pointer;
+            position: relative;
+            user-select: none;
+        }
+
+        .dropdown-arrow {
+            margin-left: auto;
+            font-size: 0.75rem;
+            transition: transform 0.3s ease;
+            opacity: 0.6;
+        }
+
+        .sidebar-dropdown.active .dropdown-arrow {
+            transform: rotate(90deg);
+            opacity: 1;
+        }
+
+        .sidebar-submenu {
+            display: none;
+            background: #fafaf9;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sidebar-dropdown.active .sidebar-submenu {
+            display: block;
+        }
+
+        .submenu-link {
+            display: flex;
+            align-items: center;
+            padding: 0.65rem 1.5rem 0.65rem 3rem;
+            color: #6f5849;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .submenu-link:hover {
+            background: #fdf8f6;
+            color: #85695a;
+        }
+
+        .submenu-link.active {
+            color: #85695a;
+            font-weight: 700;
+            background: #f5f2f0;
+        }
+
+        .submenu-link i {
+            margin-right: 0.75rem;
+            font-size: 0.9rem;
+            width: 1.1rem;
+            text-align: center;
+            color: #8a6b57;
+            opacity: 0.8;
+        }
+
+        .sidebar-section-title {
+            padding: 1.25rem 1.5rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-uppercase;
+            color: #a18072;
+            letter-spacing: 0.05em;
+        }
+
         .main-content {
             padding: 0;
             background: #faf9f8;
-            margin-left: 16.666667%;
+            margin-left: 260px;
             /* Offset by fixed sidebar width */
             margin-top: 70px;
             /* Offset by fixed navbar height */
             min-height: calc(100vh - 70px);
+            width: calc(100% - 260px);
         }
 
         .navbar-brand {
@@ -153,11 +250,11 @@
         }
 
         .user-profile-link {
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 10px;
-            padding: 0.4rem 0.75rem;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.2s;
+            background: none;
+            border-radius: 12px;
+            padding: 0.5rem 1rem;
+            border: none;
+            transition: all 0.25s;
             color: white !important;
             text-decoration: none;
             display: inline-flex;
@@ -165,21 +262,27 @@
         }
 
         .user-profile-link:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .user-name {
+            font-size: 1.3rem;
+            font-weight: 600;
         }
 
         .profile-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #b2917f, #8a6b57);
+            width: 42px;
+            height: 42px;
+            border-radius: 3812px;
+            background: #7c6257ff;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: #fff;
             font-weight: 700;
-            box-shadow: 0 2px 6px rgba(107, 83, 70, 0.18);
-            font-size: 1rem;
+            /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); */
+            font-size: 1.1rem;
         }
 
         /* Pagination Styling */
@@ -252,7 +355,7 @@
         }
 
         /* Mobile Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 1023px) {
             .hamburger-btn {
                 display: block;
             }
@@ -331,7 +434,7 @@
             }
         }
 
-        @media (min-width: 769px) {
+        @media (min-width: 1024px) {
             .sidebar-header {
                 display: none;
             }
@@ -350,14 +453,18 @@
     <nav class="navbar navbar-expand-lg navbar-dark main-navbar">
         <div class="container-fluid px-4">
             <!-- Hamburger Menu (Mobile) -->
-            @if(Auth::user()->role->name === 'admin' || Auth::user()->role->name === 'warehouse')
+            @if($user?->role?->name === 'admin' || $user?->role?->name === 'warehouse')
                 <button class="hamburger-btn me-3" id="hamburgerBtn" type="button">
                     ☰
                 </button>
             @endif
 
             <a class="navbar-brand d-flex align-items-center" href="{{ route('dashboard') }}">
-                <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 35px; width: auto;">
+                <img src="{{ asset('img/logo2.png') }}"
+                    alt="{{ App\Models\Setting::get('system_name', 'ARTIKA Logo') }}"
+                    style="height: 35px; width: auto;">
+                <span
+                    class="ms-2 text-white fw-bold d-none d-sm-inline">{{ App\Models\Setting::get('system_name', 'ARTIKA') }}</span>
             </a>
 
             <div class="ms-auto d-flex align-items-center">
@@ -385,10 +492,12 @@
 
                 <a class="nav-link user-profile-link" href="#" title="Profile Settings (Coming Soon)"
                     style="cursor: default;">
-                    <span class="profile-avatar me-2">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                    <span class="user-name">{{ Auth::user()->name }}</span>
-                    <span class="badge bg-light text-dark ms-2"
-                        style="font-size: 0.7rem;">{{ ucfirst(Auth::user()->role->name) }}</span>
+                    <div class="profile-avatar me-3">{{ strtoupper(substr($user?->name ?? '', 0, 1)) }}</div>
+                    <div class="d-flex flex-column">
+                        <span class="user-name line-height-1 mb-1">{{ $user?->name }}</span>
+                        <span class="text-white-50 fw-700 text-uppercase"
+                            style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
+                    </div>
                 </a>
             </div>
         </div>
@@ -396,8 +505,8 @@
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar (only for admin and warehouse) -->
-            @if(Auth::user()->role->name === 'admin' || Auth::user()->role->name === 'warehouse')
+            <!-- Sidebar (only for admin, manager and warehouse) -->
+            @if(in_array($user?->role?->name, ['superadmin', 'admin', 'manager', 'warehouse']))
                 <div class="col-md-2 sidebar px-0" id="sidebar">
                     <!-- Mobile Sidebar Header -->
                     <div class="sidebar-header">
@@ -405,104 +514,238 @@
                         <button class="sidebar-close" id="sidebarClose">×</button>
                     </div>
 
-                    @if(Auth::user()->role->name === 'admin')
+                    @if(in_array($user?->role?->name, ['superadmin', 'admin']))
                         <a href="{{ route('admin.dashboard') }}"
                             class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
                         </a>
-                        <a href="{{ route('admin.products') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.products*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-box"></i> {{ __('menu.products') }}
-                        </a>
-                        <a href="{{ route('admin.categories') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.categories*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-folder"></i> {{ __('menu.categories') }}
-                        </a>
-                        <a href="{{ route('admin.promos.index') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-tags"></i> {{ __('admin.promos') }}
-                        </a>
-                        <a href="{{ route('admin.users') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-users"></i> {{ __('menu.users') }}
-                        </a>
-                        <a href="{{ route('admin.suppliers') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
-                            <i class="fa-solid fa-truck"></i> {{ __('menu.suppliers') }}
-                        </a>
-                        <a href="{{ route('admin.expenses.index') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.expenses.index') ? 'active' : '' }}">
-                            <i class="fa-solid fa-wallet"></i> {{ __('menu.operational_expenses') }}
-                        </a>
-                        <a href="{{ route('admin.expense-categories.index') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.expense-categories.index') ? 'active' : '' }}"
-                            style="padding-left: 2.5rem; font-size: 0.9rem; opacity: 0.8;">
-                            <i class="fa-solid fa-tags" style="font-size: 0.8rem;"></i> {{ __('menu.expense_categories') }}
-                        </a>
-                        <hr style="margin: 0.5rem 0; opacity: 0.1;">
-                        <div class="px-3 py-2 small text-muted fw-bold text-uppercase"
-                            style="font-size: 0.7rem; letter-spacing: 0.5px;">
-                            {{ __('admin.warehouse_management') ?? 'Warehouse Management' }}
+
+                        <!-- Inventory Group -->
+                        <div
+                            class="sidebar-dropdown {{ request()->routeIs('admin.products*') || request()->routeIs('admin.categories*') || request()->routeIs('admin.promos*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-box-archive"></i> {{ __('admin.inventory') ?? 'Inventory' }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('admin.products') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.products*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-box"></i> {{ __('menu.products') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.categories') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.categories*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-folder"></i> {{ __('menu.categories') }}
+                                    </a>
+                                </li>
+                                @if(App\Models\Setting::get('admin_enable_promos', true))
+                                    <li>
+                                        <a href="{{ route('admin.promos.index') }}"
+                                            class="submenu-link {{ request()->routeIs('admin.promos.index*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-tags"></i> {{ __('admin.promos') }}
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
                         </div>
-                        <a href="{{ route('warehouse.stock') }}"
-                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.stock*') ? 'active' : '' }}"
-                            style="font-size: 0.85rem;">
-                            <i class="fa-solid fa-warehouse" style="font-size: 0.9rem;"></i>
-                            {{ __('menu.stock_management') }}
-                        </a>
-                        <a href="{{ route('warehouse.low-stock') }}"
-                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.low-stock*') ? 'active' : '' }}"
-                            style="font-size: 0.85rem;">
-                            <i class="fa-solid fa-triangle-exclamation" style="font-size: 0.9rem;"></i>
-                            {{ __('menu.low_stock_alerts') }}
-                        </a>
-                        <a href="{{ route('warehouse.stock-movements') }}"
-                            class="sidebar-link py-2 {{ request()->routeIs('warehouse.stock-movements*') ? 'active' : '' }}"
-                            style="font-size: 0.85rem;">
-                            <i class="fa-solid fa-arrows-rotate" style="font-size: 0.9rem;"></i>
-                            {{ __('menu.stock_movements') }}
-                        </a>
-                        <hr style="margin: 0.5rem 0; opacity: 0.1;">
-                        <a href="{{ route('admin.reports') }}"
-                            class="sidebar-link {{ request()->routeIs('admin.reports') ? 'active' : '' }}">
-                            <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
-                        </a>
-                        <div class="sidebar-submenu {{ request()->routeIs('admin.reports*') || request()->routeIs('admin.audit*') ? 'show' : '' }}"
-                            style="padding-left: 1.5rem;">
-                            <a href="{{ route('admin.reports.warehouse') }}"
-                                class="sidebar-link py-2 {{ request()->routeIs('admin.reports.warehouse*') ? 'active' : '' }}"
-                                style="font-size: 0.85rem; border-left: none;">
-                                <i class="fa-solid fa-warehouse" style="font-size: 0.9rem;"></i>
-                                {{ __('admin.warehouse_report') }}
-                            </a>
-                            <a href="{{ route('admin.reports.cashier') }}"
-                                class="sidebar-link py-2 {{ request()->routeIs('admin.reports.cashier*') ? 'active' : '' }}"
-                                style="font-size: 0.85rem; border-left: none;">
-                                <i class="fa-solid fa-cash-register" style="font-size: 0.9rem;"></i>
-                                {{ __('admin.cashier_report') }}
-                            </a>
-                            <a href="{{ route('admin.reports.finance') }}"
-                                class="sidebar-link py-2 {{ request()->routeIs('admin.reports.finance*') ? 'active' : '' }}"
-                                style="font-size: 0.85rem; border-left: none;">
-                                <i class="fa-solid fa-file-invoice-dollar" style="font-size: 0.9rem;"></i>
-                                {{ __('admin.finance_report') }}
-                            </a>
-                            <a href="{{ route('admin.audit.index') }}"
-                                class="sidebar-link py-2 {{ request()->routeIs('admin.audit.index*') ? 'active' : '' }}"
-                                style="font-size: 0.85rem; border-left: none;">
-                                <i class="fa-solid fa-clipboard-list" style="font-size: 0.9rem;"></i>
-                                {{ __('admin.logs_report') }}
-                            </a>
+
+                        <!-- Warehouse Group -->
+                        <div class="sidebar-dropdown {{ request()->routeIs('warehouse.*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_management') ?? 'Warehouse' }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('warehouse.stock') }}"
+                                        class="submenu-link {{ request()->routeIs('warehouse.stock*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-boxes-stacked"></i> {{ __('menu.stock_management') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('warehouse.low-stock') }}"
+                                        class="submenu-link {{ request()->routeIs('warehouse.low-stock*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-triangle-exclamation"></i> {{ __('menu.low_stock_alerts') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('warehouse.stock-movements') }}"
+                                        class="submenu-link {{ request()->routeIs('warehouse.stock-movements*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-arrows-rotate"></i> {{ __('menu.stock_movements') }}
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
-                        <hr style="margin: 1rem 0; border-color: #f2e8e5;">
-                        <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                            @csrf
-                            <button type="submit" class="sidebar-link text-danger"
-                                style="width: 100%; border: none; background: none; text-align: left;">
-                                <i class="fa-solid fa-right-from-bracket"></i> {{ __('menu.logout') }}
-                            </button>
-                        </form>
-                    @elseif(Auth::user()->role->name === 'warehouse')
+
+                        <!-- Finance Group -->
+                        <div
+                            class="sidebar-dropdown {{ request()->routeIs('admin.expenses*') || request()->routeIs('admin.expense-categories*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-wallet"></i> {{ __('menu.finance') ?? 'Finance' }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('admin.expenses.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.expenses.index') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('menu.operational_expenses') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.expense-categories.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.expense-categories.index') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-tags"></i> {{ __('menu.expense_categories') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.returns.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.returns.index') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-rotate-left"></i> {{ __('admin.returns_management') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- People Group -->
+                        <div
+                            class="sidebar-dropdown {{ request()->routeIs('admin.users*') || request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-user-group"></i> {{ __('admin.people') ?? 'People' }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route('admin.users') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-users"></i> {{ __('menu.users') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.suppliers') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-truck"></i> {{ __('menu.suppliers') }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Reports Group -->
+                        @if(App\Models\Setting::get('admin_enable_reports', true))
+                            <div
+                                class="sidebar-dropdown {{ request()->routeIs('admin.reports*') || request()->routeIs('admin.audit*') ? 'active' : '' }}">
+                                <div class="sidebar-link sidebar-dropdown-toggle">
+                                    <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
+                                    <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                                </div>
+                                <ul class="sidebar-submenu">
+                                    <li>
+                                        <a href="{{ route('admin.reports') }}"
+                                            class="submenu-link {{ request()->is('admin/reports') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-th-large"></i> {{ __('admin.reports_hub') ?? 'Reports Hub' }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.reports.warehouse') }}"
+                                            class="submenu-link {{ request()->routeIs('admin.reports.warehouse*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_report') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.reports.cashier') }}"
+                                            class="submenu-link {{ request()->routeIs('admin.reports.cashier*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_report') }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('admin.reports.finance') }}"
+                                            class="submenu-link {{ request()->routeIs('admin.reports.finance*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('admin.finance_report') }}
+                                        </a>
+                                    </li>
+                                    @if(App\Models\Setting::get('admin_enable_audit_logs', true))
+                                        <li>
+                                            <a href="{{ route('admin.audit.index') }}"
+                                                class="submenu-link {{ request()->routeIs('admin.audit.index*') ? 'active' : '' }}">
+                                                <i class="fa-solid fa-clipboard-list"></i> {{ __('admin.logs_report') }}
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
+                        @endif
+
+                        <a href="{{ route('admin.settings') }}"
+                            class="sidebar-link {{ request()->routeIs('admin.settings*') ? 'active' : '' }}">
+                            <i class="fa-solid fa-gear"></i> {{ __('menu.settings') ?? 'Settings' }}
+                        </a>
+
+                        @if($user?->role?->name === 'superadmin')
+                            <div class="sidebar-group mt-3">
+                                <span class="text-muted small px-3 text-uppercase fw-bold"
+                                    style="font-size: 0.7rem; opacity: 0.6;">System Admin</span>
+                                <a href="{{ route('superadmin.dashboard') }}"
+                                    class="sidebar-link {{ request()->is('superadmin/dashboard') || request()->routeIs('superadmin.dashboard') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-code"></i> Developer Tools
+                                </a>
+                                <a href="{{ route('superadmin.settings') }}"
+                                    class="sidebar-link {{ request()->routeIs('superadmin.settings*') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-gears"></i> Advanced Settings
+                                </a>
+                            </div>
+                        @endif
+
+                    @elseif($user?->role?->name === 'manager')
+                        <a href="{{ route($routePrefix . 'dashboard') }}"
+                            class="sidebar-link {{ request()->routeIs($routePrefix . 'dashboard') ? 'active' : '' }}">
+                            <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
+                        </a>
+
+                        <!-- Reports Group (Read-only for Manager) -->
+                        <div class="sidebar-dropdown {{ request()->routeIs($routePrefix . 'reports*') ? 'active' : '' }}">
+                            <div class="sidebar-link sidebar-dropdown-toggle">
+                                <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
+                                <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
+                            </div>
+                            <ul class="sidebar-submenu">
+                                <li>
+                                    <a href="{{ route($routePrefix . 'reports') }}"
+                                        class="submenu-link {{ request()->is($routePrefix . 'reports') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-th-large"></i> {{ __('admin.reports_hub') ?? 'Reports Hub' }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route($routePrefix . 'reports.warehouse') }}"
+                                        class="submenu-link {{ request()->routeIs($routePrefix . 'reports.warehouse*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_report') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route($routePrefix . 'reports.cashier') }}"
+                                        class="submenu-link {{ request()->routeIs($routePrefix . 'reports.cashier*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_report') }} /
+                                        {{ __('admin.transaction_correction') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route($routePrefix . 'reports.finance') }}"
+                                        class="submenu-link {{ request()->routeIs($routePrefix . 'reports.finance*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('admin.finance_report') }}
+                                    </a>
+                                </li>
+                                @if(App\Models\Setting::get('admin_enable_audit_logs', true))
+                                    <li>
+                                        <a href="{{ route('manager.audit.index') }}"
+                                            class="submenu-link {{ request()->routeIs('manager.audit.index*') ? 'active' : '' }}">
+                                            <i class="fa-solid fa-clipboard-list"></i> {{ __('admin.logs_report') }}
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+
+                    @elseif($user?->role?->name === 'warehouse')
                         <a href="{{ route('warehouse.dashboard') }}"
                             class="sidebar-link {{ request()->routeIs('warehouse.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
@@ -519,15 +762,19 @@
                             class="sidebar-link {{ request()->routeIs('warehouse.stock-movements') ? 'active' : '' }}">
                             <i class="fa-solid fa-arrows-rotate"></i> {{ __('menu.stock_movements') }}
                         </a>
-                        <hr style="margin: 1rem 0; border-color: #f2e8e5;">
+                    @endif
+
+                    <div class="mt-auto px-1 py-3">
+                        <hr style="margin: 0.5rem 0; border-color: #f2e8e5; opacity: 0.1;">
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                             @csrf
-                            <button type="submit" class="sidebar-link text-danger"
-                                style="width: 100%; border: none; background: none; text-align: left;">
-                                <i class="fa-solid fa-right-from-bracket"></i> {{ __('menu.logout') }}
+                            <button type="submit"
+                                class="sidebar-link text-danger border-0 bg-transparent w-100 text-start py-2 px-3"
+                                style="transition: all 0.3s;">
+                                <i class="fa-solid fa-right-from-bracket me-2"></i> {{ __('menu.logout') }}
                             </button>
                         </form>
-                    @endif
+                    </div>
                 </div>
                 <div class="col-md-10 main-content">
             @else
@@ -538,6 +785,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Shared Scanner Modal -->
+        @include('components.scanner-modal')
 
         <!-- Sidebar Overlay (Mobile) -->
         <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -570,14 +820,43 @@
                     document.body.style.overflow = '';
                 }
 
-                // Close sidebar when clicking a link (mobile)
-                if (window.innerWidth <= 768) {
-                    const sidebarLinks = sidebar.querySelectorAll('.sidebar-link');
+                // Close sidebar when clicking a link (mobile/tablet)
+                if (window.innerWidth <= 1023) {
+                    const sidebarLinks = sidebar.querySelectorAll('.sidebar-link:not(.sidebar-dropdown-toggle)');
                     sidebarLinks.forEach(link => {
                         link.addEventListener('click', closeSidebar);
                     });
                 }
             }
+
+            // Sidebar Dropdown Toggle Logic
+            document.querySelectorAll('.sidebar-dropdown-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const parent = this.closest('.sidebar-dropdown');
+                    const isActive = parent.classList.contains('active');
+
+                    // Close other dropdowns (optional, but cleaner)
+                    // document.querySelectorAll('.sidebar-dropdown').forEach(d => d.classList.remove('active'));
+
+                    if (isActive) {
+                        parent.classList.remove('active');
+                    } else {
+                        parent.classList.add('active');
+                    }
+                });
+            });
+
+            // Ensure active dropdowns are open on load
+            document.addEventListener('DOMContentLoaded', function () {
+                const activeSubmenuLink = document.querySelector('.submenu-link.active');
+                if (activeSubmenuLink) {
+                    const parentDropdown = activeSubmenuLink.closest('.sidebar-dropdown');
+                    if (parentDropdown) {
+                        parentDropdown.classList.add('active');
+                    }
+                }
+            });
         </script>
 
         @stack('scripts')
@@ -677,6 +956,7 @@
                 }
             });
         </script>
+
 </body>
 
 </html>

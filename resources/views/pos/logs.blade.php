@@ -152,7 +152,7 @@
             </div>
             @if($logs->hasPages())
                 <div class="card-footer bg-white py-3 d-flex justify-content-end">
-                    {{ $logs->links('vendor.pagination.no-prevnext') }}
+                    {{ $logs->links('vendor.pagination.custom-brown') }}
                 </div>
             @endif
         </div>

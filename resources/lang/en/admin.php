@@ -27,6 +27,7 @@ return [
     'no_users_found' => 'No users found',
     'password_leave_blank' => 'Leave blank to keep current',
     'save_user' => 'Save User',
+    'stock_status' => 'Stock Status',
 
     // Supplier Management
     'supplier_management' => 'Supplier Management',
@@ -144,6 +145,8 @@ return [
     'clear_confirm' => 'Are you sure you want to delete these logs?',
     'logs_cleared' => 'Audit logs successfully cleared.',
     'warehouse_management' => 'Warehouse Management',
+    'inventory' => 'Inventory',
+    'people' => 'People',
 
     // Warehouse Report
     'warehouse_reports_title' => 'Warehouse Reports',
@@ -304,4 +307,22 @@ return [
     'active_periods' => 'Active Period',
     'no_promos_found' => 'No active promotion programs found',
     'add_first_promo' => 'Create First Promo',
+    'more_settings_will_be_available_in_future_updates' => 'More settings will be available in future updates.',
+    'disabling_features_may_improve_performance_on_older_devices_but_will_limit_functionality_for_newer_tablets' => 'Disabling features may improve performance on older devices but will limit functionality for newer tablets.',
+    'settings_applied_here_are_global_and_will_affect_all_admin_manager_and_warehouse_users' => 'Settings applied here are global and will affect all Admin, Manager, and Warehouse users.',
+
+    // expired
+    'expiry_date' => 'Expiry Date',
+
+    // Receipt Settings
+    'receipt_paper_size' => 'Receipt Paper Size',
+    'receipt_paper_size_hint' => 'Select the paper width that matches your thermal printer. Most portable/Bluetooth printers use 58mm, larger desktop printers use 80mm.',
+    'paper_58mm' => '58mm (Small / Portable)',
+    'paper_80mm' => '80mm (Standard / Desktop)',
+
+    // Manager Role
+    'manager_dashboard' => 'Manager Dashboard',
+    'subtotal' => 'Subtotal',
+    'transaction_correction' => 'Transaction Correction',
+    'manage_store_oversight' => 'Monitor store performance and correct transaction errors.',
 ];

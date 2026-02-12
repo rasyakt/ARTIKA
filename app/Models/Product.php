@@ -59,6 +59,19 @@ class Product extends Model
     }
 
     /**
+     * Get available stock (only non-expired batches)
+     */
+    public function getAvailableStockAttribute()
+    {
+        return $this->stocks()
+            ->where(function ($query) {
+                $query->whereNull('expired_at')
+                    ->orWhere('expired_at', '>', now());
+            })
+            ->sum('quantity');
+    }
+
+    /**
      * Get profit margin
      */
     public function getProfitMarginAttribute()
@@ -74,6 +87,19 @@ class Product extends Model
         return $this->stocks()
             ->where('quantity', '>', 0)
             ->whereNotNull('expired_at')
+            ->orderBy('expired_at', 'asc')
+            ->value('expired_at');
+    }
+
+    /**
+     * Get next expiration date (only non-expired batches)
+     */
+    public function getNextExpiryAttribute()
+    {
+        return $this->stocks()
+            ->where('quantity', '>', 0)
+            ->whereNotNull('expired_at')
+            ->where('expired_at', '>', now())
             ->orderBy('expired_at', 'asc')
             ->value('expired_at');
     }
