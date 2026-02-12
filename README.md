@@ -26,7 +26,7 @@
 
 - **Backend**: Laravel 12 (PHP 8.2+)
 - **Frontend**: Blade, Tailwind CSS 4, Bootstrap 5, Vite 7
-- **Database**: MySQL / MariaDB / PostgreSQL
+- **Database**: PostgreSQL
 - **Reporting**: Barryvdh Laravel DomPDF
 - **Icons & UI**: FontAwesome 6, SweetAlert2, Google Fonts (Inter/Outfit)
 - **Roles**: Superadmin, Admin, Manager, Cashier, Warehouse
@@ -35,7 +35,7 @@
 
 - PHP 8.2 atau lebih tinggi
 - Composer
-- MySQL 5.7+ atau PostgreSQL
+- PostgreSQL
 - Node.js & NPM
 
 ## Instalasi Cepat
