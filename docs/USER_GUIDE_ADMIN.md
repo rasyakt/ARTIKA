@@ -20,55 +20,35 @@ Panduan lengkap bagi Administrator untuk mengelola seluruh aspek sistem ARTIKA P
 
 Sebagai Administrator, Anda memiliki akses penuh untuk:
 
-- Mengelola data master (produk, kategori).
-- Mengatur akun pengguna (Kasir & Gudang).
-- Melihat laporan keuangan dan stok.
-- Memantau aktivitas melalui log audit.
+- Mengatur data master (produk, kategori, supplier, promo).
+- Mengelola akun pengguna dan hak akses (Role).
+- Mengelola pengeluaran operasional (Expenses).
+- Melihat laporan lengkap melalui Reports Hub.
+- Melakukan pemeliharaan sistem (Audit Log).
 
 ---
 
-## Login Pertama Kali
+## Manajemen Master Data
 
-1. Buka aplikasi ARTIKA POS.
-2. Masukkan **Username:** `admin` dan **Password:** `password`.
-3. **Penting:** Segera ubah password Anda di menu profil demi keamanan.
+### 1. Produk & Kategori
 
----
+Pastikan setiap produk memiliki barcode yang valid. Gunakan kategori untuk memudahkan pencarian di POS.
 
-## Manajemen Produk
+### 2. Supplier & Pembelian
 
-Admin bertanggung jawab untuk memastikan katalog produk selalu akurat.
+Tambah data supplier untuk melacak asal barang. Gunakan fitur **Purchase** untuk mencatat stok masuk langsung di bawah nama supplier tertentu.
 
-- **Tambah Produk**: Pastikan barcode unik dan harga jual sudah menutupi harga modal (profit margin).
-- **Edit Produk**: Perubahan harga akan berlaku untuk transaksi baru di kasir.
-- **Hapus Produk**: Produk tidak bisa dihapus jika sudah pernah ada dalam transaksi (untuk menjaga sejarah data).
+### 3. Promo & Diskon
+
+Admin dapat membuat promo (misal: Diskon Member/Event). Promo dapat diaktifkan atau dinonaktifkan sewaktu-waktu dari dashboard.
 
 ---
 
-## Manajemen Pengguna
+## Manajemen Keuangan
 
-Anda dapat membuat akun untuk staf baru:
-
-1. **Kasir**: Hanya dapat mengakses menu POS untuk berjualan.
-2. **Gudang**: Hanya dapat mengatur stok dan mutasi barang.
-3. **Admin**: Akses penuh ke seluruh sistem.
+- **Expenses**: Catat setiap pengeluaran toko seperti listrik, gaji, atau pemeliharaan. Ini akan masuk ke jurnal keuangan secara otomatis.
+- **Reports Hub**: Gunakan fitur **Reports Hub** untuk mengakses seluruh laporan (Gudang, Kasir, Keuangan) di satu tempat. Anda bisa mencetak laporan periode tertentu ke PDF atau CSV.
 
 ---
 
-## Laporan & Analitik
-
-Sistem menyediakan laporan otomatis:
-
-- **Laporan Harian**: Omzet per hari dan jumlah transaksi.
-- **Peringkat Produk**: Produk mana yang paling laris (Top Seller).
-- **Laporan Keuangan**: Integrasi otomatis ke jurnal debit/kredit.
-
----
-
-## Log Audit
-
-Menu ini sangat penting untuk pengawasan. Anda bisa melihat siapa yang menghapus produk, siapa yang melakukan diskon besar-besaran, dan kapan staf login/logout.
-
----
-
-**Tips Keamanan:** Jangan pernah memberikan password Admin Anda kepada siapapun.
+**Tips Keamanan:** Periksa secara berkala **Audit Log** untuk memantau aktivitas mencurigakan.

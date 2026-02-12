@@ -24,30 +24,22 @@ Sebagai Staf Gudang, tugas utama Anda adalah:
 
 ---
 
-## Halaman Stok
+### 1. Daftar Stok Real-Time
 
-Di menu ini, Anda dapat melihat seluruh produk beserta jumlah stok saat ini.
+Pantau jumlah barang. Sistem akan memberikan peringatan otomatis:
 
-- **Warna Hijau**: Stok cukup.
-- **Warna Kuning**: Stok menipis (perlu segera pesan lagi).
-- **Warna Merah**: Stok habis (kosong).
+- **Merah**: Stok Kosong.
+- **Kuning**: Stok di bawah ambang batas (Segera restock!).
+- **Hijau**: Stok Aman.
 
----
+### 2. Mutasi & Penyesuaian (Adjust)
 
-## Penyesuaian Stok (Adjust Stock)
+Setiap perubahan stok harus memiliki alasan yang jelas (misal: Barang Kadaluwarsa, Bonus Supplier, atau Selisih Opname). Gunakan fitur **Adjust Stock** untuk menjaga akurasi data.
 
-Jika terdapat selisih antara stok di sistem dengan stok fisik (misal: barang pecah atau bonus dari supplier), gunakan fitur **Adjust Stock**:
+### 3. Riwayat Pergerakan
 
-1. Pilih produk, klik **Adjust**.
-2. Pilih tipe: **IN** (Masuk), **OUT** (Keluar), atau **ADJUSTMENT** (Koreksi).
-3. Masukkan jumlah dan **Alasan** (Wajib).
+Anda dapat melihat detail masuk dan keluarnya barang per tanggal di menu **Stock Movements**. Ini penting untuk melacak jika ada barang yang "hilang" tanpa catatan transaksi.
 
 ---
 
-## Riwayat Mutasi Barang
-
-Sistem mencatat setiap pergerakan barang, baik dari penjualan kasir maupun input manual gudang. Gunakan menu ini untuk mengaudit jika terjadi ketidakwajaran stok.
-
----
-
-**Tips:** Selalu lakukan pengecekan fisik barang secara berkala (Stock Opname) minimal sebulan sekali.
+**Tips:** Pastikan setiap barang yang masuk sudah ditempel label Barcode agar memudahkan pekerjaan Kasir.

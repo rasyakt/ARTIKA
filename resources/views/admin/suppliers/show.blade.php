@@ -429,6 +429,7 @@
         .btn-brown:hover {
             color: white;
             opacity: 0.9;
+            background: #826857ff;
         }
 
         .btn-outline-brown {

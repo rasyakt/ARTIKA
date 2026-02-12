@@ -8,7 +8,7 @@
                     <h4 class="fw-bold" style="color: #6f5849;">
                         <i class="fa-solid fa-terminal me-2"></i>System Logs
                     </h4>
-                    <p class="text-muted mb-0">Showing the last 500 entries from storage/logs/laravel.log</p>
+                    <p class="text-muted mb-0">Showing filtered **ERROR** entries from storage/logs/laravel.log</p>
                 </div>
                 <div class="d-flex gap-3 align-items-center">
                     <div class="position-relative">

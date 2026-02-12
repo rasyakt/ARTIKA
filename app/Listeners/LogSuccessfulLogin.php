@@ -34,7 +34,7 @@ class LogSuccessfulLogin
 
         // Sustainability & Performance: Auto-Optimize if enabled
         try {
-            if (\App\Models\Setting::get('auto_optimize', false) === 'true') {
+            if (\App\Models\Setting::get('auto_optimize', false) === true) {
                 \Illuminate\Support\Facades\Artisan::call('optimize');
             }
         } catch (\Exception $e) {

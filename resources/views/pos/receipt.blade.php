@@ -9,34 +9,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{{ __('pos.receipt') }} - {{ $transaction->invoice_no }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Professional OCR-B font for thermal printers -->
+    <link href="https://fonts.cdnfonts.com/css/ocr-b" rel="stylesheet">
     <style>
         :root {
             --receipt-width:
                 {{ $paperSize === '80mm' ? '80mm' : '58mm' }}
             ;
             --receipt-padding:
-                {{ $paperSize === '80mm' ? '6mm' : '5mm' }}
+                {{ $paperSize === '80mm' ? '4mm' : '3mm' }}
             ;
             --font-size-base:
-                {{ $paperSize === '80mm' ? '11px' : '9.5px' }}
+                {{ $paperSize === '80mm' ? '10px' : '9px' }}
             ;
             --font-size-store:
-                {{ $paperSize === '80mm' ? '16px' : '14px' }}
+                {{ $paperSize === '80mm' ? '14px' : '12px' }}
             ;
             --font-size-total:
-                {{ $paperSize === '80mm' ? '15px' : '14px' }}
+                {{ $paperSize === '80mm' ? '12px' : '11px' }}
             ;
             --font-size-change:
-                {{ $paperSize === '80mm' ? '14px' : '13px' }}
+                {{ $paperSize === '80mm' ? '12px' : '11px' }}
             ;
             --font-size-details:
-                {{ $paperSize === '80mm' ? '10px' : '9px' }}
+                {{ $paperSize === '80mm' ? '9px' : '8px' }}
             ;
             --font-size-summary:
-                {{ $paperSize === '80mm' ? '10px' : '9px' }}
+                {{ $paperSize === '80mm' ? '9px' : '8px' }}
             ;
             --logo-width:
-                {{ $paperSize === '80mm' ? '120px' : '100px' }}
+                {{ $paperSize === '80mm' ? '80px' : '65px' }}
             ;
         }
 
@@ -52,18 +54,22 @@
         }
 
         body {
-            font-family: 'Courier New', monospace;
+            /* OCR-B Font: Industry standard for high-legibility and machine reading */
+            font-family: 'OCR-B', 'Courier New', Courier, monospace;
             width: 100%;
             max-width: var(--receipt-width);
             margin: 0 auto;
-            padding: 20px 0;
+            padding: 5px 0;
+            /* Reduced padding */
             font-size: var(--font-size-base);
-            font-weight: 600;
-            line-height: 1.2;
+            font-weight: 500;
+            line-height: 1.0;
+            /* even tighter */
             background: #f0f1f2;
             overflow-x: hidden;
-            word-break: break-word;
+            word-break: break-all;
             color: #000;
+            -webkit-font-smoothing: antialiased;
         }
 
         .receipt {
@@ -95,11 +101,11 @@
         }
 
         .transaction-info {
-            margin: 10px 0;
-            font-size: calc(var(--font-size-base) + 1.5px);
-            font-weight: 700;
-            border-bottom: 1.5px dashed #000;
-            padding-bottom: 8px;
+            margin: 5px 0;
+            font-size: var(--font-size-base);
+            font-weight: 500;
+            border-bottom: 1px solid #000;
+            padding-bottom: 4px;
         }
 
         .transaction-info div {
@@ -114,7 +120,7 @@
         }
 
         .item-row {
-            margin-bottom: 8px;
+            margin-bottom: 2px;
             width: 100%;
         }
 
@@ -137,13 +143,14 @@
         .item-details {
             font-size: var(--font-size-details);
             color: #000;
-            font-weight: 600;
-            margin-top: 1px;
+            margin-top: 0;
         }
 
         .divider {
-            border-top: 1.5px dashed #000;
-            margin: 10px 0;
+            border-top: 1px solid #000;
+            /* thinner line to save space */
+            margin: 4px 0;
+            /* half margin */
             width: 100%;
         }
 
@@ -166,18 +173,16 @@
         }
 
         .payment-info {
-            margin: 10px 0;
-            padding-top: 5px;
-            font-weight: 700;
+            margin: 5px 0;
+            padding-top: 2px;
         }
 
         .footer {
             text-align: center;
-            margin-top: 15px;
-            border-top: 1.5px dashed #000;
-            padding-top: 10px;
+            margin-top: 8px;
+            border-top: 1px solid #000;
+            padding-top: 5px;
             font-size: var(--font-size-details);
-            font-weight: 700;
         }
 
         /* Action Buttons Area */
@@ -439,7 +444,7 @@
         <div class="items-table">
             @foreach($transaction->items as $item)
                 <div class="item-row">
-                    <div class="item-main" style="text-transform: uppercase;">
+                    <div class="item-main" style="text-transform: uppercase; font-weight: 900;">
                         <span>{{ $item->product->name }}</span>
                     </div>
                     <div class="item-details" style="display: flex; justify-content: space-between;">
@@ -464,7 +469,8 @@
                     <span>-Rp{{ number_format($transaction->discount, 0, ',', '.') }}</span>
                 </div>
             @endif
-            <div class="total-row grand-total">
+            <div class="total-row grand-total"
+                style="font-size: var(--font-size-total); border-top: 1px solid #000; padding-top: 4px;">
                 <span>{{ __('pos.total') }}:</span>
                 <span>Rp{{ number_format($transaction->total_amount, 0, ',', '.') }}</span>
             </div>

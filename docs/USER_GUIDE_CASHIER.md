@@ -30,9 +30,9 @@ Anda dapat login menggunakan dua metode:
 
 1. **Tambah Produk**: Klik gambar produk di layar atau gunakan **Barcode Scanner**.
 2. **Atur Jumlah**: Gunakan tombol **+** atau **-** pada keranjang belanja.
-3. **Checkout (F2)**: Tekan tombol Checkout untuk memulai pembayaran.
-4. **Bayar**: Pilih metode Tunai atau Non-Tunai (QRIS/Transfer).
-5. **Cetak**: Setelah transaksi berhasil, klik tombol Cetak Struk.
+3. **Checkout (F2)**: Tekan tombol Checkout, masukkan nominal uang tunai yang diterima.
+4. **Konfirmasi**: Sistem akan menampilkan jumlah kembalian. Pastikan uang sudah benar.
+5. **Cetak Struk**: Klik tombol **Cetak Struk** hanya jika pelanggan memintanya. Anda bisa menutup jendela tanpa mencetak.
 
 ---
 
@@ -40,20 +40,21 @@ Anda dapat login menggunakan dua metode:
 
 Untuk mempercepat pelayanan, gunakan tombol ini pada keyboard Anda:
 
-- **F2**: Langsung buka layar pembayaran (Checkout).
-- **F4**: Tunda transaksi (jika pelanggan ingin mengambil barang lain).
+- **F2**: Langsung fokus ke kolom input pembayaran.
+- **F4**: Tunda transaksi (Park Transaction).
 - **F8**: Batalkan seluruh isi keranjang.
 - **Esc**: Menutup popup atau membatalkan pilihan.
+- **Enter**: Mengkonfirmasi pembayaran/input.
 
 ---
 
 ## Tips Cetak Struk
 
-Jika printer Anda adalah tipe **VSC TM-58D** atau printer thermal 58mm lainnya:
+Jika printer thermal Anda bermasalah:
 
-1. Pastikan kertas terpasang kencang.
-2. Saat muncul kotak dialog cetak di komputer, pilih **Margin: None** (Tanpa Margin).
-3. Jika teks terpotong, pastikan **Scale** diatur ke **Default**.
+1. Periksa kabel USB/Koneksi.
+2. Saat kotak dialog muncul, pilih **Margin: None** dan **Scale: 100%**.
+3. Pastikan **Header & Footer** tidak dicentang agar struk terlihat rapi.
 
 ---
 
