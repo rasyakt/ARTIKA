@@ -142,14 +142,28 @@ class SuperadminController extends Controller
         $logs = '';
 
         if (File::exists($logPath)) {
-            // Get last 500 lines
+            // Get last 1000 lines to have enough potential error candidates
             $file = new \SplFileObject($logPath, 'r');
             $file->seek(PHP_INT_MAX);
             $lastLine = $file->key();
-            $lines = new \LimitIterator($file, max(0, $lastLine - 500), $lastLine);
+            $lines = new \LimitIterator($file, max(0, $lastLine - 1000), $lastLine);
+
+            $errorKeywords = ['ERROR', 'CRITICAL', 'ALERT', 'EMERGENCY'];
+            $filteredLogs = [];
 
             foreach ($lines as $line) {
-                $logs .= $line;
+                foreach ($errorKeywords as $keyword) {
+                    if (stripos($line, '.' . $keyword) !== false || stripos($line, 'local.' . $keyword) !== false || stripos($line, 'production.' . $keyword) !== false) {
+                        $filteredLogs[] = $line;
+                        break;
+                    }
+                }
+            }
+
+            $logs = implode("", array_slice($filteredLogs, -500)); // Show last 500 filtered errors
+
+            if (empty($logs)) {
+                $logs = "No system errors found in the last 1000 log entries.";
             }
         } else {
             $logs = 'Log file not found.';

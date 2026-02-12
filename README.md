@@ -14,21 +14,22 @@
 
 - **POS Super Cepat**: Mendukung scanner barcode (USB/Kamera), keyboard shortcuts, dan pencarian produk instan.
 - **Manajemen Stok Pintar**: Pantau stok masuk, keluar, dan peringatan stok rendah secara otomatis.
-- **Laporan Lengkap**: Ekspor laporan harian, peringkat produk terlaris, dan audit log ke format PDF/CSV.
-- **Akuntansi Otomatis**: Setiap transaksi langsung tercatat ke dalam Jurnal Keuangan (Debit/Kredit).
-- **Multi-Role**: Akses terbatas berdasarkan peran (Admin, Kasir, Petugas Gudang).
-- **Responsive Design**: Tampilan yang optimal di perangkat desktop, tablet, maupun ponsel.
-- **Struk Profesional**: Cetak struk belanja dengan layout yang bersih dan informatif.
+- **Laporan Lengkap & Hub**: Dashboard laporan terpusat (Warehouse, Cashier, Finance) dengan ekspor PDF/CSV.
+- **Akuntansi & Jurnal**: Pencatatan otomatis ke dalam Jurnal Keuangan setiap transaksi.
+- **Manajemen Biaya & Supplier**: Kelola pengeluaran operasional dan pembelian stok dari supplier.
+- **Promo & Diskon**: Fitur promo aktif/non-aktif untuk meningkatkan penjualan.
+- **Retur & Koreksi**: Kelola pengembalian barang dan perbaikan data transaksi dengan audit log.
+- **Multi-Role**: Akses terbatas untuk Superadmin, Admin, Manager, Kasir, dan Petugas Gudang.
+- **Responsive Design**: Tampilan optimal di desktop, tablet, maupun ponsel.
 
 ---
-
-## Tech Stack
 
 - **Backend**: Laravel 12 (PHP 8.2+)
 - **Frontend**: Blade, Tailwind CSS 4, Bootstrap 5, Vite 7
 - **Database**: MySQL / MariaDB / PostgreSQL
 - **Reporting**: Barryvdh Laravel DomPDF
 - **Icons & UI**: FontAwesome 6, SweetAlert2, Google Fonts (Inter/Outfit)
+- **Roles**: Superadmin, Admin, Manager, Cashier, Warehouse
 
 ### Prasyarat
 
@@ -74,9 +75,10 @@ Untuk informasi lebih mendalam, silakan baca panduan berikut:
 - [**Panduan Instalasi Detail**](docs/INSTALASI.md) - Langkah instalasi dan troubleshooting.
 - [**Arsitektur Sistem**](docs/ARSITEKTUR.md) - Detail teknis, pola desain, dan alur data.
 - [**Skema Database**](docs/DATABASE.md) - Struktur tabel dan relasi antar data.
-- [**User Guide: Administrator**](docs/USER_GUIDE_ADMIN.md) - Panduan kelola user dan laporan.
+- [**User Guide: Administrator**](docs/USER_GUIDE_ADMIN.md) - Panduan kelola user, laporan, dan master data.
+- [**User Guide: Manager**](docs/USER_GUIDE_MANAGER.md) - Panduan pengawasan, audit, dan koreksi data.
 - [**User Guide: Kasir**](docs/USER_GUIDE_CASHIER.md) - Panduan transaksi dan POS.
-- [**User Guide: Gudang**](docs/USER_GUIDE_WAREHOUSE.md) - Panduan manajemen stok.
+- [**User Guide: Gudang**](docs/USER_GUIDE_WAREHOUSE.md) - Panduan manajemen stok dan mutasi.
 - [**Panduan Deployment**](docs/DEPLOYMENT.md) - Cara hosting aplikasi di server/cPanel.
 
 ---

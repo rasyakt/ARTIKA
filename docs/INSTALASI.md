@@ -10,9 +10,9 @@ Sebelum memulai, pastikan perangkat Anda sudah terinstal:
 
 1. **PHP 8.2** atau versi terbaru.
 2. **Composer** (Dependency manager untuk PHP).
-3. **Node.js & NPM** (Untuk kompilasi asset frontend).
-4. **MySQL/MariaDB** (Sebagai basis data).
-5. **Web Server** (Sangat disarankan menggunakan **Laragon** atau **XAMPP** di Windows).
+3. **Node.js 18+ & NPM** (Untuk kompilasi asset frontend).
+4. **MySQL 5.7+ / PostgreSQL** (Sebagai basis data).
+5. **Web Server** (Sangat disarankan memakai **Laragon** untuk Windows).
 
 ---
 
@@ -23,8 +23,8 @@ Sebelum memulai, pastikan perangkat Anda sudah terinstal:
 Buka terminal/CMD dan jalankan perintah berikut:
 
 ```bash
-git clone https://github.com/username/artika-pos.git
-cd artika-pos
+git clone https://github.com/rasyakt/ARTIKA.git
+cd ARTIKA
 ```
 
 ### 2. Menginstal Dependensi
@@ -47,7 +47,7 @@ php artisan key:generate
 
 ### 4. Pengaturan Database
 
-Buka file `.env` dan sesuaikan bagian database berikut sesuai dengan konfigurasi server lokal Anda:
+Buka file `.env` dan sesuaikan bagian database berikut sesuai dengan konfigurasi server lokal Anda (MySQL/PostgreSQL):
 
 ```env
 DB_CONNECTION=mysql
@@ -58,32 +58,37 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-_Catatan: Pastikan Anda sudah membuat database bernama `artika_pos` di PHPMyAdmin atau MySQL._
-
 ### 5. Migrasi & Seeder
 
-Jalankan perintah ini untuk membuat struktur tabel dan mengisi data awal (user admin, kategori, dll):
+Jalankan perintah ini untuk membuat struktur tabel dan mengisi data awal:
 
 ```bash
 php artisan migrate --seed
 ```
 
-### 6. Menjalankan Aplikasi
+### 6. Kompilasi & Jalankan
 
-Buka dua terminal berbeda:
+Untuk pertama kali, bangun asset frontend:
 
-- **Terminal 1 (Kompilasi Asset):** `npm run dev`
-- **Terminal 2 (Server PHP):** `php artisan serve`
+```bash
+npm run build
+```
 
-Akses aplikasi melalui browser dialamat: `http://localhost:8000`
+Lalu jalankan server lokal:
+
+```bash
+php artisan serve
+```
+
+Akses aplikasi di: `http://localhost:8000`
 
 ---
 
 ## 🛠️ Tips Troubleshooting
 
-- Jika gambar tidak muncul, jalankan: `php artisan storage:link`.
-- Jika terjadi error "Class not found", jalankan: `composer dump-autoload`.
-- Pastikan ekstensi PHP `gd`, `bcmath`, dan `intl` sudah aktif.
+- **Symlink Storage**: Jika gambar tidak muncul, jalankan: `php artisan storage:link`.
+- **Cache**: Jika perubahan tidak terlihat, jalankan: `php artisan optimize`.
+- **Database**: Pastikan database sudah dibuat di server (PHPMyAdmin) sebelum menjalankan migrasi.
 
 ---
 

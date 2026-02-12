@@ -16,15 +16,11 @@ Dokumentasi teknis lengkap mengenai arsitektur sistem, pola desain (design patte
 
 ---
 
-## Ringkasan
-
-ARTIKA POS dibangun menggunakan framework **Laravel 12** (PHP 8.2+) dengan arsitektur **MVC (Model-View-Controller)** yang diperkuat dengan **Service Layer** dan **Repository Pattern** untuk pemisahan logika yang lebih baik dan kode yang lebih bersih.
+ARITKA POS dibangun menggunakan framework **Laravel 12** (PHP 8.2+) dengan arsitektur **MVC (Model-View-Controller)** yang diperkuat dengan **Service Layer** dan **Repository Pattern**.
 
 ---
 
 ## Diagram Arsitektur
-
-Sistem mengikuti alur dari Client (Browser/Scanner) melalui routing, middleware, controller, hingga ke lapisan logika bisnis (Service/Repository) dan terakhir ke database.
 
 ```mermaid
 graph TB
@@ -41,12 +37,12 @@ graph TB
 
     subgraph "Lapisan Logika Bisnis"
         Services[Services/TransactionService]
-        Repositories[Repositories/ProductRepo]
+        Repositories[Repositories]
     end
 
     subgraph "Lapisan Data"
         Models[Eloquent Models]
-        Database[(MySQL Database)]
+        Database[(MySQL/PostgreSQL)]
     end
 
     Browser --> Routes
@@ -61,50 +57,25 @@ graph TB
 
 ---
 
-## Pola Desain (Design Patterns)
+## Lapisan Otorisasi (RBAC)
 
-### 1. MVC (Model-View-Controller)
+Sistem menggunakan Role-Based Access Control dengan 5 tingkatan:
 
-Pola standar Laravel untuk memisahkan data (Model), tampilan (View), dan pengolah logika request (Controller).
-
-### 2. Repository Pattern
-
-Digunakan untuk mengabstraksi akses data dari logika bisnis. Hal ini memudahkan testing dan penggantian sumber data di masa depan.
-
-- **Lokasi**: `app/Repositories/` dan `app/Interfaces/`
-
-### 3. Service Layer Pattern
-
-Digunakan untuk membungkus logika bisnis yang kompleks (seperti proses checkout transaksi yang melibatkan banyak tabel).
-
-- **Lokasi**: `app/Services/`
-- **Fitur Utama**: Menggunakan **Database Transactions** (`DB::transaction`) untuk menjamin integritas data.
-
-### 4. Middleware Pattern
-
-Digunakan untuk memfilter request masuk, terutama untuk pengecekan hak akses (Role-Based Access Control).
-
----
-
-## Alur Autentikasi
-
-ARTIKA mendukung login ganda:
-
-1. **Username**: Untuk Admin dan petugas Gudang.
-2. **NIS**: Untuk Kasir (siswa/staf).
-
-Sistem secara otomatis mendeteksi input numerik sebagai NIS dan string sebagai Username.
+1. **Superadmin**: Akses teknis tingkat tinggi (maintenance, logs, settings).
+2. **Admin**: Pengelola utama operasional (master data, user, reports).
+3. **Manager**: Pengawas harian (audit, koreksi transaksi, reports).
+4. **Cashier**: Operator transaksi (POS, history).
+5. **Warehouse**: Pengelola stok (opname, movements).
 
 ---
 
 ## Keamanan
 
 1. **Proteksi CSRF**: Semua request POST/PUT/DELETE dilindungi token CSRF.
-2. **Hashing Password**: Menggunakan algoritma Bcrypt.
-3. **Mencegah SQL Injection**: Menggunakan Eloquent ORM dengan parameter binding.
-4. **XSS Protection**: Blade templates secara otomatis melakukan escaping pada output.
+2. **Hashing Password**: Menggunakan algoritma Bcrypt via Laravel.
+3. **Audit Logging**: Setiap aksi krusial (hapus data, update stok) dicatat dalam tabel `audit_logs` bersama data IP dan User-Agent.
 
 ---
 
-**Versi Arsitektur:** 2.5  
-**Terakhir Diperbarui:** 2026-01-26
+**Versi Arsitektur:** 3.0  
+**Terakhir Diperbarui:** 2026-02-12
