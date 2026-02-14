@@ -125,8 +125,7 @@
                                                 <input type="number" name="items[0][unit_price]"
                                                     class="form-control custom-input input-price" min="0" step="0.01"
                                                     required>
-                                                <div class="small text-muted mt-1 px-2">per <span
-                                                        class="product-unit-text">Pcs</span> (HPP)</div>
+                                                <div class="small text-muted mt-1 px-2">per Pcs (HPP)</div>
                                             </td>
                                             <td></td>
                                         </tr>
@@ -206,7 +205,6 @@
                     unitSelect.name = "";
                 }
 
-                row.querySelectorAll('.product-unit-text').forEach(el => el.textContent = unit);
                 calculateGrandTotal();
             }
 
@@ -230,7 +228,7 @@
                 }
 
                 const unitText = unitSelect.value === 'Lainnya' ? (otherInput.value || 'unit') : unitSelect.value;
-                row.querySelectorAll('.product-unit-text').forEach(el => el.textContent = unitText);
+                // row.querySelectorAll('.product-unit-text').forEach(el => el.textContent = unitText);
 
                 // Auto set pcs_per_unit common values
                 const pcsPerUnit = row.querySelector('.input-pcs-per-unit');
@@ -247,41 +245,40 @@
                 const newRow = document.createElement('tr');
                 newRow.className = 'item-row';
                 newRow.innerHTML = `
-                                                <td>
-                                                    <select name="items[${rowCount}][product_id]" class="form-select custom-input select-product" required>
-                                                        <option value="" disabled selected>{{ __('admin.select_product') }}</option>
-                                                        @foreach($products as $product)
-                                                            <option value="{{ $product->id }}" data-price="{{ $product->cost_price }}" data-unit="{{ $product->unit }}">
-                                                                {{ $product->name }} ({{ $product->barcode }})
-                                                            </option>
+                                                    <td>
+                                                        <select name="items[${rowCount}][product_id]" class="form-select custom-input select-product" required>
+                                                            <option value="" disabled selected>{{ __('admin.select_product') }}</option>
+                                                            @foreach($products as $product)
+                                                                <option value="{{ $product->id }}" data-price="{{ $product->cost_price }}" data-unit="{{ $product->unit }}">
+                                                                    {{ $product->name }} ({{ $product->barcode }})
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                    <select name="items[${rowCount}][unit_name]" class="form-select custom-input select-unit-type" required>
+                                                        @foreach($units as $unit)
+                                                            <option value="{{ $unit->name }}">{{ $unit->name }}</option>
                                                         @endforeach
+                                                        <option value="Lainnya">Lainnya...</option>
                                                     </select>
+                                                    <input type="text" class="form-control custom-input mt-1 d-none other-unit-input" placeholder="Nama Satuan...">
                                                 </td>
-                                                <td>
-                                                <select name="items[${rowCount}][unit_name]" class="form-select custom-input select-unit-type" required>
-                                                    @foreach($units as $unit)
-                                                        <option value="{{ $unit->name }}">{{ $unit->name }}</option>
-                                                    @endforeach
-                                                    <option value="Lainnya">Lainnya...</option>
-                                                </select>
-                                                <input type="text" class="form-control custom-input mt-1 d-none other-unit-input" placeholder="Nama Satuan...">
-                                            </td>
-                                                <td>
-                                                    <input type="number" name="items[${rowCount}][quantity]" class="form-control custom-input input-quantity" min="1" value="1" required>
-                                                </td>
-                                                <td>
-                                                    <input type="number" name="items[${rowCount}][pcs_per_unit]" class="form-control custom-input input-pcs-per-unit" min="1" value="1" required>
-                                                </td>
-                                                <td>
-                                                    <input type="number" name="items[${rowCount}][unit_price]" class="form-control custom-input input-price" min="0" step="0.01" required>
-                                                    <div class="small text-muted mt-1 px-2">per <span class="product-unit-text">unit</span></div>
-                                                </td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-link text-danger p-0 delete-row-btn">
-                                                        <i class="fa-solid fa-trash"></i>
-                                                    </button>
-                                                </td>
-                                            `;
+                                                    <td>
+                                                        <input type="number" name="items[${rowCount}][quantity]" class="form-control custom-input input-quantity" min="1" value="1" required>
+                                                    </td>
+                                                    <td>
+                                                        <input type="number" name="items[${rowCount}][pcs_per_unit]" class="form-control custom-input input-pcs-per-unit" min="1" value="1" required>
+                                                    </td>
+                                                    <td>
+                                                        <div class="small text-muted mt-1 px-2">per Pcs (HPP)</div>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-link text-danger p-0 delete-row-btn">
+                                                            <i class="fa-solid fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                `;
                 container.appendChild(newRow);
 
                 // Add event listeners to new row

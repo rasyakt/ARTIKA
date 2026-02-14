@@ -15,6 +15,8 @@ class SupplierPurchase extends Model
         'quantity',
         'purchase_price',
         'total_price',
+        'unit_name',
+        'pcs_per_unit',
         'reason',
         'notes',
         'purchase_date',

@@ -55,7 +55,7 @@
 
         body {
             /* OCR-B Font: Industry standard for high-legibility and machine reading */
-            font-family: 'OCR-B', 'Courier New', Courier, monospace;
+            font-family: 'Arial';
             width: 100%;
             max-width: var(--receipt-width);
             margin: 0 auto;
