@@ -8,10 +8,18 @@
                         class="fa-solid fa-truck me-2"></i>{{ __('admin.supplier_management') }}</h2>
                 <p class="text-muted mb-0">{{ __('admin.manage_suppliers_contacts') }}</p>
             </div>
-            <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addSupplierModal"
-                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
-                <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_supplier') }}
-            </button>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.suppliers.pre_orders.index') }}"
+                    class="btn btn-outline-brown shadow-sm d-inline-flex align-items-center"
+                    style="border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                    <i class="fa-solid fa-receipt me-2"></i> {{ __('admin.pre_orders') ?? 'Pre-Orders' }}
+                </a>
+                <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
+                    data-bs-target="#addSupplierModal"
+                    style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                    <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_supplier') }}
+                </button>
+            </div>
         </div>
 
 
@@ -27,7 +35,8 @@
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.email') }}</th>
                                 <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.address') }}</th>
                                 <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
-                                    {{ __('common.actions') }}</th>
+                                    {{ __('common.actions') }}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -50,8 +59,10 @@
                                             <ul class="dropdown-menu dropdown-menu-end"
                                                 style="border-radius: 12px; border: 1px solid #e0cec7; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                                 <li>
-                                                    <a href="{{ route('admin.suppliers.show', $supplier->id) }}" class="dropdown-item py-2" style="border-radius: 8px;">
-                                                        <i class="fa-solid fa-eye me-1 text-info"></i> {{ __('admin.view_details') }}
+                                                    <a href="{{ route('admin.suppliers.show', $supplier->id) }}"
+                                                        class="dropdown-item py-2" style="border-radius: 8px;">
+                                                        <i class="fa-solid fa-eye me-1 text-info"></i>
+                                                        {{ __('admin.view_details') }}
                                                     </a>
                                                 </li>
                                                 <li>
@@ -205,10 +216,10 @@
 
 
         // Handle delete confirmation
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const deleteButtons = document.querySelectorAll('.btn-delete');
             deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     const form = this.closest('form');
                     confirmAction({
                         text: "{{ __('admin.delete_supplier_confirm') }}",

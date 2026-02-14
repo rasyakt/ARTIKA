@@ -161,7 +161,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #6f5849;"><i class="fa-solid fa-gear me-1"></i>
+                    <h5 class="modal-title fw-bold" style="color: #dbdbdbff;"><i class="fa-solid fa-gear me-1"></i>
                         {{ __('warehouse.adjust_stock') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>

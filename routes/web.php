@@ -45,6 +45,9 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/categories/{id}', [\App\Http\Controllers\CategoryController::class, 'update'])->name('categories.update');
         Route::delete('/categories/{id}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->name('categories.delete');
 
+        // Unit Management
+        Route::resource('units', \App\Http\Controllers\UnitController::class)->except(['create', 'edit', 'show']);
+
         // User Management
         Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users');
         Route::post('/users', [\App\Http\Controllers\UserController::class, 'store'])->name('users.store');
@@ -54,6 +57,17 @@ Route::middleware(['auth'])->group(function () {
         // Supplier Management
         Route::get('/suppliers', [\App\Http\Controllers\SupplierController::class, 'index'])->name('suppliers');
         Route::post('/suppliers', [\App\Http\Controllers\SupplierController::class, 'store'])->name('suppliers.store');
+
+        // Supplier Pre-Orders
+        Route::prefix('suppliers')->name('suppliers.')->group(function () {
+            Route::get('/pre-orders', [\App\Http\Controllers\SupplierPreOrderController::class, 'index'])->name('pre_orders.index');
+            Route::get('/pre-orders/create', [\App\Http\Controllers\SupplierPreOrderController::class, 'create'])->name('pre_orders.create');
+            Route::post('/pre-orders', [\App\Http\Controllers\SupplierPreOrderController::class, 'store'])->name('pre_orders.store');
+            Route::get('/pre-orders/{preOrder}', [\App\Http\Controllers\SupplierPreOrderController::class, 'show'])->name('pre_orders.show');
+            Route::post('/pre-orders/{preOrder}/status', [\App\Http\Controllers\SupplierPreOrderController::class, 'updateStatus'])->name('pre_orders.update_status');
+            Route::get('/pre-orders/{preOrder}/print-faktur', [\App\Http\Controllers\SupplierPreOrderController::class, 'printFaktur'])->name('pre_orders.print_faktur');
+        });
+
         Route::get('/suppliers/{supplier}', [\App\Http\Controllers\SupplierController::class, 'show'])->name('suppliers.show');
         Route::put('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'update'])->name('suppliers.update');
         Route::delete('/suppliers/{id}', [\App\Http\Controllers\SupplierController::class, 'destroy'])->name('suppliers.delete');

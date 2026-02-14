@@ -21,6 +21,7 @@ return [
     'invoice' => 'Faktur',
     'cashier' => 'Kasir',
     'amount' => 'Jumlah',
+    'back' => 'Kembali',
     'payment' => 'Pembayaran',
     'time' => 'Waktu',
     'no_transactions' => 'Belum ada transaksi',
