@@ -1796,8 +1796,14 @@
             <div class="cart-section">
                 <!-- CART HEADER -->
                 <div class="cart-header">
-                    <div class="cart-title"><i class="fas fa-shopping-basket"></i> {{ __('pos.cart') }}</div>
-                    <div class="summary-stats">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="cart-title mb-0"><i class="fas fa-shopping-basket"></i> {{ __('pos.cart') }}</div>
+                        <button class="btn btn-sm btn-light opacity-75" id="btnHeldList" onclick="openHeldModal()"
+                            title="Daftar Hold">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                    <div class="summary-stats mt-2">
                         <div class="stat-item">
                             <div class="stat-label">{{ __('pos.items') }}</div>
                             <div class="stat-value cartItemCount">0</div>
@@ -1868,10 +1874,17 @@
 
                     <!-- BUTTONS -->
                     <div class="checkout-buttons">
-                        <button class="btn-checkout btn-cancel clearBtn" id="clearBtn"><i
-                                class="fas fa-trash"></i></button>
+                        <button class="btn-checkout btn-cancel clearBtn" id="clearBtn" title="Hapus Keranjang">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                        <button class="btn-checkout btn-primary" id="btnHold" onclick="holdTransaction()"
+                            title="Tunda Transaksi">
+                            <i class="fas fa-pause"></i>
+                        </button>
                         <button class="btn-checkout btn-finish checkoutBtn" id="checkoutBtn" onclick="checkout()"
-                            disabled><i class="fas fa-check-circle me-2"></i> {{ __('pos.checkout') }}</button>
+                            disabled>
+                            <i class="fas fa-check-circle me-2"></i> {{ __('pos.checkout') }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1879,8 +1892,13 @@
             <!-- MOBILE CART VIEW (OVERLAY) -->
             <div id="mobileCartView">
                 <div class="cart-header">
-                    <div class="cart-title" id="closeCartBtn">
-                        <i class="fas fa-arrow-left me-2"></i> {{ __('pos.cart') }}
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <div class="cart-title mb-0" id="closeCartBtn">
+                            <i class="fas fa-arrow-left me-2"></i> {{ __('pos.cart') }}
+                        </div>
+                        <button class="btn btn-sm btn-light opacity-75" onclick="openHeldModal()" title="Daftar Hold">
+                            <i class="fas fa-list"></i>
+                        </button>
                     </div>
                     <div class="summary-stats">
                         <div class="stat-item">
@@ -1925,6 +1943,8 @@
                     </div>
                     <div class="checkout-buttons">
                         <button class="btn-checkout btn-cancel clearBtn"><i class="fas fa-trash"></i></button>
+                        <button class="btn-checkout btn-primary" onclick="holdTransaction()"><i
+                                class="fas fa-pause"></i></button>
                         <button class="btn-checkout btn-finish checkoutBtn" disabled>
                             <i class="fas fa-check-circle me-2"></i> {{ __('pos.checkout') }}
                         </button>
@@ -2027,6 +2047,43 @@
                         data-bs-dismiss="modal">{{ __('pos.cancel') }}</button>
                     <button type="button" class="btn" style="background: var(--primary); color: white;"
                         id="keypadConfirm">{{ __('pos.confirm') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HELD TRANSACTIONS MODAL -->
+    <div class="modal fade" id="heldTransactionsModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title"><i class="fas fa-list me-2"></i> Transaksi Tertunda</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th class="ps-3">Waktu</th>
+                                    <th>Item</th>
+                                    <th class="text-end">Total</th>
+                                    <th class="text-center pe-3">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="heldTransactionsTableBody">
+                                <!-- Loading state -->
+                                <tr>
+                                    <td colspan="4" class="text-center py-4">
+                                        <i class="fas fa-spinner fa-spin me-2"></i> Memuat data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -2874,6 +2931,168 @@
                     checkoutBtn.disabled = false;
                     showToast('error', error.message);
                 });
+        }
+
+        function holdTransaction() {
+            if (cart.length === 0) {
+                showToast('warning', 'Keranjang kosong!');
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
+            const total = subtotal; // No manual discount for held transactions to keep it simple
+
+            confirmAction({
+                title: 'Tunda Transaksi?',
+                text: 'Transaksi ini akan disimpan dan bisa dipanggil kembali nanti.',
+                confirmButtonText: 'Ya, Simpan'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const btnHold = document.getElementById('btnHold');
+                    const originalText = btnHold.innerHTML;
+                    btnHold.disabled = true;
+                    btnHold.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+                    fetch('{{ route("pos.hold") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            items: cart,
+                            subtotal: subtotal,
+                            total: total,
+                            note: ''
+                        })
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            btnHold.disabled = false;
+                            btnHold.innerHTML = originalText;
+                            if (result.success) {
+                                showToast('success', 'Transaksi berhasil ditunda');
+                                cart = [];
+                                updateCartDisplay();
+                            } else {
+                                showToast('error', 'Gagal menunda transaksi: ' + result.message);
+                            }
+                        })
+                        .catch(err => {
+                            btnHold.disabled = false;
+                            btnHold.innerHTML = originalText;
+                            showToast('error', 'Terjadi kesalahan sistem');
+                        });
+                }
+            });
+        }
+
+        function openHeldModal() {
+            const modal = new bootstrap.Modal(document.getElementById('heldTransactionsModal'));
+            modal.show();
+
+            const tableBody = document.getElementById('heldTransactionsTableBody');
+            tableBody.innerHTML = '<tr><td colspan="4" class="text-center py-4"><i class="fas fa-spinner fa-spin me-2"></i> Memuat data...</td></tr>';
+
+            fetch('{{ route("pos.held.index") }}', {
+                headers: { 'Accept': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success && result.data.length > 0) {
+                        let html = '';
+                        result.data.forEach(held => {
+                            const date = new Date(held.created_at).toLocaleString('id-ID');
+                            const itemCount = held.items.length;
+                            html += `
+                                <tr>
+                                    <td class="ps-3 small">${date}</td>
+                                    <td>${itemCount} item</td>
+                                    <td class="text-end fw-bold">Rp${formatCurrency(held.total)}</td>
+                                    <td class="text-center pe-3">
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-success" onclick="resumeHeldTransaction(${held.id})" title="Panggil Kembali">
+                                                <i class="fas fa-undo"></i>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" onclick="deleteHeldTransaction(${held.id})" title="Hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        tableBody.innerHTML = html;
+                    } else {
+                        tableBody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">Tidak ada transaksi tertunda.</td></tr>';
+                    }
+                })
+                .catch(err => {
+                    tableBody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-danger">Gagal memuat data.</td></tr>';
+                });
+        }
+
+        function resumeHeldTransaction(id) {
+            if (cart.length > 0) {
+                confirmAction({
+                    title: 'Timpa Keranjang?',
+                    text: 'Keranjang saat ini akan dihapus dan diganti dengan transaksi yang dipilih.',
+                    confirmButtonText: 'Ya, Timpa'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        performResume(id);
+                    }
+                });
+            } else {
+                performResume(id);
+            }
+        }
+
+        function performResume(id) {
+            fetch('{{ url("pos/held") }}/' + id + '/resume', {
+                headers: { 'Accept': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        cart = result.data.items;
+                        updateCartDisplay();
+                        bootstrap.Modal.getInstance(document.getElementById('heldTransactionsModal')).hide();
+                        showToast('success', 'Transaksi dipanggil kembali');
+                    } else {
+                        showToast('error', 'Gagal memanggil transaksi: ' + result.message);
+                    }
+                })
+                .catch(err => showToast('error', 'Terjadi kesalahan sistem'));
+        }
+
+        function deleteHeldTransaction(id) {
+            confirmAction({
+                title: 'Hapus Transaksi?',
+                text: 'Transaksi tertunda ini akan dihapus permanen.',
+                confirmButtonText: 'Ya, Hapus'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch('{{ url("pos/held") }}/' + id, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'Accept': 'application/json'
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(result => {
+                            if (result.success) {
+                                openHeldModal();
+                                showToast('success', 'Transaksi dihapus');
+                            } else {
+                                showToast('error', 'Gagal menghapus');
+                            }
+                        })
+                        .catch(err => showToast('error', 'Terjadi kesalahan sistem'));
+                }
+            });
         }
 
         function initializeKeypad() {

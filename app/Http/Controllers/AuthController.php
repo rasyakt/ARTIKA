@@ -45,7 +45,12 @@ class AuthController extends Controller
             // If strictly enforcing that Admin MUST login at /login/admin:
             if ($request->has('role')) {
                 $requiredRole = $request->role;
-                $userRole = $user->role->name;
+                $userRole = ($user && $user->role) ? $user->role->name : null;
+
+                if (!$userRole) {
+                    Auth::logout();
+                    return back()->withErrors(['username' => 'Profil pengguna tidak valid atau role tidak ditemukan.']);
+                }
 
                 // Superadmins and managers can login at the admin login page
                 $isAuthorized = ($userRole === $requiredRole) ||
@@ -53,21 +58,21 @@ class AuthController extends Controller
 
                 if (!$isAuthorized) {
                     Auth::logout();
-                    return back()->withErrors(['username' => 'Access denied: You are not a ' . ucfirst($requiredRole)]);
+                    return back()->withErrors(['username' => 'Akses ditolak: Anda bukan ' . ucfirst($requiredRole)]);
                 }
             }
 
             $request->session()->regenerate();
 
             // Redirect based on role (case-insensitive)
-            $role = strtolower($user->role->name);
-            if ($role === 'superadmin' || $role === 'admin')
+            $userRole = ($user && $user->role) ? strtolower($user->role->name) : 'user';
+            if ($userRole === 'superadmin' || $userRole === 'admin')
                 return redirect()->route('admin.dashboard');
-            if ($role === 'manager')
+            if ($userRole === 'manager')
                 return redirect()->route('manager.dashboard');
-            if ($role === 'cashier')
+            if ($userRole === 'cashier')
                 return redirect()->route('pos.index');
-            if ($role === 'warehouse')
+            if ($userRole === 'warehouse')
                 return redirect()->route('warehouse.dashboard');
 
             return redirect()->intended('dashboard');
