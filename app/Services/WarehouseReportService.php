@@ -43,8 +43,8 @@ class WarehouseReportService
 
         if ($search) {
             $valuationQuery->where(function ($q) use ($search) {
-                $q->where('products.name', 'like', "%{$search}%")
-                    ->orWhere('products.barcode', 'like', "%{$search}%");
+                $q->where('products.name', 'ilike', "%{$search}%")
+                    ->orWhere('products.barcode', 'ilike', "%{$search}%");
             });
         }
         if ($categoryId) {
@@ -69,8 +69,8 @@ class WarehouseReportService
             $totalItemsQuery->join('products', 'products.id', '=', 'stocks.product_id');
             if ($search) {
                 $totalItemsQuery->where(function ($q) use ($search) {
-                    $q->where('products.name', 'like', "%{$search}%")
-                        ->orWhere('products.barcode', 'like', "%{$search}%");
+                    $q->where('products.name', 'ilike', "%{$search}%")
+                        ->orWhere('products.barcode', 'ilike', "%{$search}%");
                 });
             }
             if ($categoryId) {
@@ -98,8 +98,8 @@ class WarehouseReportService
             $movementsQuery->join('products', 'products.id', '=', 'stock_movements.product_id');
             if ($search) {
                 $movementsQuery->where(function ($q) use ($search) {
-                    $q->where('products.name', 'like', "%{$search}%")
-                        ->orWhere('products.barcode', 'like', "%{$search}%");
+                    $q->where('products.name', 'ilike', "%{$search}%")
+                        ->orWhere('products.barcode', 'ilike', "%{$search}%");
                 });
             }
             if ($categoryId) {
@@ -146,8 +146,8 @@ class WarehouseReportService
 
             if ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('products.name', 'like', "%{$search}%")
-                        ->orWhere('products.barcode', 'like', "%{$search}%");
+                    $q->where('products.name', 'ilike', "%{$search}%")
+                        ->orWhere('products.barcode', 'ilike', "%{$search}%");
                 });
             }
 
@@ -182,8 +182,8 @@ class WarehouseReportService
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('products.name', 'like', "%{$search}%")
-                    ->orWhere('products.barcode', 'like', "%{$search}%");
+                $q->where('products.name', 'ilike', "%{$search}%")
+                    ->orWhere('products.barcode', 'ilike', "%{$search}%");
             });
         }
 
@@ -213,8 +213,8 @@ class WarehouseReportService
             $query->join('products', 'products.id', '=', 'stock_movements.product_id');
             if ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('products.name', 'like', "%{$search}%")
-                        ->orWhere('products.barcode', 'like', "%{$search}%");
+                    $q->where('products.name', 'ilike', "%{$search}%")
+                        ->orWhere('products.barcode', 'ilike', "%{$search}%");
                 });
             }
             if ($categoryId) {

@@ -106,8 +106,8 @@ class WarehouseController extends Controller
         $stocks = Stock::with(['product.category'])
             ->when($search, function ($query) use ($search) {
                 $query->whereHas('product', function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                        ->orWhere('barcode', 'like', "%{$search}%");
+                    $q->where('name', 'ilike', "%{$search}%")
+                        ->orWhere('barcode', 'ilike', "%{$search}%");
                 });
             })
             ->orderBy('quantity', 'asc')
@@ -139,8 +139,8 @@ class WarehouseController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->whereHas('product', function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('barcode', 'like', "%{$search}%");
+                $q->where('name', 'ilike', "%{$search}%")
+                    ->orWhere('barcode', 'ilike', "%{$search}%");
             });
         }
 

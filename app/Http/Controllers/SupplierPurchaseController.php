@@ -20,6 +20,8 @@ class SupplierPurchaseController extends Controller
             'purchase_date' => 'required|date',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
+            'items.*.unit_name' => 'required|string|max:50',
+            'items.*.pcs_per_unit' => 'required|integer|min:1',
             'items.*.quantity' => 'required|integer|min:1',
             'items.*.purchase_price' => 'required|numeric|min:0',
             'items.*.notes' => 'nullable|string|max:255',
@@ -31,12 +33,15 @@ class SupplierPurchaseController extends Controller
             $supplier = Supplier::findOrFail($request->supplier_id);
 
             foreach ($request->items as $item) {
-                $totalPrice = $item['quantity'] * $item['purchase_price'];
+                $totalPrice = $item['quantity'] * $item['pcs_per_unit'] * $item['purchase_price'];
 
                 // 1. Create Purchase Record
                 $purchase = SupplierPurchase::create([
+                    'uuid' => (string) \Illuminate\Support\Str::uuid(),
                     'supplier_id' => $supplier->id,
                     'product_id' => $item['product_id'],
+                    'unit_name' => $item['unit_name'],
+                    'pcs_per_unit' => $item['pcs_per_unit'],
                     'quantity' => $item['quantity'],
                     'purchase_price' => $item['purchase_price'],
                     'total_price' => $totalPrice,
@@ -55,12 +60,14 @@ class SupplierPurchaseController extends Controller
                 $stock = Stock::where('product_id', $product->id)->first();
                 $qtyBefore = $stock ? $stock->quantity : 0;
 
+                $incrementAmount = $item['quantity'] * $item['pcs_per_unit'];
+
                 if ($stock) {
-                    $stock->increment('quantity', $item['quantity']);
+                    $stock->increment('quantity', $incrementAmount);
                 } else {
                     $stock = Stock::create([
                         'product_id' => $product->id,
-                        'quantity' => $item['quantity'],
+                        'quantity' => $incrementAmount,
                         'min_stock' => 10,
                     ]);
                 }
@@ -73,8 +80,8 @@ class SupplierPurchaseController extends Controller
                     'type' => 'in',
                     'quantity_before' => $qtyBefore,
                     'quantity_after' => $qtyAfter,
-                    'quantity_change' => $item['quantity'],
-                    'reason' => 'Pasokan dari Supplier: ' . $supplier->name . ($item['notes'] ? ' (' . $item['notes'] . ')' : ''),
+                    'quantity_change' => $incrementAmount,
+                    'reason' => 'Pasokan dari Supplier: ' . $supplier->name . ' (' . $item['quantity'] . ' ' . $item['unit_name'] . ')' . ($item['notes'] ? ' - ' . $item['notes'] : ''),
                     'reference' => 'SUP-PUR-' . $purchase->id,
                 ]);
             }

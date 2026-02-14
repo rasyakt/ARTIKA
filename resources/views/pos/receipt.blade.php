@@ -55,7 +55,7 @@
 
         body {
             /* OCR-B Font: Industry standard for high-legibility and machine reading */
-            font-family: 'OCR-B', 'Courier New', Courier, monospace;
+            font-family: 'Arial';
             width: 100%;
             max-width: var(--receipt-width);
             margin: 0 auto;
@@ -421,7 +421,7 @@
                 <img src="{{ asset('img/logo2.png') }}" alt="Logo" class="logo">
             </div>
             <div class="store-name">ARTIKA MINIMARKET</div>
-            <div class="store-info">Jl. Jendral Sudirman 269A</div>
+            <div class="store-info">{{ App\Models\Setting::get('address', '') }}</div>
         </div>
 
         <!-- Transaction Info -->

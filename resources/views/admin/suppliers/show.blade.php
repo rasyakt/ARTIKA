@@ -292,11 +292,13 @@
                             <table class="table table-borderless align-middle" id="items-table">
                                 <thead class="text-muted small text-uppercase">
                                     <tr>
-                                        <th style="width: 40%;">{{ __('admin.product') }}</th>
-                                        <th style="width: 15%;">{{ __('admin.quantity') }}</th>
-                                        <th style="width: 20%;">{{ __('admin.purchase_price') }}</th>
+                                        <th style="width: 30%;">{{ __('admin.product') }}</th>
+                                        <th style="width: 15%;">{{ __('admin.unit') }}</th>
+                                        <th style="width: 10%;">Qty</th>
+                                        <th style="width: 12%;">Pcs/Unit</th>
+                                        <th style="width: 18%;">{{ __('admin.purchase_price') ?? 'Unit Price (HPP)' }}</th>
                                         <th>{{ __('admin.notes') }}</th>
-                                        <th style="width: 50px;"></th>
+                                        <th style="width: 40px;"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="items-container">
@@ -305,19 +307,34 @@
                                             <select name="items[0][product_id]"
                                                 class="form-select custom-input select-product" required>
                                                 <option value="" disabled selected>{{ __('admin.select_product') }}</option>
-                                                @foreach($products as $product)
-                                                    <option value="{{ $product->id }}">{{ $product->name }}
-                                                        ({{ $product->barcode }})</option>
+                                                @foreach($products as $p)
+                                                    <option value="{{ $p->id }}" data-price="{{ $p->cost_price }}" data-unit="{{ $p->unit }}">
+                                                        {{ $p->name }} ({{ $p->barcode }})
+                                                    </option>
                                                 @endforeach
                                             </select>
+                                        </td>
+                                        <td>
+                                            <select name="items[0][unit_name]" class="form-select custom-input select-unit-type" required>
+                                                @foreach(\App\Models\Unit::all() as $u)
+                                                    <option value="{{ $u->name }}">{{ $u->name }}</option>
+                                                @endforeach
+                                                <option value="Lainnya">Lainnya...</option>
+                                            </select>
+                                            <input type="text" class="form-control custom-input mt-1 d-none other-unit-input" placeholder="Nama Satuan...">
                                         </td>
                                         <td>
                                             <input type="number" name="items[0][quantity]"
                                                 class="form-control custom-input input-quantity" min="1" value="1" required>
                                         </td>
                                         <td>
+                                            <input type="number" name="items[0][pcs_per_unit]"
+                                                class="form-control custom-input input-pcs-per-unit" min="1" value="1" required>
+                                        </td>
+                                        <td>
                                             <input type="number" name="items[0][purchase_price]"
                                                 class="form-control custom-input input-price" min="0" step="0.01" required>
+                                            <div class="small text-muted mt-1 px-2">per Pcs (HPP)</div>
                                         </td>
                                         <td>
                                             <input type="text" name="items[0][notes]" class="form-control custom-input"
@@ -365,10 +382,63 @@
                 let total = 0;
                 document.querySelectorAll('.item-row').forEach(row => {
                     const qty = parseFloat(row.querySelector('.input-quantity').value) || 0;
+                    const pcsPerUnit = parseFloat(row.querySelector('.input-pcs-per-unit').value) || 0;
                     const price = parseFloat(row.querySelector('.input-price').value) || 0;
-                    total += qty * price;
+                    total += qty * pcsPerUnit * price;
                 });
                 grandTotalEl.textContent = new Intl.NumberFormat('id-ID').format(total);
+            }
+
+            function handleProductChange(e) {
+                const row = e.target.closest('tr');
+                const selectedOption = e.target.options[e.target.selectedIndex];
+                const price = selectedOption.dataset.price || 0;
+                const unit = selectedOption.dataset.unit || 'Pcs';
+
+                row.querySelector('.input-price').value = price;
+                const unitSelect = row.querySelector('.select-unit-type');
+                if ([...unitSelect.options].some(opt => opt.value === unit)) {
+                    unitSelect.value = unit;
+                } else {
+                    unitSelect.value = 'Lainnya';
+                    const otherInput = row.querySelector('.other-unit-input');
+                    otherInput.classList.remove('d-none');
+                    otherInput.value = unit;
+                    otherInput.name = unitSelect.name;
+                    unitSelect.name = "";
+                }
+
+                calculateGrandTotal();
+            }
+
+            function handleUnitChange(e) {
+                const row = e.target.closest('tr');
+                const otherInput = row.querySelector('.other-unit-input');
+                const unitSelect = e.target;
+
+                if (unitSelect.value === 'Lainnya') {
+                    otherInput.classList.remove('d-none');
+                    otherInput.name = unitSelect.dataset.name || unitSelect.name;
+                    unitSelect.dataset.name = otherInput.name;
+                    unitSelect.name = "";
+                    otherInput.focus();
+                } else {
+                    otherInput.classList.add('d-none');
+                    if (unitSelect.dataset.name) {
+                        unitSelect.name = unitSelect.dataset.name;
+                    }
+                    otherInput.name = "";
+                }
+
+                const unitText = unitSelect.value === 'Lainnya' ? (otherInput.value || 'unit') : unitSelect.value;
+                // row.querySelectorAll('.product-unit-text').forEach(el => el.textContent = unitText);
+
+                const pcsPerUnit = row.querySelector('.input-pcs-per-unit');
+                if (unitSelect.value === 'Pcs') pcsPerUnit.value = 1;
+                else if (unitSelect.value === 'Lusin') pcsPerUnit.value = 12;
+                else if (['Box', 'Pack', 'Dus'].includes(unitSelect.value)) {
+                    if (pcsPerUnit.value === '12') pcsPerUnit.value = 1;
+                }
             }
 
             addBtn.addEventListener('click', function () {
@@ -378,16 +448,31 @@
                         <td>
                             <select name="items[${rowCount}][product_id]" class="form-select custom-input select-product" required>
                                 <option value="" disabled selected>{{ __('admin.select_product') }}</option>
-                                @foreach($products as $product)
-                                    <option value="{{ $product->id }}">{{ $product->name }} ({{ $product->barcode }})</option>
+                                @foreach($products as $p)
+                                    <option value="{{ $p->id }}" data-price="{{ $p->cost_price }}" data-unit="{{ $p->unit }}">
+                                        {{ $p->name }} ({{ $p->barcode }})
+                                    </option>
                                 @endforeach
                             </select>
+                        </td>
+                        <td>
+                            <select name="items[${rowCount}][unit_name]" class="form-select custom-input select-unit-type" required>
+                                @foreach(\App\Models\Unit::all() as $u)
+                                    <option value="{{ $u->name }}">{{ $u->name }}</option>
+                                @endforeach
+                                <option value="Lainnya">Lainnya...</option>
+                            </select>
+                            <input type="text" class="form-control custom-input mt-1 d-none other-unit-input" placeholder="Nama Satuan...">
                         </td>
                         <td>
                             <input type="number" name="items[${rowCount}][quantity]" class="form-control custom-input input-quantity" min="1" value="1" required>
                         </td>
                         <td>
+                            <input type="number" name="items[${rowCount}][pcs_per_unit]" class="form-control custom-input input-pcs-per-unit" min="1" value="1" required>
+                        </td>
+                        <td>
                             <input type="number" name="items[${rowCount}][purchase_price]" class="form-control custom-input input-price" min="0" step="0.01" required>
+                            <div class="small text-muted mt-1 px-2">per Pcs (HPP)</div>
                         </td>
                         <td>
                             <input type="text" name="items[${rowCount}][notes]" class="form-control custom-input" placeholder="{{ __('admin.notes_placeholder') }}">
@@ -399,22 +484,27 @@
                         </td>
                     `;
                 container.appendChild(newRow);
-                rowCount++;
 
-                // Add event listeners to new row
+                newRow.querySelector('.select-product').addEventListener('change', handleProductChange);
+                newRow.querySelector('.select-unit-type').addEventListener('change', handleUnitChange);
                 newRow.querySelector('.input-quantity').addEventListener('input', calculateGrandTotal);
+                newRow.querySelector('.input-pcs-per-unit').addEventListener('input', calculateGrandTotal);
                 newRow.querySelector('.input-price').addEventListener('input', calculateGrandTotal);
                 newRow.querySelector('.delete-row-btn').addEventListener('click', function () {
                     newRow.remove();
                     calculateGrandTotal();
                 });
+
+                rowCount++;
             });
 
             // Initial event listeners
+            document.querySelector('.select-product').addEventListener('change', handleProductChange);
+            document.querySelector('.select-unit-type').addEventListener('change', handleUnitChange);
             document.querySelector('.input-quantity').addEventListener('input', calculateGrandTotal);
+            document.querySelector('.input-pcs-per-unit').addEventListener('input', calculateGrandTotal);
             document.querySelector('.input-price').addEventListener('input', calculateGrandTotal);
 
-            // Re-calculate if validation error occurs and old data is populated (though not implemented here yet)
             calculateGrandTotal();
         });
     </script>

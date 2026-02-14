@@ -183,6 +183,7 @@ class SuperadminController extends Controller
         $categories = [
             'General' => [
                 'system_name' => ['label' => 'System Name', 'type' => 'text', 'default' => 'ARTIKA POS'],
+                'address' => ['label' => 'Store Address', 'type' => 'text', 'default' => ''],
                 'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => '© ' . date('Y') . ' RPL_Sentinel. All rights reserved.'],
             ],
             'Admin Features' => [

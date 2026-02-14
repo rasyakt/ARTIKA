@@ -309,6 +309,54 @@
         </table>
     @endif
 
+    <!-- SUPPLIER SECTION -->
+    @if(in_array('supplier', $modules))
+        <div class="section-divider">{{ __('admin.supplier_management_report') ?? 'Laporan Manajemen Supplier' }}</div>
+        <table class="summary-grid">
+            <tr>
+                <td class="summary-box" width="20%">
+                    <h3>TOTAL ORDERS</h3>
+                    <div class="value">{{ number_format($supplierSummary['total_orders']) }}</div>
+                </td>
+                <td class="summary-box" width="20%">
+                    <h3>RECEIVED</h3>
+                    <div class="value text-success">{{ number_format($supplierSummary['received_orders']) }}</div>
+                </td>
+                <td class="summary-box" width="20%">
+                    <h3>PENDING</h3>
+                    <div class="value text-danger">{{ number_format($supplierSummary['pending_orders']) }}</div>
+                </td>
+                <td class="summary-box" width="40%">
+                    <h3>TOTAL SPEND (RECEIVED)</h3>
+                    <div class="value">Rp {{ number_format($supplierSummary['total_spend'], 0, ',', '.') }}</div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="subsection-title">PERFORMA SUPPLIER (Berdasarkan Total Belanja)</div>
+        <table class="data">
+            <thead>
+                <tr>
+                    <th width="8%">RANK</th>
+                    <th>SUPPLIER</th>
+                    <th width="20%" class="text-center">ORDER COUNT</th>
+                    <th width="25%" class="text-right">TOTAL BELANJA (RECEIVED)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($supplierPerformance as $index => $supplier)
+                    <tr>
+                        <td class="text-center">#{{ $index + 1 }}</td>
+                        <td><strong>{{ $supplier->name }}</strong></td>
+                        <td class="text-center"><span class="badge">{{ $supplier->pre_orders_count }}</span></td>
+                        <td class="text-right text-success"><strong>Rp
+                                {{ number_format($supplier->pre_orders_sum_total_amount ?? 0, 0, ',', '.') }}</strong></td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+
     <!-- AUDIT SECTION -->
     {{-- Always show basic audit logs if any module is selected, or only if cashier/warehouse selected? Let's show it if
     anything is selected since it's a "Complete Store Report" --}}

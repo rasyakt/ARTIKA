@@ -540,6 +540,12 @@
                                         <i class="fa-solid fa-folder"></i> {{ __('menu.categories') }}
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ route('admin.units.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.units*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-scale-balanced"></i> {{ __('admin.units') ?? 'Unit Categories' }}
+                                    </a>
+                                </li>
                                 @if(App\Models\Setting::get('admin_enable_promos', true))
                                     <li>
                                         <a href="{{ route('admin.promos.index') }}"
@@ -624,8 +630,14 @@
                                 </li>
                                 <li>
                                     <a href="{{ route('admin.suppliers') }}"
-                                        class="submenu-link {{ request()->routeIs('admin.suppliers*') ? 'active' : '' }}">
+                                        class="submenu-link {{ request()->routeIs('admin.suppliers*') && !request()->routeIs('admin.suppliers.pre_orders*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-truck"></i> {{ __('menu.suppliers') }}
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ route('admin.suppliers.pre_orders.index') }}"
+                                        class="submenu-link {{ request()->routeIs('admin.suppliers.pre_orders*') ? 'active' : '' }}">
+                                        <i class="fa-solid fa-receipt"></i> {{ __('admin.pre_orders') ?? 'Pre-Orders' }}
                                     </a>
                                 </li>
                             </ul>

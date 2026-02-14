@@ -128,7 +128,7 @@
     box-shadow: $shadow-brown-sm;
     transition: all $transition-base;
     background: $card-bg;
-    overflow: hidden;
+    overflow: visible;
 
     &:hover:not(.no-hover) {
         box-shadow: $shadow-brown-md;
@@ -385,7 +385,7 @@
 
 .table {
     border-radius: $radius-lg;
-    overflow: hidden;
+    overflow: visible;
 
     thead {
         background: $primary-dark;
@@ -416,6 +416,18 @@
             }
         }
     }
+}
+
+// ============================================
+// Dropdown overflow fix (global)
+// ============================================
+
+.table-responsive {
+    overflow: visible !important;
+}
+
+.dropdown-menu {
+    z-index: 1050 !important;
 }
 
 // ============================================

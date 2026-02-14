@@ -269,6 +269,15 @@
                                             Performa</small>
                                     </div>
                                 </label>
+                                <label class="list-group-item d-flex align-items-center py-2">
+                                    <input class="form-check-input me-3" type="checkbox" name="modules[]" value="supplier"
+                                        checked>
+                                    <div>
+                                        <div class="fw-bold small">Laporan Supplier</div>
+                                        <small class="text-muted" style="font-size: 0.7rem;">Pre-order, Performa &
+                                            Pengeluaran</small>
+                                    </div>
+                                </label>
                             </div>
                         </div>
 

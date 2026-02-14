@@ -16,15 +16,18 @@ class ReportsHubController extends Controller
     protected $warehouseService;
     protected $cashierService;
     protected $financeService;
+    protected $supplierService;
 
     public function __construct(
         WarehouseReportService $warehouseService,
         CashierReportService $cashierService,
-        FinanceReportService $financeService
+        FinanceReportService $financeService,
+        \App\Services\SupplierReportService $supplierService
     ) {
         $this->warehouseService = $warehouseService;
         $this->cashierService = $cashierService;
         $this->financeService = $financeService;
+        $this->supplierService = $supplierService;
     }
 
     /**
@@ -91,6 +94,11 @@ class ReportsHubController extends Controller
         // Finance Report Data
         $financeSummary = $this->financeService->getFinancialSummary($startDate, $endDate);
 
+        // Supplier Report Data
+        $supplierSummary = $this->supplierService->getSummaryStats($startDate, $endDate);
+        $supplierPerformance = $this->supplierService->getSuppliersPerformance($startDate, $endDate);
+        $recentPreOrders = $this->supplierService->getRecentReceived($startDate, $endDate);
+
         $modules = $request->input('modules', ['finance', 'warehouse', 'cashier']);
 
         if ($request->input('format') === 'pdf') {
@@ -107,6 +115,9 @@ class ReportsHubController extends Controller
                 'recentTransactions' => $recentTransactions,
                 'auditLogs' => $auditLogs,
                 'financeSummary' => $financeSummary,
+                'supplierSummary' => $supplierSummary,
+                'supplierPerformance' => $supplierPerformance,
+                'recentPreOrders' => $recentPreOrders,
                 'modules' => $modules,
                 'isPdf' => true
             ]);
