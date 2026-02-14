@@ -21,7 +21,8 @@ class ShareRoutePrefix
 
         if (Auth::check()) {
             $user = Auth::user();
-            $routePrefix = $user->role->name === 'manager' ? 'manager.' : 'admin.';
+            $roleName = ($user && $user->role) ? $user->role->name : null;
+            $routePrefix = ($roleName === 'manager') ? 'manager.' : 'admin.';
             View::share('user', $user);
         }
 
