@@ -4,12 +4,12 @@
     <div class="container-fluid py-4">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
+                <h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i
                         class="fa-solid fa-receipt me-2"></i>{{ __('admin.supplier_pre_orders') ?? 'Pre-Order Supplier' }}</h2>
                 <p class="text-muted mb-0">{{ __('admin.manage_pre_orders_desc') ?? 'Kelola pesanan barang ke supplier' }}</p>
             </div>
             <a href="{{ route('admin.suppliers.pre_orders.create') }}" class="btn btn-primary shadow-sm d-inline-flex align-items-center"
-                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                style="background: var(--color-primary-dark); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
                 <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_pre_order') ?? 'Tambah Pre-Order' }}
             </a>
         </div>
@@ -18,21 +18,21 @@
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
-                        <thead style="background: #fdf8f6;">
+                        <thead style="background: var(--brown-50);">
                             <tr>
-                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">{{ __('common.date') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.supplier') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.reference') ?? 'Referensi' }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.total_amount') ?? 'Total' }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.status') }}</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">{{ __('common.actions') }}</th>
+                                <th class="border-0 fw-semibold ps-4" style="color: var(--color-primary-dark);">{{ __('common.date') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.supplier') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.reference') ?? 'Referensi' }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.total_amount') ?? 'Total' }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.status') }}</th>
+                                <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">{{ __('common.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($preOrders as $order)
                                 <tr>
                                     <td class="ps-4">
-                                        <div class="fw-bold" style="color: #6f5849;">{{ $order->created_at->format('Y-m-d') }}</div>
+                                        <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $order->created_at->format('Y-m-d') }}</div>
                                         <small class="text-muted">{{ $order->created_at->format('H:i') }}</small>
                                     </td>
                                     <td>{{ $order->supplier->name }}</td>
@@ -57,11 +57,11 @@
                                         <div class="dropdown text-center">
                                             <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
                                                 data-bs-boundary="viewport" aria-expanded="false"
-                                                style="border-radius: 8px; border: 1px solid #e0cec7; font-size: 1.2rem; line-height: 1; padding: 0.25rem 0.5rem;">
+                                                style="border-radius: 8px; border: 1px solid var(--color-secondary-light); font-size: 1.2rem; line-height: 1; padding: 0.25rem 0.5rem;">
                                                 ⋮
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end"
-                                                style="border-radius: 12px; border: 1px solid #e0cec7; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                                style="border-radius: 12px; border: 1px solid var(--color-secondary-light); box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                                 <li>
                                                     <a href="{{ route('admin.suppliers.pre_orders.show', $order->id) }}" class="dropdown-item py-2" style="border-radius: 8px;">
                                                         <i class="fa-solid fa-eye me-1 text-info"></i> {{ __('admin.view_details') }}

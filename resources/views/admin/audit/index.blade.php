@@ -11,7 +11,7 @@
                         style="border-radius: 10px; padding: 0.5rem 0.75rem;">
                         <i class="fas fa-arrow-left"></i>
                     </a>
-                    <h1 class="fw-bold mb-0" style="color: #6f5849;">
+                    <h1 class="fw-bold mb-0" style="color: var(--color-primary-dark);">
                         <i class="fas fa-clipboard-list me-2"></i>{{ __('admin.logs_report') }}
                     </h1>
                 </div>
@@ -612,22 +612,22 @@
         }
 
         .btn-outline-brown {
-            color: #6f5849;
-            border-color: #6f5849;
+            color: var(--color-primary-dark);
+            border-color: var(--color-primary-dark);
         }
 
         .btn-outline-brown:hover {
-            background-color: #6f5849;
+            background-color: var(--color-primary-dark);
             color: white;
         }
 
         .btn-brown {
-            background-color: #6f5849;
+            background-color: var(--color-primary-dark);
             color: white;
         }
 
         .btn-brown:hover {
-            background-color: #5d4a3e;
+            background-color: var(--brown-900);
             color: white;
         }
 
@@ -641,7 +641,7 @@
             }
 
             .card {
-                border: 1px solid #dee2e6 !important;
+                border: 1px solid var(--gray-200) !important;
                 box-shadow: none !important;
             }
             

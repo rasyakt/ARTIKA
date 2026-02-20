@@ -7,12 +7,12 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-1">
                         <li class="breadcrumb-item"><a href="{{ route('admin.suppliers.pre_orders.index') }}"
-                                style="color: #85695a;">{{ __('admin.supplier_pre_orders') ?? 'Pre-Order Supplier' }}</a>
+                                style="color: var(--color-primary);">{{ __('admin.supplier_pre_orders') ?? 'Pre-Order Supplier' }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">{{ $preOrder->uuid }}</li>
                     </ol>
                 </nav>
-                <h4 class="fw-bold mb-0" style="color: #6f5849;">
+                <h4 class="fw-bold mb-0" style="color: var(--color-primary-dark);">
                     <i class="fa-solid fa-receipt me-2"></i>{{ __('admin.pre_order_details') ?? 'Detail Pre-Order' }}
                 </h4>
             </div>
@@ -54,7 +54,7 @@
             <div class="col-md-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold mb-4" style="color: #6f5849;">{{ __('admin.order_info') ?? 'Informasi Pesanan' }}
+                        <h5 class="fw-bold mb-4" style="color: var(--color-primary-dark);">{{ __('admin.order_info') ?? 'Informasi Pesanan' }}
                         </h5>
 
                         <div class="mb-3">
@@ -114,41 +114,41 @@
             <div class="col-md-8">
                 <div class="card shadow-sm h-100">
                     <div class="card-header border-0 py-4 px-4 bg-white">
-                        <h5 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.order_items') ?? 'Daftar Barang' }}
+                        <h5 class="fw-bold mb-0" style="color: var(--color-primary-dark);">{{ __('admin.order_items') ?? 'Daftar Barang' }}
                         </h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0">
-                                <thead style="background-color: #fdf8f6;">
+                                <thead style="background-color: var(--brown-50);">
                                     <tr>
-                                        <th class="px-4 py-3 border-0" style="color: #6f5849; font-weight: 600;">
+                                        <th class="px-4 py-3 border-0" style="color: var(--color-primary-dark); font-weight: 600;">
                                             {{ __('admin.product') }}
                                         </th>
-                                        <th class="py-3 border-0 text-center" style="color: #6f5849; font-weight: 600;">
+                                        <th class="py-3 border-0 text-center" style="color: var(--color-primary-dark); font-weight: 600;">
                                             {{ __('admin.unit') }}
                                         </th>
-                                        <th class="py-3 border-0 text-center" style="color: #6f5849; font-weight: 600;">Qty
+                                        <th class="py-3 border-0 text-center" style="color: var(--color-primary-dark); font-weight: 600;">Qty
                                         </th>
-                                        <th class="py-3 border-0 text-center" style="color: #6f5849; font-weight: 600;">
+                                        <th class="py-3 border-0 text-center" style="color: var(--color-primary-dark); font-weight: 600;">
                                             Pcs/Unit</th>
-                                        <th class="py-3 border-0" style="color: #6f5849; font-weight: 600;">
+                                        <th class="py-3 border-0" style="color: var(--color-primary-dark); font-weight: 600;">
                                             {{ __('admin.purchase_price') ?? 'Harga Beli' }}
                                         </th>
-                                        <th class="py-3 border-0 text-end pe-4" style="color: #6f5849; font-weight: 600;">
+                                        <th class="py-3 border-0 text-end pe-4" style="color: var(--color-primary-dark); font-weight: 600;">
                                             Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($preOrder->items as $item)
-                                        <tr style="border-bottom: 1px solid #f2e8e5;">
+                                        <tr style="border-bottom: 1px solid var(--brown-100);">
                                             <td class="px-4 py-3">
                                                 <div class="fw-bold text-dark">{{ $item->product->name }}</div>
                                                 <div class="small text-muted">{{ $item->product->barcode }}</div>
                                             </td>
                                             <td class="py-3 text-center">
                                                 <span class="badge rounded-pill"
-                                                    style="background: #fdf8f6; color: #85695a; border: 1px solid #f2e8e5; padding: 0.5rem 1rem;">
+                                                    style="background: var(--brown-50); color: var(--color-primary); border: 1px solid var(--brown-100); padding: 0.5rem 1rem;">
                                                     {{ $item->unit_name }}
                                                 </span>
                                             </td>
@@ -163,7 +163,7 @@
                                                 <div class="small text-muted">per Pcs (HPP)</div>
                                             </td>
                                             <td class="py-3 text-end pe-4">
-                                                <div class="fw-bold" style="color: #6f5849;">Rp
+                                                <div class="fw-bold" style="color: var(--color-primary-dark);">Rp
                                                     {{ number_format($item->subtotal, 0, ',', '.') }}
                                                 </div>
                                                 <div class="small text-muted">
@@ -174,12 +174,12 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                <tfoot style="background-color: #fdf8f6;">
+                                <tfoot style="background-color: var(--brown-50);">
                                     <tr>
-                                        <td colspan="5" class="px-4 py-3 text-end fw-bold" style="color: #6f5849;">
+                                        <td colspan="5" class="px-4 py-3 text-end fw-bold" style="color: var(--color-primary-dark);">
                                             {{ __('admin.total_purchase_amount') ?? 'Total Harga Beli' }}
                                         </td>
-                                        <td class="py-3 text-end pe-4 fw-bold" style="color: #6f5849; font-size: 1.2rem;">
+                                        <td class="py-3 text-end pe-4 fw-bold" style="color: var(--color-primary-dark); font-size: 1.2rem;">
                                             Rp {{ number_format($preOrder->total_amount, 0, ',', '.') }}
                                         </td>
                                     </tr>

@@ -7,14 +7,14 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-1">
                         <li class="breadcrumb-item"><a href="{{ route('admin.suppliers.pre_orders.index') }}"
-                                style="color: #85695a;">{{ __('admin.supplier_pre_orders') ?? 'Pre-Order Supplier' }}</a>
+                                style="color: var(--color-primary);">{{ __('admin.supplier_pre_orders') ?? 'Pre-Order Supplier' }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
                             {{ __('admin.add_pre_order') ?? 'Tambah Pre-Order' }}
                         </li>
                     </ol>
                 </nav>
-                <h4 class="fw-bold mb-0" style="color: #6f5849;">
+                <h4 class="fw-bold mb-0" style="color: var(--color-primary-dark);">
                     <i class="fa-solid fa-plus me-2"></i>{{ __('admin.create_new_pre_order') ?? 'Buat Pre-Order Baru' }}
                 </h4>
             </div>
@@ -26,12 +26,12 @@
                 <div class="col-md-4">
                     <div class="card shadow-sm h-100">
                         <div class="card-body p-4">
-                            <h5 class="fw-bold mb-4" style="color: #6f5849;">
+                            <h5 class="fw-bold mb-4" style="color: var(--color-primary-dark);">
                                 {{ __('admin.order_info') ?? 'Informasi Pesanan' }}
                             </h5>
 
                             <div class="mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.supplier') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.supplier') }}
                                     *</label>
                                 <select name="supplier_id" class="form-select custom-input" required>
                                     <option value="" disabled selected>{{ __('admin.select_supplier') }}</option>
@@ -43,20 +43,20 @@
 
                             <div class="mb-3">
                                 <label class="form-label fw-semibold"
-                                    style="color: #6f5849;">{{ __('admin.reference_number') ?? 'Nomor Referensi' }}</label>
+                                    style="color: var(--color-primary-dark);">{{ __('admin.reference_number') ?? 'Nomor Referensi' }}</label>
                                 <input type="text" name="reference_number" class="form-control custom-input"
                                     placeholder="e.g. PO-2024-001">
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label fw-semibold"
-                                    style="color: #6f5849;">{{ __('admin.expected_arrival') ?? 'Estimasi Kedatangan' }}</label>
+                                    style="color: var(--color-primary-dark);">{{ __('admin.expected_arrival') ?? 'Estimasi Kedatangan' }}</label>
                                 <input type="date" name="expected_arrival_date" class="form-control custom-input">
                             </div>
 
                             <div class="mb-0">
                                 <label class="form-label fw-semibold"
-                                    style="color: #6f5849;">{{ __('admin.notes') }}</label>
+                                    style="color: var(--color-primary-dark);">{{ __('admin.notes') }}</label>
                                 <textarea name="notes" class="form-control custom-input" rows="3"
                                     placeholder="{{ __('admin.notes_placeholder') }}"></textarea>
                             </div>
@@ -67,7 +67,7 @@
                 <div class="col-md-8">
                     <div class="card shadow-sm h-100">
                         <div class="card-body p-4">
-                            <h5 class="fw-bold mb-4" style="color: #6f5849;">
+                            <h5 class="fw-bold mb-4" style="color: var(--color-primary-dark);">
                                 {{ __('admin.order_items') ?? 'Daftar Barang' }}
                             </h5>
 
@@ -150,7 +150,7 @@
                                         <div class="text-muted small text-uppercase">
                                             {{ __('admin.total_purchase_amount') ?? 'Total Harga Beli' }}
                                         </div>
-                                        <div class="h3 fw-bold mb-0" style="color: #6f5849;">Rp <span
+                                        <div class="h3 fw-bold mb-0" style="color: var(--color-primary-dark);">Rp <span
                                                 id="grand-total">0</span></div>
                                     </div>
                                     <button type="submit" class="btn btn-brown px-5 py-2 shadow-sm"
@@ -308,7 +308,7 @@
 
     <style>
         .btn-brown {
-            background: #6f5849;
+            background: var(--color-primary-dark);
             color: white;
             border: none;
         }
@@ -316,27 +316,27 @@
         .btn-brown:hover {
             color: white;
             opacity: 0.9;
-            background: #826857ff;
+            background: var(--color-primary)ff;
         }
 
         .btn-outline-brown {
-            border: 2px solid #85695a;
-            color: #85695a;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
         }
 
         .btn-outline-brown:hover {
-            background: #85695a;
+            background: var(--color-primary);
             color: white;
         }
 
         .custom-input {
             border-radius: 12px;
-            border: 2px solid #f2e8e5;
+            border: 2px solid var(--brown-100);
             padding: 0.6rem 1rem;
         }
 
         .custom-input:focus {
-            border-color: #85695a !important;
+            border-color: var(--color-primary) !important;
             box-shadow: 0 0 0 0.25rem rgba(111, 88, 73, 0.1) !important;
             background: #fff !important;
         }
@@ -357,7 +357,7 @@
             font-family: "Font Awesome 6 Free";
             font-weight: 900;
             font-size: 0.75rem;
-            color: #d4c4bb;
+            color: var(--color-secondary);
         }
 
         #items-table thead th {

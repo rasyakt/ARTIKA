@@ -4,7 +4,7 @@
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
                 <li class="page-item disabled" aria-disabled="true">
-                    <span class="page-link" style="color: #6c757d; border-radius: 8px 0 0 8px;"><i
+                    <span class="page-link" style="color: var(--gray-500); border-radius: 8px 0 0 8px;"><i
                             class="fa-solid fa-chevron-left"></i></span>
                 </li>
             @else
@@ -48,7 +48,7 @@
                 </li>
             @else
                 <li class="page-item disabled" aria-disabled="true">
-                    <span class="page-link" style="color: #6c757d; border-radius: 0 8px 8px 0;"><i
+                    <span class="page-link" style="color: var(--gray-500); border-radius: 0 8px 8px 0;"><i
                             class="fa-solid fa-chevron-right"></i></span>
                 </li>
             @endif

@@ -9,15 +9,15 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
         :root {
-            --primary: #85695a;
-            --primary-dark: #6f5849;
-            --primary-light: #a18072;
-            --secondary: #d2bab0;
-            --accent-warm: #c17a5c;
-            --brown-50: #fdf8f6;
-            --brown-100: #f2e8e5;
-            --gray-100: #f5f5f4;
-            --gray-200: #e7e5e4;
+            --primary: var(--color-primary);
+            --primary-dark: var(--color-primary-dark);
+            --primary-light: var(--color-primary-light);
+            --secondary: var(--color-secondary);
+            --accent-warm: var(--color-accent-warm);
+            --brown-50: var(--brown-50);
+            --brown-100: var(--brown-100);
+            --gray-100: var(--gray-100);
+            --gray-200: var(--gray-200);
         }
 
         * {
@@ -290,7 +290,7 @@
         }
 
         .btn-hold {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning-dark) 100%);
             color: white;
         }
 
@@ -300,7 +300,7 @@
         }
 
         .btn-clear {
-            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger) 100%);
             color: white;
         }
 
@@ -368,7 +368,7 @@
         }
 
         .btn-remove-item {
-            background: #ef4444;
+            background: var(--color-danger);
             color: white;
             border: none;
             width: 24px;
@@ -383,7 +383,7 @@
         }
 
         .btn-remove-item:hover {
-            background: #dc2626;
+            background: var(--color-danger);
             transform: scale(1.1);
         }
 
@@ -578,7 +578,7 @@
         }
 
         .change-display {
-            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-dark) 100%);
             color: white;
             font-weight: 800;
             font-size: 1.5rem;
@@ -591,7 +591,7 @@
         }
 
         .btn-process-payment {
-            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-dark) 100%);
             color: white;
             padding: 0.875rem 2.5rem;
             border-radius: 12px;
@@ -953,8 +953,8 @@
                             <span class="summary-value" id="subtotal">Rp 0</span>
                         </div>
                         <div class="summary-row">
-                            <span class="summary-label" style="color: #16a34a;">Discount</span>
-                            <span class="summary-value" style="color: #16a34a;" id="discount">- Rp 0</span>
+                            <span class="summary-label" style="color: var(--color-success);">Discount</span>
+                            <span class="summary-value" style="color: var(--color-success);" id="discount">- Rp 0</span>
                         </div>
                         <div class="summary-row summary-total">
                             <span class="summary-label">TOTAL</span>
@@ -1089,7 +1089,7 @@
                         // Show notification
                         const searchInput = document.getElementById('searchInput');
                         searchInput.value = `Loaded ${scannedItems.length} items from scanner`;
-                        searchInput.style.backgroundColor = '#d1fae5';
+                        searchInput.style.backgroundColor = 'var(--color-success-light)';
                         setTimeout(() => {
                             searchInput.value = '';
                             searchInput.style.backgroundColor = '';
@@ -1191,7 +1191,7 @@
                 // Visual feedback
                 const searchInput = document.getElementById('searchInput');
                 searchInput.value = product.name;
-                searchInput.style.backgroundColor = '#d1fae5';
+                searchInput.style.backgroundColor = 'var(--color-success-light)';
                 setTimeout(() => {
                     searchInput.value = '';
                     searchInput.style.backgroundColor = '';
@@ -1200,7 +1200,7 @@
                 // Visual feedback for not found
                 const searchInput = document.getElementById('searchInput');
                 searchInput.value = `Not found: ${barcode}`;
-                searchInput.style.backgroundColor = '#fee2e2';
+                searchInput.style.backgroundColor = 'var(--color-danger-light)';
                 setTimeout(() => {
                     searchInput.value = '';
                     searchInput.style.backgroundColor = '';

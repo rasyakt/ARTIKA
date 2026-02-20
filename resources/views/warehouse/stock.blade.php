@@ -4,7 +4,7 @@
 @section('content')
     <div class="container-fluid py-4">
         <div class="mb-4">
-            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
+            <h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i
                     class="fa-solid fa-box me-2"></i>{{ __('warehouse.stock_management') }}</h2>
             <p class="text-muted mb-0">{{ __('warehouse.manage_product_stock') }}</p>
         </div>
@@ -12,8 +12,8 @@
         <!-- Stock Table -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
             <div class="card-header bg-white d-flex justify-content-between align-items-center py-3"
-                style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i
+                style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);"><i
                         class="fa-solid fa-clipboard-list me-2"></i>{{ __('warehouse.stock_levels') }}
                 </h5>
                 <div class="d-flex align-items-center">
@@ -21,10 +21,10 @@
                         <div class="input-group">
                             <input type="text" name="search" id="warehouseSearchInput" class="form-control form-control-sm"
                                 placeholder="{{ __('common.search_placeholder') }}" value="{{ $search ?? '' }}"
-                                style="border-radius: {{ App\Models\Setting::get('admin_enable_camera', true) ? '10px 0 0 10px' : '10px' }}; border: 1px solid #e0cec7; min-width: 200px; {{ App\Models\Setting::get('admin_enable_camera', true) ? 'border-right: none;' : '' }}">
+                                style="border-radius: {{ App\Models\Setting::get('admin_enable_camera', true) ? '10px 0 0 10px' : '10px' }}; border: 1px solid var(--color-secondary-light); min-width: 200px; {{ App\Models\Setting::get('admin_enable_camera', true) ? 'border-right: none;' : '' }}">
                             @if(App\Models\Setting::get('admin_enable_camera', true))
                                 <button class="btn btn-sm btn-outline-secondary" type="button" id="btnScanner"
-                                    style="border: 1px solid #e0cec7; border-left: none; border-radius: 0 10px 10px 0; background: #fdf8f6; color: #6f5849;">
+                                    style="border: 1px solid var(--color-secondary-light); border-left: none; border-radius: 0 10px 10px 0; background: var(--brown-50); color: var(--color-primary-dark);">
                                     <i class="fa-solid fa-camera"></i>
                                 </button>
                             @endif
@@ -35,20 +35,20 @@
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
-                        <thead style="background: #fdf8f6;">
+                        <thead style="background: var(--brown-50);">
                             <tr>
-                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">{{ __('common.product') }}
+                                <th class="border-0 fw-semibold ps-4" style="color: var(--color-primary-dark);">{{ __('common.product') }}
                                 </th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.batch_no') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.expired_at') }}
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('warehouse.batch_no') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('warehouse.expired_at') }}
                                 </th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                     {{ __('warehouse.current_stock') }}
                                 </th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                     {{ __('common.status') }}
                                 </th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                     {{ __('common.actions') }}
                                 </th>
                             </tr>
@@ -57,10 +57,10 @@
                             @foreach($stocks as $stock)
                                 <tr>
                                     <td class="ps-4">
-                                        <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
+                                        <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $stock->product->name }}</div>
                                         <small class="text-muted">{{ $stock->product->barcode }}</small>
                                         <span class="badge ms-1"
-                                            style="background: #e0cec7; color: #6f5849; font-size: 0.7rem;">
+                                            style="background: var(--color-secondary-light); color: var(--color-primary-dark); font-size: 0.7rem;">
                                             {{ $stock->product->category->name }}
                                         </span>
                                     </td>
@@ -110,7 +110,7 @@
                                         <div class="dropdown">
                                             <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
                                                 aria-expanded="false"
-                                                style="border-radius: 10px; padding: 0.35rem 0.65rem; border: 1px solid #f2e8e5;">
+                                                style="border-radius: 10px; padding: 0.35rem 0.65rem; border: 1px solid var(--brown-100);">
                                                 <i class="fa-solid fa-ellipsis-vertical"></i>
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0"
@@ -160,30 +160,30 @@
     <div class="modal fade" id="adjustStockModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
-                <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
-                    <h5 class="modal-title fw-bold" style="color: #dbdbdbff;"><i class="fa-solid fa-gear me-1"></i>
+                <div class="modal-header" style="border-bottom: 2px solid var(--brown-100);">
+                    <h5 class="modal-title fw-bold" style="color: var(--gray-300)ff;"><i class="fa-solid fa-gear me-1"></i>
                         {{ __('warehouse.adjust_stock') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="mb-3">
-                        <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.product') }}</label>
+                        <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.product') }}</label>
                         <input type="text" class="form-control" id="product_name" readonly
-                            style="border-radius: 12px; background: #f8f9fa;">
+                            style="border-radius: 12px; background: var(--gray-50);">
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-6">
                             <label class="form-label fw-semibold"
-                                style="color: #6f5849;">{{ __('warehouse.current_stock') }}</label>
+                                style="color: var(--color-primary-dark);">{{ __('warehouse.current_stock') }}</label>
                             <input type="text" class="form-control" id="current_stock" readonly
-                                style="border-radius: 12px; background: #f8f9fa;">
+                                style="border-radius: 12px; background: var(--gray-50);">
                         </div>
                         <div class="col-6">
                             <label class="form-label fw-semibold"
-                                style="color: #6f5849;">{{ __('warehouse.adjustment_type') }}</label>
+                                style="color: var(--color-primary-dark);">{{ __('warehouse.adjustment_type') }}</label>
                             <select class="form-select" id="adjustment_type" onchange="toggleBatchFields()"
-                                style="border-radius: 12px; border: 2px solid #e0cec7;">
+                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light);">
                                 <option value="add">{{ __('warehouse.add_stock') }}</option>
                                 <option value="subtract">{{ __('warehouse.subtract_stock') }}</option>
                                 <option value="set">{{ __('warehouse.set_stock') }}</option>
@@ -192,9 +192,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('warehouse.quantity') }}</label>
+                        <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('warehouse.quantity') }}</label>
                         <input type="number" class="form-control" id="adjustment_qty" min="0" step="1"
-                            style="border-radius: 20px; border: 2px solid #e0cec7; font-size: 1.25rem; text-align: center; font-weight: bold;">
+                            style="border-radius: 20px; border: 2px solid var(--color-secondary-light); font-size: 1.25rem; text-align: center; font-weight: bold;">
                     </div>
 
                     <!-- Batch Info Fields (Shown for 'add') -->
@@ -202,37 +202,37 @@
                         <div class="row mb-3">
                             <div class="col-6">
                                 <label class="form-label fw-semibold"
-                                    style="color: #6f5849;">{{ __('warehouse.batch_no') }}</label>
+                                    style="color: var(--color-primary-dark);">{{ __('warehouse.batch_no') }}</label>
                                 <input type="text" class="form-control" id="batch_no" placeholder="ABC-123"
-                                    style="border-radius: 12px; border: 2px solid #e0cec7;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light);">
                             </div>
                             <div class="col-6">
                                 <label class="form-label fw-semibold"
-                                    style="color: #6f5849;">{{ __('warehouse.expired_at') }}</label>
+                                    style="color: var(--color-primary-dark);">{{ __('warehouse.expired_at') }}</label>
                                 <input type="date" class="form-control" id="expired_at"
-                                    style="border-radius: 12px; border: 2px solid #e0cec7;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light);">
                             </div>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label fw-semibold"
-                            style="color: #6f5849;">{{ __('warehouse.reason_optional') }}</label>
+                            style="color: var(--color-primary-dark);">{{ __('warehouse.reason_optional') }}</label>
                         <input type="text" class="form-control" id="adjustment_reason"
                             placeholder="{{ __('warehouse.reason_placeholder') }}"
-                            style="border-radius: 12px; border: 2px solid #e0cec7;">
+                            style="border-radius: 12px; border: 2px solid var(--color-secondary-light);">
                     </div>
 
                     <div class="alert alert-info py-2 ps-3 mb-0"
-                        style="border-radius: 12px; border: none; background: #f2e8e5; color: #6f5849; font-size: 0.85rem;">
+                        style="border-radius: 12px; border: none; background: var(--brown-100); color: var(--color-primary-dark); font-size: 0.85rem;">
                         <i class="fa-solid fa-circle-info me-2"></i> {{ __('warehouse.adjustment_note') }}
                     </div>
                 </div>
-                <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
+                <div class="modal-footer" style="border-top: 2px solid var(--brown-100);">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                         style="border-radius: 12px; font-weight: 600;">{{ __('common.cancel') }}</button>
                     <button type="button" id="saveAdjustmentBtn" class="btn btn-primary" onclick="saveAdjustment()"
-                        style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border: none; border-radius: 12px; padding: 0.6rem 2rem; font-weight: 600;">
+                        style="background: var(--gradient-primary); border: none; border-radius: 12px; padding: 0.6rem 2rem; font-weight: 600;">
                         <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('warehouse.save_adjustment') }}
                     </button>
                 </div>
@@ -457,8 +457,8 @@
                 input: 'text',
                 inputPlaceholder: '{{ __('warehouse.scrap_reason') }}',
                 showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#6f5849',
+                confirmButtonColor: 'var(--color-danger)',
+                cancelButtonColor: 'var(--color-primary-dark)',
                 confirmButtonText: '{{ __('common.delete') }}',
                 cancelButtonText: '{{ __('common.cancel') }}',
                 customClass: {

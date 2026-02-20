@@ -5,21 +5,21 @@
         <!-- Header -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
-                <h4 class="fw-bold mb-1" style="color: #6f5849;">
+                <h4 class="fw-bold mb-1" style="color: var(--color-primary-dark);">
                     <i class="fa-solid fa-wallet me-2"></i>{{ __('admin.operational_expenses') }}
                 </h4>
                 <p class="text-muted mb-0 small">{{ __('admin.expenses_subtitle') }}</p>
             </div>
             <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
                 data-bs-target="#addExpenseModal"
-                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
+                style="background: var(--color-primary-dark); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
                 <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_expense') }}
             </button>
         </div>
 
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm"
-                style="border-radius: 12px; background-color: #f0fdf4; color: #16a34a;">
+                style="border-radius: 12px; background-color: var(--color-success-light); color: var(--color-success);">
                 <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -31,33 +31,33 @@
                 @if($expenses->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
-                            <thead style="background-color: #fdf8f6;">
+                            <thead style="background-color: var(--brown-50);">
                                 <tr>
-                                    <th class="px-4 py-3 border-0" style="color: #6f5849; font-weight: 600; width: 15%;">
+                                    <th class="px-4 py-3 border-0" style="color: var(--color-primary-dark); font-weight: 600; width: 15%;">
                                         {{ __('admin.date') }}
                                     </th>
-                                    <th class="py-3 border-0" style="color: #6f5849; font-weight: 600; width: 15%;">
+                                    <th class="py-3 border-0" style="color: var(--color-primary-dark); font-weight: 600; width: 15%;">
                                         {{ __('admin.category') }}
                                     </th>
-                                    <th class="py-3 border-0" style="color: #6f5849; font-weight: 600;">{{ __('admin.notes') }}
+                                    <th class="py-3 border-0" style="color: var(--color-primary-dark); font-weight: 600;">{{ __('admin.notes') }}
                                     </th>
-                                    <th class="py-3 border-0" style="color: #6f5849; font-weight: 600; width: 15%;">
+                                    <th class="py-3 border-0" style="color: var(--color-primary-dark); font-weight: 600; width: 15%;">
                                         {{ __('admin.amount') }}
                                     </th>
                                     <th class="py-3 border-0 text-end px-4"
-                                        style="color: #6f5849; font-weight: 600; width: 10%;">{{ __('common.actions') }}</th>
+                                        style="color: var(--color-primary-dark); font-weight: 600; width: 10%;">{{ __('common.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($expenses as $expense)
-                                    <tr style="border-bottom: 1px solid #f2e8e5;">
+                                    <tr style="border-bottom: 1px solid var(--brown-100);">
                                         <td class="px-4 py-3">
-                                            <div class="fw-bold" style="color: #2c3e50;">{{ $expense->date->format('d M Y') }}</div>
+                                            <div class="fw-bold" style="color: var(--gray-800);">{{ $expense->date->format('d M Y') }}</div>
                                             <small class="text-muted">{{ $expense->created_at->format('H:i') }}</small>
                                         </td>
                                         <td class="py-3">
                                             <span class="badge"
-                                                style="background: #e0cec7; color: #6f5849; padding: 0.5rem 0.8rem; border-radius: 8px;">
+                                                style="background: var(--color-secondary-light); color: var(--color-primary-dark); padding: 0.5rem 0.8rem; border-radius: 8px;">
                                                 {{ $expense->category->name }}
                                             </span>
                                         </td>
@@ -110,7 +110,7 @@
                     </div>
                 @else
                     <div class="text-center py-5">
-                        <div class="mb-3" style="font-size: 4rem; opacity: 0.15; color: #6f5849;">
+                        <div class="mb-3" style="font-size: 4rem; opacity: 0.15; color: var(--color-primary-dark);">
                             <i class="fa-solid fa-receipt"></i>
                         </div>
                         <h5 class="text-muted">{{ __('admin.no_expenses_recorded') }}</h5>
@@ -143,12 +143,12 @@
                     @csrf
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.date') }}</label>
+                            <label class="form-label fw-semibold" style="color: var(--color-primary);">{{ __('admin.date') }}</label>
                             <input type="date" name="date" class="form-control custom-input" value="{{ date('Y-m-d') }}"
                                 required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.category') }}</label>
+                            <label class="form-label fw-semibold" style="color: var(--color-primary);">{{ __('admin.category') }}</label>
                             <select name="expense_category_id" class="form-select custom-input" required>
                                 <option value="" disabled selected>{{ __('admin.select_category') }}</option>
                                 @foreach($categories as $cat)
@@ -157,7 +157,7 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.amount') }}</label>
+                            <label class="form-label fw-semibold" style="color: var(--color-primary);">{{ __('admin.amount') }}</label>
                             <div class="input-group">
                                 <span class="input-group-text custom-input-text">Rp</span>
                                 <input type="number" name="amount" class="form-control custom-input" placeholder="0"
@@ -165,7 +165,7 @@
                             </div>
                         </div>
                         <div class="mb-0">
-                            <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.notes') }}</label>
+                            <label class="form-label fw-semibold" style="color: var(--color-primary);">{{ __('admin.notes') }}</label>
                             <textarea name="notes" class="form-control custom-input" rows="3"
                                 placeholder="{{ __('admin.expense_notes_placeholder') }}"></textarea>
                         </div>
@@ -197,11 +197,11 @@
                     @method('PUT')
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.date') }}</label>
+                            <label class="form-label fw-semibold" style="color: var(--color-primary);">{{ __('admin.date') }}</label>
                             <input type="date" name="date" id="edit_date" class="form-control custom-input" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.category') }}</label>
+                            <label class="form-label fw-semibold" style="color: var(--color-primary);">{{ __('admin.category') }}</label>
                             <select name="expense_category_id" id="edit_category" class="form-select custom-input" required>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}">{{ $cat->name }}</option>
@@ -209,7 +209,7 @@
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.amount') }}</label>
+                            <label class="form-label fw-semibold" style="color: var(--color-primary);">{{ __('admin.amount') }}</label>
                             <div class="input-group">
                                 <span class="input-group-text custom-input-text">Rp</span>
                                 <input type="number" name="amount" id="edit_amount" class="form-control custom-input"
@@ -217,7 +217,7 @@
                             </div>
                         </div>
                         <div class="mb-0">
-                            <label class="form-label fw-semibold" style="color: #85695a;">{{ __('admin.notes') }}</label>
+                            <label class="form-label fw-semibold" style="color: var(--color-primary);">{{ __('admin.notes') }}</label>
                             <textarea name="notes" id="edit_notes" class="form-control custom-input" rows="3"></textarea>
                         </div>
                     </div>
@@ -235,7 +235,7 @@
 
     <style>
         .btn-brown {
-            background: #6f5849;
+            background: var(--color-primary-dark);
             color: white;
             border: none;
         }
@@ -247,21 +247,21 @@
 
         .custom-input {
             border-radius: 12px;
-            border: 2px solid #f2e8e5;
+            border: 2px solid var(--brown-100);
             padding: 0.6rem 1rem;
         }
 
         .custom-input:focus {
-            border-color: #d4c4bb;
+            border-color: var(--color-secondary);
             box-shadow: none;
         }
 
         .custom-input-text {
-            background-color: #fdf8f6;
-            border: 2px solid #f2e8e5;
+            background-color: var(--brown-50);
+            border: 2px solid var(--brown-100);
             border-right: none;
             border-radius: 12px 0 0 12px;
-            color: #85695a;
+            color: var(--color-primary);
             font-weight: 600;
         }
     </style>

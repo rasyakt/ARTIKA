@@ -10,7 +10,7 @@
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <style>
         body {
-            background: linear-gradient(135deg, #85695a 0%, #5c4a3f 100%);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--brown-900) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -78,7 +78,7 @@
         }
 
         .card-header {
-            background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);
+            background: var(--gradient-primary);
             color: white;
             border-bottom: none;
             padding: 2.5rem 2rem;
@@ -146,7 +146,7 @@
 
         .form-label {
             font-weight: 600;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
             text-transform: uppercase;
@@ -171,21 +171,21 @@
         .form-control {
             border-radius: 12px;
             padding: 14px 18px;
-            border: 2px solid #e0cec7;
+            border: 2px solid var(--color-secondary-light);
             transition: all 0.3s ease;
             font-size: 1rem;
-            background: #fdf8f6;
+            background: var(--brown-50);
         }
 
         .form-control:focus {
-            border-color: #85695a;
+            border-color: var(--color-primary);
             box-shadow: 0 0 0 4px rgba(133, 105, 90, 0.15);
             background: white;
             outline: none;
         }
 
         .form-control::placeholder {
-            color: #bfa094;
+            color: var(--color-primary-lighter);
         }
 
         .login-btn-container {
@@ -199,7 +199,7 @@
             border-radius: 14px;
             padding: 16px;
             font-weight: 700;
-            background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);
+            background: var(--gradient-primary);
             border: none;
             color: white;
             font-size: 1.1rem;
@@ -248,19 +248,19 @@
         }
 
         .alert-danger {
-            background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
-            color: #991b1b;
+            background: linear-gradient(135deg, var(--color-danger-light) 0%, #fca5a5 100%);
+            color: var(--color-danger-dark);
         }
 
         .card-footer {
-            background: #fdfaf8;
-            border-top: 1px solid #f2e8e5;
+            background: var(--brown-50);
+            border-top: 1px solid var(--brown-100);
             padding: 1.5rem;
             text-align: center;
         }
 
         .footer-text {
-            color: #78716c;
+            color: var(--gray-500);
             font-size: 0.85rem;
             font-weight: 500;
         }
@@ -279,7 +279,7 @@
             left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: #a18072;
+            color: var(--color-primary-light);
             font-size: 1.1rem;
             z-index: 10;
         }
@@ -288,7 +288,7 @@
             width: 20px;
             height: 20px;
             display: block;
-            color: #a18072;
+            color: var(--color-primary-light);
         }
 
         .decorative-svg {
@@ -307,10 +307,10 @@
         .form-control {
             border-radius: 12px;
             padding: 14px 18px;
-            border: 2px solid #e0cec7;
+            border: 2px solid var(--color-secondary-light);
             transition: all 0.3s ease;
             font-size: 1rem;
-            background: #fdf8f6;
+            background: var(--brown-50);
         }
 
         .password-field .form-control {
@@ -349,7 +349,7 @@
 
         /* Make the eye icon match the form color */
         .toggle-password-btn .icon-svg {
-            color: #6f5849;
+            color: var(--color-primary-dark);
         }
 
         .toggle-password-btn:active {
@@ -363,7 +363,7 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: #a18072;
+            color: var(--color-primary-light);
             cursor: pointer;
             font-size: 1.1rem;
             padding: 5px;
@@ -372,7 +372,7 @@
         }
 
         .toggle-password:hover {
-            color: #85695a;
+            color: var(--color-primary);
         }
 
         .form-control.with-icon {
@@ -389,8 +389,8 @@
 
         /* Role Badge Styling */
         .role-preview-container {
-            background: #fdf8f6;
-            border: 1px solid #f2e8e5;
+            background: var(--brown-50);
+            border: 1px solid var(--brown-100);
             border-radius: 16px;
             padding: 12px;
             text-align: center;
@@ -402,7 +402,7 @@
             font-size: 0.65rem;
             text-transform: uppercase;
             font-weight: 800;
-            color: #a18072;
+            color: var(--color-primary-light);
             letter-spacing: 1.5px;
             margin-bottom: 2px;
         }
@@ -410,7 +410,7 @@
         .role-value {
             font-size: 1rem;
             font-weight: 700;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             margin: 0;
         }
 

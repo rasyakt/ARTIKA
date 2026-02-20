@@ -16,7 +16,7 @@
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
                 <div>
-                    <h2 class="fw-bold mb-1" style="color: #6f5849;">{{ __('admin.finance_report') }}</h2>
+                    <h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);">{{ __('admin.finance_report') }}</h2>
                     <p class="text-muted mb-0">{{ __('admin.finance_reports_subtitle') }}</p>
                 </div>
             </div>
@@ -53,12 +53,12 @@
                 <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="p-2 rounded-3 me-2" style="background: #fdf8f6; color: #6f5849;">
+                            <div class="p-2 rounded-3 me-2" style="background: var(--brown-50); color: var(--color-primary-dark);">
                                 <i class="fa-solid fa-money-bill-trend-up"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.gross_revenue')) }}</p>
                         </div>
-                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                        <h5 class="fw-bold mb-0" style="color: var(--brown-900); font-size: 1.1rem;">Rp
                             {{ number_format($summary['gross_revenue'], 0, ',', '.') }}
                         </h5>
                     </div>
@@ -70,12 +70,12 @@
                 <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="p-2 rounded-3 me-2" style="background: #fff5f2; color: #c17a5c;">
+                            <div class="p-2 rounded-3 me-2" style="background: #fff5f2; color: var(--color-accent-warm);">
                                 <i class="fa-solid fa-tags"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.cogs')) }}</p>
                         </div>
-                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                        <h5 class="fw-bold mb-0" style="color: var(--brown-900); font-size: 1.1rem;">Rp
                             {{ number_format($summary['cogs'], 0, ',', '.') }}
                         </h5>
                     </div>
@@ -93,7 +93,7 @@
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.operational_expenses')) }}
                             </p>
                         </div>
-                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                        <h5 class="fw-bold mb-0" style="color: var(--brown-900); font-size: 1.1rem;">Rp
                             {{ number_format($summary['total_expenses'], 0, ',', '.') }}
                         </h5>
                     </div>
@@ -105,12 +105,12 @@
                 <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="p-2 rounded-3 me-2" style="background: #f3e8ff; color: #7e22ce;">
+                            <div class="p-2 rounded-3 me-2" style="background: #f3e8ff; color: var(--color-purple, #7e22ce);">
                                 <i class="fa-solid fa-truck-ramp-box"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.stock_procurement')) }}</p>
                         </div>
-                        <h5 class="fw-bold mb-0" style="color: #4b382f; font-size: 1.1rem;">Rp
+                        <h5 class="fw-bold mb-0" style="color: var(--brown-900); font-size: 1.1rem;">Rp
                             {{ number_format($summary['total_procurement'], 0, ',', '.') }}
                         </h5>
                     </div>
@@ -125,12 +125,12 @@
                             <div>
                                 <p class="text-muted small mb-1 fw-semibold">{{ strtoupper(__('admin.net_profit')) }}</p>
                                 <h4 class="fw-bold mb-0"
-                                    style="color: {{ $summary['net_profit'] >= 0 ? '#15803d' : '#991b1b' }}; font-size: 1.3rem;">
+                                    style="color: {{ $summary['net_profit'] >= 0 ? 'var(--color-success-dark)' : 'var(--color-danger-dark)' }}; font-size: 1.3rem;">
                                     Rp {{ number_format($summary['net_profit'], 0, ',', '.') }}
                                 </h4>
                             </div>
                             <div class="p-2 rounded-4"
-                                style="background: {{ $summary['net_profit'] >= 0 ? '#f0fdf4' : '#fef2f2' }}; color: {{ $summary['net_profit'] >= 0 ? '#16a34a' : '#dc2626' }};">
+                                style="background: {{ $summary['net_profit'] >= 0 ? 'var(--color-success-light)' : 'var(--color-danger-light)' }}; color: {{ $summary['net_profit'] >= 0 ? 'var(--color-success)' : 'var(--color-danger)' }};">
                                 <i class="fa-solid fa-wallet fa-lg"></i>
                             </div>
                         </div>
@@ -144,12 +144,12 @@
             <div class="col-md-4">
                 <div class="card shadow-sm h-100">
                     <div class="card-body">
-                        <h6 class="fw-bold mb-4" style="color: #6f5849;">{{ __('admin.quick_info') }}</h6>
+                        <h6 class="fw-bold mb-4" style="color: var(--color-primary-dark);">{{ __('admin.quick_info') }}</h6>
 
                         <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
                             <div>
                                 <div class="small text-muted mb-1">{{ __('admin.gross_profit') }}</div>
-                                <h5 class="fw-bold mb-0" style="color: #16a34a;">
+                                <h5 class="fw-bold mb-0" style="color: var(--color-success);">
                                     Rp {{ number_format($summary['gross_profit'], 0, ',', '.') }}
                                 </h5>
                             </div>
@@ -162,7 +162,7 @@
                             <div>
                                 <div class="small text-muted mb-1">{{ __('admin.profit_margin') }}</div>
                                 <h5 class="fw-bold mb-0"
-                                    style="color: {{ $summary['profit_margin'] > 15 ? '#16a34a' : ($summary['profit_margin'] > 5 ? '#ca8a04' : '#dc2626') }}">
+                                    style="color: {{ $summary['profit_margin'] > 15 ? 'var(--color-success)' : ($summary['profit_margin'] > 5 ? 'var(--color-accent-gold)' : 'var(--color-danger)') }}">
                                     {{ number_format($summary['profit_margin'], 2) }}%
                                 </h5>
                             </div>
@@ -190,7 +190,7 @@
             <div class="col-md-8">
                 <div class="card shadow-sm h-100">
                     <div class="card-header border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.financial_trend') }}</h6>
+                        <h6 class="fw-bold mb-0" style="color: var(--color-primary-dark);">{{ __('admin.financial_trend') }}</h6>
                         <div id="chart-controls" class="btn-group btn-group-sm">
                             <!-- Toggle buttons will be injected or managed via CSS/JS -->
                         </div>
@@ -207,13 +207,13 @@
         <!-- Detailed Daily Data -->
         <div class="card shadow-sm" id="daily-profit-section">
             <div class="card-header border-0 pt-4 px-4">
-                <h6 class="fw-bold mb-0" style="color: #6f5849;">{{ __('admin.daily_profit') }}</h6>
+                <h6 class="fw-bold mb-0" style="color: var(--color-primary-dark);">{{ __('admin.daily_profit') }}</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle">
                         <thead>
-                            <tr style="background: #fdf8f6;">
+                            <tr style="background: var(--brown-50);">
                                 <th>{{ __('admin.date') }}</th>
                                 <th class="text-end">{{ __('admin.gross_revenue') }}</th>
                                 <th class="text-end">{{ __('admin.cogs') }}</th>
@@ -266,7 +266,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label fw-semibold"
-                                style="color: #85695a;">{{ __('admin.quick_period') }}</label>
+                                style="color: var(--color-primary);">{{ __('admin.quick_period') }}</label>
                             <div class="row g-2">
                                 <div class="col-6">
                                     <a href="?period=today"
@@ -383,39 +383,39 @@
 
     <style>
         .btn-brown {
-            background-color: #85695a;
+            background-color: var(--color-primary);
             color: white;
         }
 
         .btn-brown:hover {
-            background-color: #6f5849;
+            background-color: var(--color-primary-dark);
             color: white;
         }
 
         .btn-outline-brown {
-            border-color: #85695a;
-            color: #85695a;
+            border-color: var(--color-primary);
+            color: var(--color-primary);
         }
 
         .btn-outline-brown:hover,
         .btn-outline-brown.active {
-            background-color: #85695a;
+            background-color: var(--color-primary);
             color: white;
         }
 
         .alert-brown {
-            background-color: #fdf8f6;
-            border-color: #f2e8e5;
-            color: #6f5849;
+            background-color: var(--brown-50);
+            border-color: var(--brown-100);
+            color: var(--color-primary-dark);
             border-radius: 12px;
         }
 
         .bg-brown {
-            background-color: #85695a;
+            background-color: var(--color-primary);
         }
 
         .table-earth {
-            background-color: #fdf8f6 !important;
+            background-color: var(--brown-50) !important;
         }
 
         .stats-icon-small {
@@ -443,7 +443,7 @@
         .hr-text::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid #f2e8e5;
+            border-bottom: 1px solid var(--brown-100);
         }
 
         .hr-text::before {
@@ -456,12 +456,12 @@
 
         .chart-legend-btn {
             background: transparent;
-            border: 1px solid #f2e8e5;
+            border: 1px solid var(--brown-100);
             border-radius: 20px;
             padding: 4px 12px;
             font-size: 0.75rem;
             font-weight: 600;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             display: flex;
             align-items: center;
             gap: 6px;
@@ -471,8 +471,8 @@
         }
 
         .chart-legend-btn:hover {
-            background: #fdf8f6;
-            border-color: #eaddd7;
+            background: var(--brown-50);
+            border-color: var(--brown-200);
         }
 
         .chart-legend-btn.hidden {
@@ -513,18 +513,18 @@
                         {
                             label: '{{ __('admin.gross_revenue') }}',
                             data: revenueData,
-                            borderColor: '#85695a',
+                            borderColor: 'var(--color-primary)',
                             backgroundColor: 'rgba(133, 105, 90, 0.1)',
                             fill: true,
                             tension: 0.4,
                             borderWidth: 3,
                             pointRadius: 4,
-                            pointBackgroundColor: '#85695a'
+                            pointBackgroundColor: 'var(--color-primary)'
                         },
                         {
                             label: '{{ __('admin.cogs') }}',
                             data: costData,
-                            borderColor: '#c17a5c',
+                            borderColor: 'var(--color-accent-warm)',
                             borderDash: [5, 5],
                             tension: 0.4,
                             borderWidth: 2,
@@ -533,7 +533,7 @@
                         {
                             label: '{{ __('admin.operational_expenses') }}',
                             data: expenseData,
-                            borderColor: '#ca8a04',
+                            borderColor: 'var(--color-accent-gold)',
                             borderDash: [2, 2],
                             tension: 0.4,
                             borderWidth: 2,
@@ -551,7 +551,7 @@
                         {
                             label: '{{ __('admin.net_profit') }}',
                             data: profitData,
-                            borderColor: '#16a34a',
+                            borderColor: 'var(--color-success)',
                             borderWidth: 2,
                             pointRadius: 0,
                             fill: false,
@@ -590,7 +590,7 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            grid: { color: '#f5f5f4' },
+                            grid: { color: 'var(--gray-100)' },
                             ticks: {
                                 callback: function (value) {
                                     return 'Rp ' + (value >= 1000000 ? (value / 1000000) + 'M' : (value / 1000) + 'k');

@@ -11,19 +11,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #85695a;
-            --primary-dark: #6f5849;
-            --primary-light: #a68b7c;
-            --brown-50: #fdfaf8;
-            --gray-100: #f8f9fa;
-            --gray-200: #e9ecef;
-            --gray-300: #dee2e6;
-            --gray-700: #495057;
-            --gray-800: #343a40;
+            --primary: var(--color-primary);
+            --primary-dark: var(--color-primary-dark);
+            --primary-light: var(--color-primary-light);
+            --brown-50: var(--brown-50);
+            --gray-100: var(--gray-50);
+            --gray-200: var(--gray-200);
+            --gray-300: var(--gray-200);
+            --gray-700: var(--gray-600);
+            --gray-800: var(--gray-700);
         }
 
         body {
-            background-color: #f4f7f6;
+            background-color: var(--gray-100);
             font-family: 'Inter', sans-serif;
             color: var(--gray-800);
         }
@@ -108,7 +108,7 @@
 
         /* Transaction Details Card */
         .transaction-details {
-            background: #fafbfc;
+            background: var(--gray-50);
             border-radius: 12px;
             margin: 1.5rem;
             padding: 1.5rem;
@@ -175,13 +175,13 @@
         }
 
         .badge-cash {
-            background: #e6fcf5;
-            color: #0ca678;
+            background: var(--color-success-light);
+            color: var(--color-success);
         }
 
         .badge-non-cash {
-            background: #e7f5ff;
-            color: #228be6;
+            background: var(--color-info-light);
+            color: var(--color-info);
         }
 
         .btn-action-mobile {
@@ -637,8 +637,8 @@
                 text: "{{ __('pos.exit_confirm_message') }}",
                 icon: 'question',
                 showCancelButton: true,
-                confirmButtonColor: '#6f5849',
-                cancelButtonColor: '#f1f1f1',
+                confirmButtonColor: 'var(--color-primary-dark)',
+                cancelButtonColor: 'var(--gray-100)',
                 confirmButtonText: '{{ __('pos.yes_exit') }}',
                 cancelButtonText: '{{ __('pos.cancel') }}',
                 buttonsStyling: false,

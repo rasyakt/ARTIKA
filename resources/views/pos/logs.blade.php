@@ -10,11 +10,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #85695a;
-            --primary-dark: #6f5849;
-            --brown-50: #fdf8f6;
-            --gray-100: #f5f5f4;
-            --gray-200: #e7e5e4;
+            --primary: var(--color-primary);
+            --primary-dark: var(--color-primary-dark);
+            --brown-50: var(--brown-50);
+            --gray-100: var(--gray-100);
+            --gray-200: var(--gray-200);
         }
 
         body {

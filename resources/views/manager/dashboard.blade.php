@@ -7,7 +7,7 @@
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
+                <h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i
                         class="fa-solid fa-user-tie me-2"></i>{{ __('admin.manager_dashboard') }}</h2>
                 <p class="text-muted mb-0">{{ __('admin.manage_store_oversight') }}</p>
             </div>
@@ -26,11 +26,11 @@
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="bg-brown-soft bg-opacity-20 p-3 rounded-circle" style="backdrop-filter: blur(5px);">
-                                <i class="fa-solid fa-money-bill-trend-up fa-xl" style="color: #6f5849;"></i>
+                                <i class="fa-solid fa-money-bill-trend-up fa-xl" style="color: var(--color-primary-dark);"></i>
                             </div>
                         </div>
                         <h6 class="text-muted text-opacity-75 fw-bold mb-1">{{ __('admin.today_sales') }}</h6>
-                        <h3 class="fw-bold mb-0" style="color: #2c3e50;">Rp{{ number_format($stats['today_sales'], 0, ',', '.') }}</h3>
+                        <h3 class="fw-bold mb-0" style="color: var(--gray-800);">Rp{{ number_format($stats['today_sales'], 0, ',', '.') }}</h3>
                     </div>
                 </div>
             </div>
@@ -40,11 +40,11 @@
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="bg-brown-soft bg-opacity-20 p-3 rounded-circle" style="backdrop-filter: blur(5px);">
-                                <i class="fa-solid fa-receipt fa-xl" style="color: #6f5849;"></i>
+                                <i class="fa-solid fa-receipt fa-xl" style="color: var(--color-primary-dark);"></i>
                             </div>
                         </div>
                         <h6 class="text-muted fw-bold mb-1">{{ __('admin.total_transactions') }}</h6>
-                        <h3 class="fw-bold mb-0" style="color: #2c3e50;">{{ number_format($stats['today_count']) }}</h3>
+                        <h3 class="fw-bold mb-0" style="color: var(--gray-800);">{{ number_format($stats['today_count']) }}</h3>
                     </div>
                 </div>
             </div>
@@ -54,11 +54,11 @@
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="bg- brown-soft bg-opacity-20 p-3 rounded-circle" style="backdrop-filter: blur(5px);">
-                                <i class="fa-solid fa-scale-balanced fa-xl" style="color: #6f5849;"></i>
+                                <i class="fa-solid fa-scale-balanced fa-xl" style="color: var(--color-primary-dark);"></i>
                             </div>
                         </div>
                         <h6 class="text-muted fw-bold mb-1">{{ __('admin.avg_transaction') }}</h6>
-                        <h3 class="fw-bold mb-0" style="color: #2c3e50;">
+                        <h3 class="fw-bold mb-0" style="color: var(--gray-800);">
                             Rp{{ number_format($stats['today_avg'], 0, ',', '.') }}</h3>
                     </div>
                 </div>
@@ -69,10 +69,10 @@
         <div class="card border-0 shadow-sm" style="border-radius: 20px;">
             <div class="card-header bg-white py-4 px-4 border-0">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold mb-0" style="color: #6f5849;"><i
+                    <h5 class="fw-bold mb-0" style="color: var(--color-primary-dark);"><i
                             class="fa-solid fa-clock-rotate-left me-2"></i>{{ __('admin.recent_transactions') }}</h5>
                     <a href="{{ route('manager.reports.cashier') }}" class="btn btn-sm btn-outline-brown"
-                        style="border-radius: 10px; border-color: #6f5849; color: #6f5849;">
+                        style="border-radius: 10px; border-color: var(--color-primary-dark); color: var(--color-primary-dark);">
                         {{ __('admin.view_details') }} <i class="fa-solid fa-arrow-right ms-1"></i>
                     </a>
                 </div>
@@ -100,7 +100,7 @@
                             @forelse($recentTransactions as $transaction)
                                 <tr>
                                     <td class="ps-4">
-                                        <span class="fw-bold" style="color: #6f5849;">#{{ $transaction->invoice_no }}</span>
+                                        <span class="fw-bold" style="color: var(--color-primary-dark);">#{{ $transaction->invoice_no }}</span>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
@@ -390,30 +390,30 @@
     <style>
         .bg-success-soft {
             background-color: rgba(25, 135, 84, 0.1);
-            color: #198754;
+            color: var(--color-success);
         }
 
         .bg-primary-soft {
             background-color: rgba(13, 110, 253, 0.1);
-            color: #0d6efd;
+            color: var(--color-info);
         }
 
         .bg-danger-soft {
             background-color: rgba(220, 53, 69, 0.1);
-            color: #dc3545;
+            color: var(--color-danger);
         }
 
         .text-brown {
-            color: #6f5849;
+            color: var(--color-primary-dark);
         }
 
         .btn-outline-brown {
-            border-color: #6f5849;
-            color: #6f5849;
+            border-color: var(--color-primary-dark);
+            color: var(--color-primary-dark);
         }
 
         .btn-outline-brown:hover {
-            background-color: #6f5849;
+            background-color: var(--color-primary-dark);
             color: white !important;
         }
         

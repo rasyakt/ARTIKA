@@ -5,13 +5,13 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h4 class="fw-bold mb-1" style="color: #6f5849;">
+                <h4 class="fw-bold mb-1" style="color: var(--color-primary-dark);">
                     <i class="fa-solid fa-tags me-2"></i>{{ __('admin.promos') }}
                 </h4>
                 <p class="text-muted mb-0">{{ __('admin.manage_promos_subtitle') }}</p>
             </div>
             <button class="btn shadow-sm" data-bs-toggle="modal" data-bs-target="#addPromoModal"
-                style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); color: white; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;">
+                style="background: var(--gradient-primary); color: white; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;">
                 <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_promo') }}
             </button>
         </div>
@@ -22,29 +22,29 @@
                 @if($promos->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
-                            <thead style="background-color: #fdf8f6;">
+                            <thead style="background-color: var(--brown-50);">
                                 <tr>
-                                    <th class="px-4 py-3" style="border: none; color: #6f5849; font-weight: 600;">#</th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="px-4 py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">#</th>
+                                    <th class="py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('admin.promo_name') }}</th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('admin.type') }}</th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('admin.value') }}</th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('admin.active_periods') }}</th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('admin.status') }}</th>
-                                    <th class="py-3 text-end px-4" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="py-3 text-end px-4" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('common.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($promos as $index => $promo)
-                                    <tr style="border-bottom: 1px solid #f2e8e5; vertical-align: middle;">
+                                    <tr style="border-bottom: 1px solid var(--brown-100); vertical-align: middle;">
                                         <td class="px-4 py-3 text-muted">{{ $promos->firstItem() + $index }}</td>
                                         <td class="py-3">
-                                            <div class="fw-bold" style="color: #4b382f;">{{ $promo->name }}</div>
+                                            <div class="fw-bold" style="color: var(--brown-900);">{{ $promo->name }}</div>
                                             @if($promo->product)
                                                 <small class="text-muted"><i class="fa-solid fa-box me-1"></i>
                                                     {{ $promo->product->name }}</small>
@@ -56,11 +56,11 @@
                                             @endif
                                         </td>
                                         <td class="py-3">
-                                            <span class="badge" style="background: #f2e8e5; color: #6f5849; font-weight: 500;">
+                                            <span class="badge" style="background: var(--brown-100); color: var(--color-primary-dark); font-weight: 500;">
                                                 {{ $promo->type === 'percentage' ? __('admin.percentage') : __('admin.fixed_amount') }}
                                             </span>
                                         </td>
-                                        <td class="py-3 fw-bold" style="color: #85695a;">
+                                        <td class="py-3 fw-bold" style="color: var(--color-primary);">
                                             @if($promo->type === 'percentage')
                                                 {{ number_format($promo->value, 0) }}%
                                             @else
@@ -82,11 +82,11 @@
                                             <div class="dropdown">
                                                 <button class="btn btn-light btn-sm shadow-sm" type="button"
                                                     data-bs-toggle="dropdown" data-bs-boundary="viewport"
-                                                    style="border: 1px solid #f2e8e5; border-radius: 8px;">
+                                                    style="border: 1px solid var(--brown-100); border-radius: 8px;">
                                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end shadow-sm"
-                                                    style="border-radius: 12px; border: 1px solid #f2e8e5;">
+                                                    style="border-radius: 12px; border: 1px solid var(--brown-100);">
                                                     <li>
                                                         <button class="dropdown-item py-2 edit-promo-btn"
                                                             data-promo="{{ json_encode($promo) }}">
@@ -116,12 +116,12 @@
                     </div>
                 @else
                     <div class="text-center py-5">
-                        <div class="mb-3" style="font-size: 4rem; opacity: 0.2; color: #6f5849;">
+                        <div class="mb-3" style="font-size: 4rem; opacity: 0.2; color: var(--color-primary-dark);">
                             <i class="fa-solid fa-tags"></i>
                         </div>
                         <h5 class="text-muted mb-3">{{ __('admin.no_promos_found') }}</h5>
                         <button class="btn shadow-sm" data-bs-toggle="modal" data-bs-target="#addPromoModal"
-                            style="background: #6f5849; color: white; border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600;">
+                            style="background: var(--color-primary-dark); color: white; border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600;">
                             <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_first_promo') }}
                         </button>
                     </div>
@@ -149,47 +149,47 @@
                     <div class="modal-body p-4 pt-0">
                         <div class="row g-3">
                             <div class="col-md-12">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.promo_name') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.promo_name') }}
                                     *</label>
                                 <input type="text" name="name" class="form-control" required
                                     placeholder="Contoh: Diskon Awal Tahun"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.promo_type') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.promo_type') }}
                                     *</label>
                                 <select name="type" class="form-select" required
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                                     <option value="percentage">{{ __('admin.percentage') }}</option>
                                     <option value="fixed">{{ __('admin.fixed_amount') }}</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.promo_value') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.promo_value') }}
                                     *</label>
                                 <input type="number" name="value" class="form-control" required step="0.01" min="0"
                                     placeholder="0"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.start_date') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.start_date') }}
                                     *</label>
                                 <input type="date" name="start_date" class="form-control" required
                                     value="{{ date('Y-m-d') }}"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.end_date') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.end_date') }}
                                     *</label>
                                 <input type="date" name="end_date" class="form-control" required
                                     value="{{ date('Y-m-d', strtotime('+1 month')) }}"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">Target Produk
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Target Produk
                                     (Opsional)</label>
                                 <select name="product_id" class="form-select select2"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                                     <option value="">-- Semua Produk --</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }} ({{ $product->barcode }})
@@ -198,10 +198,10 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">Target Kategori
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Target Kategori
                                     (Opsional)</label>
                                 <select name="category_id" class="form-select"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                                     <option value="">Semua Kategori</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -209,9 +209,9 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">Min. Pembelian (Rp)</label>
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Min. Pembelian (Rp)</label>
                                 <input type="number" name="min_purchase" class="form-control" step="0.01" min="0" value="0"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 d-flex align-items-end">
                                 <div class="form-check form-switch mb-2">
@@ -227,7 +227,7 @@
                         <button type="button" class="btn btn-outline-secondary px-4 py-2 border-0 fw-bold"
                             data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn px-4 py-2 fw-bold"
-                            style="background: #6f5849; color: white; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(111, 88, 73, 0.2);">
+                            style="background: var(--color-primary-dark); color: white; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(111, 88, 73, 0.2);">
                             Simpan Promo
                         </button>
                     </div>
@@ -251,42 +251,42 @@
                     <div class="modal-body p-4 pt-0">
                         <div class="row g-3">
                             <div class="col-md-12">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.promo_name') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.promo_name') }}
                                     *</label>
                                 <input type="text" name="name" id="edit_name" class="form-control" required
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.promo_type') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.promo_type') }}
                                     *</label>
                                 <select name="type" id="edit_type" class="form-select" required
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                                     <option value="percentage">{{ __('admin.percentage') }}</option>
                                     <option value="fixed">{{ __('admin.fixed_amount') }}</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.promo_value') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.promo_value') }}
                                     *</label>
                                 <input type="number" name="value" id="edit_value" class="form-control" required step="0.01"
-                                    min="0" style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    min="0" style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.start_date') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.start_date') }}
                                     *</label>
                                 <input type="date" name="start_date" id="edit_start_date" class="form-control" required
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('admin.end_date') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.end_date') }}
                                     *</label>
                                 <input type="date" name="end_date" id="edit_end_date" class="form-control" required
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">Target Produk</label>
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Target Produk</label>
                                 <select name="product_id" id="edit_product_id" class="form-select"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                                     <option value="">-- Semua Produk --</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -294,9 +294,9 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">Target Kategori</label>
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Target Kategori</label>
                                 <select name="category_id" id="edit_category_id" class="form-select"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                                     <option value="">Semua Kategori</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -304,10 +304,10 @@
                                 </select>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">Min. Pembelian (Rp)</label>
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Min. Pembelian (Rp)</label>
                                 <input type="number" name="min_purchase" id="edit_min_purchase" class="form-control"
                                     step="0.01" min="0"
-                                    style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 d-flex align-items-end">
                                 <div class="form-check form-switch mb-2">
@@ -322,7 +322,7 @@
                         <button type="button" class="btn btn-outline-secondary px-4 py-2 border-0 fw-bold"
                             data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn px-4 py-2 fw-bold"
-                            style="background: #6f5849; color: white; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(111, 88, 73, 0.2);">
+                            style="background: var(--color-primary-dark); color: white; border-radius: 10px; box-shadow: 0 4px 6px -1px rgba(111, 88, 73, 0.2);">
                             Perbarui Promo
                         </button>
                     </div>

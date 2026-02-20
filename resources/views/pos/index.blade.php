@@ -21,18 +21,18 @@
         .artika-swal-popup {
             border-radius: 16px !important;
             padding: 1.5rem !important;
-            border: 1px solid #f2e8e5 !important;
+            border: 1px solid var(--brown-100) !important;
             font-family: 'Segoe UI', system-ui, sans-serif !important;
         }
 
         .artika-swal-title {
-            color: #4b382f !important;
+            color: var(--brown-900) !important;
             font-weight: 700 !important;
             font-size: 1.25rem !important;
         }
 
         .artika-swal-confirm-btn {
-            background: #6f5849 !important;
+            background: var(--color-primary-dark) !important;
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
@@ -41,9 +41,9 @@
         }
 
         .artika-swal-cancel-btn {
-            background: #fdf8f6 !important;
-            color: #6f5849 !important;
-            border: 1px solid #f2e8e5 !important;
+            background: var(--brown-50) !important;
+            color: var(--color-primary-dark) !important;
+            border: 1px solid var(--brown-100) !important;
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
@@ -52,21 +52,21 @@
 
         .artika-swal-toast {
             border-radius: 12px !important;
-            background: #ffffff !important;
+            background: var(--color-white) !important;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
         }
 
         :root {
-            --primary: #85695a;
-            --primary-dark: #6f5849;
-            --primary-light: #a18072;
-            --success: #10b981;
-            --danger: #ef4444;
-            --brown-50: #fdf8f6;
-            --gray-100: #f5f5f4;
-            --gray-200: #e7e5e4;
-            --gray-300: #d6d3d1;
-            --gray-700: #374151;
+            --primary: var(--color-primary);
+            --primary-dark: var(--color-primary-dark);
+            --primary-light: var(--color-primary-light);
+            --success: var(--color-success);
+            --danger: var(--color-danger);
+            --brown-50: var(--brown-50);
+            --gray-100: var(--gray-100);
+            --gray-200: var(--gray-200);
+            --gray-300: var(--gray-300);
+            --gray-700: var(--gray-700);
         }
 
         * {
@@ -196,7 +196,7 @@
         .profile-avatar {
             width: 40px;
             height: 40px;
-            background: #7c6257ff;
+            background: var(--color-primary)ff;
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -276,7 +276,7 @@
         .barcode-input-group {
             display: flex;
             align-items: center;
-            background: #fff4f0;
+            background: var(--color-warning-light);
             border: 2px solid var(--primary-light);
             border-radius: 8px;
             padding: 0 0.75rem;
@@ -593,7 +593,7 @@
 
         .cart-item-price {
             font-weight: 700;
-            color: #c17a5c;
+            color: var(--color-accent-warm);
             font-size: 0.8rem;
         }
 
@@ -664,7 +664,7 @@
         }
 
         .cart-item-remove:hover {
-            background: #dc2626;
+            background: var(--color-danger);
         }
 
         .cart-empty {
@@ -805,7 +805,7 @@
         }
 
         .btn-finish {
-            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            background: linear-gradient(135deg, var(--success) 0%, var(--color-success) 100%);
         }
 
         .btn-finish:hover:not(:disabled) {
@@ -870,7 +870,7 @@
         }
 
         .keypad-btn.delete:hover {
-            background: #dc2626;
+            background: var(--color-danger);
         }
 
         /* SCANNER REFINED (Unified Overlay) */
@@ -934,7 +934,7 @@
         }
 
         .scanner-title i {
-            color: #10b981;
+            color: var(--color-success);
             filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
         }
 
@@ -1122,7 +1122,7 @@
             .profile-avatar {
                 width: 38px;
                 height: 38px;
-                background: #a18072;
+                background: var(--color-primary-light);
                 border-radius: 10px;
                 display: flex;
                 align-items: center;
@@ -1181,7 +1181,7 @@
             }
 
             .search-input-group {
-                background: #f1f3f5;
+                background: var(--gray-100);
                 border: 1px solid rgba(0, 0, 0, 0.05);
                 border-radius: 50px;
                 padding: 0 1rem;
@@ -1245,7 +1245,7 @@
                 flex: 1;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
-                background: #f8f9fa;
+                background: var(--gray-50);
             }
 
             .products-grid {
@@ -1281,7 +1281,7 @@
             }
 
             .product-card:active {
-                background: #fdfaf8;
+                background: var(--brown-50);
                 transform: none;
             }
 
@@ -1511,7 +1511,7 @@
             position: absolute;
             top: 0;
             right: 0;
-            background: #ef4444;
+            background: var(--color-danger);
             color: white;
             padding: 0.2rem 0.5rem;
             font-size: 0.65rem;
@@ -1552,18 +1552,18 @@
         }
 
         .expiry-badge.expired {
-            background: #ef4444;
+            background: var(--color-danger);
             color: white;
         }
 
         .expiry-badge.expiring {
-            background: #f59e0b;
-            color: #4b382f;
+            background: var(--color-warning);
+            color: var(--brown-900);
         }
 
         .expiry-badge.expiring {
-            background: #f59e0b;
-            color: #4b382f;
+            background: var(--color-warning);
+            color: var(--brown-900);
         }
 
         /* FIX TABLET SCROLLING */
@@ -2123,8 +2123,8 @@
                 text: settings.text,
                 icon: settings.icon,
                 showCancelButton: true,
-                confirmButtonColor: '#6f5849',
-                cancelButtonColor: '#f1f1f1',
+                confirmButtonColor: 'var(--color-primary-dark)',
+                cancelButtonColor: 'var(--gray-100)',
                 confirmButtonText: settings.confirmButtonText,
                 cancelButtonText: settings.cancelButtonText,
                 customClass: {

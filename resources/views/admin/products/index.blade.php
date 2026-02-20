@@ -20,7 +20,7 @@
 			min-width: 260px;
 			border-radius: 12px;
 			padding: 0.5rem 0.75rem;
-			border: 1px solid #e9e2df;
+			border: 1px solid var(--brown-200);
 		}
 
 		.category-select {
@@ -40,8 +40,8 @@
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
-			background: #f2e8e5;
-			color: #6f5849;
+			background: var(--brown-100);
+			color: var(--color-primary-dark);
 		}
 
 		.action-btn {
@@ -88,7 +88,7 @@
 							style="border-radius: {{ App\Models\Setting::get('admin_enable_camera', true) ? '12px 0 0 12px' : '12px' }}; {{ App\Models\Setting::get('admin_enable_camera', true) ? 'border-right: none;' : '' }}">
 						@if(App\Models\Setting::get('admin_enable_camera', true))
 							<button class="btn btn-outline-secondary" type="button" id="btnScanner"
-								style="border: 1px solid #e9e2df; border-left: none; border-radius: 0 12px 12px 0; background: #fff; color: #6f5849; padding: 0.5rem 0.75rem;">
+								style="border: 1px solid var(--brown-200); border-left: none; border-radius: 0 12px 12px 0; background: #fff; color: var(--color-primary-dark); padding: 0.5rem 0.75rem;">
 								<i class="fa-solid fa-camera"></i>
 							</button>
 						@endif
@@ -104,7 +104,7 @@
 				</form>
 
 				<a href="{{ route('admin.products.create') }}" class="btn btn-primary shadow-sm"
-					style="background: #6f5849; border:none; border-radius:12px; padding:0.6rem 1rem;">
+					style="background: var(--color-primary-dark); border:none; border-radius:12px; padding:0.6rem 1rem;">
 					<i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_product') }}
 				</a>
 			</div>
@@ -115,7 +115,7 @@
 			<div class="card-body p-0">
 				<div class="table-responsive">
 					<table class="table table-hover align-middle mb-0">
-						<thead style="background: #f2e8e5;">
+						<thead style="background: var(--brown-100);">
 							<tr>
 								<th class="ps-4 border-0 fw-semibold" style="color:var(--color-primary-dark);">
 									{{ __('common.product') }}
@@ -166,11 +166,11 @@
 									</td>
 									<td>
 										<span class="badge"
-											style="background:#e9e2df; color:var(--color-primary-dark); padding:0.4rem 0.6rem; border-radius:8px;">{{ $product->category->name ?? '-' }}</span>
+											style="background:var(--brown-200); color:var(--color-primary-dark); padding:0.4rem 0.6rem; border-radius:8px;">{{ $product->category->name ?? '-' }}</span>
 									</td>
 									<td>
 										<code
-											style="background:#fdf8f6; padding:0.25rem 0.5rem; border-radius:6px; color:var(--color-primary-dark);">{{ $product->barcode }}</code>
+											style="background:var(--brown-50); padding:0.25rem 0.5rem; border-radius:6px; color:var(--color-primary-dark);">{{ $product->barcode }}</code>
 									</td>
 									<td class="text-muted">Rp {{ number_format($product->cost_price, 0, ',', '.') }}</td>
 									<td class="fw-bold" style="color:var(--color-accent-warm);">Rp

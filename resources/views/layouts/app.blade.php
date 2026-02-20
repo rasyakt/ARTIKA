@@ -20,18 +20,18 @@
         .artika-swal-popup {
             border-radius: 16px !important;
             padding: 1.5rem !important;
-            border: 1px solid #f2e8e5 !important;
+            border: 1px solid var(--brown-100) !important;
             font-family: 'Inter', system-ui, sans-serif !important;
         }
 
         .artika-swal-title {
-            color: #4b382f !important;
+            color: var(--brown-900) !important;
             font-weight: 700 !important;
             font-size: 1.25rem !important;
         }
 
         .artika-swal-confirm-btn {
-            background: #6f5849 !important;
+            background: var(--color-primary-dark) !important;
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
@@ -40,9 +40,9 @@
         }
 
         .artika-swal-cancel-btn {
-            background: #fdf8f6 !important;
-            color: #6f5849 !important;
-            border: 1px solid #f2e8e5 !important;
+            background: var(--brown-50) !important;
+            color: var(--color-primary-dark) !important;
+            border: 1px solid var(--brown-100) !important;
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
@@ -51,20 +51,20 @@
 
         .artika-swal-toast {
             border-radius: 12px !important;
-            background: #ffffff !important;
+            background: var(--color-white) !important;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
         }
 
         html {
             zoom: 90%;
-            background: #faf9f8;
+            background: var(--gray-50);
         }
 
         body {
-            background: #faf9f8;
+            background: var(--gray-50);
             min-height: 100vh;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-            color: #4b382f;
+            color: var(--brown-900);
         }
 
         /* Fix for Bootstrap Modals & SweetAlert2 with CSS Zoom */
@@ -80,7 +80,7 @@
         }
 
         .main-navbar {
-            /* background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%); */
+            /* background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); */
             background: var(--primary-dark);
             box-shadow: 0 4px 18px rgba(107, 83, 70, 0.08);
             padding: 0.75rem 0;
@@ -101,12 +101,12 @@
             bottom: 0;
             width: 260px;
             /* Matched to col-md-2 */
-            border-right: 1px solid #f2e8e5;
+            border-right: 1px solid var(--brown-100);
             padding: 1.25rem 0;
             overflow-y: auto;
             z-index: 1000;
             scrollbar-width: thin;
-            scrollbar-color: #8a6b57 transparent;
+            scrollbar-color: var(--color-primary) transparent;
         }
 
         .sidebar::-webkit-scrollbar {
@@ -114,7 +114,7 @@
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background-color: #8a6b57;
+            background-color: var(--color-primary);
             border-radius: 4px;
         }
 
@@ -122,7 +122,7 @@
             display: flex;
             align-items: center;
             padding: 0.875rem 1.5rem;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s;
@@ -130,15 +130,15 @@
         }
 
         .sidebar-link:hover {
-            background: #fdf8f6;
-            color: #85695a;
-            border-left-color: #85695a;
+            background: var(--brown-50);
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
         }
 
         .sidebar-link.active {
-            background: linear-gradient(90deg, #fdf8f6 0%, #f2e8e5 100%);
-            color: #85695a;
-            border-left-color: #85695a;
+            background: linear-gradient(90deg, var(--brown-50) 0%, var(--brown-100) 100%);
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
             font-weight: 600;
         }
 
@@ -147,12 +147,12 @@
             font-size: 1.05rem;
             width: 1.2rem;
             text-align: center;
-            color: #8a6b57;
+            color: var(--color-primary);
         }
 
         .sidebar-link.text-danger:hover {
-            background: #fee2e2 !important;
-            border-left-color: #ef4444 !important;
+            background: var(--color-danger-light) !important;
+            border-left-color: var(--color-danger) !important;
         }
 
         /* Sidebar Dropdown Styles */
@@ -181,7 +181,7 @@
 
         .sidebar-submenu {
             display: none;
-            background: #fafaf9;
+            background: var(--gray-50);
             list-style: none;
             padding: 0;
             margin: 0;
@@ -195,7 +195,7 @@
             display: flex;
             align-items: center;
             padding: 0.65rem 1.5rem 0.65rem 3rem;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
@@ -204,14 +204,14 @@
         }
 
         .submenu-link:hover {
-            background: #fdf8f6;
-            color: #85695a;
+            background: var(--brown-50);
+            color: var(--color-primary);
         }
 
         .submenu-link.active {
-            color: #85695a;
+            color: var(--color-primary);
             font-weight: 700;
-            background: #f5f2f0;
+            background: var(--brown-50);
         }
 
         .submenu-link i {
@@ -219,7 +219,7 @@
             font-size: 0.9rem;
             width: 1.1rem;
             text-align: center;
-            color: #8a6b57;
+            color: var(--color-primary);
             opacity: 0.8;
         }
 
@@ -228,13 +228,13 @@
             font-size: 0.7rem;
             font-weight: 800;
             text-uppercase;
-            color: #a18072;
+            color: var(--color-primary-light);
             letter-spacing: 0.05em;
         }
 
         .main-content {
             padding: 0;
-            background: #faf9f8;
+            background: var(--gray-50);
             margin-left: 260px;
             /* Offset by fixed sidebar width */
             margin-top: 70px;
@@ -275,7 +275,7 @@
             width: 42px;
             height: 42px;
             border-radius: 3812px;
-            background: #7c6257ff;
+            background: var(--color-primary)ff;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -295,8 +295,8 @@
             padding: 0.5rem 0.75rem;
             border-radius: 8px;
             margin: 0 0.25rem;
-            border: 1px solid #e0cec7;
-            color: #6f5849;
+            border: 1px solid var(--color-secondary-light);
+            color: var(--color-primary-dark);
         }
 
         .pagination .page-link svg {
@@ -307,14 +307,14 @@
         }
 
         .pagination .page-item.active .page-link {
-            background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);
-            border-color: #85695a;
+            background: var(--gradient-primary);
+            border-color: var(--color-primary);
         }
 
         .pagination .page-link:hover {
-            background: #fdf8f6;
-            border-color: #85695a;
-            color: #85695a;
+            background: var(--brown-50);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
         }
 
         /* Hamburger Menu Button */
@@ -397,13 +397,13 @@
                 align-items: center;
                 justify-content: space-between;
                 padding: 1rem 1.5rem;
-                border-bottom: 2px solid #f2e8e5;
+                border-bottom: 2px solid var(--brown-100);
                 margin-bottom: 1rem;
             }
 
             .sidebar-title {
                 font-weight: 700;
-                color: #6f5849;
+                color: var(--color-primary-dark);
                 font-size: 1.125rem;
             }
 
@@ -411,7 +411,7 @@
                 background: none;
                 border: none;
                 font-size: 1.5rem;
-                color: #6f5849;
+                color: var(--color-primary-dark);
                 cursor: pointer;
                 padding: 0;
                 line-height: 1;
@@ -419,7 +419,7 @@
             }
 
             .sidebar-close:hover {
-                color: #85695a;
+                color: var(--color-primary);
                 transform: rotate(90deg);
             }
 
@@ -777,7 +777,7 @@
                     @endif
 
                     <div class="mt-auto px-1 py-3">
-                        <hr style="margin: 0.5rem 0; border-color: #f2e8e5; opacity: 0.1;">
+                        <hr style="margin: 0.5rem 0; border-color: var(--brown-100); opacity: 0.1;">
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                             @csrf
                             <button type="submit"
@@ -913,8 +913,8 @@
                     text: settings.text,
                     icon: settings.icon,
                     showCancelButton: true,
-                    confirmButtonColor: '#6f5849',
-                    cancelButtonColor: '#f1f1f1',
+                    confirmButtonColor: 'var(--color-primary-dark)',
+                    cancelButtonColor: 'var(--gray-100)',
                     confirmButtonText: settings.confirmButtonText,
                     cancelButtonText: settings.cancelButtonText,
                     customClass: {

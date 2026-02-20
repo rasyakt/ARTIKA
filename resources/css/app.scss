@@ -19,16 +19,79 @@
 
 /* Expose theme colors as CSS custom properties for runtime use */
 :root {
+    /* Brown Palette */
+    --brown-50: #{$brown-50};
+    --brown-100: #{$brown-100};
+    --brown-200: #{$brown-200};
+    --brown-300: #{$brown-300};
+    --brown-400: #{$brown-400};
+    --brown-500: #{$brown-500};
+    --brown-600: #{$brown-600};
+    --brown-700: #{$brown-700};
+    --brown-800: #{$brown-800};
+    --brown-900: #{$brown-900};
+    --card-bg: #{$card-bg};
+
+    /* Primary Brand */
     --color-primary: #{$primary};
     --color-primary-dark: #{$primary-dark};
     --color-primary-light: #{$primary-light};
+    --color-primary-lighter: #{$primary-lighter};
+
+    /* Secondary */
     --color-secondary: #{$secondary};
+    --color-secondary-dark: #{$secondary-dark};
+    --color-secondary-light: #{$secondary-light};
+
+    /* Accent */
     --color-accent-warm: #{$accent-warm};
     --color-accent-gold: #{$accent-gold};
     --color-cream: #{$accent-cream};
+
+    /* Neutral */
+    --color-white: #{$white};
     --color-bg: #{$gray-50};
     --color-text: #{$gray-800};
+    --gray-50: #{$gray-50};
+    --gray-100: #{$gray-100};
+    --gray-200: #{$gray-200};
+    --gray-300: #{$gray-300};
+    --gray-400: #{$gray-400};
+    --gray-500: #{$gray-500};
+    --gray-600: #{$gray-600};
+    --gray-700: #{$gray-700};
+    --gray-800: #{$gray-800};
+    --gray-900: #{$gray-900};
+
+    /* Semantic - Success */
+    --color-success: #{$success};
+    --color-success-light: #{$success-light};
+    --color-success-dark: #{$success-dark};
+
+    /* Semantic - Warning */
+    --color-warning: #{$warning};
+    --color-warning-light: #{$warning-light};
+    --color-warning-dark: #{$warning-dark};
+
+    /* Semantic - Danger */
+    --color-danger: #{$danger};
+    --color-danger-light: #{$danger-light};
+    --color-danger-dark: #{$danger-dark};
+
+    /* Semantic - Info */
+    --color-info: #{$info};
+    --color-info-light: #{$info-light};
+    --color-info-dark: #{$info-dark};
+
+    /* Gradients */
+    --gradient-primary: #{$gradient-primary};
+    --gradient-warm: #{$gradient-warm};
+
+    /* Radius */
+    --radius-sm: #{$radius-sm};
+    --radius-md: #{$radius-md};
     --radius-lg: #{$radius-lg};
+    --radius-xl: #{$radius-xl};
 }
 
 // ============================================
