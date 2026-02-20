@@ -214,6 +214,7 @@
 
         .btn-brown:hover {
             color: white;
+            background: var(--color-primary-dark);
             opacity: 0.9;
         }
 

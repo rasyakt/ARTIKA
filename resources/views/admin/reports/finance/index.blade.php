@@ -53,7 +53,8 @@
                 <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="p-2 rounded-3 me-2" style="background: var(--brown-50); color: var(--color-primary-dark);">
+                            <div class="p-2 rounded-3 me-2"
+                                style="background: var(--brown-50); color: var(--color-primary-dark);">
                                 <i class="fa-solid fa-money-bill-trend-up"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.gross_revenue')) }}</p>
@@ -105,7 +106,8 @@
                 <div class="card h-100 shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex align-items-center mb-2">
-                            <div class="p-2 rounded-3 me-2" style="background: #f3e8ff; color: var(--color-purple, #7e22ce);">
+                            <div class="p-2 rounded-3 me-2"
+                                style="background: #f3e8ff; color: var(--color-purple, #7e22ce);">
                                 <i class="fa-solid fa-truck-ramp-box"></i>
                             </div>
                             <p class="text-muted small mb-0 fw-semibold">{{ strtoupper(__('admin.stock_procurement')) }}</p>
@@ -190,7 +192,8 @@
             <div class="col-md-8">
                 <div class="card shadow-sm h-100">
                     <div class="card-header border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold mb-0" style="color: var(--color-primary-dark);">{{ __('admin.financial_trend') }}</h6>
+                        <h6 class="fw-bold mb-0" style="color: var(--color-primary-dark);">{{ __('admin.financial_trend') }}
+                        </h6>
                         <div id="chart-controls" class="btn-group btn-group-sm">
                             <!-- Toggle buttons will be injected or managed via CSS/JS -->
                         </div>
@@ -491,8 +494,20 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Helper: read CSS custom property value for use in Canvas/Chart.js
+        function cssVar(name) {
+            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const dailyData = {!! json_encode($allDailyData) !!};
+
+            // Read CSS variables once for Chart.js (Canvas can't parse var())
+            const colorPrimary = cssVar('--color-primary');
+            const colorAccentWarm = cssVar('--color-accent-warm');
+            const colorAccentGold = cssVar('--color-accent-gold');
+            const colorSuccess = cssVar('--color-success');
+            const gray100 = cssVar('--gray-100');
 
             const labels = dailyData.map(d => {
                 const date = new Date(d.date);
@@ -513,18 +528,18 @@
                         {
                             label: '{{ __('admin.gross_revenue') }}',
                             data: revenueData,
-                            borderColor: 'var(--color-primary)',
-                            backgroundColor: 'rgba(133, 105, 90, 0.1)',
+                            borderColor: colorPrimary,
+                            backgroundColor: colorPrimary + '1a',
                             fill: true,
                             tension: 0.4,
                             borderWidth: 3,
                             pointRadius: 4,
-                            pointBackgroundColor: 'var(--color-primary)'
+                            pointBackgroundColor: colorPrimary
                         },
                         {
                             label: '{{ __('admin.cogs') }}',
                             data: costData,
-                            borderColor: 'var(--color-accent-warm)',
+                            borderColor: colorAccentWarm,
                             borderDash: [5, 5],
                             tension: 0.4,
                             borderWidth: 2,
@@ -533,7 +548,7 @@
                         {
                             label: '{{ __('admin.operational_expenses') }}',
                             data: expenseData,
-                            borderColor: 'var(--color-accent-gold)',
+                            borderColor: colorAccentGold,
                             borderDash: [2, 2],
                             tension: 0.4,
                             borderWidth: 2,
@@ -551,7 +566,7 @@
                         {
                             label: '{{ __('admin.net_profit') }}',
                             data: profitData,
-                            borderColor: 'var(--color-success)',
+                            borderColor: colorSuccess,
                             borderWidth: 2,
                             pointRadius: 0,
                             fill: false,
@@ -568,7 +583,7 @@
                     },
                     plugins: {
                         legend: {
-                            display: false // Hide default legend to use custom buttons
+                            display: false
                         },
                         tooltip: {
                             padding: 12,
@@ -590,7 +605,7 @@
                     scales: {
                         y: {
                             beginAtZero: true,
-                            grid: { color: 'var(--gray-100)' },
+                            grid: { color: gray100 },
                             ticks: {
                                 callback: function (value) {
                                     return 'Rp ' + (value >= 1000000 ? (value / 1000000) + 'M' : (value / 1000) + 'k');

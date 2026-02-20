@@ -316,7 +316,7 @@
         .btn-brown:hover {
             color: white;
             opacity: 0.9;
-            background: var(--color-primary)ff;
+            background: var(--color-primary-dark);
         }
 
         .btn-outline-brown {

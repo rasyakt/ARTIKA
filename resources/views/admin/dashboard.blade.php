@@ -318,6 +318,11 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Helper: read CSS custom property value for use in Canvas/Chart.js
+        function cssVar(name) {
+            return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        }
+
         const salesData = @json($salesChartData);
         let currentChart = null;
 
@@ -329,6 +334,10 @@
             }
 
             const data = salesData[period];
+            const colorPrimary = cssVar('--color-primary');
+            const colorPrimaryDark = cssVar('--color-primary-dark');
+            const gray500 = cssVar('--gray-500');
+            const gray100 = cssVar('--gray-100');
 
             currentChart = new Chart(ctx, {
                 type: 'line',
@@ -337,12 +346,12 @@
                     datasets: [{
                         label: 'Sales (Rp)',
                         data: data.values,
-                        borderColor: 'var(--color-primary)',
-                        backgroundColor: 'rgba(133, 105, 90, 0.1)',
+                        borderColor: colorPrimary,
+                        backgroundColor: colorPrimary + '1a',
                         borderWidth: 3,
                         fill: true,
                         tension: 0.4,
-                        pointBackgroundColor: 'var(--color-primary)',
+                        pointBackgroundColor: colorPrimary,
                         pointBorderColor: '#fff',
                         pointBorderWidth: 2,
                         pointRadius: 5,
@@ -357,7 +366,7 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: 'var(--color-primary-dark)',
+                            backgroundColor: colorPrimaryDark,
                             padding: 12,
                             titleFont: {
                                 size: 14,
@@ -380,15 +389,15 @@
                                 callback: function (value) {
                                     return 'Rp ' + (value / 1000) + 'k';
                                 },
-                                color: 'var(--gray-500)'
+                                color: gray500
                             },
                             grid: {
-                                color: 'var(--gray-100)'
+                                color: gray100
                             }
                         },
                         x: {
                             ticks: {
-                                color: 'var(--gray-500)'
+                                color: gray500
                             },
                             grid: {
                                 display: false

@@ -36,7 +36,7 @@
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: $shadow-brown-lg;
+        box-shadow: $shadow-lg;
     }
 
     &:active {
@@ -114,6 +114,56 @@
 
     &:hover {
         background: $warning-dark;
+        color: $white;
+    }
+}
+
+.btn-info {
+    background: $info;
+    color: $white;
+
+    &:hover {
+        background: $info-dark;
+        color: $white;
+    }
+}
+
+.btn-light {
+    background: $gray-100;
+    color: $gray-700;
+
+    &:hover {
+        background: $gray-200;
+        color: $gray-800;
+    }
+}
+
+.btn-outline-secondary {
+    border: 2px solid $secondary;
+    color: $primary-dark;
+
+    &:hover {
+        background: $secondary;
+        color: $primary-dark;
+    }
+}
+
+.btn-outline-danger {
+    border: 2px solid $danger;
+    color: $danger;
+
+    &:hover {
+        background: $danger;
+        color: $white;
+    }
+}
+
+.btn-outline-success {
+    border: 2px solid $success;
+    color: $success;
+
+    &:hover {
+        background: $success;
         color: $white;
     }
 }

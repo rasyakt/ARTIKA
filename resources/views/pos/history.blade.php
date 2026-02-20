@@ -94,8 +94,8 @@
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 0.05em;
-            color: var(--gray-700);
-            background: var(--brown-50);
+            color: var(--white);
+            background: var(--primary);
             border-bottom: 1px solid var(--gray-200);
             padding: 1rem 1.5rem;
         }

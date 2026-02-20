@@ -1874,8 +1874,8 @@
 
                     <!-- BUTTONS -->
                     <div class="checkout-buttons">
-                        <button class="btn-checkout btn-cancel clearBtn" id="clearBtn" title="Hapus Keranjang">
-                            <i class="fas fa-trash"></i>
+                        <button class="btn-checkout bg-danger btn-cancel clearBtn" id="clearBtn" title="Hapus Keranjang">
+                            <i class="fas fa-trash text-white opacity-90"></i>
                         </button>
                         <button class="btn-checkout btn-primary" id="btnHold" onclick="holdTransaction()"
                             title="Tunda Transaksi">

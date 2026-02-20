@@ -413,4 +413,13 @@ return [
     'grand_total' => 'Total Keseluruhan',
     'update_status' => 'Update Status',
     'manage_pre_orders_desc' => 'Kelola pesanan barang ke supplier',
+    'backup_excel' => 'Backup Excel',
+    'backup_and_clear' => 'Backup dan Hapus Data',
+    'confirm_password' => 'Konfirmasi Password',
+    'enter_password_to_continue' => 'Masukkan password untuk melanjutkan',
+    'password_mismatch' => 'Password tidak cocok',
+    'backup_success' => 'Backup berhasil',
+    'backup_failed' => 'Backup gagal',
+    'clear_success' => 'Data berhasil dihapus',
+    'clear_failed' => 'Data gagal dihapus',
 ];
