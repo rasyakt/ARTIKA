@@ -366,23 +366,21 @@
         }
 
         .profile-trigger:hover {
-            background: rgba(255, 255, 255, 0.2) !important;
-            border-color: rgba(255, 255, 255, 0.3) !important;
+            background: var(--color-primary) !important;
         }
 
         .profile-avatar {
             width: 40px;
             height: 40px;
-            background: var(--color-primary)ff;
+            background: var(--color-primary);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 1.4rem;
-            border: none;
+            border: 2px solid var(--color-primary-light);
             transition: all 0.2s;
-            /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); */
         }
 
         .dropdown-menu {
@@ -1798,27 +1796,6 @@
                 <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 38px; width: auto;">
             </div>
             <div class="navbar-right">
-                <!-- Theme Toggle -->
-                <div class="dropdown">
-                    <button class="pos-theme-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                        id="posThemeBtn" title="Pilih Tema">
-                        <i class="fa-solid fa-sun" id="posThemeIcon"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end pos-theme-menu">
-                        <button class="pos-theme-opt" data-theme="light">
-                            <i class="fa-solid fa-sun"></i> Light
-                            <i class="fa-solid fa-check pos-theme-check d-none"></i>
-                        </button>
-                        <button class="pos-theme-opt" data-theme="dark">
-                            <i class="fa-solid fa-moon"></i> Dark
-                            <i class="fa-solid fa-check pos-theme-check d-none"></i>
-                        </button>
-                        <button class="pos-theme-opt" data-theme="system">
-                            <i class="fa-solid fa-desktop"></i> System
-                            <i class="fa-solid fa-check pos-theme-check d-none"></i>
-                        </button>
-                    </div>
-                </div>
                 <div class="dropdown">
                     <button class="btn p-0 border-0 profile-trigger d-flex align-items-center" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -1831,18 +1808,17 @@
                             <span class="text-white-50 fw-700 text-uppercase"
                                 style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
                         </div>
-                        <!-- <i class="fas fa-chevron-down text-white-50 small d-none d-lg-block"></i> -->
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
-                        style="min-width: 240px; border-radius: 16px;">
+                        style="min-width: 260px; border-radius: 16px;">
                         <li class="p-3 bg-light border-bottom">
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
                                     style="width: 42px; height: 42px; font-size: 1.2rem;">
                                     {{ substr($user?->name ?? '', 0, 1) }}
                                 </div>
-                                <div class="overflow-hidden">
-                                    <h6 class="mb-0 fw-800 text-truncate">{{ $user?->name }}</h6>
+                                <div class="overflow-hidden text-start">
+                                    <h6 class="mb-0 fw-800 text-truncate text-dark">{{ $user?->name }}</h6>
                                     <div class="small text-muted text-truncate">@ {{ $user?->username }}</div>
                                     <div class="small fw-700 text-primary" style="font-size: 0.7rem;">NIS:
                                         {{ $user?->nis ?? '-' }}
@@ -1850,6 +1826,35 @@
                                 </div>
                             </div>
                         </li>
+
+                        {{-- Section: Settings/Theme --}}
+                        <div class="p-2 border-bottom">
+                            <div class="px-3 py-1 mb-1 small fw-bold text-uppercase text-muted"
+                                style="font-size: 0.65rem;">
+                                {{ __('common.settings') ?? 'Pengaturan' }}
+                            </div>
+                            <div class="px-3 py-2">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-600 text-muted"><i
+                                            class="fa-solid fa-circle-half-stroke me-2"></i>Tema</span>
+                                </div>
+                                <div class="btn-group w-100" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
+                                        data-theme="light" title="Light">
+                                        <i class="fa-solid fa-sun"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
+                                        data-theme="dark" title="Dark">
+                                        <i class="fa-solid fa-moon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
+                                        data-theme="system" title="System">
+                                        <i class="fa-solid fa-desktop"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <li>
                             <a class="dropdown-item py-2 px-3 d-flex align-items-center"
                                 href="{{ route('pos.history') }}">
@@ -3748,7 +3753,6 @@
     <script>
         (function () {
             const opts = document.querySelectorAll('.pos-theme-opt');
-            const icon = document.getElementById('posThemeIcon');
             const htmlEl = document.documentElement;
 
             function getEffective(pref) {
@@ -3760,8 +3764,14 @@
             function apply(pref) {
                 htmlEl.setAttribute('data-bs-theme', getEffective(pref));
                 localStorage.setItem('artika-theme', pref);
+
                 const icons = { light: 'fa-sun', dark: 'fa-moon', system: 'fa-desktop' };
-                icon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
+                const icon = document.getElementById('posThemeIcon');
+
+                if (icon) {
+                    icon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
+                }
+
                 opts.forEach(o => {
                     const chk = o.querySelector('.pos-theme-check');
                     if (o.dataset.theme === pref) {

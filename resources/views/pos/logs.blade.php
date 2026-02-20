@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -171,32 +172,81 @@
                 <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 38px; width: auto;">
             </a>
             <div class="d-flex align-items-center gap-2">
-                <!-- Theme Toggle -->
-                <div class="dropdown">
-                    <button class="pos-theme-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                        id="posThemeBtn" title="Pilih Tema">
-                        <i class="fa-solid fa-sun" id="posThemeIcon"></i>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end pos-theme-menu">
-                        <button class="pos-theme-opt" data-theme="light">
-                            <i class="fa-solid fa-sun"></i> Light
-                            <i class="fa-solid fa-check pos-theme-check d-none"></i>
-                        </button>
-                        <button class="pos-theme-opt" data-theme="dark">
-                            <i class="fa-solid fa-moon"></i> Dark
-                            <i class="fa-solid fa-check pos-theme-check d-none"></i>
-                        </button>
-                        <button class="pos-theme-opt" data-theme="system">
-                            <i class="fa-solid fa-desktop"></i> System
-                            <i class="fa-solid fa-check pos-theme-check d-none"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <a href="{{ route('pos.index') }}" class="btn"
-                    style="border-radius: 10px; padding: 0.5rem 1.25rem; background: rgba(255, 255, 255, 0.15); border: none; color: white; font-weight: 600;">
+                <a href="{{ route('pos.index') }}" class="btn me-2"
+                    style="border-radius: 10px; padding: 0.45rem 1rem; background: var(--color-primary, #85695a); border: 2px solid var(--color-primary-light, #a08474); color: white; font-weight: 600; font-size: 0.85rem;">
                     <i class="fa-solid fa-arrow-left me-2"></i>{{ __('pos.back_to_pos') }}
                 </a>
+
+                <div class="dropdown">
+                    <button class="btn p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                        style="background: none;">
+                        <div
+                            style="width: 38px; height: 38px; background: var(--color-primary, #85695a); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; border: 2px solid var(--color-primary-light, #a08474);">
+                            <i class="fas fa-user"></i>
+                        </div>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
+                        style="min-width: 260px; border-radius: 16px;">
+                        <li class="p-3 bg-light border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
+                                    style="width: 42px; height: 42px; font-size: 1.2rem;">
+                                    {{ substr($user?->name ?? '', 0, 1) }}
+                                </div>
+                                <div class="overflow-hidden text-start">
+                                    <h6 class="mb-0 fw-800 text-truncate text-dark">{{ $user?->name }}</h6>
+                                    <div class="small text-muted text-truncate">@ {{ $user?->username }}</div>
+                                </div>
+                            </div>
+                        </li>
+
+                        {{-- Section: Settings/Theme --}}
+                        <div class="p-2 border-bottom">
+                            <div class="px-3 py-1 mb-1 small fw-bold text-uppercase text-muted"
+                                style="font-size: 0.65rem;">
+                                {{ __('common.settings') ?? 'Pengaturan' }}
+                            </div>
+                            <div class="px-3 py-2">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-600 text-muted"><i
+                                            class="fa-solid fa-circle-half-stroke me-2"></i>Tema</span>
+                                </div>
+                                <div class="btn-group w-100" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
+                                        data-theme="light" title="Light">
+                                        <i class="fa-solid fa-sun"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
+                                        data-theme="dark" title="Dark">
+                                        <i class="fa-solid fa-moon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
+                                        data-theme="system" title="System">
+                                        <i class="fa-solid fa-desktop"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <li>
+                            <a class="dropdown-item py-2 px-3 d-flex align-items-center"
+                                href="{{ route('pos.history') }}">
+                                <i class="fa-solid fa-clock-rotate-left me-3 text-primary opacity-75"></i>
+                                <span class="fw-600">{{ __('pos.transaction_history') }}</span>
+                            </a>
+                        </li>
+                        <li class="border-top mt-1">
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="dropdown-item py-3 px-3 d-flex align-items-center text-danger">
+                                    <i class="fas fa-sign-out-alt me-3"></i>
+                                    <span class="fw-700">{{ __('pos.exit_system') }}</span>
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>

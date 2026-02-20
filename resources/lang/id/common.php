@@ -12,6 +12,7 @@ return [
     'in_catalog' => 'Dalam katalog',
     'suppliers' => 'Pemasok',
     'quantity' => 'Jumlah',
+    'settings' => 'Pengaturan',
     'registered_suppliers' => 'Pemasok terdaftar',
     'sales_overview' => 'Ringkasan Penjualan',
     'top_products' => 'Produk Terlaris',

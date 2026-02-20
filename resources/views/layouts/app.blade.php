@@ -81,8 +81,8 @@
 
         /* Theme Toggle Dropdown */
         .theme-toggle-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--color-primary);
+            border: 2px solid var(--color-primary-light);
             border-radius: 10px;
             padding: 0.45rem 0.85rem;
             color: white;
@@ -95,7 +95,7 @@
         }
 
         .theme-toggle-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--color-primary-dark);
         }
 
         .theme-menu {
@@ -128,21 +128,14 @@
         }
 
         .theme-option.active {
-            background: var(--brown-100, #f0e7e0);
-            color: var(--color-primary, #85695a);
-            font-weight: 600;
+            background: var(--color-primary, #85695a) !important;
+            color: white !important;
+            border-color: var(--color-primary-dark) !important;
         }
 
-        .theme-option i {
-            width: 1.1rem;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        .theme-check {
-            margin-left: auto;
-            font-size: 0.75rem;
-            color: var(--color-primary, #85695a);
+        .theme-selector-group .btn {
+            border-radius: 8px;
+            padding: 0.4rem;
         }
 
         /* Fix for Bootstrap Modals & SweetAlert2 with CSS Zoom */
@@ -547,60 +540,93 @@
             </a>
 
             <div class="ms-auto d-flex align-items-center">
-                <!-- Theme Toggle -->
-                <div class="dropdown me-2">
-                    <button class="theme-toggle-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                        id="themeToggleBtn" title="Pilih Tema">
-                        <i class="fa-solid fa-sun" id="themeIcon"></i>
-                        <span class="d-none d-md-inline" id="themeLabel">Light</span>
+                <div class="dropdown">
+                    <button class="nav-link user-profile-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <div class="profile-avatar me-3">{{ strtoupper(substr($user?->name ?? '', 0, 1)) }}</div>
+                        <div class="d-flex flex-column text-start">
+                            <span class="user-name line-height-1 mb-1">{{ $user?->name }}</span>
+                            <span class="text-white-50 fw-700 text-uppercase"
+                                style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
+                        </div>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end theme-menu" id="themeMenu">
-                        <button class="theme-option" data-theme="light">
-                            <i class="fa-solid fa-sun"></i> Light
-                            <i class="fa-solid fa-check theme-check d-none"></i>
-                        </button>
-                        <button class="theme-option" data-theme="dark">
-                            <i class="fa-solid fa-moon"></i> Dark
-                            <i class="fa-solid fa-check theme-check d-none"></i>
-                        </button>
-                        <button class="theme-option" data-theme="system">
-                            <i class="fa-solid fa-desktop"></i> System
-                            <i class="fa-solid fa-check theme-check d-none"></i>
-                        </button>
+                    <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
+                        style="min-width: 280px; border-radius: 16px;">
+                        {{-- Header Profil --}}
+                        <li class="p-3 bg-light border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="profile-avatar bg-primary text-white me-3"
+                                    style="width: 45px; height: 45px;">
+                                    {{ strtoupper(substr($user?->name ?? '', 0, 1)) }}
+                                </div>
+                                <div class="overflow-hidden">
+                                    <h6 class="mb-0 fw-800 text-truncate text-dark">{{ $user?->name }}</h6>
+                                    <div class="small text-muted text-truncate">{{ $user?->role?->name }}</div>
+                                </div>
+                            </div>
+                        </li>
+
+                        {{-- Section: Settings --}}
+                        <div class="p-2">
+                            <div class="dropdown-header text-uppercase fw-bold"
+                                style="font-size: 0.7rem; letter-spacing: 0.05em;">
+                                {{ __('common.settings') ?? 'Pengaturan' }}
+                            </div>
+
+                            {{-- Theme Selection --}}
+                            <div class="px-3 py-2">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-600 text-muted"><i
+                                            class="fa-solid fa-circle-half-stroke me-2"></i>Tema</span>
+                                </div>
+                                <div class="btn-group w-100 theme-selector-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary theme-option"
+                                        data-theme="light" title="Light">
+                                        <i class="fa-solid fa-sun"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary theme-option"
+                                        data-theme="dark" title="Dark">
+                                        <i class="fa-solid fa-moon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary theme-option"
+                                        data-theme="system" title="System">
+                                        <i class="fa-solid fa-desktop"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <hr class="dropdown-divider mx-2">
+
+                            {{-- Language Selection --}}
+                            <div class="px-3 py-2">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-600 text-muted"><i
+                                            class="fa-solid fa-globe me-2"></i>Bahasa</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('language.change', 'en') }}"
+                                        class="btn btn-sm {{ app()->getLocale() == 'en' ? 'btn-primary' : 'btn-outline-secondary' }} grow">English</a>
+                                    <a href="{{ route('language.change', 'id') }}"
+                                        class="btn btn-sm {{ app()->getLocale() == 'id' ? 'btn-primary' : 'btn-outline-secondary' }} grow">Indonesia</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="dropdown-divider m-0">
+
+                        {{-- Logout --}}
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="dropdown-item py-3 px-3 d-flex align-items-center text-danger fw-bold">
+                                    <i class="fa-solid fa-right-from-bracket me-3"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+                        </li>
                     </div>
                 </div>
-
-                <!-- Language Switcher -->
-                <div class="dropdown me-3">
-                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-globe me-1"></i> {{ strtoupper(app()->getLocale()) }}
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}"
-                                href="{{ route('language.change', 'en') }}">
-                                English
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item {{ app()->getLocale() == 'id' ? 'active' : '' }}"
-                                href="{{ route('language.change', 'id') }}">
-                                Bahasa Indonesia
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <a class="nav-link user-profile-link" href="#" title="Profile Settings (Coming Soon)"
-                    style="cursor: default;">
-                    <div class="profile-avatar me-3">{{ strtoupper(substr($user?->name ?? '', 0, 1)) }}</div>
-                    <div class="d-flex flex-column">
-                        <span class="user-name line-height-1 mb-1">{{ $user?->name }}</span>
-                        <span class="text-white-50 fw-700 text-uppercase"
-                            style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
-                    </div>
-                </a>
             </div>
         </div>
     </nav>
@@ -993,21 +1019,27 @@
                     htmlEl.setAttribute('data-bs-theme', effective);
                     localStorage.setItem('artika-theme', pref);
 
-                    // Update button icon & label
+                    // Update button icon & label if they exist
+                    const themeIcon = document.getElementById('themeIcon');
+                    const themeLabel = document.getElementById('themeLabel');
                     const icons = { light: 'fa-sun', dark: 'fa-moon', system: 'fa-desktop' };
                     const labels = { light: 'Light', dark: 'Dark', system: 'System' };
-                    themeIcon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
-                    if (themeLabel) themeLabel.textContent = labels[pref] || 'Light';
+
+                    if (themeIcon) {
+                        themeIcon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
+                    }
+                    if (themeLabel) {
+                        themeLabel.textContent = labels[pref] || 'Light';
+                    }
 
                     // Update active indicator
                     themeOptions.forEach(opt => {
-                        const check = opt.querySelector('.theme-check');
                         if (opt.dataset.theme === pref) {
                             opt.classList.add('active');
-                            check?.classList.remove('d-none');
+                            opt.querySelector('.theme-check')?.classList.remove('d-none');
                         } else {
                             opt.classList.remove('active');
-                            check?.classList.add('d-none');
+                            opt.querySelector('.theme-check')?.classList.add('d-none');
                         }
                     });
                 }
