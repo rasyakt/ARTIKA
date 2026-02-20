@@ -267,6 +267,12 @@ class WarehouseController extends Controller
                     $moveType = 'in';
                     break;
                 case 'subtract':
+                    if ($stock->quantity < $request->quantity) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => __('warehouse.insufficient_stock') . " (Tersedia: {$stock->quantity}, Diminta: {$request->quantity})"
+                        ], 422);
+                    }
                     $stock->quantity -= $request->quantity;
                     $quantityChange = -$request->quantity;
                     $moveType = 'out';

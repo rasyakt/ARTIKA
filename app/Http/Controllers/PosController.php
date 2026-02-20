@@ -267,7 +267,8 @@ class PosController extends Controller
      */
     public function printReceipt($transactionId)
     {
-        $transaction = Transaction::with(['user', 'items.product'])
+        $transaction = Transaction::where('user_id', Auth::id())
+            ->with(['user', 'items.product'])
             ->findOrFail($transactionId);
 
         $paperSize = \App\Models\Setting::get('receipt_paper_size', '58mm');

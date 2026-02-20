@@ -17,6 +17,7 @@ class Transaction extends Model
         'payment_method',
         'cash_amount',
         'change_amount',
+        'payment_proof',
         'status',
     ];
 
@@ -27,20 +28,6 @@ class Transaction extends Model
         'cash_amount' => 'decimal:2',
         'change_amount' => 'decimal:2',
     ];
-
-    /**
-     * Boot the model and generate invoice number
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($transaction) {
-            if (empty($transaction->invoice_no)) {
-                $transaction->invoice_no = 'INV-' . date('Ymd') . '-' . str_pad(static::whereDate('created_at', today())->count() + 1, 4, '0', STR_PAD_LEFT);
-            }
-        });
-    }
 
     /**
      * Get the user (cashier) for this transaction

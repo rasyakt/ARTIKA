@@ -30,21 +30,21 @@ class TransactionService
 
     public function processTransaction(array $data, array $items)
     {
-        // 0. Preliminary Stock Check (Prevent negative stock)
-        foreach ($items as $item) {
-            $product = Product::with('stocks')->find($item['product_id']);
-            $available = $product ? $product->available_stock : 0;
-
-            if ($available < $item['quantity']) {
-                $productName = $product ? $product->name : 'Unknown Product';
-                throw new \Exception(trans('pos.insufficient_stock') . " ({$productName}. Tersedia: {$available}, Diminta: {$item['quantity']})");
-            }
-        }
-
         // Control Transaction
         return DB::transaction(function () use ($data, $items) {
+            // 0. Stock Check INSIDE transaction for consistency
+            foreach ($items as $item) {
+                $product = Product::with('stocks')->find($item['product_id']);
+                $available = $product ? $product->available_stock : 0;
+
+                if ($available < $item['quantity']) {
+                    $productName = $product ? $product->name : 'Unknown Product';
+                    throw new \Exception(trans('pos.insufficient_stock') . " ({$productName}. Tersedia: {$available}, Diminta: {$item['quantity']})");
+                }
+            }
+
             // 1. Create Transaction Header
-            $data['invoice_no'] = 'INV-' . strtoupper(Str::random(10)); // Simple invoice gen
+            $data['invoice_no'] = 'INV-' . strtoupper(Str::random(10));
             $data['status'] = 'completed';
 
             $transaction = $this->transactionRepository->createTransaction($data);

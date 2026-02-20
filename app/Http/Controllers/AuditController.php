@@ -6,6 +6,7 @@ use App\Models\AuditLog;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Hash;
 
 class AuditController extends Controller
 {
@@ -145,6 +146,7 @@ class AuditController extends Controller
                     __('admin.amount'),
                     'IP Address',
                     __('admin.device') ?? 'Device',
+                    'URL',
                     __('admin.notes')
                 ], $delimiter);
 
@@ -161,6 +163,7 @@ class AuditController extends Controller
                         : ($log->amount ? number_format($log->amount, 0, ',', '.') : '-'),
                         $log->ip_address,
                         $log->device_name,
+                        $log->url,
                         $log->notes
                     ], $delimiter);
                 }
@@ -232,10 +235,33 @@ class AuditController extends Controller
      */
     public function clear(Request $request)
     {
+        $request->validate([
+            'password' => 'required|string',
+            'clear_type' => 'required|string|in:filtered,backup_clear'
+        ]);
+
+        // Verify password
+        if (!\Illuminate\Support\Facades\Hash::check($request->password, auth()->user()->password)) {
+            return redirect()->back()
+                ->with('error', __('admin.password_incorrect') ?? 'Password yang anda masukkan salah')
+                ->withInput();
+        }
+
         $query = AuditLog::query();
 
-        if ($request->filled('clear_type') && $request->clear_type === 'filtered') {
-            // Apply current filters to deletion
+        // Apply filters if needed
+        if ($request->clear_type === 'filtered') {
+            // Safety check: at least one filter must be set to prevent accidental deletion of all logs
+            $hasFilters = $request->filled('start_date') || $request->filled('end_date') ||
+                $request->filled('action') || $request->filled('role_id') ||
+                $request->filled('search');
+
+            if (!$hasFilters) {
+                return redirect()->back()
+                    ->with('error', __('admin.filter_required_for_clear') ?? 'Minimal satu filter harus diisi untuk menghapus log secara selektif. Gunakan "Backup & Clear" untuk menghapus semua.')
+                    ->withInput();
+            }
+
             if ($request->filled('start_date') && $request->filled('end_date')) {
                 $query->whereBetween('created_at', [
                     $request->start_date . ' 00:00:00',
@@ -260,9 +286,102 @@ class AuditController extends Controller
             }
         }
 
+        // Handle Backup & Clear
+        if ($request->clear_type === 'backup_clear') {
+            $logs = $query->with('user.role')->latest()->get();
+            $startDate = $logs->last()?->created_at?->format('Y-m-d') ?? now()->format('Y-m-d');
+            $endDate = $logs->first()?->created_at?->format('Y-m-d') ?? now()->format('Y-m-d');
+
+            // Deletion first
+            $query->delete();
+
+            // Log the action AFTER deletion so it remains in the new empty log
+            AuditLog::log(
+                'audit_backup_clear',
+                null,
+                null,
+                null,
+                null,
+                null,
+                'Full backup and clear performed by ' . auth()->user()->name
+            );
+
+            // Return CSV response
+            return $this->downloadCsv($logs, $startDate, $endDate);
+        }
+
         $query->delete();
+
+        // Log filtered deletion if applicable
+        AuditLog::log(
+            'audit_clear',
+            null,
+            null,
+            null,
+            null,
+            null,
+            'Audit logs cleared (Type: ' . $request->clear_type . ') by ' . auth()->user()->name
+        );
 
         return redirect()->route('admin.audit.index')
             ->with('success', __('admin.logs_cleared'));
+    }
+
+    /**
+     * Helper to download CSV
+     */
+    private function downloadCsv($logs, $startDate, $endDate)
+    {
+        $filename = 'audit-backup-' . now()->format('Y-m-d-H-i-s') . '.csv';
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=$filename",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $callback = function () use ($logs, $startDate, $endDate) {
+            $file = fopen('php://output', 'w');
+            fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
+            $delimiter = ';';
+
+            fputcsv($file, [__('admin.logs_report'), $startDate . ' - ' . $endDate], $delimiter);
+            fputcsv($file, [], $delimiter);
+            fputcsv($file, [
+                __('admin.date'),
+                __('admin.user'),
+                __('admin.role') ?? 'Role',
+                __('admin.action'),
+                __('admin.model') ?? 'Model',
+                'ID',
+                __('admin.amount'),
+                'IP Address',
+                __('admin.device') ?? 'Device',
+                'URL',
+                __('admin.notes')
+            ], $delimiter);
+
+            foreach ($logs as $log) {
+                fputcsv($file, [
+                    $log->created_at->format('Y-m-d H:i:s'),
+                    $log->user->name ?? 'System',
+                    $log->user->role->name ?? '-',
+                    $log->action,
+                    $log->model_type,
+                    $log->model_id,
+                    in_array($log->action, ['transaction_created', 'payment_received', 'refund', 'expense_created'])
+                    ? ($log->amount ? 'Rp ' . number_format($log->amount, 0, ',', '.') : '-')
+                    : ($log->amount ? number_format($log->amount, 0, ',', '.') : '-'),
+                    $log->ip_address,
+                    $log->device_name,
+                    $log->url,
+                    $log->notes
+                ], $delimiter);
+            }
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

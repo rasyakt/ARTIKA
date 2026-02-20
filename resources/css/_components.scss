@@ -423,7 +423,22 @@
 // ============================================
 
 .table-responsive {
-    overflow: visible !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+
+    // Ensure dropdowns inside tables are not clipped
+    .dropdown-menu {
+        position: fixed !important;
+        z-index: 1050 !important;
+    }
+
+    // Prevent text from wrapping in table cells (keeps data on single line)
+    .table {
+        th,
+        td {
+            white-space: nowrap;
+        }
+    }
 }
 
 .dropdown-menu {
@@ -562,13 +577,13 @@
                 transform: scale(1.05);
             }
         }
-        
+
         &.active .page-link {
             box-shadow: 0 4px 12px rgba(133, 105, 90, 0.3);
             transform: scale(1.1);
             z-index: 10;
         }
-        
+
         &.disabled .page-link {
             opacity: 0.5;
             cursor: not-allowed;

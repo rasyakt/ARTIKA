@@ -26,8 +26,8 @@
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="maintenanceDropdown" style="border-radius: 12px; padding: 0.5rem;">
                             <li>
-                                <button class="dropdown-item py-2 px-3 text-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#clearLogsModal" style="border-radius: 8px;">
-                                    <i class="fas fa-trash-alt me-2"></i> {{ __('admin.clear_logs') }}
+                                <button class="dropdown-item py-2 px-3 text-danger d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#clearLogsModal" onclick="setClearType('backup_clear')" style="border-radius: 8px;">
+                                    <i class="fas fa-file-export me-2"></i> {{ __('admin.backup_and_clear') ?? 'Backup & Hapus Semua' }}
                                 </button>
                             </li>
                         </ul>
@@ -48,7 +48,7 @@
                     </button>
                     <button class="btn btn-brown" onclick="exportReport('csv')"
                         style="padding: 0.5rem 1rem; font-weight: 600; border-top-left-radius: 0; border-bottom-left-radius: 0;">
-                        <i class="fas fa-file-csv me-2"></i> CSV
+                        <i class="fas fa-file-csv me-2"></i> {{ __('admin.backup_excel') ?? 'Backup Excel' }}
                     </button>
                 </div>
             </div>
@@ -93,54 +93,67 @@
 
         <!-- Audit Logs Table -->
         <div class="card">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-2">
                 <h5 class="mb-0">{{ __('admin.activity_logs_list') }}</h5>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light shadow-sm dropdown-toggle d-flex align-items-center" type="button" id="columnToggleDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" style="border-radius: 8px; font-weight: 600;">
+                        <i class="fas fa-columns me-2"></i> Kolom
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 p-3" aria-labelledby="columnToggleDropdown" style="border-radius: 12px; min-width: 200px;">
+                        <h6 class="dropdown-header ps-0 mb-2 text-dark fw-bold">Tampilkan Kolom</h6>
+                        <li class="mb-2"><div class="form-check"><input class="form-check-input col-toggle" type="checkbox" value="col-date" id="check-date" checked> <label class="form-check-label small" for="check-date">Tanggal</label></div></li>
+                        <li class="mb-2"><div class="form-check"><input class="form-check-input col-toggle" type="checkbox" value="col-user" id="check-user" checked> <label class="form-check-label small" for="check-user">User</label></div></li>
+                        <li class="mb-2"><div class="form-check"><input class="form-check-input col-toggle" type="checkbox" value="col-action" id="check-action" checked> <label class="form-check-label small" for="check-action">Aksi</label></div></li>
+                        <li class="mb-2"><div class="form-check"><input class="form-check-input col-toggle" type="checkbox" value="col-model" id="check-model" checked> <label class="form-check-label small" for="check-model">Model</label></div></li>
+                        <li class="mb-2"><div class="form-check"><input class="form-check-input col-toggle" type="checkbox" value="col-amount" id="check-amount" checked> <label class="form-check-label small" for="check-amount">Jumlah</label></div></li>
+                        <li class="mb-2"><div class="form-check"><input class="form-check-input col-toggle" type="checkbox" value="col-url" id="check-url" checked> <label class="form-check-label small" for="check-url">URL</label></div></li>
+                        <li class="mb-2"><div class="form-check"><input class="form-check-input col-toggle" type="checkbox" value="col-ip" id="check-ip" checked> <label class="form-check-label small" for="check-ip">IP Address</label></div></li>
+                        <li><div class="form-check"><input class="form-check-input col-toggle" type="checkbox" value="col-device" id="check-device" checked> <label class="form-check-label small" for="check-device">Device</label></div></li>
+                    </ul>
+                </div>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover mb-0">
+                    <table class="table table-hover mb-0 text-nowrap">
                         <thead class="table-light">
                             <tr>
-                                <th>{{ __('common.date') }}</th>
-                                <th>{{ __('common.user') }}</th>
-                                <th>{{ __('common.action') }}</th>
-                                <th>{{ __('admin.model') }}</th>
-                                <th>{{ __('common.amount') }}</th>
-                                <th>{{ __('admin.ip_address') }}</th>
-                                <th>Device</th>
+                                <th class="col-date">{{ __('common.date') }}</th>
+                                <th class="col-user">{{ __('common.user') }}</th>
+                                <th class="col-action">{{ __('common.action') }}</th>
+                                <th class="col-model">{{ __('admin.model') }}</th>
+                                <th class="col-amount">{{ __('common.amount') }}</th>
+                                <th class="col-url">URL</th>
+                                <th class="col-ip">{{ __('admin.ip_address') }}</th>
+                                <th class="col-device">Device</th>
                                 <th>{{ __('common.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($logs as $log)
                                 <tr>
-                                    <td>
+                                    <td class="col-date">
                                         <small>{{ $log->created_at->format('Y-m-d H:i:s') }}</small>
                                     </td>
-                                    <td>
+                                    <td class="col-user">
                                         <span class="badge bg-info">{{ $log->user?->name ?? __('common.system') }}</span>
-                                        <br><small class="text-muted">{{ $log->user?->role->name ?? '' }}</small>
+                                        <small class="text-muted ms-1">({{ $log->user?->role->name ?? '' }})</small>
                                         @if($log->user && $log->user->role && $log->user->role->name === 'cashier')
-                                            <br><small class="text-muted">
-                                                <i class="fa-solid fa-id-card me-1"></i>{{ $log->user->nis ?? '-' }}
-                                            </small>
-                                            <br><small class="text-muted">
-                                                <i class="fa-solid fa-user me-1"></i>{{ $log->user->username ?? '-' }}
+                                            <small class="text-muted ms-2">
+                                                <i class="fa-solid fa-id-card me-1 small"></i>{{ $log->user->nis ?? '-' }}
+                                                <i class="fa-solid fa-user ms-2 me-1 small"></i>{{ $log->user->username ?? '-' }}
                                             </small>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="col-action">
                                         <span class="badge bg-secondary">{{ $log->action }}</span>
                                     </td>
-                                    <td>
-                                        <small>
-                                            {{ $log->model_type }}
-                                            @if($log->model_id)
-                                                <br><code>#{{ $log->model_id }}</code>
-                                            @endif
-                                        </small>
+                                    <td class="col-model">
+                                        <small class="fw-bold">{{ $log->model_type }}</small>
+                                        @if($log->model_id)
+                                            <code class="ms-1 small">#{{ $log->model_id }}</code>
+                                        @endif
                                     </td>
-                                    <td>
+                                    <td class="col-amount">
                                         @if($log->amount)
                                             @if(in_array($log->action, ['transaction_created', 'payment_received', 'refund', 'expense_created']))
                                                 <strong>Rp{{ number_format($log->amount, 0, ',', '.') }}</strong>
@@ -151,10 +164,13 @@
                                             <span class="text-muted">-</span>
                                         @endif
                                     </td>
-                                    <td>
+                                    <td class="col-url">
+                                        <small><code>{{ $log->url }}</code></small>
+                                    </td>
+                                    <td class="col-ip">
                                         <small><code>{{ $log->ip_address }}</code></small>
                                     </td>
-                                    <td>
+                                    <td class="col-device">
                                         <small>
                                             <i class="fa-solid fa-desktop"></i> {{ $log->device_name ?? 'Unknown' }}
                                         </small>
@@ -175,6 +191,7 @@
                                             data-mac="{{ $log->mac_address ?? 'Not Available' }}"
                                             data-device="{{ $log->device_name ?? 'Unknown Device' }}"
                                             data-agent="{{ $log->user_agent }}"
+                                            data-url="{{ $log->url }}"
                                             data-date="{{ $log->created_at->format('Y-m-d H:i:s') }}"
                                             data-changes="{{ json_encode($log->changes ?? []) }}"
                                             data-notes="{{ $log->notes ?? '-' }}">
@@ -337,6 +354,10 @@
                         <label class="text-muted small"><i class="fa-solid fa-browser me-1"></i>User Agent</label>
                         <p id="detail-agent" class="mb-0 fw-bold" style="font-size: 0.75rem; word-break: break-all;"></p>
                     </div>
+                    <div class="mb-3">
+                        <label class="text-muted small"><i class="fa-solid fa-link me-1"></i>Full URL</label>
+                        <p id="detail-url" class="mb-0 fw-bold" style="font-size: 0.75rem; word-break: break-all;"><code></code></p>
+                    </div>
                     <hr>
                     <div class="mb-3">
                         <label class="text-muted small"><i class="fa-solid fa-sticky-note me-1"></i>Notes</label>
@@ -344,8 +365,22 @@
                     </div>
                     <div class="mb-3">
                         <label class="text-muted small"><i class="fa-solid fa-code me-1"></i>Data Changes</label>
-                        <pre id="detail-changes" class="bg-light p-2"
-                            style="border-radius: 6px; max-height: 300px; overflow-y: auto;"></pre>
+                        <div id="detail-changes-container">
+                            <pre id="detail-changes-raw" class="bg-light p-2 d-none"
+                                style="border-radius: 6px; max-height: 300px; overflow-y: auto;"></pre>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered mt-2" id="detail-changes-table">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Field</th>
+                                            <th>Before</th>
+                                            <th>After</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -370,10 +405,20 @@
                     <div class="mb-3">
                         <i class="fas fa-trash-alt fa-3x text-danger opacity-25"></i>
                     </div>
-                    <p class="mb-4">{{ __('admin.clear_logs_desc') }}<br><strong>{{ __('admin.clear_confirm') }}</strong></p>
+                    <p class="mb-2" id="clearLogsText">{{ __('admin.clear_logs_desc') }}<br><strong>{{ __('admin.clear_confirm') }}</strong></p>
                     
                     <form action="{{ route('admin.audit.clear') }}" method="POST" id="clearLogsForm">
                         @csrf
+                        <div class="mb-4 text-start">
+                            <label class="form-label fw-bold small text-muted">{{ __('admin.confirm_password') ?? 'Konfirmasi Password' }}</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+                            </div>
+                            <div class="form-text text-danger small" id="passwordError" style="display: none;">
+                                {{ __('admin.password_incorrect') ?? 'Password yang anda masukkan salah' }}
+                            </div>
+                        </div>
                         {{-- Preserved filters for 'filtered' deletion --}}
                         <input type="hidden" name="start_date" value="{{ request('start_date') }}">
                         <input type="hidden" name="end_date" value="{{ request('end_date') }}">
@@ -383,8 +428,8 @@
                         <input type="hidden" name="clear_type" id="clear_type" value="all">
 
                         <div class="d-grid gap-2">
-                            <button type="button" class="btn btn-danger py-2 fw-bold" onclick="confirmClear('all')">
-                                <i class="fas fa-dumpster me-2"></i>{{ __('admin.clear_logs_all') }}
+                            <button type="submit" class="btn btn-danger py-2 fw-bold" id="confirmClearBtn">
+                                <i class="fas fa-check me-2"></i>{{ __('admin.confirm_and_proceed') ?? 'Konfirmasi & Lanjutkan' }}
                             </button>
                             
                             @if(request()->anyFilled(['start_date', 'end_date', 'action', 'role_id', 'search']))
@@ -421,6 +466,7 @@
             const mac = button.getAttribute('data-mac');
             const device = button.getAttribute('data-device');
             const agent = button.getAttribute('data-agent');
+            const url = button.getAttribute('data-url');
             const notes = button.getAttribute('data-notes');
             const changes = JSON.parse(button.getAttribute('data-changes') || '{}');
 
@@ -447,8 +493,51 @@
             modal.querySelector('#detail-mac').innerHTML = `<code>${mac}</code>`;
             modal.querySelector('#detail-device').textContent = device;
             modal.querySelector('#detail-agent').textContent = agent;
+            modal.querySelector('#detail-url').innerHTML = `<code>${url}</code>`;
             modal.querySelector('#detail-notes').textContent = notes;
-            modal.querySelector('#detail-changes').textContent = JSON.stringify(changes, null, 2);
+
+            // Handle Changes Table
+            const changesRaw = modal.querySelector('#detail-changes-raw');
+            const changesTableBody = modal.querySelector('#detail-changes-table tbody');
+            changesTableBody.innerHTML = '';
+            
+            if (changes && (changes.before || changes.after)) {
+                changesRaw.classList.add('d-none');
+                modal.querySelector('#detail-changes-table').classList.remove('d-none');
+                
+                const before = changes.before || {};
+                const after = changes.after || {};
+                const allKeys = [...new Set([...Object.keys(before), ...Object.keys(after)])];
+                
+                if (allKeys.length > 0) {
+                    allKeys.forEach(key => {
+                        const tr = document.createElement('tr');
+                        
+                        const tdKey = document.createElement('td');
+                        tdKey.className = 'fw-bold small';
+                        tdKey.textContent = key;
+                        
+                        const tdBefore = document.createElement('td');
+                        tdBefore.className = 'text-danger small';
+                        tdBefore.textContent = (typeof before[key] === 'object' ? JSON.stringify(before[key]) : before[key]) ?? '-';
+                        
+                        const tdAfter = document.createElement('td');
+                        tdAfter.className = 'text-success small';
+                        tdAfter.textContent = (typeof after[key] === 'object' ? JSON.stringify(after[key]) : after[key]) ?? '-';
+                        
+                        tr.appendChild(tdKey);
+                        tr.appendChild(tdBefore);
+                        tr.appendChild(tdAfter);
+                        changesTableBody.appendChild(tr);
+                    });
+                } else {
+                    changesTableBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted italic">No specific field changes recorded</td></tr>';
+                }
+            } else {
+                changesRaw.textContent = JSON.stringify(changes, null, 2);
+                changesRaw.classList.remove('d-none');
+                modal.querySelector('#detail-changes-table').classList.add('d-none');
+            }
         });
 
         function exportReport(format) {
@@ -459,16 +548,59 @@
         }
 
         function confirmClear(type) {
-            confirmAction({
-                title: "{{ __('admin.clear_logs') }}",
-                text: "{{ __('admin.clear_confirm') }}",
-                icon: 'warning',
-                confirmButtonText: "{{ __('admin.delete_logs') }}",
-                cancelButtonText: "{{ __('admin.cancel') }}"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('clear_type').value = type;
-                    document.getElementById('clearLogsForm').submit();
+            document.getElementById('clear_type').value = type;
+            const text = document.getElementById('clearLogsText');
+            const btn = document.getElementById('confirmClearBtn');
+            
+            if (type === 'backup_clear') {
+                text.innerHTML = "<strong>Backup dan Hapus Semua Log</strong><br>Sistem akan mengunduh laporan excel terlebih dahulu sebelum menghapus seluruh data secara permanen.";
+                btn.className = "btn btn-warning py-2 fw-bold text-white";
+                btn.innerHTML = '<i class="fas fa-file-export me-2"></i>Backup & Hapus';
+            } else {
+                text.innerHTML = "{{ __('admin.clear_logs_desc') }}<br><strong>{{ __('admin.clear_confirm') }}</strong>";
+                btn.className = "btn btn-danger py-2 fw-bold";
+                btn.innerHTML = '<i class="fas fa-check me-2"></i>Konfirmasi & Lanjutkan';
+            }
+        }
+
+        function setClearType(type) {
+            confirmClear(type);
+        }
+
+        // Add auto-refresh for backup_clear
+        document.getElementById('clearLogsForm').addEventListener('submit', function(e) {
+            const clearType = document.getElementById('clear_type').value;
+            if (clearType === 'backup_clear') {
+                // We use a timeout to let the browser initiate the download before reloading
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+            }
+        });
+
+        // Column visibility logic
+        document.querySelectorAll('.col-toggle').forEach(checkbox => {
+            // Load initial state
+            const colName = checkbox.value;
+            const isHidden = localStorage.getItem('hide-' + colName) === 'true';
+            
+            if (isHidden) {
+                checkbox.checked = false;
+                toggleColumn(colName, false);
+            }
+
+            checkbox.addEventListener('change', function() {
+                toggleColumn(this.value, this.checked);
+                localStorage.setItem('hide-' + this.value, !this.checked);
+            });
+        });
+
+        function toggleColumn(colName, show) {
+            document.querySelectorAll('.' + colName).forEach(el => {
+                if (show) {
+                    el.classList.remove('d-none');
+                } else {
+                    el.classList.add('d-none');
                 }
             });
         }

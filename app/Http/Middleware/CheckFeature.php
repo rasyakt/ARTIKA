@@ -22,7 +22,21 @@ class CheckFeature
             if ($request->wantsJson()) {
                 return response()->json(['success' => false, 'message' => 'This feature is currently disabled.'], 403);
             }
-            return redirect()->route('admin.dashboard')->with('error', 'This feature is currently disabled by administrator.');
+
+            // Redirect to the appropriate dashboard based on user role
+            $redirectRoute = 'dashboard';
+            if ($request->user()) {
+                $role = strtolower($request->user()->role->name ?? '');
+                $redirectRoute = match ($role) {
+                    'superadmin', 'admin' => 'admin.dashboard',
+                    'manager' => 'manager.dashboard',
+                    'cashier' => 'pos.index',
+                    'warehouse' => 'warehouse.dashboard',
+                    default => 'dashboard',
+                };
+            }
+
+            return redirect()->route($redirectRoute)->with('error', 'This feature is currently disabled by administrator.');
         }
 
         return $next($request);

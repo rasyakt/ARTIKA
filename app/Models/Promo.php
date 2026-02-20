@@ -4,8 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Traits\Auditable;
+
 class Promo extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'name',
         'type',
@@ -19,8 +23,8 @@ class Promo extends Model
     ];
 
     protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
         'is_active' => 'boolean',
         'value' => 'decimal:2',
         'min_purchase' => 'decimal:2',
@@ -62,7 +66,7 @@ class Promo extends Model
     {
         $now = now();
         return $this->is_active &&
-            \Carbon\Carbon::parse($this->start_date)->startOfDay()->lte($now) &&
-            \Carbon\Carbon::parse($this->end_date)->endOfDay()->gte($now);
+            $this->start_date->startOfDay()->lte($now) &&
+            $this->end_date->endOfDay()->gte($now);
     }
 }
