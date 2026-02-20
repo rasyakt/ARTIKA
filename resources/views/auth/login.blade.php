@@ -10,7 +10,7 @@
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     <style>
         body {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--brown-900) 100%);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -78,7 +78,7 @@
         }
 
         .card-header {
-            background: var(--gradient-primary);
+            background: var(--color-primary);
             color: white;
             border-bottom: none;
             padding: 2.5rem 2rem;

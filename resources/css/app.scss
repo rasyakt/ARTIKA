@@ -94,6 +94,79 @@
     --radius-xl: #{$radius-xl};
 }
 
+/* Dark theme overrides — activated by data-bs-theme="dark" on <html> */
+[data-bs-theme="dark"] {
+    /* Brown Palette (darkened surfaces, lightened text tones) */
+    --brown-50: #2d2520;
+    --brown-100: #3a302a;
+    --brown-200: #4a3d35;
+    --brown-300: #5c4d42;
+    --brown-400: #7a6858;
+    --brown-500: #9a8474;
+    --brown-600: #b49e8e;
+    --brown-700: #c8b4a4;
+    --brown-800: #daccbf;
+    --brown-900: #ece2d8;
+    --card-bg: #2a2a2a;
+
+    /* Primary Brand (adjusted for dark mode, keeping the brown identity) */
+    --color-primary: #a18072;       /* Medium brown */
+    --color-primary-dark: #85695a;  /* Original primary (Darker) */
+    --color-primary-light: #b49e8e; /* Light brown / Tan */
+    --color-primary-lighter: #c8b4a4; /* Very light tan */
+
+    /* Secondary */
+    --color-secondary: #5c4d42;
+    --color-secondary-dark: #4a3d35;
+    --color-secondary-light: #3a302a;
+
+    /* Accent */
+    --color-accent-warm: #d4976e;
+    --color-accent-gold: #e0b88a;
+    --color-cream: #3a302a;
+
+    /* Neutral (inverted) */
+    --color-white: #1e1e1e;
+    --color-bg: #121212;
+    --color-text: #e7e5e4;
+    --gray-50: #1e1e1e;
+    --gray-100: #2a2a2a;
+    --gray-200: #3a3a3a;
+    --gray-300: #4a4a4a;
+    --gray-400: #6a6a6a;
+    --gray-500: #8a8a8a;
+    --gray-600: #a8a8a8;
+    --gray-700: #c8c8c8;
+    --gray-800: #e0e0e0;
+    --gray-900: #f0f0f0;
+
+    /* Semantic - Success (brighter for dark bg) */
+    --color-success: #4ade80;
+    --color-success-light: #14532d;
+    --color-success-dark: #86efac;
+
+    /* Semantic - Warning */
+    --color-warning: #fb923c;
+    --color-warning-light: #7c2d12;
+    --color-warning-dark: #fdba74;
+
+    /* Semantic - Danger */
+    --color-danger: #f87171;
+    --color-danger-light: #7f1d1d;
+    --color-danger-dark: #fca5a5;
+
+    /* Semantic - Info */
+    --color-info: #38bdf8;
+    --color-info-light: #0c4a6e;
+    --color-info-dark: #7dd3fc;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #5c4d42 0%, #4a3d35 100%);
+    --gradient-warm: linear-gradient(135deg, #7a5a42 0%, #5c4d42 100%);
+
+    color-scheme: dark;
+}
+
 // ============================================
 // Global Styles
 // ============================================

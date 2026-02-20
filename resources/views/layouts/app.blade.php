@@ -3,6 +3,17 @@
 <html lang="en">
 
 <head>
+    {{-- Apply theme ASAP to prevent flash of wrong theme --}}
+    <script>
+        (function () {
+            const saved = localStorage.getItem('artika-theme') || 'system';
+            if (saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') - {{ App\Models\Setting::get('system_name', 'ARTIKA POS') }}</title>
@@ -61,10 +72,77 @@
         }
 
         body {
-            background: var(--gray-50);
+            background: var(--color-bg);
             min-height: 100vh;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-            color: var(--brown-900);
+            color: var(--color-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Theme Toggle Dropdown */
+        .theme-toggle-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 0.45rem 0.85rem;
+            color: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .theme-toggle-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .theme-menu {
+            min-width: 160px;
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            background: var(--card-bg, #fff);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--color-text, #333);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .theme-option:hover {
+            background: var(--gray-100, #f5f5f5);
+        }
+
+        .theme-option.active {
+            background: var(--brown-100, #f0e7e0);
+            color: var(--color-primary, #85695a);
+            font-weight: 600;
+        }
+
+        .theme-option i {
+            width: 1.1rem;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .theme-check {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--color-primary, #85695a);
         }
 
         /* Fix for Bootstrap Modals & SweetAlert2 with CSS Zoom */
@@ -94,7 +172,7 @@
         }
 
         .sidebar {
-            background: #fffefc;
+            background: var(--card-bg, #fffefc);
             position: fixed;
             top: 70px;
             left: 0;
@@ -107,6 +185,7 @@
             z-index: 1000;
             scrollbar-width: thin;
             scrollbar-color: var(--color-primary) transparent;
+            transition: background-color 0.3s ease;
         }
 
         .sidebar::-webkit-scrollbar {
@@ -468,6 +547,29 @@
             </a>
 
             <div class="ms-auto d-flex align-items-center">
+                <!-- Theme Toggle -->
+                <div class="dropdown me-2">
+                    <button class="theme-toggle-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                        id="themeToggleBtn" title="Pilih Tema">
+                        <i class="fa-solid fa-sun" id="themeIcon"></i>
+                        <span class="d-none d-md-inline" id="themeLabel">Light</span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end theme-menu" id="themeMenu">
+                        <button class="theme-option" data-theme="light">
+                            <i class="fa-solid fa-sun"></i> Light
+                            <i class="fa-solid fa-check theme-check d-none"></i>
+                        </button>
+                        <button class="theme-option" data-theme="dark">
+                            <i class="fa-solid fa-moon"></i> Dark
+                            <i class="fa-solid fa-check theme-check d-none"></i>
+                        </button>
+                        <button class="theme-option" data-theme="system">
+                            <i class="fa-solid fa-desktop"></i> System
+                            <i class="fa-solid fa-check theme-check d-none"></i>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Language Switcher -->
                 <div class="dropdown me-3">
                     <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button"
@@ -869,6 +971,63 @@
                     }
                 }
             });
+        </script>
+
+        {{-- Theme Toggle Script --}}
+        <script>
+            (function () {
+                const themeOptions = document.querySelectorAll('.theme-option');
+                const themeIcon = document.getElementById('themeIcon');
+                const themeLabel = document.getElementById('themeLabel');
+                const htmlEl = document.documentElement;
+
+                function getEffectiveTheme(pref) {
+                    if (pref === 'system') {
+                        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                    }
+                    return pref;
+                }
+
+                function applyTheme(pref) {
+                    const effective = getEffectiveTheme(pref);
+                    htmlEl.setAttribute('data-bs-theme', effective);
+                    localStorage.setItem('artika-theme', pref);
+
+                    // Update button icon & label
+                    const icons = { light: 'fa-sun', dark: 'fa-moon', system: 'fa-desktop' };
+                    const labels = { light: 'Light', dark: 'Dark', system: 'System' };
+                    themeIcon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
+                    if (themeLabel) themeLabel.textContent = labels[pref] || 'Light';
+
+                    // Update active indicator
+                    themeOptions.forEach(opt => {
+                        const check = opt.querySelector('.theme-check');
+                        if (opt.dataset.theme === pref) {
+                            opt.classList.add('active');
+                            check?.classList.remove('d-none');
+                        } else {
+                            opt.classList.remove('active');
+                            check?.classList.add('d-none');
+                        }
+                    });
+                }
+
+                // Init
+                const saved = localStorage.getItem('artika-theme') || 'system';
+                applyTheme(saved);
+
+                // Click handlers
+                themeOptions.forEach(opt => {
+                    opt.addEventListener('click', () => applyTheme(opt.dataset.theme));
+                });
+
+                // Listen for system preference changes
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                    if (localStorage.getItem('artika-theme') === 'system') {
+                        applyTheme('system');
+                    }
+                });
+            })();
         </script>
 
         @stack('scripts')

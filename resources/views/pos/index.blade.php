@@ -3,6 +3,17 @@
 <html lang="en">
 
 <head>
+    {{-- Apply theme ASAP to prevent flash --}}
+    <script>
+        (function () {
+            const saved = localStorage.getItem('artika-theme') || 'system';
+            if (saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -93,7 +104,7 @@
 
         html {
             zoom: 90%;
-            background: var(--gray-100);
+            background: var(--color-bg);
         }
 
         html,
@@ -113,7 +124,173 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text, #333);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Theme Toggle Button (POS) */
+        .pos-theme-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.35rem 0.65rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+        }
+
+        .pos-theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .pos-theme-menu {
+            min-width: 140px;
+            padding: 0.4rem;
+            border-radius: 10px;
+            border: 1px solid var(--gray-200);
+            background: var(--card-bg, #fff);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .pos-theme-opt {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: var(--color-text, #333);
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .pos-theme-opt:hover {
+            background: var(--gray-100, #f5f5f5);
+        }
+
+        .pos-theme-opt.active {
+            background: var(--primary-dark, #f0e7e0);
+            color: var(--color-primary, #85695a);
+            font-weight: 600;
+        }
+
+        .pos-theme-opt i {
+            width: 1rem;
+            text-align: center;
+        }
+
+        .pos-theme-check {
+            margin-left: auto;
+            font-size: 0.7rem;
+            color: var(--color-primary);
+        }
+
+        /* === DARK MODE OVERRIDES (POS) === */
+        [data-bs-theme="dark"] .products-section,
+        [data-bs-theme="dark"] .cart-section {
+            background: var(--card-bg, #2a2a2a);
+        }
+
+        [data-bs-theme="dark"] .product-card {
             background: var(--gray-100);
+            border-color: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .category-filter {
+            background: linear-gradient(to right, var(--card-bg) 0%, var(--card-bg) 95%, rgba(42, 42, 42, 0.8) 100%);
+        }
+
+        [data-bs-theme="dark"] .category-btn {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        [data-bs-theme="dark"] .category-btn:hover {
+            background: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .search-input,
+        [data-bs-theme="dark"] .barcode-input {
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .search-input-group {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+
+        [data-bs-theme="dark"] .quantity-control {
+            background: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .totals-section {
+            background: var(--gray-100);
+        }
+
+        [data-bs-theme="dark"] .payment-method-btn {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .modal-content {
+            background: var(--card-bg);
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .modal-header,
+        [data-bs-theme="dark"] .modal-footer {
+            border-color: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .form-control,
+        [data-bs-theme="dark"] .form-select {
+            background-color: var(--gray-100);
+            border-color: var(--gray-200);
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: var(--card-bg);
+            border-color: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .dropdown-item {
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: var(--gray-100);
+        }
+
+        [data-bs-theme="dark"] .bg-light {
+            background-color: var(--gray-100) !important;
+        }
+
+        [data-bs-theme="dark"] .text-dark {
+            color: var(--color-text) !important;
+        }
+
+        [data-bs-theme="dark"] .artika-swal-popup {
+            background: var(--card-bg) !important;
+        }
+
+        [data-bs-theme="dark"] .artika-swal-title {
+            color: var(--color-text) !important;
+        }
+
+        [data-bs-theme="dark"] .swal2-html-container {
+            color: var(--color-text) !important;
         }
 
         /* Fixed Overlay Alignment Fix for Zoom & Mobile Stacking */
@@ -177,7 +354,7 @@
         .navbar-right {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .profile-trigger {
@@ -234,7 +411,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: white;
+            background: var(--card-bg);
             border-right: 1px solid var(--gray-300);
             overflow: hidden !important;
         }
@@ -249,6 +426,7 @@
             display: flex;
             align-items: center;
             background: var(--gray-100);
+            border: 1px solid var(--primary-light);
             border-radius: 8px;
             padding: 0 0.75rem;
         }
@@ -338,9 +516,9 @@
             -webkit-overflow-scrolling: touch;
             position: sticky;
             top: 0;
-            background: linear-gradient(to right, white 0%, white 95%, rgba(255, 255, 255, 0.8) 100%);
+            background: linear-gradient(to right, var(--card-bg) 0%, var(--card-bg) 95%, rgba(253, 248, 246, 0.8) 100%);
             z-index: 50;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 6px rgba(133, 105, 90, 0.08);
             align-items: center;
         }
 
@@ -364,7 +542,7 @@
         .category-btn {
             padding: 0.65rem 1.3rem;
             border: 2px solid var(--gray-300);
-            background: white;
+            background: var(--white);
             border-radius: 10px;
             cursor: pointer;
             font-size: 0.85rem;
@@ -453,7 +631,7 @@
         }
 
         .product-card {
-            background: white;
+            background: var(--white);
             border: 1px solid var(--gray-200);
             border-radius: 8px;
             padding: 0.75rem;
@@ -513,7 +691,7 @@
             width: 340px;
             display: flex;
             flex-direction: column;
-            background: white;
+            background: var(--card-bg);
             border-left: 1px solid var(--gray-300);
             overflow: hidden;
         }
@@ -608,7 +786,7 @@
             display: flex;
             align-items: center;
             gap: 0.2rem;
-            background: white;
+            background: var(--card-bg);
             border-radius: 4px;
             padding: 0.1rem;
         }
@@ -690,7 +868,7 @@
 
         .totals-section {
             margin-bottom: 1rem;
-            background: white;
+            background: var(--card-bg);
             padding: 0.75rem;
             border-radius: 6px;
         }
@@ -740,7 +918,7 @@
         .payment-method-btn {
             padding: 0.75rem;
             border: 1px solid var(--gray-300);
-            background: white;
+            background: var(--white);
             border-radius: 10px;
             cursor: pointer;
             font-size: 0.85rem;
@@ -1620,6 +1798,27 @@
                 <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 38px; width: auto;">
             </div>
             <div class="navbar-right">
+                <!-- Theme Toggle -->
+                <div class="dropdown">
+                    <button class="pos-theme-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                        id="posThemeBtn" title="Pilih Tema">
+                        <i class="fa-solid fa-sun" id="posThemeIcon"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end pos-theme-menu">
+                        <button class="pos-theme-opt" data-theme="light">
+                            <i class="fa-solid fa-sun"></i> Light
+                            <i class="fa-solid fa-check pos-theme-check d-none"></i>
+                        </button>
+                        <button class="pos-theme-opt" data-theme="dark">
+                            <i class="fa-solid fa-moon"></i> Dark
+                            <i class="fa-solid fa-check pos-theme-check d-none"></i>
+                        </button>
+                        <button class="pos-theme-opt" data-theme="system">
+                            <i class="fa-solid fa-desktop"></i> System
+                            <i class="fa-solid fa-check pos-theme-check d-none"></i>
+                        </button>
+                    </div>
+                </div>
                 <div class="dropdown">
                     <button class="btn p-0 border-0 profile-trigger d-flex align-items-center" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -1874,7 +2073,8 @@
 
                     <!-- BUTTONS -->
                     <div class="checkout-buttons">
-                        <button class="btn-checkout bg-danger btn-cancel clearBtn" id="clearBtn" title="Hapus Keranjang">
+                        <button class="btn-checkout bg-danger btn-cancel clearBtn" id="clearBtn"
+                            title="Hapus Keranjang">
                             <i class="fas fa-trash text-white opacity-90"></i>
                         </button>
                         <button class="btn-checkout btn-primary" id="btnHold" onclick="holdTransaction()"
@@ -3543,6 +3743,44 @@
     <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
+
+    {{-- Theme Toggle Script --}}
+    <script>
+        (function () {
+            const opts = document.querySelectorAll('.pos-theme-opt');
+            const icon = document.getElementById('posThemeIcon');
+            const htmlEl = document.documentElement;
+
+            function getEffective(pref) {
+                return pref === 'system'
+                    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                    : pref;
+            }
+
+            function apply(pref) {
+                htmlEl.setAttribute('data-bs-theme', getEffective(pref));
+                localStorage.setItem('artika-theme', pref);
+                const icons = { light: 'fa-sun', dark: 'fa-moon', system: 'fa-desktop' };
+                icon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
+                opts.forEach(o => {
+                    const chk = o.querySelector('.pos-theme-check');
+                    if (o.dataset.theme === pref) {
+                        o.classList.add('active');
+                        chk?.classList.remove('d-none');
+                    } else {
+                        o.classList.remove('active');
+                        chk?.classList.add('d-none');
+                    }
+                });
+            }
+
+            apply(localStorage.getItem('artika-theme') || 'system');
+            opts.forEach(o => o.addEventListener('click', () => apply(o.dataset.theme)));
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                if (localStorage.getItem('artika-theme') === 'system') apply('system');
+            });
+        })();
+    </script>
 </body>
 
 </html>
