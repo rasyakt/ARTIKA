@@ -320,6 +320,12 @@ return [
     'paper_58mm' => '58mm (Small / Portable)',
     'paper_80mm' => '80mm (Standard / Desktop)',
 
+    // Invoice Format Settings
+    'invoice_prefix' => 'Invoice Number Prefix',
+    'invoice_format' => 'Invoice Number Format',
+    'invoice_rand_length' => 'Random Code Length',
+    'invoice_seq_padding' => 'Sequential Number Digits',
+
     // Manager Role
     'manager_dashboard' => 'Manager Dashboard',
     'subtotal' => 'Subtotal',

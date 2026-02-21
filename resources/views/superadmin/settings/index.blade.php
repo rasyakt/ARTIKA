@@ -34,7 +34,7 @@
                                             type="button" 
                                             role="tab"
                                             style="border-radius: 10px; font-weight: 600; padding: 12px 16px;">
-                                        <i class="fa-solid @if($categoryName == 'General') fa-display @elseif($categoryName == 'Admin Features') fa-user-shield @elseif($categoryName == 'Warehouse Features') fa-boxes-stacked @elseif($categoryName == 'Cashier Features') fa-cash-register @else fa-microchip @endif me-3"></i>
+                                        <i class="fa-solid @if($categoryName == 'General') fa-display @elseif($categoryName == 'POS & Struk') fa-receipt @elseif($categoryName == 'Admin Features') fa-user-shield @elseif($categoryName == 'Warehouse Features') fa-boxes-stacked @elseif($categoryName == 'Cashier Features') fa-cash-register @else fa-microchip @endif me-3"></i>
                                         {{ $categoryName }}
                                     </button>
                                 @endforeach
@@ -75,15 +75,41 @@
                                                                        style="width: 3.5rem; height: 1.75rem; cursor: pointer;">
                                                             </div>
                                                         </div>
+                                                    @elseif($config['type'] === 'select')
+                                                        <label class="form-label fw-bold text-muted small text-uppercase mb-2">{{ $config['label'] }}</label>
+                                                        <select class="form-select form-select-lg" name="{{ $key }}" id="{{ $key }}"
+                                                                style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 14px 20px; font-weight: 600;">
+                                                            @foreach($config['options'] as $optVal => $optLabel)
+                                                                <option value="{{ $optVal }}" @if($settings->get($key, $config['default']) == $optVal) selected @endif>{{ $optLabel }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     @else
                                                         <label class="form-label fw-bold text-muted small text-uppercase mb-2">{{ $config['label'] }}</label>
-                                                        <input type="{{ $config['type'] }}" class="form-control form-control-lg" name="{{ $key }}" 
+                                                        <input type="{{ $config['type'] }}" class="form-control form-control-lg" name="{{ $key }}" id="{{ $key }}"
                                                                value="{{ $settings->get($key, $config['default']) }}"
                                                                style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 14px 20px;"
                                                                @if($config['type'] === 'number') min="0" @endif>
                                                     @endif
                                                 </div>
                                             @endforeach
+
+                                            {{-- Invoice Preview (only for POS & Struk tab) --}}
+                                            @if($categoryName === 'POS & Struk')
+                                                <div class="col-12 mt-2">
+                                                    <div class="p-4" style="border-radius: 14px; background: linear-gradient(135deg, var(--brown-50), #fff); border: 2px dashed var(--brown-200, #c4b5a8);">
+                                                        <div class="d-flex align-items-center mb-3">
+                                                            <i class="fa-solid fa-eye me-2" style="color: var(--color-primary);"></i>
+                                                            <h6 class="mb-0 fw-bold" style="color: var(--color-primary-dark);">Preview No. Struk</h6>
+                                                        </div>
+                                                        <div id="invoice-preview" class="text-center py-3 px-4 bg-white" style="border-radius: 10px; font-family: 'Courier New', monospace; font-size: 1.2rem; font-weight: 800; letter-spacing: 1px; color: var(--color-primary-dark); border: 1px solid var(--brown-100);">
+                                                            {{-- Filled by JS --}}
+                                                        </div>
+                                                        <p class="text-muted small mb-0 mt-2 text-center">
+                                                            <i class="fa-solid fa-info-circle me-1"></i>Contoh format yang akan tampil di struk
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -114,4 +140,50 @@
             border-color: var(--color-primary-dark);
         }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const prefixEl = document.getElementById('invoice_prefix');
+            const formatEl = document.getElementById('invoice_format');
+            const randLenEl = document.getElementById('invoice_rand_length');
+            const seqPadEl = document.getElementById('invoice_seq_padding');
+            const previewEl = document.getElementById('invoice-preview');
+
+            if (!prefixEl || !formatEl || !previewEl) return;
+
+            function randomStr(len) {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let r = '';
+                for (let i = 0; i < len; i++) r += chars.charAt(Math.floor(Math.random() * chars.length));
+                return r;
+            }
+
+            function updatePreview() {
+                const prefix = prefixEl.value || 'INV';
+                const format = formatEl.value || '{PREFIX}-{RAND}';
+                const randLen = parseInt(randLenEl.value) || 10;
+                const seqPad = parseInt(seqPadEl.value) || 5;
+
+                const now = new Date();
+                const date = now.getFullYear().toString() +
+                    String(now.getMonth() + 1).padStart(2, '0') +
+                    String(now.getDate()).padStart(2, '0');
+
+                let result = format;
+                result = result.replaceAll('{PREFIX}', prefix);
+                result = result.replaceAll('{DATE}', date);
+                result = result.replaceAll('{RAND}', randomStr(randLen));
+                result = result.replaceAll('{SEQ}', '1'.padStart(seqPad, '0'));
+
+                previewEl.textContent = result;
+            }
+
+            [prefixEl, formatEl, randLenEl, seqPadEl].forEach(el => {
+                if (el) el.addEventListener('input', updatePreview);
+                if (el) el.addEventListener('change', updatePreview);
+            });
+
+            updatePreview();
+        });
+    </script>
 @endsection

@@ -370,6 +370,12 @@ return [
     'paper_58mm' => '58mm (Kecil / Portabel)',
     'paper_80mm' => '80mm (Standar / Desktop)',
 
+    // Invoice Format Settings
+    'invoice_prefix' => 'Prefix No. Struk',
+    'invoice_format' => 'Format No. Struk',
+    'invoice_rand_length' => 'Panjang Kode Acak',
+    'invoice_seq_padding' => 'Digit Nomor Urut',
+
     // Manager Role
     'manager_dashboard' => 'Dashboard Manager',
     'subtotal' => 'Subtotal',

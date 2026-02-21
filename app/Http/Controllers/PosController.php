@@ -145,7 +145,7 @@ class PosController extends Controller
             // Handle Payment Proof for Non-Cash
             if ($request->hasFile('payment_proof')) {
                 $file = $request->file('payment_proof');
-                $filename = time() . '_' . $file->getClientOriginalName();
+                $filename = time() . '_' . \Illuminate\Support\Str::random(16) . '.' . $file->getClientOriginalExtension();
                 $file->move(public_path('uploads/payment_proofs'), $filename);
                 $data['payment_proof'] = 'uploads/payment_proofs/' . $filename;
             } elseif ($validated['payment_method'] === 'non-cash') {
@@ -234,7 +234,7 @@ class PosController extends Controller
      */
     public function resumeHeldTransaction($id)
     {
-        $held = HeldTransaction::findOrFail($id);
+        $held = HeldTransaction::where('user_id', Auth::id())->findOrFail($id);
 
         // Return the held transaction data
         $data = [
@@ -256,7 +256,7 @@ class PosController extends Controller
      */
     public function deleteHeldTransaction($id)
     {
-        $held = HeldTransaction::findOrFail($id);
+        $held = HeldTransaction::where('user_id', Auth::id())->findOrFail($id);
         $held->delete();
 
         return response()->json(['success' => true]);

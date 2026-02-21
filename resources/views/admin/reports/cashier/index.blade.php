@@ -216,7 +216,7 @@
         <!-- Detailed Reports Section -->
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-white border-bottom-0 pt-4 px-4">
-                <ul class="nav nav-pills nav-fill gap-2 p-1 bg-light rounded-pill mb-0" id="reportTabs" role="tablist"
+                <ul class="nav nav-pills nav-fill gap-2 p-1 bg-light rounded mb-0" id="reportTabs" role="tablist"
                     style="border: 1px solid var(--brown-100);">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active rounded-pill fw-bold" id="transactions-tab" data-bs-toggle="tab"
@@ -256,7 +256,7 @@
                     </li>
                     @if(App\Models\Setting::get('admin_enable_audit_logs', true))
                         <li class="nav-item flex-sm-fill text-center" role="presentation">
-                            <button class="nav-link w-100 fw-bold py-3" id="audit-tab" data-bs-toggle="tab"
+                            <button class="nav-link fw-bold rounded-pill" id="audit-tab" data-bs-toggle="tab"
                                 data-bs-target="#audit-pane" type="button" role="tab" aria-selected="false">
                                 <i class="fa-solid fa-clipboard-list me-2"></i>{{ __('admin.audit_log') }}
                             </button>

@@ -3194,7 +3194,8 @@
         }
 
         function openHeldModal() {
-            const modal = new bootstrap.Modal(document.getElementById('heldTransactionsModal'));
+            const modalElement = document.getElementById('heldTransactionsModal');
+            const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
             modal.show();
 
             const tableBody = document.getElementById('heldTransactionsTableBody');
@@ -3261,9 +3262,22 @@
                 .then(response => response.json())
                 .then(result => {
                     if (result.success) {
-                        cart = result.data.items;
+                        // Ensure all numeric fields are actually numbers to avoid string concatenation in calculations
+                        cart = result.data.items.map(item => ({
+                            ...item,
+                            price: parseFloat(item.price),
+                            quantity: parseInt(item.quantity),
+                            subtotal: parseFloat(item.subtotal),
+                            stock: parseInt(item.stock || 0)
+                        }));
+
                         updateCartDisplay();
-                        bootstrap.Modal.getInstance(document.getElementById('heldTransactionsModal')).hide();
+
+                        const modalElement = document.getElementById('heldTransactionsModal');
+                        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                        if (modalInstance) {
+                            modalInstance.hide();
+                        }
                         showToast('success', 'Transaksi dipanggil kembali');
                     } else {
                         showToast('error', 'Gagal memanggil transaksi: ' + result.message);
