@@ -8,6 +8,7 @@
     <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     <!-- Using inline SVG icons for reliability and theme control (removed external CDN) -->
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <style>
         body {
             background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
@@ -31,8 +32,9 @@
             right: 0;
             bottom: 0;
             background-image:
-                radial-gradient(circle at 20% 50%, rgba(191, 160, 148, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(161, 128, 114, 0.15) 0%, transparent 50%);
+                radial-gradient(circle at 20% 50%, var(--color-primary-lighter) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--color-primary-light) 0%, transparent 50%);
+            opacity: 0.15;
             animation: float 15s ease-in-out infinite;
         }
 
@@ -179,7 +181,7 @@
 
         .form-control:focus {
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 4px rgba(133, 105, 90, 0.15);
+            box-shadow: 0 0 0 4px var(--brown-100);
             background: white;
             outline: none;
         }
@@ -199,7 +201,7 @@
             border-radius: 14px;
             padding: 16px;
             font-weight: 700;
-            background: var(--gradient-primary);
+            background: var(--color-primary-light);
             border: none;
             color: white;
             font-size: 1.1rem;
@@ -207,7 +209,7 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(133, 105, 90, 0.3);
+            box-shadow: 0 8px 20px var(--brown-200);
             text-align: center;
             cursor: pointer;
             -webkit-appearance: none;
@@ -215,7 +217,7 @@
 
         .btn-login:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(133, 105, 90, 0.4);
+            box-shadow: 0 12px 25px var(--brown-300);
             filter: brightness(1.1);
         }
 
@@ -337,13 +339,13 @@
 
         .toggle-password-btn:hover {
             transform: translateY(-50%) scale(1.02);
-            background-color: rgba(133, 105, 90, 0.06);
+            background-color: var(--brown-100);
             /* subtle tint matching theme */
-            box-shadow: 0 4px 12px rgba(133, 105, 90, 0.08);
+            box-shadow: 0 4px 12px var(--brown-200);
         }
 
         .toggle-password-btn:focus-visible {
-            outline: 2px solid rgba(133, 105, 90, 0.18);
+            outline: 2px solid var(--brown-300);
             outline-offset: 2px;
         }
 

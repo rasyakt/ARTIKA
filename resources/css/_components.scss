@@ -45,46 +45,42 @@
 }
 
 .btn-primary {
-    background: $gradient-primary;
+    background: var(--gradient-primary);
     color: $white;
     box-shadow: $shadow-brown-md;
 
     &:hover {
-        background: linear-gradient(
-            135deg,
-            $primary-dark 0%,
-            darken($primary-dark, 5%) 100%
-        );
+        background: var(--color-primary-dark);
         color: $white;
     }
 }
 
 .btn-secondary {
-    background: $secondary;
-    color: $primary-dark;
+    background: var(--color-secondary);
+    color: var(--color-primary-dark);
     box-shadow: $shadow-sm;
 
     &:hover {
-        background: $secondary-dark;
-        color: $primary-dark;
+        background: var(--color-secondary-dark);
+        color: var(--color-primary-dark);
     }
 }
 
 .btn-outline-primary {
-    border: 2px solid $primary;
-    color: $primary;
+    border: 2px solid var(--color-primary);
+    color: var(--color-primary);
     background: transparent;
 
     &:hover {
-        background: $primary;
+        background: var(--color-primary);
         color: $white;
-        border-color: $primary;
+        border-color: var(--color-primary);
     }
 
     &.active {
-        background: $primary;
+        background: var(--color-primary);
         color: $white;
-        border-color: $primary;
+        border-color: var(--color-primary);
     }
 }
 
@@ -139,12 +135,12 @@
 }
 
 .btn-outline-secondary {
-    border: 2px solid $secondary;
-    color: $primary-dark;
+    border: 2px solid var(--color-secondary);
+    color: var(--color-primary-dark);
 
     &:hover {
-        background: $secondary;
-        color: $primary-dark;
+        background: var(--color-secondary);
+        color: var(--color-primary-dark);
     }
 }
 
@@ -174,10 +170,10 @@
 
 .card {
     border-radius: 16px;
-    border: 1px solid $brown-100;
+    border: 1px solid var(--brown-100);
     box-shadow: $shadow-brown-sm;
     transition: all $transition-base;
-    background: $card-bg;
+    background: var(--card-bg);
     overflow: visible;
 
     &:hover:not(.no-hover) {
@@ -187,7 +183,7 @@
 
     // Premium Accents
     &.accent-brown {
-        border-left: 5px solid $brown-800 !important;
+        border-left: 5px solid var(--brown-800) !important;
     }
     &.accent-success {
         border-left: 5px solid $success !important;
@@ -205,7 +201,7 @@
         border-left: 5px solid #7e22ce !important;
     }
     &.accent-sienna {
-        border-left: 5px solid #c17a5c !important;
+        border-left: 5px solid var(--color-accent-warm) !important;
     }
     &.accent-gold {
         border-left: 5px solid #ca8a04 !important;
@@ -229,8 +225,8 @@
     transition: all $transition-base;
 
     &.bg-brown-soft {
-        background: $brown-50;
-        color: $brown-800;
+        background: var(--brown-50);
+        color: var(--brown-800);
     }
     &.bg-success-soft,
     &.bg-danger-soft,
@@ -239,19 +235,19 @@
     &.bg-purple-soft,
     &.bg-sienna-soft,
     &.bg-gold-soft {
-        background: $brown-50;
-        color: $brown-800;
+        background: var(--brown-50);
+        color: var(--brown-800);
         opacity: 0.9;
     }
 }
 
 .card-header {
-    background: $brown-100;
-    border-bottom: 1px solid $brown-200;
+    background: var(--brown-100);
+    border-bottom: 1px solid var(--brown-200);
     border-radius: $radius-xl $radius-xl 0 0;
     padding: $spacing-4 $spacing-5;
     font-weight: $font-weight-semibold;
-    color: $primary-dark;
+    color: var(--color-primary-dark);
 }
 
 .card-body {
@@ -277,8 +273,8 @@
     font-size: $font-size-base;
 
     &:focus {
-        border-color: $primary;
-        box-shadow: 0 0 0 3px rgba($primary, 0.1);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(133, 105, 90, 0.1);
         outline: none;
     }
 
@@ -301,8 +297,8 @@
     transition: all $transition-base;
 
     &:focus {
-        border-color: $primary;
-        box-shadow: 0 0 0 3px rgba($primary, 0.1);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(133, 105, 90, 0.1);
         outline: none;
     }
 }
@@ -349,7 +345,7 @@
     font-size: $font-size-xs;
 
     &.bg-primary {
-        background: $primary !important;
+        background: var(--color-primary) !important;
     }
 
     &.bg-success {
@@ -377,7 +373,7 @@
 }
 
 .modal-header {
-    background: $primary-dark;
+    background: var(--color-primary-dark);
     color: $white;
     border-bottom: none;
     padding: $spacing-5 $spacing-6;
@@ -408,7 +404,7 @@
 
 .navbar {
     box-shadow: $shadow-brown-md;
-    background: $primary-dark !important;
+    background: var(--color-primary-dark) !important;
 
     .navbar-brand {
         font-weight: $font-weight-bold;
@@ -438,7 +434,7 @@
     overflow: visible;
 
     thead {
-        background: $primary-dark;
+        background: var(--color-primary-dark);
         color: $white;
 
         th {
@@ -456,7 +452,7 @@
             transition: all $transition-fast;
 
             &:hover {
-                background: $brown-50;
+                background: var(--brown-50);
             }
 
             td {
@@ -500,27 +496,27 @@
 // ============================================
 
 .text-primary {
-    color: $primary !important;
+    color: var(--color-primary) !important;
 }
 
 .text-secondary {
-    color: $secondary-dark !important;
+    color: var(--color-secondary-dark) !important;
 }
 
 .bg-primary {
-    background: $primary !important;
+    background: var(--color-primary) !important;
 }
 
 .bg-secondary {
-    background: $secondary !important;
+    background: var(--color-secondary) !important;
 }
 
 .bg-gradient-primary {
-    background: $gradient-primary !important;
+    background: var(--gradient-primary) !important;
 }
 
 .bg-gradient-warm {
-    background: $gradient-warm !important;
+    background: var(--gradient-warm) !important;
 }
 
 .shadow-sm {
@@ -601,11 +597,11 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: $primary-light;
+    background: var(--color-primary-light);
     border-radius: $radius-full;
 
     &:hover {
-        background: $primary;
+        background: var(--color-primary);
     }
 }
 
@@ -622,14 +618,16 @@
         .page-link {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             &:hover {
-                background-color: rgba(133, 105, 90, 0.1) !important;
-                color: #6f5849 !important;
+                background-color: var(--brown-50) !important;
+                color: var(--color-primary-dark) !important;
                 transform: scale(1.05);
             }
         }
 
         &.active .page-link {
-            box-shadow: 0 4px 12px rgba(133, 105, 90, 0.3);
+            background: var(--color-primary-dark) !important;
+            border-color: var(--color-primary-dark) !important;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             transform: scale(1.1);
             z-index: 10;
         }
@@ -646,7 +644,7 @@
 }
 
 .spinner-border {
-    border-color: $primary;
+    border-color: var(--color-primary);
     border-right-color: transparent;
 }
 
@@ -858,6 +856,8 @@
     }
 
     .shadow-sm {
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2) !important;
+        box-shadow:
+            0 1px 3px 0 rgba(0, 0, 0, 0.3),
+            0 1px 2px -1px rgba(0, 0, 0, 0.2) !important;
     }
 }

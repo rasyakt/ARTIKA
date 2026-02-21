@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ThemeHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
@@ -185,6 +186,7 @@ class SuperadminController extends Controller
                 'system_name' => ['label' => 'System Name', 'type' => 'text', 'default' => 'ARTIKA POS'],
                 'address' => ['label' => 'Store Address', 'type' => 'text', 'default' => ''],
                 'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => '© ' . date('Y') . ' RPL_Sentinel. All rights reserved.'],
+                'site_color_theme' => ['label' => 'Tema Warna Website', 'type' => 'palette', 'default' => 'brown'],
             ],
             'POS & Struk' => [
                 'invoice_prefix' => ['label' => 'Prefix No. Struk', 'type' => 'text', 'default' => 'INV'],
@@ -230,7 +232,9 @@ class SuperadminController extends Controller
             ],
         ];
 
-        return view('superadmin.settings.index', compact('settings', 'categories'));
+        $palettePreviews = ThemeHelper::getPalettePreviewColors();
+
+        return view('superadmin.settings.index', compact('settings', 'categories', 'palettePreviews'));
     }
 
     /**

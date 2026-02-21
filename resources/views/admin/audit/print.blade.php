@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>{{ __('admin.logs_report') }} - ARTIKA</title>
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <style>
         @page {
             margin: 10mm;
@@ -22,13 +23,13 @@
         .header {
             text-align: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid #85695a;
+            border-bottom: 2px solid var(--color-primary);
             padding-bottom: 10px;
         }
 
         .header h1 {
             font-size: 18px;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             margin: 0;
             text-transform: uppercase;
         }
@@ -36,7 +37,7 @@
         .header p {
             margin: 5px 0 0 0;
             font-size: 12px;
-            color: #85695a;
+            color: var(--color-primary);
         }
 
         .report-meta {
@@ -52,11 +53,11 @@
             font-size: 12px;
             font-weight: bold;
             margin: 15px 0 10px 0;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             text-transform: uppercase;
-            border-left: 4px solid #85695a;
+            border-left: 4px solid var(--color-primary);
             padding-left: 10px;
-            background-color: #fdf8f6;
+            background-color: var(--brown-50);
             padding-top: 5px;
             padding-bottom: 5px;
         }
@@ -68,7 +69,7 @@
         }
 
         .summary-box {
-            border: 1px solid #e0cec7;
+            border: 1px solid var(--brown-200);
             padding: 10px;
             text-align: center;
         }
@@ -83,7 +84,7 @@
         .summary-box .value {
             font-size: 14px;
             font-weight: bold;
-            color: #6f5849;
+            color: var(--color-primary-dark);
         }
 
         table.data {
@@ -93,11 +94,11 @@
         }
 
         table.data th {
-            background-color: #fdf8f6;
-            color: #6f5849;
+            background-color: var(--brown-50);
+            color: var(--color-primary-dark);
             text-align: left;
             padding: 6px;
-            border: 1px solid #f2e8e5;
+            border: 1px solid var(--brown-100);
             font-weight: bold;
             text-transform: uppercase;
             font-size: 9px;
@@ -105,7 +106,7 @@
 
         table.data td {
             padding: 6px;
-            border: 1px solid #f2e8e5;
+            border: 1px solid var(--brown-100);
         }
 
         .text-right {
@@ -136,14 +137,14 @@
             font-size: 8px;
             font-weight: bold;
             background-color: #f5f0ed;
-            color: #6f5849;
-            border: 1px solid #e0cec7;
+            color: var(--color-primary-dark);
+            border: 1px solid var(--brown-200);
         }
 
         code {
             font-family: monospace;
             font-size: 8px;
-            color: #6f5849;
+            color: var(--color-primary-dark);
         }
     </style>
 </head>
@@ -221,7 +222,7 @@
                             @if(in_array($log->action, ['transaction_created', 'payment_received', 'refund', 'expense_created']))
                                 <strong style="color: #16a34a;">Rp{{ number_format($log->amount, 0, ',', '.') }}</strong>
                             @else
-                                <strong style="color: #6f5849;">{{ number_format($log->amount, 0, ',', '.') }}</strong>
+                                <strong style="color: var(--color-primary-dark);">{{ number_format($log->amount, 0, ',', '.') }}</strong>
                             @endif
                             <div class="text-muted">{{ $log->payment_method }}</div>
                         @else - @endif

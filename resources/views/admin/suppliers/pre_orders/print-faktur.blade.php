@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Faktur Penerimaan - {{ $preOrder->uuid }}</title>
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
@@ -17,7 +18,7 @@
         .header {
             text-align: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid #333;
+            border-bottom: 2px solid var(--color-primary);
             padding-bottom: 10px;
         }
 
@@ -25,6 +26,7 @@
             margin: 0;
             font-size: 20px;
             text-transform: uppercase;
+            color: var(--color-primary-dark);
         }
 
         .info-section {
@@ -51,7 +53,8 @@
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: var(--brown-50);
+            color: var(--color-primary-dark);
         }
 
         .text-right {

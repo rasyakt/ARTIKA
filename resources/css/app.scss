@@ -222,11 +222,126 @@ body {
     }
 
     &::-webkit-scrollbar-thumb {
-        background: $primary-light;
+        background: var(--color-primary-light);
         border-radius: $radius-full;
 
         &:hover {
-            background: $primary;
+            background: var(--color-primary);
         }
     }
+}
+
+// ============================================
+// Bootstrap Primary Color Runtime Overrides
+// These ensure Bootstrap components follow
+// the runtime palette instead of baked SCSS
+// ============================================
+
+// Links
+a {
+    color: var(--color-primary);
+    &:hover {
+        color: var(--color-primary-dark);
+    }
+}
+
+// Checkboxes & Radios
+.form-check-input:checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.form-check-input:focus {
+    border-color: var(--color-primary-light);
+    box-shadow: 0 0 0 0.25rem rgba(133, 105, 90, 0.15);
+}
+
+// Switch
+.form-switch .form-check-input:checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+// Focus ring for inputs (Bootstrap uses --bs-focus-ring-color)
+:root {
+    --bs-link-color-rgb: 133, 105, 90;
+    --bs-link-hover-color-rgb: 111, 88, 73;
+}
+
+// Nav pills (common in tabs)
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background-color: var(--color-primary-dark) !important;
+    color: white !important;
+}
+
+// Nav tabs
+.nav-tabs .nav-link.active {
+    color: var(--color-primary-dark);
+    border-bottom-color: var(--color-primary-dark);
+}
+
+.nav-tabs .nav-link:hover {
+    color: var(--color-primary);
+}
+
+// Progress bar
+.progress-bar {
+    background-color: var(--color-primary);
+}
+
+// List group active
+.list-group-item.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+// Page links (pagination)
+.page-link {
+    color: var(--color-primary);
+    &:hover {
+        color: var(--color-primary-dark);
+    }
+}
+
+.page-item.active .page-link {
+    background-color: var(--color-primary-dark);
+    border-color: var(--color-primary-dark);
+}
+
+// Accordion
+.accordion-button:not(.collapsed) {
+    color: var(--color-primary-dark);
+    background-color: var(--brown-50);
+}
+
+// Breadcrumb active
+.breadcrumb-item.active {
+    color: var(--color-primary);
+}
+
+.breadcrumb-item a {
+    color: var(--color-primary);
+    &:hover {
+        color: var(--color-primary-dark);
+    }
+}
+
+// Table active row
+.table-active {
+    --bs-table-bg-state: var(--brown-50);
+}
+
+// Bootstrap's btn-link
+.btn-link {
+    color: var(--color-primary);
+    &:hover {
+        color: var(--color-primary-dark);
+    }
+}
+
+// Dropdown active
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: var(--color-primary);
 }

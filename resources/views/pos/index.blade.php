@@ -23,6 +23,7 @@
     <title>{{ __('pos.title') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 -->
@@ -212,7 +213,7 @@
         [data-bs-theme="dark"] .category-btn {
             background: var(--gray-100);
             border-color: var(--gray-300);
-            color: var(--gray-700);
+            color: var(--color-text);
         }
 
         [data-bs-theme="dark"] .category-btn:hover {
@@ -251,6 +252,7 @@
         [data-bs-theme="dark"] .modal-header,
         [data-bs-theme="dark"] .modal-footer {
             border-color: var(--gray-200);
+            background: var(--card-bg);
         }
 
         [data-bs-theme="dark"] .form-control,
@@ -291,6 +293,32 @@
 
         [data-bs-theme="dark"] .swal2-html-container {
             color: var(--color-text) !important;
+        }
+
+        [data-bs-theme="dark"] .keypad-btn {
+            background: var(--gray-100);
+            border-color: var(--gray-200);
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .keypad-btn:hover {
+            background: var(--gray-200);
+            border-color: var(--primary);
+        }
+
+        [data-bs-theme="dark"] #mobileCartView,
+        [data-bs-theme="dark"] .search-section,
+        [data-bs-theme="dark"] .products-grid,
+        [data-bs-theme="dark"] .bottom-nav {
+            background: var(--card-bg) !important;
+        }
+
+        [data-bs-theme="dark"] .category-filter {
+            background: rgba(42, 42, 42, 0.85);
+        }
+
+        [data-bs-theme="dark"] .cart-footer {
+            background: rgba(42, 42, 42, 0.9);
         }
 
         /* Fixed Overlay Alignment Fix for Zoom & Mobile Stacking */

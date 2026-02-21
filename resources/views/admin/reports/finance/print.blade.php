@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>{{ __('admin.finance_report') }} - ARTIKA</title>
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <style>
         body {
             font-family: 'Helvetica', sans-serif;
@@ -17,13 +18,13 @@
         .header {
             text-align: center;
             margin-bottom: 20px;
-            border-bottom: 2px solid #85695a;
+            border-bottom: 2px solid var(--color-primary);
             padding-bottom: 10px;
         }
 
         .header h1 {
             font-size: 18px;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             margin: 0;
             text-transform: uppercase;
         }
@@ -31,7 +32,7 @@
         .header p {
             margin: 5px 0 0 0;
             font-size: 12px;
-            color: #85695a;
+            color: var(--color-primary);
         }
 
         .report-meta {
@@ -47,11 +48,11 @@
             font-size: 13px;
             font-weight: bold;
             margin: 15px 0 10px 0;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             text-transform: uppercase;
-            border-left: 4px solid #85695a;
+            border-left: 4px solid var(--color-primary);
             padding-left: 10px;
-            background-color: #fdf8f6;
+            background-color: var(--brown-50);
             padding-top: 5px;
             padding-bottom: 5px;
         }
@@ -63,7 +64,7 @@
         }
 
         .summary-box {
-            border: 1px solid #e0cec7;
+            border: 1px solid var(--brown-200);
             padding: 10px;
             text-align: center;
         }
@@ -78,7 +79,7 @@
         .summary-box .value {
             font-size: 14px;
             font-weight: bold;
-            color: #6f5849;
+            color: var(--color-primary-dark);
         }
 
         table.data {
@@ -88,11 +89,11 @@
         }
 
         table.data th {
-            background-color: #fdf8f6;
-            color: #6f5849;
+            background-color: var(--brown-50);
+            color: var(--color-primary-dark);
             text-align: left;
             padding: 8px;
-            border: 1px solid #f2e8e5;
+            border: 1px solid var(--brown-100);
             font-weight: bold;
             text-transform: uppercase;
             font-size: 10px;
@@ -100,7 +101,7 @@
 
         table.data td {
             padding: 8px;
-            border: 1px solid #f2e8e5;
+            border: 1px solid var(--brown-100);
         }
 
         .text-right {
