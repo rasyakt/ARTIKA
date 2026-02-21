@@ -36,7 +36,7 @@
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: $shadow-brown-lg;
+        box-shadow: $shadow-lg;
     }
 
     &:active {
@@ -114,6 +114,56 @@
 
     &:hover {
         background: $warning-dark;
+        color: $white;
+    }
+}
+
+.btn-info {
+    background: $info;
+    color: $white;
+
+    &:hover {
+        background: $info-dark;
+        color: $white;
+    }
+}
+
+.btn-light {
+    background: $gray-100;
+    color: $gray-700;
+
+    &:hover {
+        background: $gray-200;
+        color: $gray-800;
+    }
+}
+
+.btn-outline-secondary {
+    border: 2px solid $secondary;
+    color: $primary-dark;
+
+    &:hover {
+        background: $secondary;
+        color: $primary-dark;
+    }
+}
+
+.btn-outline-danger {
+    border: 2px solid $danger;
+    color: $danger;
+
+    &:hover {
+        background: $danger;
+        color: $white;
+    }
+}
+
+.btn-outline-success {
+    border: 2px solid $success;
+    color: $success;
+
+    &:hover {
+        background: $success;
         color: $white;
     }
 }
@@ -423,7 +473,22 @@
 // ============================================
 
 .table-responsive {
-    overflow: visible !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+
+    // Ensure dropdowns inside tables are not clipped
+    .dropdown-menu {
+        position: fixed !important;
+        z-index: 1050 !important;
+    }
+
+    // Prevent text from wrapping in table cells (keeps data on single line)
+    .table {
+        th,
+        td {
+            white-space: nowrap;
+        }
+    }
 }
 
 .dropdown-menu {
@@ -562,13 +627,13 @@
                 transform: scale(1.05);
             }
         }
-        
+
         &.active .page-link {
             box-shadow: 0 4px 12px rgba(133, 105, 90, 0.3);
             transform: scale(1.1);
             z-index: 10;
         }
-        
+
         &.disabled .page-link {
             opacity: 0.5;
             cursor: not-allowed;
@@ -589,4 +654,210 @@
     width: 1rem;
     height: 1rem;
     border-width: 0.15em;
+}
+
+// ============================================
+// Dark Mode Component Overrides
+// ============================================
+
+[data-bs-theme="dark"] {
+    body {
+        background: var(--color-bg);
+        color: var(--color-text);
+    }
+
+    // Cards
+    .card {
+        background: var(--card-bg);
+        border-color: var(--gray-200);
+        color: var(--color-text);
+    }
+
+    .card-header {
+        background: var(--gray-100);
+        border-bottom-color: var(--gray-200);
+    }
+
+    .card-footer {
+        background: var(--gray-100);
+        border-top-color: var(--gray-200);
+    }
+
+    // Tables
+    .table {
+        --bs-table-bg: var(--card-bg);
+        --bs-table-color: var(--color-text);
+        --bs-table-border-color: var(--gray-200);
+        --bs-table-hover-bg: var(--gray-100);
+        --bs-table-striped-bg: var(--gray-100);
+        color: var(--color-text);
+    }
+
+    .table thead th {
+        background: var(--gray-100) !important;
+        color: var(--brown-900) !important;
+        border-bottom-color: var(--gray-200) !important;
+    }
+
+    // Modals
+    .modal-content {
+        background: var(--card-bg);
+        border-color: var(--gray-200);
+        color: var(--color-text);
+    }
+
+    .modal-header {
+        border-bottom-color: var(--gray-200);
+    }
+
+    .modal-footer {
+        border-top-color: var(--gray-200);
+    }
+
+    // Forms
+    .form-control,
+    .form-select {
+        background-color: var(--gray-100);
+        border-color: var(--gray-200);
+        color: var(--color-text);
+
+        &:focus {
+            background-color: var(--gray-100);
+            border-color: var(--color-primary);
+            color: var(--color-text);
+        }
+
+        &::placeholder {
+            color: var(--gray-400);
+        }
+    }
+
+    .form-label {
+        color: var(--color-text);
+    }
+
+    .input-group-text {
+        background-color: var(--gray-200);
+        border-color: var(--gray-200);
+        color: var(--color-text);
+    }
+
+    // Dropdowns
+    .dropdown-menu {
+        background-color: var(--card-bg);
+        border-color: var(--gray-200);
+    }
+
+    .dropdown-item {
+        color: var(--color-text);
+
+        &:hover,
+        &:focus {
+            background-color: var(--gray-100);
+            color: var(--color-text);
+        }
+
+        &.active {
+            background-color: var(--color-primary);
+        }
+    }
+
+    .dropdown-divider {
+        border-top-color: var(--gray-200);
+    }
+
+    // Alerts
+    .alert {
+        border-color: var(--gray-200);
+    }
+
+    // Badges
+    .badge.bg-light {
+        background-color: var(--gray-200) !important;
+        color: var(--color-text) !important;
+    }
+
+    // Breadcrumbs
+    .breadcrumb {
+        background: var(--gray-100);
+    }
+
+    // List groups
+    .list-group-item {
+        background-color: var(--card-bg);
+        border-color: var(--gray-200);
+        color: var(--color-text);
+    }
+
+    // Pagination
+    .pagination .page-link {
+        background-color: var(--card-bg);
+        border-color: var(--gray-200);
+        color: var(--color-text);
+    }
+
+    // Text utilities
+    .text-muted {
+        color: var(--gray-500) !important;
+    }
+
+    .text-dark {
+        color: var(--color-text) !important;
+    }
+
+    // Borders
+    .border,
+    .border-bottom,
+    .border-top {
+        border-color: var(--gray-200) !important;
+    }
+
+    // HR
+    hr {
+        border-color: var(--gray-200);
+    }
+
+    // Scrollbar
+    &::-webkit-scrollbar-track,
+    *::-webkit-scrollbar-track {
+        background: var(--gray-100);
+    }
+
+    // Close btn
+    .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+
+    // SweetAlert2
+    .artika-swal-popup {
+        background: var(--card-bg) !important;
+        border-color: var(--gray-200) !important;
+    }
+
+    .artika-swal-title {
+        color: var(--brown-900) !important;
+    }
+
+    .artika-swal-cancel-btn {
+        background: var(--gray-100) !important;
+        border-color: var(--gray-200) !important;
+        color: var(--color-text) !important;
+    }
+
+    .swal2-html-container {
+        color: var(--color-text) !important;
+    }
+
+    // Local style overrides
+    .bg-white {
+        background-color: var(--card-bg) !important;
+    }
+
+    .bg-light {
+        background-color: var(--gray-100) !important;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2) !important;
+    }
 }

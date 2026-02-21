@@ -40,14 +40,14 @@ $languages = config('app.supported_languages', ['id' => 'Bahasa Indonesia', 'en'
 }
 
 .language-selector .btn.active {
-    background-color: #007bff;
+    background-color: var(--color-info);
     color: white;
-    border-color: #007bff;
+    border-color: var(--color-info);
 }
 
 .language-selector .btn-outline-primary:hover {
-    background-color: #007bff;
+    background-color: var(--color-info);
     color: white;
-    border-color: #007bff;
+    border-color: var(--color-info);
 }
 </style>

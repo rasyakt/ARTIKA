@@ -67,6 +67,121 @@ $info-light: #bae6fd;
 $info-dark: #075985;
 
 // ============================================
+// Bootstrap Theme Overrides
+// ============================================
+// These variables override Bootstrap's internal defaults so that
+// ALL Bootstrap components (buttons, forms, pagination, etc.)
+// use the brown theme colors. When you change the palette above,
+// Bootstrap components will update automatically.
+
+// Theme color map (used by Bootstrap utilities like bg-*, text-*, btn-*)
+$theme-colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "info": $info,
+    "warning": $warning,
+    "danger": $danger,
+    "light": $brown-50,
+    "dark": $brown-900,
+);
+
+// Body
+$body-bg: $gray-50;
+$body-color: $gray-800;
+
+// Links
+$link-color: $primary;
+$link-hover-color: $primary-dark;
+
+// Border
+$border-color: $gray-200;
+
+// Components (general)
+$component-active-bg: $primary;
+$component-active-color: $white;
+
+// Forms
+$input-border-color: $gray-200;
+$input-focus-border-color: $primary;
+$input-focus-box-shadow: 0 0 0 3px rgba($primary, 0.15);
+$form-check-input-checked-bg-color: $primary;
+$form-check-input-checked-border-color: $primary;
+$form-switch-checked-bg: $primary;
+$form-select-focus-border-color: $primary;
+$form-range-thumb-bg: $primary;
+$form-range-thumb-active-bg: $primary-light;
+
+// Buttons
+$btn-link-color: $primary;
+$btn-link-hover-color: $primary-dark;
+
+// Pagination
+$pagination-color: $primary-dark;
+$pagination-bg: $white;
+$pagination-border-color: $gray-200;
+$pagination-hover-color: $primary-dark;
+$pagination-hover-bg: $brown-100;
+$pagination-hover-border-color: $brown-200;
+$pagination-active-color: $white;
+$pagination-active-bg: $primary;
+$pagination-active-border-color: $primary;
+$pagination-focus-box-shadow: 0 0 0 3px rgba($primary, 0.15);
+
+// Tables
+$table-hover-bg: $brown-50;
+$table-striped-bg: rgba($primary, 0.03);
+$table-active-bg: rgba($primary, 0.08);
+$table-border-color: $gray-200;
+
+// Breadcrumbs
+$breadcrumb-active-color: $primary-dark;
+
+// Dropdowns
+$dropdown-link-color: $gray-800;
+$dropdown-link-hover-bg: $brown-50;
+$dropdown-link-active-bg: $primary;
+$dropdown-link-active-color: $white;
+$dropdown-border-color: $gray-200;
+
+// Navs / Tabs
+$nav-link-color: $primary;
+$nav-link-hover-color: $primary-dark;
+$nav-tabs-link-active-color: $primary-dark;
+$nav-tabs-link-active-border-color: $gray-200 $gray-200 $white;
+$nav-pills-link-active-bg: $primary;
+
+// Tooltips
+$tooltip-bg: $brown-900;
+
+// Modals
+$modal-content-border-color: $gray-200;
+
+// Close button
+$btn-close-color: $gray-800;
+
+// Progress bars
+$progress-bg: $brown-100;
+$progress-bar-bg: $primary;
+
+// List group
+$list-group-border-color: $gray-200;
+$list-group-hover-bg: $brown-50;
+$list-group-active-bg: $primary;
+$list-group-active-border-color: $primary;
+$list-group-action-color: $gray-700;
+$list-group-action-active-color: $gray-800;
+$list-group-action-active-bg: $brown-100;
+
+// Accordion
+$accordion-button-active-bg: $brown-50;
+$accordion-button-active-color: $primary-dark;
+
+// Badges (already handled by theme-colors map)
+
+// Alerts (use theme-colors map automatically)
+
+// ============================================
 // Typography
 // ============================================
 

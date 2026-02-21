@@ -5,7 +5,7 @@
         <div class="row mb-4">
             <div class="col-12 d-flex justify-content-between align-items-center">
                 <div>
-                    <h4 class="fw-bold" style="color: #6f5849;">
+                    <h4 class="fw-bold" style="color: var(--color-primary-dark);">
                         <i class="fa-solid fa-terminal me-2"></i>System Logs
                     </h4>
                     <p class="text-muted mb-0">Showing filtered **ERROR** entries from storage/logs/laravel.log</p>

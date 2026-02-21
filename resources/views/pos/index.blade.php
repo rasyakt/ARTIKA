@@ -3,6 +3,17 @@
 <html lang="en">
 
 <head>
+    {{-- Apply theme ASAP to prevent flash --}}
+    <script>
+        (function () {
+            const saved = localStorage.getItem('artika-theme') || 'system';
+            if (saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -21,18 +32,18 @@
         .artika-swal-popup {
             border-radius: 16px !important;
             padding: 1.5rem !important;
-            border: 1px solid #f2e8e5 !important;
+            border: 1px solid var(--brown-100) !important;
             font-family: 'Segoe UI', system-ui, sans-serif !important;
         }
 
         .artika-swal-title {
-            color: #4b382f !important;
+            color: var(--brown-900) !important;
             font-weight: 700 !important;
             font-size: 1.25rem !important;
         }
 
         .artika-swal-confirm-btn {
-            background: #6f5849 !important;
+            background: var(--color-primary-dark) !important;
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
@@ -41,9 +52,9 @@
         }
 
         .artika-swal-cancel-btn {
-            background: #fdf8f6 !important;
-            color: #6f5849 !important;
-            border: 1px solid #f2e8e5 !important;
+            background: var(--brown-50) !important;
+            color: var(--color-primary-dark) !important;
+            border: 1px solid var(--brown-100) !important;
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
@@ -52,21 +63,21 @@
 
         .artika-swal-toast {
             border-radius: 12px !important;
-            background: #ffffff !important;
+            background: var(--color-white) !important;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
         }
 
         :root {
-            --primary: #85695a;
-            --primary-dark: #6f5849;
-            --primary-light: #a18072;
-            --success: #10b981;
-            --danger: #ef4444;
-            --brown-50: #fdf8f6;
-            --gray-100: #f5f5f4;
-            --gray-200: #e7e5e4;
-            --gray-300: #d6d3d1;
-            --gray-700: #374151;
+            --primary: var(--color-primary);
+            --primary-dark: var(--color-primary-dark);
+            --primary-light: var(--color-primary-light);
+            --success: var(--color-success);
+            --danger: var(--color-danger);
+            --brown-50: var(--brown-50);
+            --gray-100: var(--gray-100);
+            --gray-200: var(--gray-200);
+            --gray-300: var(--gray-300);
+            --gray-700: var(--gray-700);
         }
 
         * {
@@ -93,7 +104,7 @@
 
         html {
             zoom: 90%;
-            background: var(--gray-100);
+            background: var(--color-bg);
         }
 
         html,
@@ -113,7 +124,173 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text, #333);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Theme Toggle Button (POS) */
+        .pos-theme-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.35rem 0.65rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+        }
+
+        .pos-theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .pos-theme-menu {
+            min-width: 140px;
+            padding: 0.4rem;
+            border-radius: 10px;
+            border: 1px solid var(--gray-200);
+            background: var(--card-bg, #fff);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .pos-theme-opt {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.45rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: var(--color-text, #333);
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .pos-theme-opt:hover {
+            background: var(--gray-100, #f5f5f5);
+        }
+
+        .pos-theme-opt.active {
+            background: var(--primary-dark, #f0e7e0);
+            color: var(--color-primary, #85695a);
+            font-weight: 600;
+        }
+
+        .pos-theme-opt i {
+            width: 1rem;
+            text-align: center;
+        }
+
+        .pos-theme-check {
+            margin-left: auto;
+            font-size: 0.7rem;
+            color: var(--color-primary);
+        }
+
+        /* === DARK MODE OVERRIDES (POS) === */
+        [data-bs-theme="dark"] .products-section,
+        [data-bs-theme="dark"] .cart-section {
+            background: var(--card-bg, #2a2a2a);
+        }
+
+        [data-bs-theme="dark"] .product-card {
             background: var(--gray-100);
+            border-color: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .category-filter {
+            background: linear-gradient(to right, var(--card-bg) 0%, var(--card-bg) 95%, rgba(42, 42, 42, 0.8) 100%);
+        }
+
+        [data-bs-theme="dark"] .category-btn {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+            color: var(--gray-700);
+        }
+
+        [data-bs-theme="dark"] .category-btn:hover {
+            background: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .search-input,
+        [data-bs-theme="dark"] .barcode-input {
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .search-input-group {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+        }
+
+        [data-bs-theme="dark"] .quantity-control {
+            background: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .totals-section {
+            background: var(--gray-100);
+        }
+
+        [data-bs-theme="dark"] .payment-method-btn {
+            background: var(--gray-100);
+            border-color: var(--gray-300);
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .modal-content {
+            background: var(--card-bg);
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .modal-header,
+        [data-bs-theme="dark"] .modal-footer {
+            border-color: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .form-control,
+        [data-bs-theme="dark"] .form-select {
+            background-color: var(--gray-100);
+            border-color: var(--gray-200);
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: var(--card-bg);
+            border-color: var(--gray-200);
+        }
+
+        [data-bs-theme="dark"] .dropdown-item {
+            color: var(--color-text);
+        }
+
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: var(--gray-100);
+        }
+
+        [data-bs-theme="dark"] .bg-light {
+            background-color: var(--gray-100) !important;
+        }
+
+        [data-bs-theme="dark"] .text-dark {
+            color: var(--color-text) !important;
+        }
+
+        [data-bs-theme="dark"] .artika-swal-popup {
+            background: var(--card-bg) !important;
+        }
+
+        [data-bs-theme="dark"] .artika-swal-title {
+            color: var(--color-text) !important;
+        }
+
+        [data-bs-theme="dark"] .swal2-html-container {
+            color: var(--color-text) !important;
         }
 
         /* Fixed Overlay Alignment Fix for Zoom & Mobile Stacking */
@@ -177,7 +354,7 @@
         .navbar-right {
             display: flex;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .profile-trigger {
@@ -189,23 +366,21 @@
         }
 
         .profile-trigger:hover {
-            background: rgba(255, 255, 255, 0.2) !important;
-            border-color: rgba(255, 255, 255, 0.3) !important;
+            background: var(--color-primary) !important;
         }
 
         .profile-avatar {
             width: 40px;
             height: 40px;
-            background: #7c6257ff;
+            background: var(--color-primary);
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 1.4rem;
-            border: none;
+            border: 2px solid var(--color-primary-light);
             transition: all 0.2s;
-            /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); */
         }
 
         .dropdown-menu {
@@ -234,7 +409,7 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            background: white;
+            background: var(--card-bg);
             border-right: 1px solid var(--gray-300);
             overflow: hidden !important;
         }
@@ -249,6 +424,7 @@
             display: flex;
             align-items: center;
             background: var(--gray-100);
+            border: 1px solid var(--primary-light);
             border-radius: 8px;
             padding: 0 0.75rem;
         }
@@ -276,7 +452,7 @@
         .barcode-input-group {
             display: flex;
             align-items: center;
-            background: #fff4f0;
+            background: var(--color-warning-light);
             border: 2px solid var(--primary-light);
             border-radius: 8px;
             padding: 0 0.75rem;
@@ -338,9 +514,9 @@
             -webkit-overflow-scrolling: touch;
             position: sticky;
             top: 0;
-            background: linear-gradient(to right, white 0%, white 95%, rgba(255, 255, 255, 0.8) 100%);
+            background: linear-gradient(to right, var(--card-bg) 0%, var(--card-bg) 95%, rgba(253, 248, 246, 0.8) 100%);
             z-index: 50;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 6px rgba(133, 105, 90, 0.08);
             align-items: center;
         }
 
@@ -364,7 +540,7 @@
         .category-btn {
             padding: 0.65rem 1.3rem;
             border: 2px solid var(--gray-300);
-            background: white;
+            background: var(--white);
             border-radius: 10px;
             cursor: pointer;
             font-size: 0.85rem;
@@ -453,7 +629,7 @@
         }
 
         .product-card {
-            background: white;
+            background: var(--white);
             border: 1px solid var(--gray-200);
             border-radius: 8px;
             padding: 0.75rem;
@@ -513,7 +689,7 @@
             width: 340px;
             display: flex;
             flex-direction: column;
-            background: white;
+            background: var(--card-bg);
             border-left: 1px solid var(--gray-300);
             overflow: hidden;
         }
@@ -593,7 +769,7 @@
 
         .cart-item-price {
             font-weight: 700;
-            color: #c17a5c;
+            color: var(--color-accent-warm);
             font-size: 0.8rem;
         }
 
@@ -608,7 +784,7 @@
             display: flex;
             align-items: center;
             gap: 0.2rem;
-            background: white;
+            background: var(--card-bg);
             border-radius: 4px;
             padding: 0.1rem;
         }
@@ -664,7 +840,7 @@
         }
 
         .cart-item-remove:hover {
-            background: #dc2626;
+            background: var(--color-danger);
         }
 
         .cart-empty {
@@ -690,7 +866,7 @@
 
         .totals-section {
             margin-bottom: 1rem;
-            background: white;
+            background: var(--card-bg);
             padding: 0.75rem;
             border-radius: 6px;
         }
@@ -740,7 +916,7 @@
         .payment-method-btn {
             padding: 0.75rem;
             border: 1px solid var(--gray-300);
-            background: white;
+            background: var(--white);
             border-radius: 10px;
             cursor: pointer;
             font-size: 0.85rem;
@@ -805,7 +981,7 @@
         }
 
         .btn-finish {
-            background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+            background: linear-gradient(135deg, var(--success) 0%, var(--color-success) 100%);
         }
 
         .btn-finish:hover:not(:disabled) {
@@ -870,7 +1046,7 @@
         }
 
         .keypad-btn.delete:hover {
-            background: #dc2626;
+            background: var(--color-danger);
         }
 
         /* SCANNER REFINED (Unified Overlay) */
@@ -934,7 +1110,7 @@
         }
 
         .scanner-title i {
-            color: #10b981;
+            color: var(--color-success);
             filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
         }
 
@@ -1122,7 +1298,7 @@
             .profile-avatar {
                 width: 38px;
                 height: 38px;
-                background: #a18072;
+                background: var(--color-primary-light);
                 border-radius: 10px;
                 display: flex;
                 align-items: center;
@@ -1181,7 +1357,7 @@
             }
 
             .search-input-group {
-                background: #f1f3f5;
+                background: var(--gray-100);
                 border: 1px solid rgba(0, 0, 0, 0.05);
                 border-radius: 50px;
                 padding: 0 1rem;
@@ -1245,7 +1421,7 @@
                 flex: 1;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
-                background: #f8f9fa;
+                background: var(--gray-50);
             }
 
             .products-grid {
@@ -1281,7 +1457,7 @@
             }
 
             .product-card:active {
-                background: #fdfaf8;
+                background: var(--brown-50);
                 transform: none;
             }
 
@@ -1511,7 +1687,7 @@
             position: absolute;
             top: 0;
             right: 0;
-            background: #ef4444;
+            background: var(--color-danger);
             color: white;
             padding: 0.2rem 0.5rem;
             font-size: 0.65rem;
@@ -1552,18 +1728,18 @@
         }
 
         .expiry-badge.expired {
-            background: #ef4444;
+            background: var(--color-danger);
             color: white;
         }
 
         .expiry-badge.expiring {
-            background: #f59e0b;
-            color: #4b382f;
+            background: var(--color-warning);
+            color: var(--brown-900);
         }
 
         .expiry-badge.expiring {
-            background: #f59e0b;
-            color: #4b382f;
+            background: var(--color-warning);
+            color: var(--brown-900);
         }
 
         /* FIX TABLET SCROLLING */
@@ -1632,18 +1808,17 @@
                             <span class="text-white-50 fw-700 text-uppercase"
                                 style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
                         </div>
-                        <!-- <i class="fas fa-chevron-down text-white-50 small d-none d-lg-block"></i> -->
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
-                        style="min-width: 240px; border-radius: 16px;">
+                        style="min-width: 260px; border-radius: 16px;">
                         <li class="p-3 bg-light border-bottom">
                             <div class="d-flex align-items-center">
                                 <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
                                     style="width: 42px; height: 42px; font-size: 1.2rem;">
                                     {{ substr($user?->name ?? '', 0, 1) }}
                                 </div>
-                                <div class="overflow-hidden">
-                                    <h6 class="mb-0 fw-800 text-truncate">{{ $user?->name }}</h6>
+                                <div class="overflow-hidden text-start">
+                                    <h6 class="mb-0 fw-800 text-truncate text-dark">{{ $user?->name }}</h6>
                                     <div class="small text-muted text-truncate">@ {{ $user?->username }}</div>
                                     <div class="small fw-700 text-primary" style="font-size: 0.7rem;">NIS:
                                         {{ $user?->nis ?? '-' }}
@@ -1651,6 +1826,35 @@
                                 </div>
                             </div>
                         </li>
+
+                        {{-- Section: Settings/Theme --}}
+                        <div class="p-2 border-bottom">
+                            <div class="px-3 py-1 mb-1 small fw-bold text-uppercase text-muted"
+                                style="font-size: 0.65rem;">
+                                {{ __('common.settings') ?? 'Pengaturan' }}
+                            </div>
+                            <div class="px-3 py-2">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-600 text-muted"><i
+                                            class="fa-solid fa-circle-half-stroke me-2"></i>Tema</span>
+                                </div>
+                                <div class="btn-group w-100" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
+                                        data-theme="light" title="Light">
+                                        <i class="fa-solid fa-sun"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
+                                        data-theme="dark" title="Dark">
+                                        <i class="fa-solid fa-moon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
+                                        data-theme="system" title="System">
+                                        <i class="fa-solid fa-desktop"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
                         <li>
                             <a class="dropdown-item py-2 px-3 d-flex align-items-center"
                                 href="{{ route('pos.history') }}">
@@ -1874,8 +2078,9 @@
 
                     <!-- BUTTONS -->
                     <div class="checkout-buttons">
-                        <button class="btn-checkout btn-cancel clearBtn" id="clearBtn" title="Hapus Keranjang">
-                            <i class="fas fa-trash"></i>
+                        <button class="btn-checkout bg-danger btn-cancel clearBtn" id="clearBtn"
+                            title="Hapus Keranjang">
+                            <i class="fas fa-trash text-white opacity-90"></i>
                         </button>
                         <button class="btn-checkout btn-primary" id="btnHold" onclick="holdTransaction()"
                             title="Tunda Transaksi">
@@ -2123,8 +2328,8 @@
                 text: settings.text,
                 icon: settings.icon,
                 showCancelButton: true,
-                confirmButtonColor: '#6f5849',
-                cancelButtonColor: '#f1f1f1',
+                confirmButtonColor: 'var(--color-primary-dark)',
+                cancelButtonColor: 'var(--gray-100)',
                 confirmButtonText: settings.confirmButtonText,
                 cancelButtonText: settings.cancelButtonText,
                 customClass: {
@@ -2989,7 +3194,8 @@
         }
 
         function openHeldModal() {
-            const modal = new bootstrap.Modal(document.getElementById('heldTransactionsModal'));
+            const modalElement = document.getElementById('heldTransactionsModal');
+            const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
             modal.show();
 
             const tableBody = document.getElementById('heldTransactionsTableBody');
@@ -3056,9 +3262,22 @@
                 .then(response => response.json())
                 .then(result => {
                     if (result.success) {
-                        cart = result.data.items;
+                        // Ensure all numeric fields are actually numbers to avoid string concatenation in calculations
+                        cart = result.data.items.map(item => ({
+                            ...item,
+                            price: parseFloat(item.price),
+                            quantity: parseInt(item.quantity),
+                            subtotal: parseFloat(item.subtotal),
+                            stock: parseInt(item.stock || 0)
+                        }));
+
                         updateCartDisplay();
-                        bootstrap.Modal.getInstance(document.getElementById('heldTransactionsModal')).hide();
+
+                        const modalElement = document.getElementById('heldTransactionsModal');
+                        const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                        if (modalInstance) {
+                            modalInstance.hide();
+                        }
                         showToast('success', 'Transaksi dipanggil kembali');
                     } else {
                         showToast('error', 'Gagal memanggil transaksi: ' + result.message);
@@ -3543,6 +3762,49 @@
     <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
+
+    {{-- Theme Toggle Script --}}
+    <script>
+        (function () {
+            const opts = document.querySelectorAll('.pos-theme-opt');
+            const htmlEl = document.documentElement;
+
+            function getEffective(pref) {
+                return pref === 'system'
+                    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+                    : pref;
+            }
+
+            function apply(pref) {
+                htmlEl.setAttribute('data-bs-theme', getEffective(pref));
+                localStorage.setItem('artika-theme', pref);
+
+                const icons = { light: 'fa-sun', dark: 'fa-moon', system: 'fa-desktop' };
+                const icon = document.getElementById('posThemeIcon');
+
+                if (icon) {
+                    icon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
+                }
+
+                opts.forEach(o => {
+                    const chk = o.querySelector('.pos-theme-check');
+                    if (o.dataset.theme === pref) {
+                        o.classList.add('active');
+                        chk?.classList.remove('d-none');
+                    } else {
+                        o.classList.remove('active');
+                        chk?.classList.add('d-none');
+                    }
+                });
+            }
+
+            apply(localStorage.getItem('artika-theme') || 'system');
+            opts.forEach(o => o.addEventListener('click', () => apply(o.dataset.theme)));
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                if (localStorage.getItem('artika-theme') === 'system') apply('system');
+            });
+        })();
+    </script>
 </body>
 
 </html>

@@ -27,7 +27,7 @@
             top: 2rem;
             bottom: 0;
             width: 2px;
-            background: #e0cec7;
+            background: var(--color-secondary-light);
         }
 
         .timeline-item:last-child::before {
@@ -53,7 +53,7 @@
         <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
+                <h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i
                         class="fa-solid fa-arrows-rotate me-2"></i>{{ __('warehouse.stock_movements') }}</h2>
                 <p class="text-muted mb-0">{{ __('warehouse.track_stock_changes') }}</p>
             </div>
@@ -100,7 +100,7 @@
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">{{ __('warehouse.adjustments_today') }}</h6>
-                                <h3 class="mb-0 fw-bold" style="color: #6f5849;">{{ $adjustmentsToday }}</h3>
+                                <h3 class="mb-0 fw-bold" style="color: var(--color-primary-dark);">{{ $adjustmentsToday }}</h3>
                             </div>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                             </div>
                             <div class="ms-3">
                                 <h6 class="text-muted mb-1">{{ __('warehouse.total_movements') }}</h6>
-                                <h3 class="mb-0 fw-bold" style="color: #6f5849;">{{ $movements->total() }}</h3>
+                                <h3 class="mb-0 fw-bold" style="color: var(--color-primary-dark);">{{ $movements->total() }}</h3>
                             </div>
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                         </div>
                         <div class="col-md-2">
                             <div class="d-flex gap-2">
-                                <button type="submit" class="btn w-100 text-white" style="background-color: #6f5849;">
+                                <button type="submit" class="btn w-100 text-white" style="background-color: var(--color-primary-dark);">
                                     <i class="fa-solid fa-filter me-1"></i>{{ __('admin.apply_filter') }}
                                 </button>
                                 <a href="{{ route('warehouse.stock-movements') }}" class="btn btn-outline-secondary">
@@ -175,8 +175,8 @@
 
         <!-- Movement Timeline -->
         <div class="card shadow-sm" style="border-radius: 16px; border: none;">
-            <div class="card-header bg-white" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i
+            <div class="card-header bg-white" style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);"><i
                         class="fa-solid fa-scroll me-2"></i>{{ __('warehouse.recent_movements') }}</h5>
             </div>
             <div class="card-body">
@@ -191,7 +191,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <div>
-                                            <h6 class="mb-1 fw-bold" style="color: #6f5849;">
+                                            <h6 class="mb-1 fw-bold" style="color: var(--color-primary-dark);">
                                                 {{ $movement->product->name }}
                                             </h6>
                                             <small class="text-muted">{{ $movement->product->barcode }}</small>

@@ -30,21 +30,21 @@ class TransactionService
 
     public function processTransaction(array $data, array $items)
     {
-        // 0. Preliminary Stock Check (Prevent negative stock)
-        foreach ($items as $item) {
-            $product = Product::with('stocks')->find($item['product_id']);
-            $available = $product ? $product->available_stock : 0;
-
-            if ($available < $item['quantity']) {
-                $productName = $product ? $product->name : 'Unknown Product';
-                throw new \Exception(trans('pos.insufficient_stock') . " ({$productName}. Tersedia: {$available}, Diminta: {$item['quantity']})");
-            }
-        }
-
         // Control Transaction
         return DB::transaction(function () use ($data, $items) {
+            // 0. Stock Check INSIDE transaction for consistency
+            foreach ($items as $item) {
+                $product = Product::with('stocks')->find($item['product_id']);
+                $available = $product ? $product->available_stock : 0;
+
+                if ($available < $item['quantity']) {
+                    $productName = $product ? $product->name : 'Unknown Product';
+                    throw new \Exception(trans('pos.insufficient_stock') . " ({$productName}. Tersedia: {$available}, Diminta: {$item['quantity']})");
+                }
+            }
+
             // 1. Create Transaction Header
-            $data['invoice_no'] = 'INV-' . strtoupper(Str::random(10)); // Simple invoice gen
+            $data['invoice_no'] = $this->generateInvoiceNumber();
             $data['status'] = 'completed';
 
             $transaction = $this->transactionRepository->createTransaction($data);
@@ -324,5 +324,45 @@ class TransactionService
 
             return $returnRecord;
         });
+    }
+
+    /**
+     * Generate a dynamic invoice number based on Superadmin settings.
+     *
+     * Supported tokens:
+     *   {PREFIX} - Customizable prefix (default: INV)
+     *   {DATE}   - Current date as YYYYMMDD
+     *   {RAND}   - Random alphanumeric string
+     *   {SEQ}    - Daily sequential number (resets each day)
+     *
+     * @return string
+     */
+    protected function generateInvoiceNumber(): string
+    {
+        $prefix = \App\Models\Setting::get('invoice_prefix', 'INV');
+        $format = \App\Models\Setting::get('invoice_format', '{PREFIX}-{RAND}');
+        $randLen = (int) \App\Models\Setting::get('invoice_rand_length', 10);
+        $seqPad = (int) \App\Models\Setting::get('invoice_seq_padding', 5);
+
+        $date = now()->format('Ymd');
+
+        // Build the invoice number from the format template
+        $invoiceNo = $format;
+        $invoiceNo = str_replace('{PREFIX}', $prefix, $invoiceNo);
+        $invoiceNo = str_replace('{DATE}', $date, $invoiceNo);
+
+        // Handle {RAND} token
+        if (str_contains($invoiceNo, '{RAND}')) {
+            $invoiceNo = str_replace('{RAND}', strtoupper(Str::random($randLen)), $invoiceNo);
+        }
+
+        // Handle {SEQ} token — daily sequential counter
+        if (str_contains($invoiceNo, '{SEQ}')) {
+            $todayCount = Transaction::whereDate('created_at', now()->toDateString())->count();
+            $seq = str_pad($todayCount + 1, $seqPad, '0', STR_PAD_LEFT);
+            $invoiceNo = str_replace('{SEQ}', $seq, $invoiceNo);
+        }
+
+        return $invoiceNo;
     }
 }

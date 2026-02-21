@@ -5,21 +5,21 @@
         <!-- Header -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
-                <h4 class="fw-bold mb-1" style="color: #6f5849;">
+                <h4 class="fw-bold mb-1" style="color: var(--color-primary-dark);">
                     <i class="fa-solid fa-tags me-2"></i>{{ __('admin.expense_categories') }}
                 </h4>
                 <p class="text-muted mb-0 small">{{ __('admin.manage_expense_categories_subtitle') }}</p>
             </div>
             <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
                 data-bs-target="#addCategoryModal"
-                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
+                style="background: var(--color-primary-dark); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
                 <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_category') }}
             </button>
         </div>
 
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm"
-                style="border-radius: 12px; background-color: #f0fdf4; color: #16a34a;">
+                style="border-radius: 12px; background-color: var(--color-success-light); color: var(--color-success);">
                 <i class="fa-solid fa-circle-check me-2"></i>{{ session('success') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -27,7 +27,7 @@
 
         @if(session('error'))
             <div class="alert alert-danger alert-dismissible fade show border-0 shadow-sm"
-                style="border-radius: 12px; background-color: #fef2f2; color: #dc2626;">
+                style="border-radius: 12px; background-color: var(--color-danger-light); color: var(--color-danger);">
                 <i class="fa-solid fa-circle-exclamation me-2"></i>{{ session('error') }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -39,26 +39,26 @@
                 @if($categories->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-hover align-middle mb-0">
-                            <thead style="background-color: #fdf8f6;">
+                            <thead style="background-color: var(--brown-50);">
                                 <tr>
-                                    <th class="px-4 py-3 border-0" style="color: #6f5849; font-weight: 600; width: 30%;">
+                                    <th class="px-4 py-3 border-0" style="color: var(--color-primary-dark); font-weight: 600; width: 30%;">
                                         {{ __('admin.category_name') }}
                                     </th>
-                                    <th class="py-3 border-0" style="color: #6f5849; font-weight: 600;">
+                                    <th class="py-3 border-0" style="color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('admin.description') }}
                                     </th>
-                                    <th class="py-3 border-0" style="color: #6f5849; font-weight: 600; width: 15%;">
+                                    <th class="py-3 border-0" style="color: var(--color-primary-dark); font-weight: 600; width: 15%;">
                                         {{ __('admin.usage_count') }}
                                     </th>
                                     <th class="py-3 border-0 text-end px-4"
-                                        style="color: #6f5849; font-weight: 600; width: 15%;">{{ __('common.actions') }}</th>
+                                        style="color: var(--color-primary-dark); font-weight: 600; width: 15%;">{{ __('common.actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($categories as $category)
-                                    <tr style="border-bottom: 1px solid #f2e8e5;">
+                                    <tr style="border-bottom: 1px solid var(--brown-100);">
                                         <td class="px-4 py-3">
-                                            <div class="fw-bold" style="color: #2c3e50;">{{ $category->name }}</div>
+                                            <div class="fw-bold" style="color: var(--gray-800);">{{ $category->name }}</div>
                                         </td>
                                         <td class="py-3">
                                             <div class="text-muted small">
@@ -67,7 +67,7 @@
                                         </td>
                                         <td class="py-3">
                                             <span class="badge rounded-pill"
-                                                style="background: #fdf2f2; color: #dc2626; border: 1px solid #fecaca;">
+                                                style="background: #fdf2f2; color: var(--color-danger); border: 1px solid var(--color-danger-light);">
                                                 {{ $category->expenses_count }} {{ __('admin.expenses') }}
                                             </span>
                                         </td>
@@ -111,7 +111,7 @@
                     </div>
                 @else
                     <div class="text-center py-5">
-                        <div class="mb-3" style="font-size: 4rem; opacity: 0.15; color: #6f5849;">
+                        <div class="mb-3" style="font-size: 4rem; opacity: 0.15; color: var(--color-primary-dark);">
                             <i class="fa-solid fa-tags"></i>
                         </div>
                         <h5 class="text-muted">{{ __('admin.no_expense_categories_found') }}</h5>
@@ -144,13 +144,13 @@
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label fw-semibold"
-                                style="color: #85695a;">{{ __('admin.category_name') }}</label>
+                                style="color: var(--color-primary);">{{ __('admin.category_name') }}</label>
                             <input type="text" name="name" class="form-control custom-input"
                                 placeholder="{{ __('admin.category_name_placeholder') }}" required>
                         </div>
                         <div class="mb-0">
                             <label class="form-label fw-semibold"
-                                style="color: #85695a;">{{ __('admin.description') }}</label>
+                                style="color: var(--color-primary);">{{ __('admin.description') }}</label>
                             <textarea name="description" class="form-control custom-input" rows="3"
                                 placeholder="{{ __('admin.category_description_placeholder') }}"></textarea>
                         </div>
@@ -183,12 +183,12 @@
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label fw-semibold"
-                                style="color: #85695a;">{{ __('admin.category_name') }}</label>
+                                style="color: var(--color-primary);">{{ __('admin.category_name') }}</label>
                             <input type="text" name="name" id="edit_name" class="form-control custom-input" required>
                         </div>
                         <div class="mb-0">
                             <label class="form-label fw-semibold"
-                                style="color: #85695a;">{{ __('admin.description') }}</label>
+                                style="color: var(--color-primary);">{{ __('admin.description') }}</label>
                             <textarea name="description" id="edit_description" class="form-control custom-input"
                                 rows="3"></textarea>
                         </div>
@@ -207,24 +207,25 @@
 
     <style>
         .btn-brown {
-            background: #6f5849;
+            background: var(--color-primary-dark);
             color: white;
             border: none;
         }
 
         .btn-brown:hover {
             color: white;
+            background: var(--color-primary-dark);
             opacity: 0.9;
         }
 
         .custom-input {
             border-radius: 12px;
-            border: 2px solid #f2e8e5;
+            border: 2px solid var(--brown-100);
             padding: 0.6rem 1rem;
         }
 
         .custom-input:focus {
-            border-color: #d4c4bb;
+            border-color: var(--color-secondary);
             box-shadow: none;
         }
     </style>

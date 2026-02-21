@@ -28,7 +28,7 @@
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="mb-4">
-            <h2 class="fw-bold mb-1" style="color: #6f5849;"><i class="fa-solid fa-box me-2"></i>{{ __('warehouse.dashboard') }}</h2>
+            <h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i class="fa-solid fa-box me-2"></i>{{ __('warehouse.dashboard') }}</h2>
             <p class="text-muted mb-0">{{ __('warehouse.stock_monitoring') }}</p>
         </div>
 
@@ -42,7 +42,7 @@
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('warehouse.total_products') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $totalProducts }}</h3>
+                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">{{ $totalProducts }}</h3>
                                 <small class="text-muted">{{ __('warehouse.in_catalog') }}</small>
                             </div>
                             <div class="icon-box-premium bg-brown-soft">
@@ -61,7 +61,7 @@
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('warehouse.stock_value') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp {{ number_format($totalStockValue, 0, ',', '.') }}</h3>
+                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">Rp {{ number_format($totalStockValue, 0, ',', '.') }}</h3>
                                 <small class="text-muted">{{ __('warehouse.total_inventory') }}</small>
                             </div>
                             <div class="icon-box-premium bg-brown-soft">
@@ -80,7 +80,7 @@
                             <div>
                                 <p class="mb-2 text-muted text-uppercase"
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">{{ __('warehouse.low_stock') }}</p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">{{ $lowStockItems->count() }}</h3>
+                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">{{ $lowStockItems->count() }}</h3>
                                 <small class="text-muted">{{ __('warehouse.items_need_restock') }}</small>
                             </div>
                             <div class="icon-box-premium bg-brown-soft">
@@ -105,7 +105,7 @@
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: #fff5f5;">
+                                <thead style="background: var(--color-danger-light);">
                                     <tr>
                                         <th class="border-0 fw-semibold text-danger">{{ __('common.product') }}</th>
                                         <th class="border-0 fw-semibold text-danger">{{ __('common.expiry_date') }}</th>
@@ -138,24 +138,24 @@
                 @if($expiringSoonItems->count() > 0)
                 <div class="card shadow-sm border-warning mb-4" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-warning"
-                        style="border-radius: 16px 16px 0 0; color: #4b382f;">
+                        style="border-radius: 16px 16px 0 0; color: var(--brown-900);">
                         <h5 class="mb-0 fw-bold"><i class="fa-solid fa-clock me-2"></i>{{ __('warehouse.expiring_soon_alerts') }}</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: #fffbeb;">
+                                <thead style="background: var(--color-warning-light);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.product') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.expiry_date') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.stock') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.product') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.expiry_date') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.stock') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($expiringSoonItems as $stock)
                                         <tr>
                                             <td>
-                                                <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
+                                                <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $stock->product->name }}</div>
                                                 <small class="text-muted">{{ $stock->product->barcode }}</small>
                                             </td>
                                             <td>
@@ -175,29 +175,29 @@
 
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
-                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-triangle-exclamation me-2"></i>{{ __('warehouse.low_stock_alerts') }}</h5>
+                        style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);"><i class="fa-solid fa-triangle-exclamation me-2"></i>{{ __('warehouse.low_stock_alerts') }}</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: #fdf8f6;">
+                                <thead style="background: var(--brown-50);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.product') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.category') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.stock') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.status') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.product') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.category') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.stock') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.status') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($lowStockItems as $stock)
                                         <tr>
                                             <td>
-                                                <div class="fw-bold" style="color: #6f5849;">{{ $stock->product->name }}</div>
+                                                <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $stock->product->name }}</div>
                                                 <small class="text-muted">{{ $stock->product->barcode }}</small>
                                             </td>
                                             <td>
-                                                <span class="badge" style="background: #e0cec7; color: #6f5849;">
+                                                <span class="badge" style="background: var(--color-secondary-light); color: var(--color-primary-dark);">
                                                     {{ $stock->product->category->name }}
                                                 </span>
                                             </td>
@@ -232,21 +232,21 @@
             <div class="col-md-4">
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
-                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-folder me-2"></i>{{ __('warehouse.stock_by_category') }}</h5>
+                        style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);"><i class="fa-solid fa-folder me-2"></i>{{ __('warehouse.stock_by_category') }}</h5>
                     </div>
                     <div class="card-body" style="max-height: 500px; overflow-y: auto;">
                         @foreach($stockByCategory as $category)
                             <div class="mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <div class="fw-bold" style="color: #6f5849;">{{ $category['name'] }}</div>
-                                    <span class="badge" style="background: #e0cec7; color: #6f5849;">
+                                    <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $category['name'] }}</div>
+                                    <span class="badge" style="background: var(--color-secondary-light); color: var(--color-primary-dark);">
                                         {{ $category['products_count'] }} {{ __('common.products') }}
                                     </span>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <small class="text-muted">{{ __('warehouse.total_stock') }}:</small>
-                                    <span class="fw-bold" style="color: #c17a5c;">{{ $category['total_stock'] }} {{ __('warehouse.units') }}</span>
+                                    <span class="fw-bold" style="color: var(--color-accent-warm);">{{ $category['total_stock'] }} {{ __('warehouse.units') }}</span>
                                 </div>
                             </div>
                         @endforeach
@@ -260,34 +260,34 @@
             <div class="col-12">
                 <div class="card shadow-sm" style="border-radius: 16px; border: none;">
                     <div class="card-header bg-white"
-                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;"><i class="fa-solid fa-clipboard-list me-2"></i>{{ __('warehouse.recent_products') }}</h5>
+                        style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);"><i class="fa-solid fa-clipboard-list me-2"></i>{{ __('warehouse.recent_products') }}</h5>
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: #fdf8f6;">
+                                <thead style="background: var(--brown-50);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.product') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.category') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.price') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.total_stock') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('warehouse.added') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.product') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.category') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('warehouse.price') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('warehouse.total_stock') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('warehouse.added') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($recentProducts as $product)
                                         <tr>
                                             <td>
-                                                <div class="fw-bold" style="color: #6f5849;">{{ $product->name }}</div>
+                                                <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $product->name }}</div>
                                                 <small class="text-muted">{{ $product->barcode }}</small>
                                             </td>
                                             <td>
-                                                <span class="badge" style="background: #e0cec7; color: #6f5849;">
+                                                <span class="badge" style="background: var(--color-secondary-light); color: var(--color-primary-dark);">
                                                     {{ $product->category->name }}
                                                 </span>
                                             </td>
-                                            <td class="fw-bold" style="color: #c17a5c;">Rp
+                                            <td class="fw-bold" style="color: var(--color-accent-warm);">Rp
                                                 {{ number_format($product->price, 0, ',', '.') }}</td>
                                             <td>
                                                 @php

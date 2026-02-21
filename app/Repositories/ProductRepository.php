@@ -47,12 +47,9 @@ class ProductRepository implements ProductRepositoryInterface
             }
         }
 
-        // If still remaining (oversold), deduct from the last modified batch or first available
+        // If still remaining (oversold), throw exception instead of allowing negative stock
         if ($remainingToDeduct > 0) {
-            $lastStock = Stock::where('product_id', $productId)->orderBy('id', 'desc')->first();
-            if ($lastStock) {
-                $lastStock->decrement('quantity', $remainingToDeduct);
-            }
+            throw new \Exception("Insufficient stock for product ID {$productId}. Short by {$remainingToDeduct} units.");
         }
     }
 

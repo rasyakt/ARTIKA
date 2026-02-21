@@ -4,7 +4,7 @@
 @section('content')
     <style>
         .table-hover tbody tr:hover {
-            background-color: #fdf8f6;
+            background-color: var(--brown-50);
         }
 
         html {
@@ -19,10 +19,10 @@
                     <div class="d-flex align-items-center mb-1">
 
                     <a href="{{ route($routePrefix . 'reports') }}" class="btn btn-light me-3 shadow-sm"
-                        style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
+                        style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid var(--gray-200);">
                         <i class="fas fa-arrow-left"></i>
                     </a>
-                        <h2 class="fw-bold mb-0" style="color: #6f5849;">
+                        <h2 class="fw-bold mb-0" style="color: var(--color-primary-dark);">
                             <i class="fa-solid fa-warehouse me-2"></i>{{ __('admin.warehouse_reports_title') }}
                         </h2>
                     </div>
@@ -47,7 +47,7 @@
                         <!-- Date Row -->
                         <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="period" class="form-label text-dark fw-semibold">
-                                <i class="fa-solid fa-calendar me-1" style="color: #c17a5c;"></i> {{ __('admin.quick_period') }}
+                                <i class="fa-solid fa-calendar me-1" style="color: var(--color-accent-warm);"></i> {{ __('admin.quick_period') }}
                             </label>
                             <select name="period" id="period" class="form-select" onchange="this.form.submit()">
                                 <option value="today" {{ $period == 'today' ? 'selected' : '' }}>{{ __('admin.today') }}</option>
@@ -58,13 +58,13 @@
                         </div>
                         <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="start_date" class="form-label text-dark fw-semibold">
-                                <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.start_date') }}
+                                <i class="fa-solid fa-calendar-days me-1" style="color: var(--color-accent-warm);"></i> {{ __('admin.start_date') }}
                             </label>
                             <input type="date" class="form-select" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                         </div>
                         <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="end_date" class="form-label text-dark fw-semibold">
-                                <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i> {{ __('admin.end_date') }}
+                                <i class="fa-solid fa-calendar-days me-1" style="color: var(--color-accent-warm);"></i> {{ __('admin.end_date') }}
                             </label>
                             <input type="date" class="form-select" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
                         </div>
@@ -72,7 +72,7 @@
                         <!-- Info Row -->
                         <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="category_id" class="form-label text-dark fw-semibold">
-                                <i class="fa-solid fa-list me-1" style="color: #c17a5c;"></i> {{ __('common.category') }}
+                                <i class="fa-solid fa-list me-1" style="color: var(--color-accent-warm);"></i> {{ __('common.category') }}
                             </label>
                             <select name="category_id" id="category_id" class="form-select">
                                 <option value="">{{ __('admin.all_categories') }}</option>
@@ -86,7 +86,7 @@
                         </div>
                         <div class="col-xl-2 col-lg-4 col-md-6">
                             <label for="stock_status" class="form-label text-dark fw-semibold">
-                                <i class="fa-solid fa-layer-group me-1" style="color: #c17a5c;"></i> {{ __('admin.stock_status') }}
+                                <i class="fa-solid fa-layer-group me-1" style="color: var(--color-accent-warm);"></i> {{ __('admin.stock_status') }}
                             </label>
                             <select name="stock_status" id="stock_status" class="form-select">
                                 <option value="">{{ __('admin.all_status') }}</option>
@@ -115,7 +115,7 @@
                         <div class="col-12 mt-3">
                             <div class="input-group shadow-sm" style="border-radius: 10px; overflow: hidden;">
                                 <span class="input-group-text bg-white border-0">
-                                    <i class="fa-solid fa-magnifying-glass" style="color: #c17a5c;"></i>
+                                    <i class="fa-solid fa-magnifying-glass" style="color: var(--color-accent-warm);"></i>
                                 </span>
                                 <input type="text" name="search" class="form-control border-0"
                                     placeholder="{{ __('admin.search_placeholder') }}" value="{{ $search }}">
@@ -135,7 +135,7 @@
                                     <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.total_valuation') }}</p>
-                                    <h5 class="fw-bold mb-0" style="color: #4b382f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                    <h5 class="fw-bold mb-0" style="color: var(--brown-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                                         Rp {{ number_format($summary['total_valuation'], 0, ',', '.') }}
                                     </h5>
                                     <small class="text-muted">{{ __('admin.based_on_cost') }}</small>
@@ -156,7 +156,7 @@
                                     <p class="mb-2 text-muted text-uppercase"
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.total_items') }}</p>
-                                    <h5 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['total_items']) }}</h5>
+                                    <h5 class="fw-bold mb-0" style="color: var(--brown-900);">{{ number_format($summary['total_items']) }}</h5>
                                     <small class="text-muted">{{ __('admin.units_in_stock') }}</small>
                                 </div>
                                 <div class="icon-box-premium bg-brown-soft">
@@ -176,7 +176,7 @@
                                         style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                         {{ __('admin.low_stock_alerts') }}
                                     </p>
-                                    <h5 class="fw-bold mb-0" style="color: #4b382f;">{{ number_format($summary['low_stock_count']) }}</h5>
+                                    <h5 class="fw-bold mb-0" style="color: var(--brown-900);">{{ number_format($summary['low_stock_count']) }}</h5>
                                     <small class="text-muted">{{ __('admin.items_need_restocking') }}</small>
                                 </div>
                                 <div class="icon-box-premium bg-brown-soft">
@@ -224,21 +224,21 @@
                 <div class="col-lg-6">
                     <div class="card shadow-sm">
                         <div class="card-header"
-                            style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                            <h5 class="mb-0 fw-bold" style="color: #6f5849;">
+                            style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                            <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);">
                                 <i class="fa-solid fa-trophy me-2"></i>{{ __('admin.top_moving_items') }}
                             </h5>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0">
-                                    <thead style="background: #fdf8f6;">
+                                    <thead style="background: var(--brown-50);">
                                         <tr>
-                                            <th class="border-0 fw-semibold" style="color: #6f5849;">
+                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
                                                 {{ __('admin.product_management') }}</th>
-                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                            <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                                 {{ __('admin.movements') }}</th>
-                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                            <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                                 {{ __('admin.quantity') }}</th>
                                         </tr>
                                     </thead>
@@ -248,11 +248,11 @@
                                                 <td>
                                                     <div class="d-flex align-items-center">
                                                         <div class="me-3"
-                                                            style="width: 30px; height: 30px; background: #6f5849; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
+                                                            style="width: 30px; height: 30px; background: var(--color-primary-dark); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
                                                             {{ $index + 1 }}
                                                         </div>
                                                         <div>
-                                                            <div class="fw-bold" style="color: #6f5849;">{{ $mover->product->name }}
+                                                            <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $mover->product->name }}
                                                             </div>
                                                             <small class="text-muted">{{ $mover->product->barcode }}</small>
                                                         </div>
@@ -260,9 +260,9 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <span class="badge"
-                                                        style="background: #e0cec7; color: #6f5849;">{{ $mover->total_movements }}</span>
+                                                        style="background: var(--color-secondary-light); color: var(--color-primary-dark);">{{ $mover->total_movements }}</span>
                                                 </td>
-                                                <td class="text-center fw-bold" style="color: #85695a;">{{ $mover->total_quantity }}
+                                                <td class="text-center fw-bold" style="color: var(--color-primary);">{{ $mover->total_quantity }}
                                                 </td>
                                             </tr>
                                         @empty
@@ -285,23 +285,23 @@
                 <div class="col-lg-6" id="low-stock-section">
                     <div class="card shadow-sm">
                         <div class="card-header"
-                            style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                            <h5 class="mb-0 fw-bold" style="color: #6f5849;">
+                            style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                            <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);">
                                 <i class="fa-solid fa-triangle-exclamation me-2"></i>{{ __('admin.low_stock_items') }}
                             </h5>
                         </div>
                         <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0">
-                                    <thead style="background: #fdf8f6;">
+                                    <thead style="background: var(--brown-50);">
                                         <tr>
-                                            <th class="border-0 fw-semibold" style="color: #6f5849;">
+                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
                                                 {{ __('admin.product_management') }}</th>
-                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                            <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                                 {{ __('admin.min_stock') }}</th>
-                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                            <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                                 {{ __('admin.current_stock') }}</th>
-                                            <th class="border-0 fw-semibold text-end" style="color: #6f5849;">
+                                            <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">
                                                 {{ __('admin.action') }}</th>
                                         </tr>
                                     </thead>
@@ -309,11 +309,11 @@
                                         @forelse($lowStockItems as $item)
                                             <tr>
                                                 <td>
-                                                    <div class="fw-bold" style="color: #6f5849;">{{ $item->name }}</div>
+                                                    <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $item->name }}</div>
                                                 </td>
                                                 <td class="text-center">
                                                     <span class="badge"
-                                                        style="background: #e0cec7; color: #6f5849;">{{ $item->min_stock }}</span>
+                                                        style="background: var(--color-secondary-light); color: var(--color-primary-dark);">{{ $item->min_stock }}</span>
                                                 </td>
                                                 <td class="text-center">
                                                     <span class="badge bg-danger">{{ $item->current_stock }}</span>
@@ -351,25 +351,25 @@
 
             <!-- Recent Movements Table -->
             <div class="card shadow-sm mb-4" id="movements-section">
-                <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                    <h5 class="mb-0 fw-bold" style="color: #6f5849;">
+                <div class="card-header" style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                    <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);">
                         <i class="fa-solid fa-arrows-rotate me-2"></i>{{ __('admin.recent_stock_movements') }}
                     </h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
-                            <thead style="background: #fdf8f6;">
+                            <thead style="background: var(--brown-50);">
                                 <tr>
-                                    <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
-                                    <th class="border-0 fw-semibold" style="color: #6f5849;">
+                                    <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.date') }}</th>
+                                    <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
                                         {{ __('admin.product_management') }}</th>
-                                    <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                    <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                         {{ __('admin.activity_type') }}</th>
-                                    <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                    <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                         {{ __('admin.quantity') }}</th>
-                                    <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.reference') }}</th>
-                                    <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.user') }}</th>
+                                    <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.reference') }}</th>
+                                    <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.user') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -377,7 +377,7 @@
                                     <tr>
                                         <td class="text-muted">{{ $movement->created_at->format('d M Y H:i') }}</td>
                                         <td>
-                                            <div class="fw-bold" style="color: #6f5849;">{{ $movement->product->name }}</div>
+                                            <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $movement->product->name }}</div>
                                         </td>
                                         <td class="text-center">
                                             @if($movement->type == 'in')
@@ -385,7 +385,7 @@
                                             @elseif($movement->type == 'out')
                                                 <span class="badge bg-warning text-dark">OUT</span>
                                             @else
-                                                <span class="badge" style="background: #e0cec7; color: #6f5849;">ADJ</span>
+                                                <span class="badge" style="background: var(--color-secondary-light); color: var(--color-primary-dark);">ADJ</span>
                                             @endif
                                         </td>
                                         <td
@@ -394,7 +394,7 @@
                                         </td>
                                         <td>
                                             <span class="badge"
-                                                style="background: #e0cec7; color: #6f5849;">{{ $movement->reference ?? 'N/A' }}</span>
+                                                style="background: var(--color-secondary-light); color: var(--color-primary-dark);">{{ $movement->reference ?? 'N/A' }}</span>
                                         </td>
                                         <td>{{ $movement->user->name ?? 'System' }}</td>
                                     </tr>
@@ -418,22 +418,22 @@
             <!-- Audit Logs Section -->
             @if(App\Models\Setting::get('admin_enable_audit_logs', true))
             <div class="card shadow-sm mb-4" id="audit-section">
-                <div class="card-header" style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                    <h5 class="mb-0 fw-bold" style="color: #6f5849;">
+                <div class="card-header" style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                    <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);">
                         <i class="fa-solid fa-clipboard-list me-2"></i>{{ __('admin.audit_log') }}
                     </h5>
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
-                            <thead style="background: #fdf8f6;">
+                            <thead style="background: var(--brown-50);">
                                 <tr>
-                                    <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
-                                    <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.user') }}</th>
-                                    <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                    <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.date') }}</th>
+                                    <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.user') }}</th>
+                                    <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                         {{ __('admin.action') }}</th>
-                                    <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.entity') }}</th>
-                                    <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.details') }}</th>
+                                    <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.entity') }}</th>
+                                    <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.details') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -441,15 +441,15 @@
                                     <tr>
                                         <td class="text-muted">{{ $log->created_at->format('d M Y H:i') }}</td>
                                         <td>
-                                            <div class="fw-bold" style="color: #6f5849;">{{ $log->user->name ?? 'System' }}</div>
+                                            <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $log->user->name ?? 'System' }}</div>
                                             <small class="text-muted">{{ $log->user->role->name ?? '' }}</small>
                                         </td>
                                         <td class="text-center">
                                             <span class="badge"
-                                                style="background: #e0cec7; color: #6f5849;">{{ strtoupper($log->action) }}</span>
+                                                style="background: var(--color-secondary-light); color: var(--color-primary-dark);">{{ strtoupper($log->action) }}</span>
                                         </td>
                                         <td>
-                                            <span class="fw-semibold" style="color: #85695a;">{{ $log->model_type }}</span>
+                                            <span class="fw-semibold" style="color: var(--color-primary);">{{ $log->model_type }}</span>
                                             <span class="text-muted small">#{{ $log->model_id }}</span>
                                         </td>
                                         <td>

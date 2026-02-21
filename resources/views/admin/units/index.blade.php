@@ -4,7 +4,7 @@
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
-            <h4 class="fw-bold mb-0" style="color: #6f5849;">
+            <h4 class="fw-bold mb-0" style="color: var(--color-primary-dark);">
                 <i class="fa-solid fa-scale-balanced me-2"></i>{{ __('admin.unit_management') ?? 'Manajemen Satuan' }}
             </h4>
             <button class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
@@ -27,32 +27,32 @@
                 @if($units->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
-                            <thead style="background-color: #fdf8f6;">
+                            <thead style="background-color: var(--brown-50);">
                                 <tr>
-                                    <th class="px-4 py-3" style="border: none; color: #6f5849; font-weight: 600;">#</th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="px-4 py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">#</th>
+                                    <th class="py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('admin.unit_name') ?? 'Nama Satuan' }}
                                     </th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('admin.short_name') ?? 'Singkatan' }}
                                     </th>
-                                    <th class="py-3 text-end px-4" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="py-3 text-end px-4" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('common.actions') }}
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($units as $index => $unit)
-                                    <tr style="border-bottom: 1px solid #f2e8e5;">
-                                        <td class="px-4 py-3 align-middle" style="color: #6c757d;">
+                                    <tr style="border-bottom: 1px solid var(--brown-100);">
+                                        <td class="px-4 py-3 align-middle" style="color: var(--gray-500);">
                                             {{ ($units->currentPage() - 1) * $units->perPage() + $loop->iteration }}</td>
                                         <td class="py-3 align-middle">
                                             <div class="d-flex align-items-center">
                                                 <div class="me-3"
-                                                    style="width: 40px; height: 40px; background: #fdf8f6; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                                                    <i class="fa-solid fa-box" style="color: #6f5849; font-size: 1.2rem;"></i>
+                                                    style="width: 40px; height: 40px; background: var(--brown-50); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                                    <i class="fa-solid fa-box" style="color: var(--color-primary-dark); font-size: 1.2rem;"></i>
                                                 </div>
-                                                <span class="fw-semibold" style="color: #2c3e50;">{{ $unit->name }}</span>
+                                                <span class="fw-semibold" style="color: var(--gray-800);">{{ $unit->name }}</span>
                                             </div>
                                         </td>
                                         <td class="py-3 align-middle text-muted">
@@ -61,7 +61,7 @@
                                         <td class="py-3 align-middle text-end px-4">
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-light" type="button" data-bs-toggle="dropdown"
-                                                    style="border: 1px solid #f2e8e5; border-radius: 8px; padding: 0.35rem 0.7rem;">
+                                                    style="border: 1px solid var(--brown-100); border-radius: 8px; padding: 0.35rem 0.7rem;">
                                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0"
@@ -97,7 +97,7 @@
                     </div>
                 @else
                     <div class="text-center py-5">
-                        <div style="font-size: 4rem; opacity: 0.2; color: #6f5849;">
+                        <div style="font-size: 4rem; opacity: 0.2; color: var(--color-primary-dark);">
                             <i class="fa-solid fa-scale-balanced"></i>
                         </div>
                         <p class="text-muted mb-3">Belum ada data satuan.</p>
@@ -133,16 +133,16 @@
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label fw-semibold"
-                                style="color: #6f5849;">{{ __('admin.unit_name') ?? 'Nama Satuan' }} *</label>
+                                style="color: var(--color-primary-dark);">{{ __('admin.unit_name') ?? 'Nama Satuan' }} *</label>
                             <input type="text" class="form-control" name="name" required
                                 placeholder="Contoh: Box, Kardus, Pcs"
-                                style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-0">
                             <label class="form-label fw-semibold"
-                                style="color: #6f5849;">{{ __('admin.short_name') ?? 'Singkatan (Opsional)' }}</label>
+                                style="color: var(--color-primary-dark);">{{ __('admin.short_name') ?? 'Singkatan (Opsional)' }}</label>
                             <input type="text" class="form-control" name="short_name" placeholder="Contoh: box, krd, pcs"
-                                style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                         </div>
                     </div>
                     <div class="modal-footer border-0 pt-0 pb-4 px-4">
@@ -174,15 +174,15 @@
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label class="form-label fw-semibold"
-                                style="color: #6f5849;">{{ __('admin.unit_name') ?? 'Nama Satuan' }} *</label>
+                                style="color: var(--color-primary-dark);">{{ __('admin.unit_name') ?? 'Nama Satuan' }} *</label>
                             <input type="text" class="form-control" id="edit_name" name="name" required
-                                style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-0">
                             <label class="form-label fw-semibold"
-                                style="color: #6f5849;">{{ __('admin.short_name') ?? 'Singkatan (Opsional)' }}</label>
+                                style="color: var(--color-primary-dark);">{{ __('admin.short_name') ?? 'Singkatan (Opsional)' }}</label>
                             <input type="text" class="form-control" id="edit_short_name" name="short_name"
-                                style="border-radius: 12px; border: 2px solid #f2e8e5; padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
                         </div>
                     </div>
                     <div class="modal-footer border-0 pt-0 pb-4 px-4">

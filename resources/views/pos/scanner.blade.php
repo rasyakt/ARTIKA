@@ -1,3 +1,4 @@
+@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,13 +11,13 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <style>
         :root {
-            --primary: #85695a;
-            --primary-dark: #6f5849;
-            --primary-light: #a18072;
-            --success: #16a34a;
-            --success-dark: #15803d;
-            --danger: #ef4444;
-            --warning: #f59e0b;
+            --primary: var(--color-primary);
+            --primary-dark: var(--color-primary-dark);
+            --primary-light: var(--color-primary-light);
+            --success: var(--color-success);
+            --success-dark: var(--color-success-dark);
+            --danger: var(--color-danger);
+            --warning: var(--color-warning);
         }
 
         * {
@@ -499,7 +500,7 @@
 
         /* Error Message Styles */
         .error-message {
-            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            background: linear-gradient(135deg, var(--color-danger) 0%, var(--color-danger-dark) 100%);
             color: white;
             padding: 1.5rem;
             border-radius: 16px;
@@ -550,7 +551,7 @@
             width: 100%;
             padding: 0.875rem;
             background: white;
-            color: #dc2626;
+            color: var(--color-danger);
             border: none;
             border-radius: 12px;
             font-weight: 700;

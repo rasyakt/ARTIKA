@@ -5,13 +5,13 @@
         <!-- Header -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
             <div>
-                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
+                <h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i
                         class="fa-solid fa-users me-2"></i>{{ __('admin.user_management') }}</h2>
                 <p class="text-muted mb-0">{{ __('admin.manage_users_permissions') }}</p>
             </div>
             <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
                 data-bs-target="#addUserModal"
-                style="background: #6f5849; border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                style="background: var(--color-primary-dark); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
                 <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_user') }}
             </button>
         </div>
@@ -22,13 +22,13 @@
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
-                        <thead style="background: #fdf8f6;">
+                        <thead style="background: var(--brown-50);">
                             <tr>
-                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">{{ __('common.user') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.username') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.nis') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('common.role') }}</th>
-                                <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                <th class="border-0 fw-semibold ps-4" style="color: var(--color-primary-dark);">{{ __('common.user') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.username') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.nis') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.role') }}</th>
+                                <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                     {{ __('common.actions') }}
                                 </th>
                             </tr>
@@ -39,18 +39,18 @@
                                     <td class="ps-4">
                                         <div class="d-flex align-items-center">
                                             <div class="me-3"
-                                                style="width: 45px; height: 45px; background: #f2e8e5; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+                                                style="width: 45px; height: 45px; background: var(--brown-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
                                                 <i class="fa-solid fa-user"></i>
                                             </div>
                                             <div>
-                                                <div class="fw-bold" style="color: #6f5849;">{{ $user->name }}</div>
+                                                <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $user->name }}</div>
                                                 <small class="text-muted">{{ __('common.id') }}: {{ $user->id }}</small>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <code
-                                            style="background: #fdf8f6; padding: 0.25rem 0.5rem; border-radius: 6px; color: #85695a;">{{ $user->username }}</code>
+                                            style="background: var(--brown-50); padding: 0.25rem 0.5rem; border-radius: 6px; color: var(--color-primary);">{{ $user->username }}</code>
                                     </td>
                                     <td>{{ $user->nis ?? '-' }}</td>
                                     <td>
@@ -70,11 +70,11 @@
                                         <div class="dropdown text-center">
                                             <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown"
                                                 aria-expanded="false"
-                                                style="border-radius: 8px; border: 1px solid #e0cec7; font-size: 1.2rem; line-height: 1; padding: 0.25rem 0.5rem;">
+                                                style="border-radius: 8px; border: 1px solid var(--color-secondary-light); font-size: 1.2rem; line-height: 1; padding: 0.25rem 0.5rem;">
                                                 ⋮
                                             </button>
                                             <ul class="dropdown-menu dropdown-menu-end"
-                                                style="border-radius: 12px; border: 1px solid #e0cec7; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                                style="border-radius: 12px; border: 1px solid var(--color-secondary-light); box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
                                                 <li>
                                                     <button class="dropdown-item" data-bs-toggle="modal"
                                                         data-bs-target="#editUserModal" onclick='editUser(@json($user))'
@@ -139,7 +139,7 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: #a18072;
+            color: var(--color-primary-light);
             cursor: pointer;
             z-index: 10;
             padding: 5px;
@@ -148,13 +148,13 @@
         }
 
         .toggle-password:hover {
-            color: #85695a;
+            color: var(--color-primary);
         }
     </style>
     <div class="modal fade" id="addUserModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
-                <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
+                <div class="modal-header" style="border-bottom: 2px solid var(--brown-100);">
                     <h5 class="modal-title fw-bold"><i class="fa-solid fa-plus me-1"></i>
                         {{ __('admin.add_new_user') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -164,23 +164,23 @@
                     <div class="modal-body p-4">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.full_name') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.full_name') }}
                                     *</label>
                                 <input type="text" class="form-control" name="name" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.username') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.username') }}
                                     *</label>
                                 <input type="text" class="form-control" name="username" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.password') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.password') }}
                                     *</label>
                                 <div class="password-field">
                                     <input type="password" class="form-control" name="password" id="add_password" required
-                                        style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 2.5rem 0.75rem 1rem;">
+                                        style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 2.5rem 0.75rem 1rem;">
                                     <button type="button" class="toggle-password"
                                         onclick="togglePasswordVisibility('add_password', this)">
                                         <i class="fa-solid fa-eye"></i>
@@ -188,16 +188,16 @@
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.nis') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.nis') }}
                                     ({{ __('common.optional') }})</label>
                                 <input type="text" class="form-control" name="nis"
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.role') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.role') }}
                                     *</label>
                                 <select class="form-select" name="role_id" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                                     <option value="">{{ __('common.select_role') }}</option>
                                     @foreach($roles as $role)
                                         @php
@@ -216,11 +216,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
+                    <div class="modal-footer" style="border-top: 2px solid var(--brown-100);">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: #6f5849; border: none; border-radius: 12px;">
+                            style="background: var(--color-primary-dark); border: none; border-radius: 12px;">
                             <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('admin.save_user') }}
                         </button>
                     </div>
@@ -233,7 +233,7 @@
     <div class="modal fade" id="editUserModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
-                <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
+                <div class="modal-header" style="border-bottom: 2px solid var(--brown-100);">
                     <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen me-1"></i>
                         {{ __('admin.edit_user') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -244,23 +244,23 @@
                     <div class="modal-body p-4">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.full_name') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.full_name') }}
                                     *</label>
                                 <input type="text" class="form-control" id="edit_name" name="name" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.username') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.username') }}
                                     *</label>
                                 <input type="text" class="form-control" id="edit_username" name="username" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.password') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.password') }}
                                     ({{ __('admin.password_leave_blank') }})</label>
                                 <div class="password-field">
                                     <input type="password" class="form-control" name="password" id="edit_password"
-                                        style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 2.5rem 0.75rem 1rem;">
+                                        style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 2.5rem 0.75rem 1rem;">
                                     <button type="button" class="toggle-password"
                                         onclick="togglePasswordVisibility('edit_password', this)">
                                         <i class="fa-solid fa-eye"></i>
@@ -268,16 +268,16 @@
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.nis') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.nis') }}
                                     ({{ __('common.optional') }})</label>
                                 <input type="text" class="form-control" id="edit_nis" name="nis"
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: #6f5849;">{{ __('common.role') }}
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.role') }}
                                     *</label>
                                 <select class="form-select" id="edit_role_id" name="role_id" required
-                                    style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                                     @foreach($roles as $role)
                                         @php
                                             $isAllowed = false;
@@ -296,11 +296,11 @@
 
                         </div>
                     </div>
-                    <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
+                    <div class="modal-footer" style="border-top: 2px solid var(--brown-100);">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                             style="border-radius: 12px;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary"
-                            style="background: #6f5849; border: none; border-radius: 12px;">
+                            style="background: var(--color-primary-dark); border: none; border-radius: 12px;">
                             <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.update') }} {{ __('common.user') }}
                         </button>
                     </div>

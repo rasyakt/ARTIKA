@@ -7,8 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+use App\Traits\Auditable;
+
 class Product extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'barcode',
         'name',
@@ -77,6 +81,9 @@ class Product extends Model
      */
     public function getProfitMarginAttribute()
     {
+        if ($this->cost_price == 0) {
+            return 0;
+        }
         return (($this->price - $this->cost_price) / $this->cost_price) * 100;
     }
 

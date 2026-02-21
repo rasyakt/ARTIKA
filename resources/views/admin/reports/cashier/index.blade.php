@@ -4,7 +4,7 @@
 @section('content')
     <style>
         .table-hover tbody tr:hover {
-            background-color: #fdf8f6;
+            background-color: var(--brown-50);
         }
 
         html {
@@ -31,10 +31,10 @@
                 <div class="d-flex align-items-center mb-1">
 
                     <a href="{{ route($routePrefix . 'reports') }}" class="btn btn-light me-3 shadow-sm"
-                        style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid #dee2e6;">
+                        style="border-radius: 10px; padding: 0.5rem 0.75rem; border: 1px solid var(--gray-200);">
                         <i class="fas fa-arrow-left"></i>
                     </a>
-                    <h2 class="fw-bold mb-0" style="color: #6f5849;">
+                    <h2 class="fw-bold mb-0" style="color: var(--color-primary-dark);">
                         <i class="fa-solid fa-cash-register me-2"></i>{{ __('admin.cashier_reports_title') }}
                     </h2>
                 </div>
@@ -59,7 +59,7 @@
                 <form action="{{ route($routePrefix . 'reports.cashier') }}" method="GET" class="row g-3 align-items-end">
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="period" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-calendar me-1" style="color: #c17a5c;"></i> {{ __('admin.quick_period') }}
+                            <i class="fa-solid fa-calendar me-1" style="color: var(--color-accent-warm);"></i> {{ __('admin.quick_period') }}
                         </label>
                         <select name="period" id="period" class="form-select" onchange="this.form.submit()">
                             <option value="today" {{ $period == 'today' ? 'selected' : '' }}>{{ __('admin.today') }}</option>
@@ -73,28 +73,28 @@
                     </div>
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="start_date" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i>
+                            <i class="fa-solid fa-calendar-days me-1" style="color: var(--color-accent-warm);"></i>
                             {{ __('admin.start_date') }}
                         </label>
                         <input type="date" class="form-select" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                     </div>
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="end_date" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-calendar-days me-1" style="color: #c17a5c;"></i>
+                            <i class="fa-solid fa-calendar-days me-1" style="color: var(--color-accent-warm);"></i>
                             {{ __('admin.end_date') }}
                         </label>
                         <input type="date" class="form-select" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6">
                         <label for="search" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-user me-1" style="color: #c17a5c;"></i> {{ __('common.user') }}
+                            <i class="fa-solid fa-user me-1" style="color: var(--color-accent-warm);"></i> {{ __('common.user') }}
                         </label>
                         <input type="text" name="search" class="form-control" placeholder="NIS/Username/Nama"
                             value="{{ $search }}">
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6">
                         <label for="action" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-clipboard-list me-1" style="color: #c17a5c;"></i> {{ __('admin.action') }}
+                            <i class="fa-solid fa-clipboard-list me-1" style="color: var(--color-accent-warm);"></i> {{ __('admin.action') }}
                         </label>
                         <select name="action" class="form-select">
                             <option value="">-- {{ __('admin.all_actions') }} --</option>
@@ -104,7 +104,7 @@
                         </select>
                     </div>
                     <div class="col-xl-2 col-lg-12 col-md-12 d-flex gap-2">
-                        <button type="submit" class="btn btn-brown flex-grow-1 fw-bold"
+                        <button type="submit" class="btn btn-brown grow fw-bold"
                             style="border-radius: 8px; padding: 0.6rem;">
                             <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                         </button>
@@ -130,7 +130,7 @@
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                     {{ __('admin.total_sales') }}
                                 </p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp
+                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">Rp
                                     {{ number_format($summary['total_sales'], 0, ',', '.') }}
                                 </h3>
                                 <small class="text-muted">{{ number_format($summary['total_transactions']) }}
@@ -153,7 +153,7 @@
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                     {{ __('admin.avg_transaction_label') }}
                                 </p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp
+                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">Rp
                                     {{ number_format($summary['average_transaction'], 0, ',', '.') }}
                                 </h3>
                                 <small class="text-muted">{{ __('admin.per_transaction') }}</small>
@@ -175,7 +175,7 @@
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                     {{ __('admin.cash_sales') }}
                                 </p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp
+                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">Rp
                                     {{ number_format($summary['cash_sales'], 0, ',', '.') }}
                                 </h3>
                                 <small class="text-muted">{{ $summary['cash_count'] }}
@@ -198,7 +198,7 @@
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                     {{ __('admin.non_cash_sales') }}
                                 </p>
-                                <h3 class="fw-bold mb-0" style="color: #4b382f;">Rp
+                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">Rp
                                     {{ number_format($summary['non_cash_sales'], 0, ',', '.') }}
                                 </h3>
                                 <small class="text-muted">{{ $summary['non_cash_count'] }}
@@ -216,8 +216,8 @@
         <!-- Detailed Reports Section -->
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-white border-bottom-0 pt-4 px-4">
-                <ul class="nav nav-pills nav-fill gap-2 p-1 bg-light rounded-pill mb-0" id="reportTabs" role="tablist"
-                    style="border: 1px solid #f2e8e5;">
+                <ul class="nav nav-pills nav-fill gap-2 p-1 bg-light rounded mb-0" id="reportTabs" role="tablist"
+                    style="border: 1px solid var(--brown-100);">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active rounded-pill fw-bold" id="transactions-tab" data-bs-toggle="tab"
                             data-bs-target="#transactions-pane" type="button" role="tab">
@@ -256,7 +256,7 @@
                     </li>
                     @if(App\Models\Setting::get('admin_enable_audit_logs', true))
                         <li class="nav-item flex-sm-fill text-center" role="presentation">
-                            <button class="nav-link w-100 fw-bold py-3" id="audit-tab" data-bs-toggle="tab"
+                            <button class="nav-link fw-bold rounded-pill" id="audit-tab" data-bs-toggle="tab"
                                 data-bs-target="#audit-pane" type="button" role="tab" aria-selected="false">
                                 <i class="fa-solid fa-clipboard-list me-2"></i>{{ __('admin.audit_log') }}
                             </button>
@@ -270,20 +270,20 @@
                     <div class="tab-pane fade show active" id="transactions-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: #fdf8f6;">
+                                <thead style="background: var(--brown-50);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.invoice') }}
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.invoice') }}
                                         </th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.cashier') }}
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.date') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.cashier') }}
                                         </th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                             {{ __('admin.payment_method') }}
                                         </th>
-                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">
+                                        <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">
                                             {{ __('admin.amount') }}
                                         </th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                             {{ __('admin.action') }}
                                         </th>
                                     </tr>
@@ -293,7 +293,7 @@
                                         <tr class="{{ $transaction->status === 'rolled_back' ? 'opacity-50 grayscale' : '' }}">
                                             <td>
                                                 <div class="fw-bold {{ $transaction->status === 'rolled_back' ? 'text-decoration-line-through' : '' }}"
-                                                    style="color: #85695a;">
+                                                    style="color: var(--color-primary);">
                                                     {{ $transaction->invoice_no }}
                                                 </div>
                                             </td>
@@ -312,10 +312,10 @@
                                                     <span class="badge bg-warning text-dark">Debit</span>
                                                 @else
                                                     <span class="badge"
-                                                        style="background: #0284c7; color: white;">{{ __('admin.non_cash') }}</span>
+                                                        style="background: var(--color-info); color: white;">{{ __('admin.non_cash') }}</span>
                                                 @endif
                                             </td>
-                                            <td class="text-end fw-bold" style="color: #c17a5c;">
+                                            <td class="text-end fw-bold" style="color: var(--color-accent-warm);">
                                                 @if(\App\Models\Setting::get('cashier_enable_returns', true) && $transaction->total_refunded > 0)
                                                     <div class="small text-muted text-decoration-line-through">Rp
                                                         {{ number_format($transaction->total_amount, 0, ',', '.') }}
@@ -396,13 +396,13 @@
                     <div class="tab-pane fade" id="products-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: #fdf8f6;">
+                                <thead style="background: var(--brown-50);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Produk</th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">Produk</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                             {{ __('admin.sold') }}
                                         </th>
-                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">
+                                        <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">
                                             {{ __('admin.revenue') }}
                                         </th>
                                     </tr>
@@ -413,19 +413,19 @@
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     <div class="me-3"
-                                                        style="width: 30px; height: 30px; background: #6f5849; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
+                                                        style="width: 30px; height: 30px; background: var(--color-primary-dark); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.85rem;">
                                                         {{ $index + 1 }}
                                                     </div>
                                                     <div>
-                                                        <div class="fw-bold" style="color: #6f5849;">{{ $product->name }}</div>
+                                                        <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $product->name }}</div>
                                                         <small class="text-muted">{{ $product->barcode }}</small>
                                                     </div>
                                                 </div>
                                             </td>
                                             <td class="text-center"><span class="badge"
-                                                    style="background: #e0cec7; color: #6f5849;">{{ $product->total_sold }}</span>
+                                                    style="background: var(--color-secondary-light); color: var(--color-primary-dark);">{{ $product->total_sold }}</span>
                                             </td>
-                                            <td class="text-end fw-bold" style="color: #c17a5c;">Rp
+                                            <td class="text-end fw-bold" style="color: var(--color-accent-warm);">Rp
                                                 {{ number_format($product->total_revenue, 0, ',', '.') }}
                                             </td>
                                         </tr>
@@ -445,23 +445,23 @@
                     <div class="tab-pane fade" id="categories-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: #fdf8f6;">
+                                <thead style="background: var(--brown-50);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Kategori</th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Item Terjual
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">Kategori</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">Item Terjual
                                         </th>
-                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">Total Pendapatan
+                                        <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">Total Pendapatan
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($categorySales as $cat)
                                         <tr>
-                                            <td class="fw-bold" style="color: #6f5849;">{{ $cat->name }}</td>
+                                            <td class="fw-bold" style="color: var(--color-primary-dark);">{{ $cat->name }}</td>
                                             <td class="text-center"><span class="badge"
-                                                    style="background: #e0cec7; color: #6f5849;">{{ $cat->total_sold }}</span>
+                                                    style="background: var(--color-secondary-light); color: var(--color-primary-dark);">{{ $cat->total_sold }}</span>
                                             </td>
-                                            <td class="text-end fw-bold" style="color: #c17a5c;">Rp
+                                            <td class="text-end fw-bold" style="color: var(--color-accent-warm);">Rp
                                                 {{ number_format($cat->total_revenue, 0, ',', '.') }}
                                             </td>
                                         </tr>
@@ -481,12 +481,12 @@
                     <div class="tab-pane fade" id="performance-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: #fdf8f6;">
+                                <thead style="background: var(--brown-50);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.cashier') }}
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.cashier') }}
                                         </th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Transaksi</th>
-                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">
+                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">Transaksi</th>
+                                        <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">
                                             {{ __('admin.total_sales') }}
                                         </th>
                                     </tr>
@@ -495,13 +495,13 @@
                                     @forelse($cashierPerformance as $p)
                                         <tr>
                                             <td>
-                                                <div class="fw-bold" style="color: #6f5849;">{{ $p->user->name }}</div>
+                                                <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $p->user->name }}</div>
                                                 <small class="text-muted">{{ $p->user->role->name }}</small>
                                             </td>
                                             <td class="text-center"><span class="badge"
-                                                    style="background: #e0cec7; color: #6f5849;">{{ $p->transaction_count }}</span>
+                                                    style="background: var(--color-secondary-light); color: var(--color-primary-dark);">{{ $p->transaction_count }}</span>
                                             </td>
-                                            <td class="text-end fw-bold" style="color: #85695a;">Rp
+                                            <td class="text-end fw-bold" style="color: var(--color-primary);">Rp
                                                 {{ number_format($p->total_sales, 0, ',', '.') }}
                                             </td>
                                         </tr>
@@ -521,12 +521,12 @@
                     <div class="tab-pane fade" id="payment-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: #fdf8f6;">
+                                <thead style="background: var(--brown-50);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: #6f5849;">Metode Pembayaran</th>
-                                        <th class="border-0 fw-semibold text-center" style="color: #6f5849;">Jumlah
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">Metode Pembayaran</th>
+                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">Jumlah
                                             Transaksi</th>
-                                        <th class="border-0 fw-semibold text-end" style="color: #6f5849;">Total Nominal</th>
+                                        <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">Total Nominal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -534,7 +534,7 @@
                                         <tr>
                                             <td class="fw-bold text-brown">{{ $pay->payment_method }}</td>
                                             <td class="text-center">{{ $pay->count }}</td>
-                                            <td class="text-end fw-bold" style="color: #c17a5c;">Rp
+                                            <td class="text-end fw-bold" style="color: var(--color-accent-warm);">Rp
                                                 {{ number_format($pay->total, 0, ',', '.') }}
                                             </td>
                                         </tr>
@@ -555,21 +555,21 @@
                         <div class="p-4 text-center">
                             <div class="row g-4 justify-content-center">
                                 <div class="col-md-4">
-                                    <div class="p-4 rounded-16" style="background: #fef2f2; border: 1px solid #fee2e2;">
+                                    <div class="p-4 rounded-16" style="background: var(--color-danger-light); border: 1px solid var(--color-danger-light);">
                                         <div class="text-muted small text-uppercase fw-bold mb-1">Transaksi Berdiskon</div>
                                         <h2 class="fw-bold mb-0 text-danger">{{ $discountSummary['count'] }}</h2>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="p-4 rounded-16" style="background: #fdf8f6; border: 1px solid #f2e8e5;">
+                                    <div class="p-4 rounded-16" style="background: var(--brown-50); border: 1px solid var(--brown-100);">
                                         <div class="text-muted small text-uppercase fw-bold mb-1">Total Potongan Harga</div>
-                                        <h2 class="fw-bold mb-0" style="color: #6f5849;">Rp
+                                        <h2 class="fw-bold mb-0" style="color: var(--color-primary-dark);">Rp
                                             {{ number_format($discountSummary['total_discount'], 0, ',', '.') }}
                                         </h2>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="p-4 rounded-16" style="background: #f0fdf4; border: 1px solid #dcfce7;">
+                                    <div class="p-4 rounded-16" style="background: var(--color-success-light); border: 1px solid #dcfce7;">
                                         <div class="text-muted small text-uppercase fw-bold mb-1">Total Setelah Diskon</div>
                                         <h2 class="fw-bold mb-0 text-success">Rp
                                             {{ number_format($discountSummary['total_revenue'], 0, ',', '.') }}
@@ -585,16 +585,16 @@
                         <div class="tab-pane fade" id="audit-pane" role="tabpanel" tabindex="0">
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0">
-                                    <thead style="background: #fdf8f6;">
+                                    <thead style="background: var(--brown-50);">
                                         <tr>
-                                            <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.date') }}</th>
-                                            <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.user') }}</th>
-                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849;">
+                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.date') }}</th>
+                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.user') }}</th>
+                                            <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                                 {{ __('admin.action') }}
                                             </th>
-                                            <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.details') }}
+                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.details') }}
                                             </th>
-                                            <th class="border-0 fw-semibold text-center" style="color: #6f5849;">View</th>
+                                            <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">View</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -602,12 +602,12 @@
                                             <tr>
                                                 <td class="text-muted small">{{ $log->created_at->format('d M Y H:i') }}</td>
                                                 <td>
-                                                    <div class="fw-bold" style="color: #6f5849;">{{ $log->user->name ?? 'System' }}
+                                                    <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $log->user->name ?? 'System' }}
                                                     </div>
                                                     <small class="text-muted">{{ $log->user->role->name ?? '' }}</small>
                                                 </td>
                                                 <td class="text-center"><span class="badge"
-                                                        style="background: #e0cec7; color: #6f5849;">{{ strtoupper($log->action) }}</span>
+                                                        style="background: var(--color-secondary-light); color: var(--color-primary-dark);">{{ strtoupper($log->action) }}</span>
                                                 </td>
                                                 <td><span class="small">{{ Str::limit($log->notes, 40) }}</span></td>
                                                 <td class="text-center">
@@ -657,7 +657,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header text-white"
-                    style="background: linear-gradient(135deg, #85695a 0%, #6f5849 100%); border-radius: 16px 16px 0 0;">
+                    style="background: var(--gradient-primary); border-radius: 16px 16px 0 0;">
                     <h5 class="modal-title">{{ __('admin.audit_log_detail') }}</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -785,7 +785,7 @@
                     <div class="table-responsive mb-4">
                         <table class="table table-hover">
                             <thead>
-                                <tr style="background: #fdf8f6;">
+                                <tr style="background: var(--brown-50);">
                                     <th class="border-0">Produk</th>
                                     <th class="border-0 text-center">Qty</th>
                                     <th class="border-0 text-center">Subtotal</th>
@@ -1110,7 +1110,7 @@
                         cashierInfoRow.style.display = 'none';
                     }
 
-                    modal.querySelector('#detail-action').innerHTML = `<span class="badge" style="background: #e0cec7; color: #6f5849;">${action}</span>`;
+                    modal.querySelector('#detail-action').innerHTML = `<span class="badge" style="background: var(--color-secondary-light); color: var(--color-primary-dark);">${action}</span>`;
                     modal.querySelector('#detail-model').textContent = model;
                     modal.querySelector('#detail-model-id').textContent = modelId || '-';
                     modal.querySelector('#detail-amount').textContent = amount;

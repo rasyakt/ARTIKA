@@ -3,6 +3,17 @@
 <html lang="en">
 
 <head>
+    {{-- Apply theme ASAP to prevent flash of wrong theme --}}
+    <script>
+        (function () {
+            const saved = localStorage.getItem('artika-theme') || 'system';
+            if (saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+            }
+        })();
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard') - {{ App\Models\Setting::get('system_name', 'ARTIKA POS') }}</title>
@@ -20,18 +31,18 @@
         .artika-swal-popup {
             border-radius: 16px !important;
             padding: 1.5rem !important;
-            border: 1px solid #f2e8e5 !important;
+            border: 1px solid var(--brown-100) !important;
             font-family: 'Inter', system-ui, sans-serif !important;
         }
 
         .artika-swal-title {
-            color: #4b382f !important;
+            color: var(--brown-900) !important;
             font-weight: 700 !important;
             font-size: 1.25rem !important;
         }
 
         .artika-swal-confirm-btn {
-            background: #6f5849 !important;
+            background: var(--color-primary-dark) !important;
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
@@ -40,9 +51,9 @@
         }
 
         .artika-swal-cancel-btn {
-            background: #fdf8f6 !important;
-            color: #6f5849 !important;
-            border: 1px solid #f2e8e5 !important;
+            background: var(--brown-50) !important;
+            color: var(--color-primary-dark) !important;
+            border: 1px solid var(--brown-100) !important;
             border-radius: 10px !important;
             padding: 0.6rem 1.5rem !important;
             font-weight: 600 !important;
@@ -51,20 +62,80 @@
 
         .artika-swal-toast {
             border-radius: 12px !important;
-            background: #ffffff !important;
+            background: var(--color-white) !important;
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
         }
 
         html {
             zoom: 90%;
-            background: #faf9f8;
+            background: var(--gray-50);
         }
 
         body {
-            background: #faf9f8;
+            background: var(--color-bg);
             min-height: 100vh;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-            color: #4b382f;
+            color: var(--color-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Theme Toggle Dropdown */
+        .theme-toggle-btn {
+            background: var(--color-primary);
+            border: 2px solid var(--color-primary-light);
+            border-radius: 10px;
+            padding: 0.45rem 0.85rem;
+            color: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .theme-toggle-btn:hover {
+            background: var(--color-primary-dark);
+        }
+
+        .theme-menu {
+            min-width: 160px;
+            padding: 0.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            background: var(--card-bg, #fff);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-option {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.55rem 0.9rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--color-text, #333);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .theme-option:hover {
+            background: var(--gray-100, #f5f5f5);
+        }
+
+        .theme-option.active {
+            background: var(--color-primary, #85695a) !important;
+            color: white !important;
+            border-color: var(--color-primary-dark) !important;
+        }
+
+        .theme-selector-group .btn {
+            border-radius: 8px;
+            padding: 0.4rem;
         }
 
         /* Fix for Bootstrap Modals & SweetAlert2 with CSS Zoom */
@@ -80,7 +151,7 @@
         }
 
         .main-navbar {
-            /* background: linear-gradient(135deg, #8a6b57 0%, #6f5849 100%); */
+            /* background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); */
             background: var(--primary-dark);
             box-shadow: 0 4px 18px rgba(107, 83, 70, 0.08);
             padding: 0.75rem 0;
@@ -94,19 +165,20 @@
         }
 
         .sidebar {
-            background: #fffefc;
+            background: var(--card-bg, #fffefc);
             position: fixed;
             top: 70px;
             left: 0;
             bottom: 0;
             width: 260px;
             /* Matched to col-md-2 */
-            border-right: 1px solid #f2e8e5;
+            border-right: 1px solid var(--brown-100);
             padding: 1.25rem 0;
             overflow-y: auto;
             z-index: 1000;
             scrollbar-width: thin;
-            scrollbar-color: #8a6b57 transparent;
+            scrollbar-color: var(--color-primary) transparent;
+            transition: background-color 0.3s ease;
         }
 
         .sidebar::-webkit-scrollbar {
@@ -114,7 +186,7 @@
         }
 
         .sidebar::-webkit-scrollbar-thumb {
-            background-color: #8a6b57;
+            background-color: var(--color-primary);
             border-radius: 4px;
         }
 
@@ -122,7 +194,7 @@
             display: flex;
             align-items: center;
             padding: 0.875rem 1.5rem;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s;
@@ -130,15 +202,15 @@
         }
 
         .sidebar-link:hover {
-            background: #fdf8f6;
-            color: #85695a;
-            border-left-color: #85695a;
+            background: var(--brown-50);
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
         }
 
         .sidebar-link.active {
-            background: linear-gradient(90deg, #fdf8f6 0%, #f2e8e5 100%);
-            color: #85695a;
-            border-left-color: #85695a;
+            background: linear-gradient(90deg, var(--brown-50) 0%, var(--brown-100) 100%);
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
             font-weight: 600;
         }
 
@@ -147,12 +219,12 @@
             font-size: 1.05rem;
             width: 1.2rem;
             text-align: center;
-            color: #8a6b57;
+            color: var(--color-primary);
         }
 
         .sidebar-link.text-danger:hover {
-            background: #fee2e2 !important;
-            border-left-color: #ef4444 !important;
+            background: var(--color-danger-light) !important;
+            border-left-color: var(--color-danger) !important;
         }
 
         /* Sidebar Dropdown Styles */
@@ -181,7 +253,7 @@
 
         .sidebar-submenu {
             display: none;
-            background: #fafaf9;
+            background: var(--gray-50);
             list-style: none;
             padding: 0;
             margin: 0;
@@ -195,7 +267,7 @@
             display: flex;
             align-items: center;
             padding: 0.65rem 1.5rem 0.65rem 3rem;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             text-decoration: none;
             font-size: 0.875rem;
             font-weight: 500;
@@ -204,14 +276,14 @@
         }
 
         .submenu-link:hover {
-            background: #fdf8f6;
-            color: #85695a;
+            background: var(--brown-50);
+            color: var(--color-primary);
         }
 
         .submenu-link.active {
-            color: #85695a;
+            color: var(--color-primary);
             font-weight: 700;
-            background: #f5f2f0;
+            background: var(--brown-50);
         }
 
         .submenu-link i {
@@ -219,7 +291,7 @@
             font-size: 0.9rem;
             width: 1.1rem;
             text-align: center;
-            color: #8a6b57;
+            color: var(--color-primary);
             opacity: 0.8;
         }
 
@@ -228,13 +300,13 @@
             font-size: 0.7rem;
             font-weight: 800;
             text-uppercase;
-            color: #a18072;
+            color: var(--color-primary-light);
             letter-spacing: 0.05em;
         }
 
         .main-content {
             padding: 0;
-            background: #faf9f8;
+            background: var(--gray-50);
             margin-left: 260px;
             /* Offset by fixed sidebar width */
             margin-top: 70px;
@@ -275,7 +347,7 @@
             width: 42px;
             height: 42px;
             border-radius: 3812px;
-            background: #7c6257ff;
+            background: var(--color-primary)ff;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -295,8 +367,8 @@
             padding: 0.5rem 0.75rem;
             border-radius: 8px;
             margin: 0 0.25rem;
-            border: 1px solid #e0cec7;
-            color: #6f5849;
+            border: 1px solid var(--color-secondary-light);
+            color: var(--color-primary-dark);
         }
 
         .pagination .page-link svg {
@@ -307,14 +379,14 @@
         }
 
         .pagination .page-item.active .page-link {
-            background: linear-gradient(135deg, #85695a 0%, #6f5849 100%);
-            border-color: #85695a;
+            background: var(--gradient-primary);
+            border-color: var(--color-primary);
         }
 
         .pagination .page-link:hover {
-            background: #fdf8f6;
-            border-color: #85695a;
-            color: #85695a;
+            background: var(--brown-50);
+            border-color: var(--color-primary);
+            color: var(--color-primary);
         }
 
         /* Hamburger Menu Button */
@@ -397,13 +469,13 @@
                 align-items: center;
                 justify-content: space-between;
                 padding: 1rem 1.5rem;
-                border-bottom: 2px solid #f2e8e5;
+                border-bottom: 2px solid var(--brown-100);
                 margin-bottom: 1rem;
             }
 
             .sidebar-title {
                 font-weight: 700;
-                color: #6f5849;
+                color: var(--color-primary-dark);
                 font-size: 1.125rem;
             }
 
@@ -411,7 +483,7 @@
                 background: none;
                 border: none;
                 font-size: 1.5rem;
-                color: #6f5849;
+                color: var(--color-primary-dark);
                 cursor: pointer;
                 padding: 0;
                 line-height: 1;
@@ -419,7 +491,7 @@
             }
 
             .sidebar-close:hover {
-                color: #85695a;
+                color: var(--color-primary);
                 transform: rotate(90deg);
             }
 
@@ -468,37 +540,93 @@
             </a>
 
             <div class="ms-auto d-flex align-items-center">
-                <!-- Language Switcher -->
-                <div class="dropdown me-3">
-                    <a class="nav-link dropdown-toggle text-white d-flex align-items-center" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-globe me-1"></i> {{ strtoupper(app()->getLocale()) }}
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <a class="dropdown-item {{ app()->getLocale() == 'en' ? 'active' : '' }}"
-                                href="{{ route('language.change', 'en') }}">
-                                English
-                            </a>
+                <div class="dropdown">
+                    <button class="nav-link user-profile-link dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <div class="profile-avatar me-3">{{ strtoupper(substr($user?->name ?? '', 0, 1)) }}</div>
+                        <div class="d-flex flex-column text-start">
+                            <span class="user-name line-height-1 mb-1">{{ $user?->name }}</span>
+                            <span class="text-white-50 fw-700 text-uppercase"
+                                style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
+                        </div>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
+                        style="min-width: 280px; border-radius: 16px;">
+                        {{-- Header Profil --}}
+                        <li class="p-3 bg-light border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="profile-avatar bg-primary text-white me-3"
+                                    style="width: 45px; height: 45px;">
+                                    {{ strtoupper(substr($user?->name ?? '', 0, 1)) }}
+                                </div>
+                                <div class="overflow-hidden">
+                                    <h6 class="mb-0 fw-800 text-truncate text-dark">{{ $user?->name }}</h6>
+                                    <div class="small text-muted text-truncate">{{ $user?->role?->name }}</div>
+                                </div>
+                            </div>
                         </li>
-                        <li>
-                            <a class="dropdown-item {{ app()->getLocale() == 'id' ? 'active' : '' }}"
-                                href="{{ route('language.change', 'id') }}">
-                                Bahasa Indonesia
-                            </a>
-                        </li>
-                    </ul>
-                </div>
 
-                <a class="nav-link user-profile-link" href="#" title="Profile Settings (Coming Soon)"
-                    style="cursor: default;">
-                    <div class="profile-avatar me-3">{{ strtoupper(substr($user?->name ?? '', 0, 1)) }}</div>
-                    <div class="d-flex flex-column">
-                        <span class="user-name line-height-1 mb-1">{{ $user?->name }}</span>
-                        <span class="text-white-50 fw-700 text-uppercase"
-                            style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
+                        {{-- Section: Settings --}}
+                        <div class="p-2">
+                            <div class="dropdown-header text-uppercase fw-bold"
+                                style="font-size: 0.7rem; letter-spacing: 0.05em;">
+                                {{ __('common.settings') ?? 'Pengaturan' }}
+                            </div>
+
+                            {{-- Theme Selection --}}
+                            <div class="px-3 py-2">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-600 text-muted"><i
+                                            class="fa-solid fa-circle-half-stroke me-2"></i>Tema</span>
+                                </div>
+                                <div class="btn-group w-100 theme-selector-group" role="group">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary theme-option"
+                                        data-theme="light" title="Light">
+                                        <i class="fa-solid fa-sun"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary theme-option"
+                                        data-theme="dark" title="Dark">
+                                        <i class="fa-solid fa-moon"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary theme-option"
+                                        data-theme="system" title="System">
+                                        <i class="fa-solid fa-desktop"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <hr class="dropdown-divider mx-2">
+
+                            {{-- Language Selection --}}
+                            <div class="px-3 py-2">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <span class="small fw-600 text-muted"><i
+                                            class="fa-solid fa-globe me-2"></i>Bahasa</span>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('language.change', 'en') }}"
+                                        class="btn btn-sm {{ app()->getLocale() == 'en' ? 'btn-primary' : 'btn-outline-secondary' }} grow">English</a>
+                                    <a href="{{ route('language.change', 'id') }}"
+                                        class="btn btn-sm {{ app()->getLocale() == 'id' ? 'btn-primary' : 'btn-outline-secondary' }} grow">Indonesia</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="dropdown-divider m-0">
+
+                        {{-- Logout --}}
+                        <li>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                    class="dropdown-item py-3 px-3 d-flex align-items-center text-danger fw-bold">
+                                    <i class="fa-solid fa-right-from-bracket me-3"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </form>
+                        </li>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
     </nav>
@@ -777,7 +905,7 @@
                     @endif
 
                     <div class="mt-auto px-1 py-3">
-                        <hr style="margin: 0.5rem 0; border-color: #f2e8e5; opacity: 0.1;">
+                        <hr style="margin: 0.5rem 0; border-color: var(--brown-100); opacity: 0.1;">
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                             @csrf
                             <button type="submit"
@@ -871,6 +999,69 @@
             });
         </script>
 
+        {{-- Theme Toggle Script --}}
+        <script>
+            (function () {
+                const themeOptions = document.querySelectorAll('.theme-option');
+                const themeIcon = document.getElementById('themeIcon');
+                const themeLabel = document.getElementById('themeLabel');
+                const htmlEl = document.documentElement;
+
+                function getEffectiveTheme(pref) {
+                    if (pref === 'system') {
+                        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                    }
+                    return pref;
+                }
+
+                function applyTheme(pref) {
+                    const effective = getEffectiveTheme(pref);
+                    htmlEl.setAttribute('data-bs-theme', effective);
+                    localStorage.setItem('artika-theme', pref);
+
+                    // Update button icon & label if they exist
+                    const themeIcon = document.getElementById('themeIcon');
+                    const themeLabel = document.getElementById('themeLabel');
+                    const icons = { light: 'fa-sun', dark: 'fa-moon', system: 'fa-desktop' };
+                    const labels = { light: 'Light', dark: 'Dark', system: 'System' };
+
+                    if (themeIcon) {
+                        themeIcon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
+                    }
+                    if (themeLabel) {
+                        themeLabel.textContent = labels[pref] || 'Light';
+                    }
+
+                    // Update active indicator
+                    themeOptions.forEach(opt => {
+                        if (opt.dataset.theme === pref) {
+                            opt.classList.add('active');
+                            opt.querySelector('.theme-check')?.classList.remove('d-none');
+                        } else {
+                            opt.classList.remove('active');
+                            opt.querySelector('.theme-check')?.classList.add('d-none');
+                        }
+                    });
+                }
+
+                // Init
+                const saved = localStorage.getItem('artika-theme') || 'system';
+                applyTheme(saved);
+
+                // Click handlers
+                themeOptions.forEach(opt => {
+                    opt.addEventListener('click', () => applyTheme(opt.dataset.theme));
+                });
+
+                // Listen for system preference changes
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                    if (localStorage.getItem('artika-theme') === 'system') {
+                        applyTheme('system');
+                    }
+                });
+            })();
+        </script>
+
         @stack('scripts')
 
         <script>
@@ -913,8 +1104,8 @@
                     text: settings.text,
                     icon: settings.icon,
                     showCancelButton: true,
-                    confirmButtonColor: '#6f5849',
-                    cancelButtonColor: '#f1f1f1',
+                    confirmButtonColor: 'var(--color-primary-dark)',
+                    cancelButtonColor: 'var(--gray-100)',
                     confirmButtonText: settings.confirmButtonText,
                     cancelButtonText: settings.cancelButtonText,
                     customClass: {

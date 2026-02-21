@@ -186,6 +186,28 @@ class SuperadminController extends Controller
                 'address' => ['label' => 'Store Address', 'type' => 'text', 'default' => ''],
                 'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => '© ' . date('Y') . ' RPL_Sentinel. All rights reserved.'],
             ],
+            'POS & Struk' => [
+                'invoice_prefix' => ['label' => 'Prefix No. Struk', 'type' => 'text', 'default' => 'INV'],
+                'invoice_format' => [
+                    'label' => 'Format No. Struk',
+                    'type' => 'select',
+                    'default' => '{PREFIX}-{RAND}',
+                    'options' => [
+                        '{PREFIX}-{RAND}' => 'PREFIX-RANDOM  (INV-A8K2M3N1P9)',
+                        '{PREFIX}-{DATE}-{SEQ}' => 'PREFIX-TANGGAL-URUT  (INV-20260220-00042)',
+                        '{PREFIX}/{DATE}/{RAND}' => 'PREFIX/TANGGAL/RANDOM  (INV/20260220/X7K3M2)',
+                        '{PREFIX}-{DATE}-{RAND}' => 'PREFIX-TANGGAL-RANDOM  (INV-20260220-A8K2M3)',
+                    ]
+                ],
+                'invoice_rand_length' => ['label' => 'Panjang Kode Acak', 'type' => 'number', 'default' => 10],
+                'invoice_seq_padding' => ['label' => 'Digit Nomor Urut', 'type' => 'number', 'default' => 5],
+                'receipt_paper_size' => [
+                    'label' => 'Ukuran Kertas Struk',
+                    'type' => 'select',
+                    'default' => '58mm',
+                    'options' => ['58mm' => '58mm (Thermal Kecil)', '80mm' => '80mm (Thermal Besar)']
+                ],
+            ],
             'Admin Features' => [
                 'admin_enable_audit_logs' => ['label' => 'Audit Logs', 'type' => 'boolean', 'default' => true],
                 'admin_enable_reports' => ['label' => 'Detailed Reports', 'type' => 'boolean', 'default' => true],

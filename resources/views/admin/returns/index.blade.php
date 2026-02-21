@@ -4,7 +4,7 @@
     <div class="container-fluid py-4">
         <div class="row mb-4">
             <div class="col">
-                <h2 class="fw-bold mb-1" style="color: #6f5849;"><i
+                <h2 class="fw-bold mb-1" style="color: var(--color-primary-dark);"><i
                         class="fa-solid fa-rotate-left me-2"></i>{{ __('admin.returns_management') }}</h2>
                 <p class="text-muted small mb-0">{{ __('admin.manage_returns_subtitle') }}</p>
             </div>
@@ -44,14 +44,14 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead class="bg-light">
                             <tr>
-                                <th class="border-0 fw-semibold ps-4" style="color: #6f5849;">{{ __('admin.return_no') }}
+                                <th class="border-0 fw-semibold ps-4" style="color: var(--color-primary-dark);">{{ __('admin.return_no') }}
                                 </th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.invoice') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.return_date') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.cashier') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.total_refund') }}</th>
-                                <th class="border-0 fw-semibold" style="color: #6f5849;">{{ __('admin.status') }}</th>
-                                <th class="border-0 fw-semibold text-centerpe-4" style="color: #6f5849;">
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.invoice') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.return_date') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.cashier') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.total_refund') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.status') }}</th>
+                                <th class="border-0 fw-semibold text-centerpe-4" style="color: var(--color-primary-dark);">
                                     {{ __('admin.action') }}
                                 </th>
                             </tr>
@@ -217,27 +217,27 @@
             }
 
             .btn-outline-brown {
-                color: #6f5849;
-                border-color: #6f5849;
+                color: var(--color-primary-dark);
+                border-color: var(--color-primary-dark);
             }
 
             .btn-outline-brown:hover {
-                background-color: #6f5849;
+                background-color: var(--color-primary-dark);
                 color: white;
             }
 
             .btn-brown {
-                background-color: #6f5849;
+                background-color: var(--color-primary-dark);
                 color: white;
             }
 
             .btn-brown:hover {
-                background-color: #5a473b;
+                background-color: var(--brown-900);
                 color: white;
             }
 
             .text-brown {
-                color: #6f5849;
+                color: var(--color-primary-dark);
             }
         </style>
     @endpush

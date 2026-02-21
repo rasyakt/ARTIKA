@@ -21,6 +21,7 @@ class AuditLog extends Model
         'mac_address',
         'device_name',
         'user_agent',
+        'url',
         'notes',
     ];
 
@@ -88,9 +89,10 @@ class AuditLog extends Model
             'payment_method' => $paymentMethod,
             'changes' => $changes,
             'ip_address' => request()->ip(),
-            'mac_address' => request()->header('X-Mac-Address'), // Will be sent from client if available
+            'mac_address' => request()->header('X-Mac-Address'),
             'device_name' => $deviceName,
             'user_agent' => $userAgent,
+            'url' => request()->fullUrl(),
             'notes' => $notes,
         ]);
     }

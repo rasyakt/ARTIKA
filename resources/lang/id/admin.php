@@ -370,6 +370,12 @@ return [
     'paper_58mm' => '58mm (Kecil / Portabel)',
     'paper_80mm' => '80mm (Standar / Desktop)',
 
+    // Invoice Format Settings
+    'invoice_prefix' => 'Prefix No. Struk',
+    'invoice_format' => 'Format No. Struk',
+    'invoice_rand_length' => 'Panjang Kode Acak',
+    'invoice_seq_padding' => 'Digit Nomor Urut',
+
     // Manager Role
     'manager_dashboard' => 'Dashboard Manager',
     'subtotal' => 'Subtotal',
@@ -413,4 +419,13 @@ return [
     'grand_total' => 'Total Keseluruhan',
     'update_status' => 'Update Status',
     'manage_pre_orders_desc' => 'Kelola pesanan barang ke supplier',
+    'backup_excel' => 'Backup Excel',
+    'backup_and_clear' => 'Backup dan Hapus Data',
+    'confirm_password' => 'Konfirmasi Password',
+    'enter_password_to_continue' => 'Masukkan password untuk melanjutkan',
+    'password_mismatch' => 'Password tidak cocok',
+    'backup_success' => 'Backup berhasil',
+    'backup_failed' => 'Backup gagal',
+    'clear_success' => 'Data berhasil dihapus',
+    'clear_failed' => 'Data gagal dihapus',
 ];

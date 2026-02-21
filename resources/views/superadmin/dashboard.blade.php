@@ -4,7 +4,7 @@
     <div class="container-fluid py-4">
         <div class="row mb-4">
             <div class="col-12">
-                <h4 class="fw-bold" style="color: #6f5849;">
+                <h4 class="fw-bold" style="color: var(--color-primary-dark);">
                     <i class="fa-solid fa-code me-2"></i>Developer Tools
                 </h4>
                 <p class="text-muted">High-level system management and technical utilities.</p>
@@ -13,7 +13,7 @@
 
         @if($systemInfo['is_maintenance'])
             <div class="alert alert-warning border-0 shadow-sm mb-4"
-                style="border-radius: 12px; border-left: 5px solid #ffc107;">
+                style="border-radius: 12px; border-left: 5px solid var(--color-warning);">
                 <h6 class="fw-bold mb-1"><i class="fa-solid fa-triangle-exclamation me-2"></i>Maintenance Mode is Active</h6>
                 <p class="small mb-0">The application is currently locked. To access the site, you must use your secret token.
                     If you lose it, check the latest entries in the <strong>System Logs</strong> or run
@@ -32,8 +32,8 @@
             <div class="col-lg-8">
                 <div class="card border-0 shadow-sm mb-4" style="border-radius: 16px;">
                     <div class="card-header bg-white py-3"
-                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">
+                        style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);">
                             <i class="fa-solid fa-server me-2"></i>System Information
                         </h5>
                     </div>
@@ -94,7 +94,7 @@
                         <div class="card border-0 shadow-sm h-100" style="border-radius: 16px;">
                             <div class="card-body p-4 text-center">
                                 <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3"
-                                    style="width: 64px; height: 64px; color: #6f5849;">
+                                    style="width: 64px; height: 64px; color: var(--color-primary-dark);">
                                     <i class="fa-solid fa-broom fa-2x"></i>
                                 </div>
                                 <h5 class="fw-bold mb-2">System Cache</h5>
@@ -113,7 +113,7 @@
                         <div class="card border-0 shadow-sm h-100" style="border-radius: 16px;">
                             <div class="card-body p-4 text-center">
                                 <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3"
-                                    style="width: 64px; height: 64px; color: #6f5849;">
+                                    style="width: 64px; height: 64px; color: var(--color-primary-dark);">
                                     <i class="fa-solid fa-bolt fa-2x"></i>
                                 </div>
                                 <h5 class="fw-bold mb-2">Optimize</h5>
@@ -132,8 +132,8 @@
                 <!-- Database Overview -->
                 <div class="card border-0 shadow-sm mt-4" style="border-radius: 16px;">
                     <div class="card-header bg-white py-3"
-                        style="border-bottom: 2px solid #f2e8e5; border-radius: 16px 16px 0 0;">
-                        <h5 class="mb-0 fw-bold" style="color: #6f5849;">
+                        style="border-bottom: 2px solid var(--brown-100); border-radius: 16px 16px 0 0;">
+                        <h5 class="mb-0 fw-bold" style="color: var(--color-primary-dark);">
                             <i class="fa-solid fa-database me-2"></i>Database Overview
                         </h5>
                     </div>
@@ -191,7 +191,7 @@
                             @csrf
                             @if($systemInfo['is_maintenance'])
                                 <button type="submit" class="btn btn-light w-100 fw-bold"
-                                    style="border-radius: 12px; color: #dc3545;">
+                                    style="border-radius: 12px; color: var(--color-danger);">
                                     Go Live Now
                                 </button>
                             @else
@@ -208,7 +208,7 @@
                 <div class="card border-0 shadow-sm" style="border-radius: 16px;">
                     <div class="card-body p-4 text-center">
                         <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center mb-3"
-                            style="width: 64px; height: 64px; color: #6f5849;">
+                            style="width: 64px; height: 64px; color: var(--color-primary-dark);">
                             <i class="fa-solid fa-terminal fa-2x"></i>
                         </div>
                         <h5 class="fw-bold mb-2">System Logs</h5>

@@ -33,6 +33,16 @@ class AuthController extends Controller
         $input = $request->username;
         $loginType = 'username';
 
+        // Rate Limiting Key based on IP only for global brute force protection
+        $throttleKey = 'login|' . $request->ip();
+
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
+            return back()->withErrors([
+                'username' => "Terlalu banyak percobaan login. Silakan coba lagi dalam $seconds detik.",
+            ])->onlyInput('username');
+        }
+
         // Check if input looks like NIS (numeric and e.g. > 3 digits)
         if (is_numeric($input)) {
             $loginType = 'nis';
@@ -49,6 +59,7 @@ class AuthController extends Controller
 
                 if (!$userRole) {
                     Auth::logout();
+                    \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
                     return back()->withErrors(['username' => 'Profil pengguna tidak valid atau role tidak ditemukan.']);
                 }
 
@@ -58,10 +69,13 @@ class AuthController extends Controller
 
                 if (!$isAuthorized) {
                     Auth::logout();
+                    \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
                     return back()->withErrors(['username' => 'Akses ditolak: Anda bukan ' . ucfirst($requiredRole)]);
                 }
             }
 
+            // Success: clear the rate limit
+            \Illuminate\Support\Facades\RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
 
             // Redirect based on role (case-insensitive)
@@ -77,6 +91,9 @@ class AuthController extends Controller
 
             return redirect()->intended('dashboard');
         }
+
+        // Failed credentials
+        \Illuminate\Support\Facades\RateLimiter::hit($throttleKey);
 
         return back()->withErrors([
             'username' => 'Login gagal! Periksa Username/NIS dan Password.',

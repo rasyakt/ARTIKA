@@ -4,12 +4,12 @@
     <div class="container-fluid py-4">
         <!-- Header -->
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-3">
-            <h4 class="fw-bold mb-0" style="color: #6f5849;">
+            <h4 class="fw-bold mb-0" style="color: var(--color-primary-dark);">
                 <i class="fa-solid fa-folder me-2"></i>{{ __('common.categories') }}
             </h4>
             <button class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
                 data-bs-target="#addCategoryModal"
-                style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
+                style="background: var(--color-primary-dark); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; height: fit-content;">
                 <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_category') }}
             </button>
         </div>
@@ -21,16 +21,16 @@
                 @if($categories->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-hover mb-0">
-                            <thead style="background-color: #f8f9fa;">
+                            <thead style="background-color: var(--gray-50);">
                                 <tr>
-                                    <th class="px-4 py-3" style="border: none; color: #6f5849; font-weight: 600;">#</th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="px-4 py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">#</th>
+                                    <th class="py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('common.category_name') }}
                                     </th>
-                                    <th class="py-3" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="py-3" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('common.products') }}
                                     </th>
-                                    <th class="py-3 text-end px-4" style="border: none; color: #6f5849; font-weight: 600;">
+                                    <th class="py-3 text-end px-4" style="border: none; color: var(--color-primary-dark); font-weight: 600;">
                                         {{ __('common.actions') }}
                                     </th>
                                 </tr>
@@ -38,19 +38,19 @@
                             <tbody>
                                 @foreach($categories as $index => $category)
                                     <tr style="border-bottom: 1px solid #f0f0f0;">
-                                        <td class="px-4 py-3 align-middle" style="color: #6c757d;">{{ $index + 1 }}</td>
+                                        <td class="px-4 py-3 align-middle" style="color: var(--gray-500);">{{ $index + 1 }}</td>
                                         <td class="py-3 align-middle">
                                             <div class="d-flex align-items-center">
                                                 <div class="me-3"
-                                                    style="width: 40px; height: 40px; background: #f2e8e5; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                                                    <i class="fa-solid fa-folder" style="color: #6f5849; font-size: 1.2rem;"></i>
+                                                    style="width: 40px; height: 40px; background: var(--brown-100); border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                                    <i class="fa-solid fa-folder" style="color: var(--color-primary-dark); font-size: 1.2rem;"></i>
                                                 </div>
-                                                <span class="fw-semibold" style="color: #2c3e50;">{{ $category->name }}</span>
+                                                <span class="fw-semibold" style="color: var(--gray-800);">{{ $category->name }}</span>
                                             </div>
                                         </td>
                                         <td class="py-3 align-middle">
                                             <span class="badge"
-                                                style="background: #e0cec7; color: #6f5849; padding: 0.4rem 0.8rem; border-radius: 6px;">
+                                                style="background: var(--color-secondary-light); color: var(--color-primary-dark); padding: 0.4rem 0.8rem; border-radius: 6px;">
                                                 {{ $category->products_count }} {{ __('common.items') }}
                                             </span>
                                         </td>
@@ -58,7 +58,7 @@
                                             <div class="dropdown d-inline-block">
                                                 <button class="btn btn-light" type="button" data-bs-toggle="dropdown"
                                                     data-bs-boundary="viewport"
-                                                    style="border: 1px solid #dee2e6; border-radius: 8px; padding: 0.35rem 0.7rem;">
+                                                    style="border: 1px solid var(--gray-200); border-radius: 8px; padding: 0.35rem 0.7rem;">
                                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end"
@@ -94,13 +94,13 @@
                     </div>
                 @else
                     <div class="text-center py-5">
-                        <div style="font-size: 4rem; opacity: 0.2; color: #6f5849;">
+                        <div style="font-size: 4rem; opacity: 0.2; color: var(--color-primary-dark);">
                             <i class="fa-solid fa-folder"></i>
                         </div>
                         <p class="text-muted mb-3">{{ __('admin.no_categories') }}</p>
                         <button class="btn btn-primary d-inline-flex align-items-center" data-bs-toggle="modal"
                             data-bs-target="#addCategoryModal"
-                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600; height: fit-content;">
+                            style="background: var(--color-primary-dark); border: none; border-radius: 10px; padding: 0.6rem 1.5rem; font-weight: 600; height: fit-content;">
                             <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_first_category') }}
                         </button>
                     </div>
@@ -118,7 +118,7 @@
     <div class="modal fade" id="addCategoryModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
-                <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
+                <div class="modal-header" style="border-bottom: 2px solid var(--brown-100);">
                     <h5 class="modal-title fw-bold"><i class="fa-solid fa-plus me-1"></i>
                         {{ __('admin.add_category') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -128,17 +128,17 @@
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label for="name" class="form-label fw-semibold"
-                                style="color: #6f5849;">{{ __('common.category_name') }} *</label>
+                                style="color: var(--color-primary-dark);">{{ __('common.category_name') }} *</label>
                             <input type="text" class="form-control" id="name" name="name" required
                                 placeholder="{{ __('common.category_placeholder') }}"
-                                style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                         </div>
                     </div>
-                    <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
+                    <div class="modal-footer" style="border-top: 2px solid var(--brown-100);">
                         <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal"
                             style="border-radius: 10px; padding: 0.6rem 1.25rem;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary px-4"
-                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
+                            style="background: var(--color-primary-dark); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
                             <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.save') }} {{ __('common.category') }}
                         </button>
                     </div>
@@ -151,7 +151,7 @@
     <div class="modal fade" id="editCategoryModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content" style="border-radius: 16px; border: none;">
-                <div class="modal-header" style="border-bottom: 2px solid #f2e8e5;">
+                <div class="modal-header" style="border-bottom: 2px solid var(--brown-100);">
                     <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen me-1"></i>
                         {{ __('admin.edit_category') }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -162,16 +162,16 @@
                     <div class="modal-body p-4">
                         <div class="mb-3">
                             <label for="edit_name" class="form-label fw-semibold"
-                                style="color: #6f5849;">{{ __('common.category_name') }} *</label>
+                                style="color: var(--color-primary-dark);">{{ __('common.category_name') }} *</label>
                             <input type="text" class="form-control" id="edit_name" name="name" required
-                                style="border-radius: 12px; border: 2px solid #e0cec7; padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
                         </div>
                     </div>
-                    <div class="modal-footer" style="border-top: 2px solid #f2e8e5;">
+                    <div class="modal-footer" style="border-top: 2px solid var(--brown-100);">
                         <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal"
                             style="border-radius: 10px; padding: 0.6rem 1.25rem;">{{ __('common.cancel') }}</button>
                         <button type="submit" class="btn btn-primary px-4"
-                            style="background: #6f5849; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
+                            style="background: var(--color-primary-dark); border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
                             <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.update') }}
                             {{ __('common.category') }}
                         </button>
