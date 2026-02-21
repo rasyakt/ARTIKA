@@ -241,7 +241,7 @@ class AuditController extends Controller
         ]);
 
         // Verify password
-        if (!\Illuminate\Support\Facades\Hash::check($request->password, auth()->user()->password)) {
+        if (!Hash::check($request->password, auth()->user()->password)) {
             return redirect()->back()
                 ->with('error', __('admin.password_incorrect') ?? 'Password yang anda masukkan salah')
                 ->withInput();

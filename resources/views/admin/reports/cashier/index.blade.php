@@ -104,7 +104,7 @@
                         </select>
                     </div>
                     <div class="col-xl-2 col-lg-12 col-md-12 d-flex gap-2">
-                        <button type="submit" class="btn btn-brown flex-grow-1 fw-bold"
+                        <button type="submit" class="btn btn-brown grow fw-bold"
                             style="border-radius: 8px; padding: 0.6rem;">
                             <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                         </button>
