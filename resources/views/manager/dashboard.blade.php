@@ -22,7 +22,7 @@
         <div class="row g-4 mb-5">
             <div class="col-12 col-sm-6 col-xl-4">
                 <div class="card border-0 shadow-sm h-100"
-                    style="border-radius: 20px; background: primary-dark; color: white;">
+                    style="border-radius: 20px; background: var(--card-bg); color: white;">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="bg-brown-soft bg-opacity-20 p-3 rounded-circle" style="backdrop-filter: blur(5px);">
@@ -36,7 +36,7 @@
             </div>
 
             <div class="col-12 col-sm-6 col-xl-4">
-                <div class="card border-0 shadow-sm h-100" style="border-radius: 20px; background: white;">
+                <div class="card border-0 shadow-sm h-100" style="border-radius: 20px; background: var(--card-bg);">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="bg-brown-soft bg-opacity-20 p-3 rounded-circle" style="backdrop-filter: blur(5px);">
@@ -50,7 +50,7 @@
             </div>
 
             <div class="col-12 col-sm-12 col-xl-4">
-                <div class="card border-0 shadow-sm h-100" style="border-radius: 20px; background: white;">
+                <div class="card border-0 shadow-sm h-100" style="border-radius: 20px; background: var(--card-bg);">
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div class="bg- brown-soft bg-opacity-20 p-3 rounded-circle" style="backdrop-filter: blur(5px);">
@@ -67,7 +67,7 @@
 
         <!-- Recent Transactions -->
         <div class="card border-0 shadow-sm" style="border-radius: 20px;">
-            <div class="card-header bg-white py-4 px-4 border-0">
+            <div class="card-header bg-transparent py-4 px-4 border-0">
                 <div class="d-flex justify-content-between align-items-center">
                     <h5 class="fw-bold mb-0" style="color: var(--color-primary-dark);"><i
                             class="fa-solid fa-clock-rotate-left me-2"></i>{{ __('admin.recent_transactions') }}</h5>
@@ -80,7 +80,7 @@
             <div class="card-body px-0 pt-0">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="bg-light">
+                        <thead class="bg-body-tertiary">
                             <tr>
                                 <th class="ps-4 border-0 py-3 text-muted small text-uppercase fw-bold">
                                     {{ __('admin.invoice') }}</th>
@@ -104,7 +104,7 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <div class="bg-light rounded-circle p-2 me-2"
+                                            <div class="bg-body-secondary rounded-circle p-2 me-2"
                                                 style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;">
                                                 <i class="fa-solid fa-user text-muted small"></i>
                                             </div>
@@ -127,7 +127,7 @@
                                     </td>
                                     <td class="text-end pe-4">
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-light border shadow-sm p-2 rounded-3" type="button"
+                                            <button class="btn btn-sm btn-outline-secondary border shadow-sm p-2 rounded-3" type="button"
                                                 data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-h text-brown"></i>
                                             </button>
