@@ -150,7 +150,7 @@ class PosController extends Controller
                     $request->file('payment_proof'),
                     'uploads/payment_proofs'
                 );
-                \Illuminate\Support\Facades\Log::info("Payment proof compressed: {$originalSize}KB -> saved as {$data['payment_proof']}");
+                Log::info("Payment proof compressed: {$originalSize}KB -> saved as {$data['payment_proof']}");
             } elseif ($validated['payment_method'] === 'non-cash') {
                 // If strictly required, throw error. For now, we allow it (or frontend validation handles it).
                 // return response()->json(['success' => false, 'message' => 'Bukti pembayaran wajib diunggah untuk transaksi non-tunai.'], 422);
