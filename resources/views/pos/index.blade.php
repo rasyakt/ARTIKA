@@ -3032,19 +3032,86 @@
             resetFileInput();
         });
 
+        /**
+         * Client-side image compression using Canvas API.
+         * Resizes large images and compresses to JPEG before upload.
+         * This dramatically reduces upload size and bandwidth usage.
+         */
+        function compressImage(file, maxWidth = 1920, quality = 0.8) {
+            return new Promise((resolve, reject) => {
+                // Skip non-image files
+                if (!file.type.startsWith('image/')) {
+                    resolve(file);
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = new Image();
+                    img.onload = function () {
+                        // Calculate new dimensions maintaining aspect ratio
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+
+                        // Draw to canvas
+                        const canvas = document.createElement('canvas');
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Convert to blob
+                        canvas.toBlob(function (blob) {
+                            if (blob) {
+                                const compressedFile = new File([blob], file.name.replace(/\.[^/.]+$/, '.jpg'), {
+                                    type: 'image/jpeg',
+                                    lastModified: Date.now()
+                                });
+                                const originalKB = (file.size / 1024).toFixed(1);
+                                const compressedKB = (compressedFile.size / 1024).toFixed(1);
+                                console.log(`[ImageCompress] ${originalKB}KB → ${compressedKB}KB (${((1 - compressedFile.size / file.size) * 100).toFixed(0)}% smaller)`);
+                                resolve(compressedFile);
+                            } else {
+                                resolve(file); // fallback to original
+                            }
+                        }, 'image/jpeg', quality);
+                    };
+                    img.onerror = () => resolve(file); // fallback
+                    img.src = e.target.result;
+                };
+                reader.onerror = () => resolve(file); // fallback
+                reader.readAsDataURL(file);
+            });
+        }
+
         function handleFileSelect(input, otherInputId) {
-            input.addEventListener('change', function (e) {
+            input.addEventListener('change', async function (e) {
                 if (this.files && this.files[0]) {
                     // Clear the other input
                     document.getElementById(otherInputId).value = '';
 
+                    // Compress the image before preview and upload
+                    const originalFile = this.files[0];
+                    const compressedFile = await compressImage(originalFile);
+
+                    // Replace the file input's file with the compressed version
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(compressedFile);
+                    this.files = dataTransfer.files;
+
+                    // Show preview
                     const reader = new FileReader();
                     reader.onload = function (e) {
                         document.getElementById('imagePreview').src = e.target.result;
                         document.getElementById('previewContainer').classList.remove('d-none');
                         document.getElementById('uploadButtons').classList.add('d-none');
                     }
-                    reader.readAsDataURL(this.files[0]);
+                    reader.readAsDataURL(compressedFile);
                 }
             });
         }

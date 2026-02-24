@@ -445,7 +445,7 @@
         <div class="items-table">
             @foreach($transaction->items as $item)
                 <div class="item-row">
-                    <div class="item-main" style="text-transform: uppercase; font-weight: 900;">
+                    <div class="item-main" style="text-transform: uppercase; font-weight: 550;">
                         <span>{{ $item->product->name }}</span>
                     </div>
                     <div class="item-details" style="display: flex; justify-content: space-between;">
@@ -480,7 +480,7 @@
         <div class="divider"></div>
 
         <!-- Summary -->
-        <div style="margin: 5px 0; font-size: var(--font-size-summary); font-weight: 700;">
+        <div style="margin: 5px 0; font-size: var(--font-size-summary); font-weight: 670;">
             <div class="total-row">
                 <span>Total Item:</span>
                 <span>{{ $transaction->items->count() }}</span>

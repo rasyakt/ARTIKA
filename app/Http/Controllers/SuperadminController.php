@@ -230,6 +230,20 @@ class SuperadminController extends Controller
                 'session_duration' => ['label' => 'Session Duration (Minutes)', 'type' => 'number', 'default' => 120],
                 'auto_optimize' => ['label' => 'Auto-Optimize on Login', 'type' => 'boolean', 'default' => false],
             ],
+            'Image & Storage' => [
+                'image_max_width' => ['label' => 'Max Lebar Gambar (px)', 'type' => 'number', 'default' => 1920],
+                'image_quality' => ['label' => 'Kualitas Kompresi (%)', 'type' => 'number', 'default' => 80],
+                'image_format' => [
+                    'label' => 'Format Output Gambar',
+                    'type' => 'select',
+                    'default' => 'webp',
+                    'options' => [
+                        'webp' => 'WebP (Terkecil, Modern)',
+                        'jpg' => 'JPEG (Universal)',
+                        'png' => 'PNG (Tanpa Kompresi Lossy)',
+                    ]
+                ],
+            ],
         ];
 
         $palettePreviews = ThemeHelper::getPalettePreviewColors();

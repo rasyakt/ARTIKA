@@ -142,12 +142,15 @@ class PosController extends Controller
                 'status' => 'completed',
             ];
 
-            // Handle Payment Proof for Non-Cash
+            // Handle Payment Proof for Non-Cash (compressed)
             if ($request->hasFile('payment_proof')) {
-                $file = $request->file('payment_proof');
-                $filename = time() . '_' . \Illuminate\Support\Str::random(16) . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('uploads/payment_proofs'), $filename);
-                $data['payment_proof'] = 'uploads/payment_proofs/' . $filename;
+                $imageService = app(\App\Services\ImageService::class);
+                $originalSize = $imageService->getFileSizeKB($request->file('payment_proof'));
+                $data['payment_proof'] = $imageService->compress(
+                    $request->file('payment_proof'),
+                    'uploads/payment_proofs'
+                );
+                \Illuminate\Support\Facades\Log::info("Payment proof compressed: {$originalSize}KB -> saved as {$data['payment_proof']}");
             } elseif ($validated['payment_method'] === 'non-cash') {
                 // If strictly required, throw error. For now, we allow it (or frontend validation handles it).
                 // return response()->json(['success' => false, 'message' => 'Bukti pembayaran wajib diunggah untuk transaksi non-tunai.'], 422);
