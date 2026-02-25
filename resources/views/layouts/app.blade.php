@@ -834,6 +834,10 @@
                                     class="sidebar-link {{ request()->routeIs('superadmin.settings*') ? 'active' : '' }}">
                                     <i class="fa-solid fa-gears"></i> Advanced Settings
                                 </a>
+                                <a href="{{ route('superadmin.faq') }}"
+                                    class="sidebar-link {{ request()->routeIs('superadmin.faq*') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-circle-question"></i> Kelola FAQ
+                                </a>
                             </div>
                         @endif
 
@@ -907,6 +911,10 @@
 
                     <div class="mt-auto px-1 py-3">
                         <hr style="margin: 0.5rem 0; border-color: var(--brown-100); opacity: 0.1;">
+                        <a href="{{ route('faq.index') }}"
+                            class="sidebar-link {{ request()->routeIs('faq.index') ? 'active' : '' }}">
+                            <i class="fa-solid fa-circle-question"></i> Bantuan / FAQ
+                        </a>
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                             @csrf
                             <button type="submit"

@@ -145,7 +145,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/logs', [\App\Http\Controllers\SuperadminController::class, 'logs'])->name('logs');
         Route::get('/settings', [\App\Http\Controllers\SuperadminController::class, 'settings'])->name('settings');
         Route::post('/settings', [\App\Http\Controllers\SuperadminController::class, 'updateSettings'])->name('settings.update');
+
+        // FAQ Management (CRUD)
+        Route::get('/faq', [\App\Http\Controllers\FaqController::class, 'manage'])->name('faq');
+        Route::post('/faq', [\App\Http\Controllers\FaqController::class, 'store'])->name('faq.store');
+        Route::put('/faq/{id}', [\App\Http\Controllers\FaqController::class, 'update'])->name('faq.update');
+        Route::delete('/faq/{id}', [\App\Http\Controllers\FaqController::class, 'destroy'])->name('faq.destroy');
     });
+
+    // FAQ / Help Center (All authenticated users)
+    Route::get('/faq', [\App\Http\Controllers\FaqController::class, 'index'])->name('faq.index');
 
     // Cashier Routes (POS)
     Route::middleware(['role:cashier'])->prefix('pos')->name('pos.')->group(function () {

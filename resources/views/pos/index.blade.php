@@ -1926,6 +1926,13 @@
                                 </a>
                             </li>
                         @endif
+                        <li>
+                            <a class="dropdown-item py-2 px-3 d-flex align-items-center"
+                                href="{{ route('faq.index') }}">
+                                <i class="fa-solid fa-circle-question me-3 text-primary opacity-75"></i>
+                                <span class="fw-600">Bantuan / FAQ</span>
+                            </a>
+                        </li>
                         <li class="border-top mt-1">
                             <button type="button" class="dropdown-item py-3 px-3 d-flex align-items-center text-danger"
                                 id="btnLogout">
