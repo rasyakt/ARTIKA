@@ -33,7 +33,7 @@
 
 
 <!-- Load html5-qrcode from CDN -->
-<script src="https://unpkg.com/html5-qrcode" type="text/javascript" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js" type="text/javascript" defer></script>
 
 <script>
     let artikaScanner = null;

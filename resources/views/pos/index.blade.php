@@ -24,7 +24,7 @@
     <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -331,7 +331,7 @@
         }
 
         .swal2-container {
-            z-index: 5000 !important;
+            z-index: 7000 !important;
         }
 
         .modal-backdrop,
@@ -1114,6 +1114,34 @@
             to {
                 opacity: 1;
                 transform: scale(1);
+            }
+        }
+
+        /* Loading State (Reuse from standalone scanner) */
+        .scanner-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+            z-index: 5005;
+            display: none;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin-scanner 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin-scanner {
+            to {
+                transform: rotate(360deg);
             }
         }
 
@@ -2550,9 +2578,6 @@
                 barcode = barcode.trim();
                 console.log(`[Diagnostic] Processing barcode: "${barcode}"`);
 
-                // Show a very brief toast so user knows SOMETHING was captured
-                showToast('info', 'Mencari: ' + barcode);
-
                 // More robust matching: Iterate through all product cards
                 let product = null;
                 const cards = document.querySelectorAll('.product-card');
@@ -2573,7 +2598,11 @@
 
                     if (wasAdded) {
                         playBeep();
-                        showToast('success', '✓ ' + product.dataset.name);
+                        const price = parseFloat(product.dataset.promoPrice || product.dataset.price);
+                        const priceFormatted = 'Rp' + price.toLocaleString('id-ID');
+                        const existingItem = cart.find(item => item.product_id == product.dataset.productId);
+                        const qtyText = existingItem ? ' (x' + existingItem.quantity + ')' : '';
+                        showToast('success', '✅ ' + product.dataset.name + qtyText + ' — ' + priceFormatted);
                     }
 
                     if (productSearch) {
@@ -2586,10 +2615,10 @@
                     Swal.fire({
                         icon: 'error',
                         title: 'Produk Tidak Ditemukan',
-                        text: 'Barcode: ' + barcode + ' tidak terdaftar di sistem ARTIKA.',
+                        html: '<div style="font-size:0.95rem;">Barcode: <strong>' + barcode + '</strong></div><div style="font-size:0.85rem;color:#888;margin-top:4px;">Produk tidak terdaftar di sistem ARTIKA.</div>',
                         timer: 2500,
                         showConfirmButton: false,
-                        allowEnterKey: false, // Prevent scanner tail Enter from closing
+                        allowEnterKey: false,
                         customClass: {
                             popup: 'artika-swal-popup',
                             title: 'artika-swal-title'
@@ -2617,6 +2646,133 @@
                     e.preventDefault();
                     openScanner();
                 });
+            }
+
+            // ======== CAMERA SCANNER FUNCTIONS ========
+            let scannerLastBarcode = '';
+            let scannerLastTime = 0;
+            let scannerIsActive = false;
+            const SCANNER_COOLDOWN = 2000;
+
+            function openScanner() {
+                const section = document.getElementById('scannerSection');
+                const loading = document.getElementById('scannerLoading');
+                if (!section) {
+                    console.error('[Camera Scanner] scannerSection not found!');
+                    return;
+                }
+
+                console.log('[Camera Scanner] Opening scanner...');
+
+                // Show the overlay first
+                section.classList.add('active');
+                if (loading) {
+                    loading.innerHTML = '<div class="loading-spinner"></div><div>{{ __("pos.starting_camera") }}</div>';
+                    loading.style.display = 'block';
+                }
+
+                // Delay camera start to allow DOM to render the visible container
+                setTimeout(function () {
+                    startCameraScanner();
+                }, 400);
+            }
+
+            async function startCameraScanner() {
+                const loading = document.getElementById('scannerLoading');
+
+                // If scanner is already active, stop it first
+                if (scannerIsActive && scanner) {
+                    try {
+                        await scanner.stop();
+                        scannerIsActive = false;
+                    } catch (e) {
+                        console.warn('[Camera Scanner] Could not stop previous session:', e);
+                    }
+                }
+
+                // Create scanner instance if needed
+                if (!scanner) {
+                    try {
+                        scanner = new Html5Qrcode("reader");
+                    } catch (e) {
+                        console.error('[Camera Scanner] Failed to create Html5Qrcode instance:', e);
+                        if (loading) {
+                            loading.innerHTML = '<div style="color:#ef4444;padding:1.5rem;text-align:center;">' +
+                                '<div style="font-size:2.5rem;margin-bottom:0.75rem;"><i class="fas fa-video-slash"></i></div>' +
+                                '<div style="font-weight:700;margin-bottom:0.5rem;">Scanner Error</div>' +
+                                '<div style="font-size:0.85rem;">Html5Qrcode library not loaded.</div></div>';
+                            loading.style.display = 'block';
+                        }
+                        return;
+                    }
+                }
+
+                try {
+                    await scanner.start(
+                        { facingMode: "environment" },
+                        {
+                            fps: 10,
+                            qrbox: { width: 250, height: 250 },
+                            aspectRatio: 1.0
+                        },
+                        function (decodedText) {
+                            const now = Date.now();
+                            if (decodedText === scannerLastBarcode && (now - scannerLastTime) < SCANNER_COOLDOWN) {
+                                return;
+                            }
+                            scannerLastBarcode = decodedText;
+                            scannerLastTime = now;
+
+                            console.log('[Camera Scanner] Scanned:', decodedText);
+                            if (typeof handleScannedBarcode === 'function') {
+                                handleScannedBarcode(decodedText);
+                            }
+                        },
+                        function () {
+                            // Silent — normal during scanning
+                        }
+                    );
+
+                    scannerIsActive = true;
+                    if (loading) loading.style.display = 'none';
+                    console.log('[Camera Scanner] Started successfully');
+
+                } catch (err) {
+                    console.error('[Camera Scanner] Failed to start:', err);
+                    scannerIsActive = false;
+                    if (loading) {
+                        loading.innerHTML = '<div style="color:#ef4444;padding:1.5rem;text-align:center;">' +
+                            '<div style="font-size:2.5rem;margin-bottom:0.75rem;"><i class="fas fa-video-slash"></i></div>' +
+                            '<div style="font-weight:700;margin-bottom:0.5rem;">Gagal Akses Kamera</div>' +
+                            '<div style="font-size:0.85rem;opacity:0.9;">Pastikan izin kamera sudah diaktifkan.<br>Error: ' + (err.message || err) + '</div>' +
+                            '</div>';
+                        loading.style.display = 'block';
+                    }
+                }
+            }
+
+            async function closeScanner() {
+                const section = document.getElementById('scannerSection');
+                const loading = document.getElementById('scannerLoading');
+
+                console.log('[Camera Scanner] Closing scanner...');
+
+                if (scanner && scannerIsActive) {
+                    try {
+                        await scanner.stop();
+                        scannerIsActive = false;
+                        console.log('[Camera Scanner] Stopped');
+                    } catch (err) {
+                        console.warn('[Camera Scanner] Stop error:', err);
+                        scannerIsActive = false;
+                    }
+                }
+
+                if (section) section.classList.remove('active');
+                if (loading) {
+                    loading.innerHTML = '<div class="loading-spinner"></div><div>{{ __("pos.starting_camera") }}</div>';
+                    loading.style.display = 'none';
+                }
             }
 
             // Mobile Navigation and Cart logic
@@ -3588,30 +3744,34 @@
         function openScanner() {
             if (isScannerStarting) return;
             const scannerSection = document.getElementById('scannerSection');
+            const loadingOverlay = document.getElementById('scannerLoading');
+            const readerDiv = document.getElementById('reader');
+
             if (scannerSection) scannerSection.classList.add('active');
+            if (loadingOverlay) loadingOverlay.style.display = 'block';
+            if (readerDiv) readerDiv.style.opacity = '0'; // Hide reader until ready
 
             if (!scanner) {
                 isScannerStarting = true;
                 scanner = new Html5Qrcode("reader");
 
-                // Advanced constraints for sharpness and focus
+                // Optimized constraints for faster startup on mobile
                 const videoConstraints = {
                     facingMode: "environment",
-                    width: { min: 640, ideal: 1280, max: 1920 },
-                    height: { min: 480, ideal: 720, max: 1080 },
-                    aspectRatio: { ideal: 1.7777777778 } // 16:9 ideal for mobile
+                    // Use slightly lower resolution for faster initialization if needed,
+                    // but stay within acceptable range for barcode scanning.
+                    width: { min: 640, ideal: 1280 },
+                    height: { min: 480, ideal: 720 },
                 };
 
                 const config = {
-                    fps: 20, // Higher FPS for smoother focus response
+                    fps: 15, // Reduced from 20 for better mobile performance
                     qrbox: (viewWidth, viewHeight) => {
-                        // Dynamic box size relative to viewport
                         const minDim = Math.min(viewWidth, viewHeight);
                         const boxSize = Math.floor(minDim * 0.7);
                         return { width: boxSize, height: boxSize };
                     },
-                    aspectRatio: 1.0, // Square guide
-                    // Try to enable continuous focus if supported
+                    aspectRatio: 1.0,
                     videoConstraints: {
                         ...videoConstraints,
                         advanced: [{ focusMode: "continuous" }]
@@ -3625,13 +3785,24 @@
                     onScanFailure
                 ).then(() => {
                     isScannerStarting = false;
-                    console.log("[Scanner] Started with advanced constraints");
+                    if (loadingOverlay) loadingOverlay.style.display = 'none';
+                    if (readerDiv) readerDiv.style.opacity = '1';
+                    console.log("[Scanner] Started successfully");
                 }).catch(err => {
                     console.error("Camera error:", err);
                     isScannerStarting = false;
-                    // Fallback to basic start if advanced fails
-                    scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess, onScanFailure);
+                    if (loadingOverlay) loadingOverlay.style.display = 'none';
+
+                    // Fallback to basic start
+                    scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: 250 }, onScanSuccess, onScanFailure)
+                        .then(() => {
+                            if (readerDiv) readerDiv.style.opacity = '1';
+                        });
                 });
+            } else {
+                // If scanner existed, just make sure UI is correct
+                if (loadingOverlay) loadingOverlay.style.display = 'none';
+                if (readerDiv) readerDiv.style.opacity = '1';
             }
         }
 
@@ -3837,8 +4008,9 @@
         const originalAddToCart = window.addToCart;
         if (typeof originalAddToCart === 'function') {
             window.addToCart = function () {
-                originalAddToCart.apply(this, arguments);
+                const result = originalAddToCart.apply(this, arguments);
                 setTimeout(refocusBarcode, 100);
+                return result;
             };
         }
     </script>
@@ -3849,6 +4021,10 @@
             <span class="scanner-title"><i class="fas fa-barcode"></i> {{ __('pos.scanner_title') }}</span>
         </div>
         <div id="reader"></div>
+        <div class="scanner-loading" id="scannerLoading">
+            <div class="loading-spinner"></div>
+            <div>{{ __('pos.starting_camera') }}</div>
+        </div>
         <div class="scanner-footer">
             <button class="btn-toggle-scanner" id="closeScannerBtn">{{ __('common.close') }}</button>
         </div>
