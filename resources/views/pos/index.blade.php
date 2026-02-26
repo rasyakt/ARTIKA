@@ -17,11 +17,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="theme-color" content="#6F5849">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ARTIKA POS">
     <title>{{ __('pos.title') }}</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/img/icons/icon-192x192.png">
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js" type="text/javascript"></script>
@@ -2131,11 +2135,11 @@
                                     class="payment-method-btn paymentMethodBtn {{ $method->slug === 'cash' ? 'active' : '' }}"
                                     data-method="{{ $method->slug }}"
                                     data-proof-requirement="{{ $method->proof_requirement }}">
-                                        @if($method->icon)
-                                            <i class="{{ $method->icon }} me-1"></i>
-                                        @endif
-                                        {{ $method->name }}
-                                    </button>
+                                    @if($method->icon)
+                                        <i class="{{ $method->icon }} me-1"></i>
+                                    @endif
+                                    {{ $method->name }}
+                                </button>
                             @endforeach
                         </div>
                     </div>
@@ -4091,6 +4095,17 @@
                 if (localStorage.getItem('artika-theme') === 'system') apply('system');
             });
         })();
+    </script>
+
+    {{-- PWA Service Worker Registration --}}
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered:', reg.scope))
+                    .catch(err => console.log('SW registration failed:', err));
+            });
+        }
     </script>
 </body>
 

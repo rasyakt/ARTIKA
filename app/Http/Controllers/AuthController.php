@@ -48,7 +48,7 @@ class AuthController extends Controller
             $loginType = 'nis';
         }
 
-        if (Auth::attempt([$loginType => $input, 'password' => $request->password])) {
+        if (Auth::attempt([$loginType => $input, 'password' => $request->password], true)) {
             $user = Auth::user();
 
             // Check if loop user role matches the requested login page role

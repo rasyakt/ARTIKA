@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - ARTIKA POS</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fdf8f6 0%, #f5ebe6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #4a3728;
+            padding: 20px;
+        }
+        .container {
+            text-align: center;
+            max-width: 440px;
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(111, 88, 73, 0.1);
+        }
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: #6F5849;
+        }
+        p {
+            font-size: 1rem;
+            color: #8b7a6e;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .retry-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #6F5849 0%, #85695a 100%);
+            color: white;
+            padding: 0.85rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(111, 88, 73, 0.25);
+        }
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(111, 88, 73, 0.3);
+        }
+        .retry-btn:active { transform: translateY(0); }
+        .brand {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #b8a99e;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="icon">🛜</span>
+        <h1>Anda Sedang Offline</h1>
+        <p>Tidak ada koneksi internet. Pastikan perangkat Anda terhubung ke jaringan untuk menggunakan ARTIKA POS.</p>
+        <button class="retry-btn" onclick="window.location.reload()">Coba Lagi</button>
+        <div class="brand">ARTIKA POS</div>
+    </div>
+</body>
+</html>
