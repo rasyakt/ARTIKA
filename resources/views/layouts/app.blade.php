@@ -28,8 +28,7 @@
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity=""
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
@@ -555,17 +554,20 @@
                     <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
                         style="min-width: 280px; border-radius: 16px;">
                         {{-- Header Profil --}}
-                        <li class="p-3 bg-light border-bottom border-secondary-subtle">
-                            <div class="d-flex align-items-center">
-                                <div class="profile-avatar bg-primary text-white me-3 d-flex align-items-center justify-content-center"
-                                    style="width: 45px; height: 45px; border-radius: 50%;">
+                        <li>
+                            <a href="{{ route('profile') }}"
+                                class="dropdown-item p-3 bg-light border-bottom border-secondary-subtle d-flex align-items-center"
+                                style="white-space: normal;">
+                                <div class="profile-avatar bg-primary text-white me-3 d-flex align-items-center justify-content-center shadow-sm"
+                                    style="width: 45px; height: 45px; border-radius: 50%; min-width: 45px;">
                                     {{ strtoupper(substr($user?->name ?? '', 0, 1)) }}
                                 </div>
                                 <div class="overflow-hidden">
-                                    <h6 class="mb-0 fw-800 text-truncate">{{ $user?->name }}</h6>
+                                    <h6 class="mb-0 fw-800 text-truncate text-dark">{{ $user?->name }}</h6>
                                     <div class="small text-muted text-truncate">{{ $user?->role?->name }}</div>
                                 </div>
-                            </div>
+                                <i class="fa-solid fa-chevron-right ms-auto opacity-50" style="font-size: 0.8rem;"></i>
+                            </a>
                         </li>
 
                         {{-- Section: Settings --}}
@@ -607,14 +609,15 @@
                                 </div>
                                 <div class="d-flex gap-2">
                                     <a href="{{ route('language.change', 'en') }}"
-                                        class="btn btn-sm {{ app()->getLocale() == 'en' ? 'btn-primary' : 'btn-outline-secondary' }} grow">English</a>
+                                        class="btn btn-sm {{ app()->getLocale() == 'en' ? 'btn-primary' : 'btn-outline-secondary' }} flex-fill py-2">English</a>
                                     <a href="{{ route('language.change', 'id') }}"
-                                        class="btn btn-sm {{ app()->getLocale() == 'id' ? 'btn-primary' : 'btn-outline-secondary' }} grow">Indonesia</a>
+                                        class="btn btn-sm {{ app()->getLocale() == 'id' ? 'btn-primary' : 'btn-outline-secondary' }} flex-fill py-2">Indonesia</a>
                                 </div>
                             </div>
                         </div>
 
                         <hr class="dropdown-divider m-0">
+
 
                         {{-- Logout --}}
                         <li>
@@ -844,6 +847,10 @@
                                     class="sidebar-link {{ request()->routeIs('superadmin.faq*') ? 'active' : '' }}">
                                     <i class="fa-solid fa-circle-question"></i> Kelola FAQ
                                 </a>
+                                <a href="{{ route('superadmin.identity-types.index') }}"
+                                    class="sidebar-link {{ request()->routeIs('superadmin.identity-types.*') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-id-card"></i> Jenis ID (NIS/NIK/...)
+                                </a>
                             </div>
                         @endif
 
@@ -917,10 +924,13 @@
 
                     <div class="mt-auto px-1 py-3">
                         <hr style="margin: 0.5rem 0; border-color: var(--brown-100); opacity: 0.1;">
-                        <a href="{{ route('faq.index') }}"
-                            class="sidebar-link {{ request()->routeIs('faq.index') ? 'active' : '' }}">
-                            <i class="fa-solid fa-circle-question"></i> Bantuan / FAQ
-                        </a>
+                        @if(\App\Models\Setting::get('enable_faq', true))
+                            <a href="{{ route('faq.index') }}"
+                                class="sidebar-link {{ request()->routeIs('faq.index') ? 'active' : '' }}">
+                                <i class="fa-solid fa-circle-question"></i> Bantuan / FAQ
+                            </a>
+                        @endif
+
                         <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
                             @csrf
                             <button type="submit"

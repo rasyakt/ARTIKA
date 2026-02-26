@@ -62,7 +62,7 @@ return [
     'track_stock_changes' => 'Lacak semua perubahan dan penyesuaian stok',
     'stock_in_today' => 'Stok Masuk (Hari Ini)',
     'stock_out_today' => 'Stok Keluar (Hari Ini)',
-    'adjustments_today' => 'Penyesuaian',
+    'adjustments_today' => 'Penyesuaian Stok',
     'total_movements' => 'Total Pergerakan',
     'stock_in' => 'Stok Masuk',
     'stock_out' => 'Stok Keluar',

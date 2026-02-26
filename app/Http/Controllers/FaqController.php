@@ -14,6 +14,12 @@ class FaqController extends Controller
      */
     public function index()
     {
+        if (!\App\Models\Setting::get('enable_faq', true)) {
+            $user = Auth::user();
+            $route = $user && strtolower($user->role->name ?? '') === 'cashier' ? 'pos.index' : 'dashboard';
+            return redirect()->route($route)->with('error', 'Fitur Pusat Bantuan saat ini sedang dinonaktifkan oleh administrator.');
+        }
+
         $user = Auth::user();
         $role = strtolower($user->role->name ?? 'user');
 
@@ -23,7 +29,7 @@ class FaqController extends Controller
             ->get()
             ->groupBy('category');
 
-        $categories = Faq::CATEGORIES;
+        $categories = array_intersect_key(Faq::CATEGORIES, $faqs->toArray());
 
         return view('faq.index', compact('faqs', 'categories', 'role'));
     }

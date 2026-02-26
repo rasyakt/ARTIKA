@@ -188,6 +188,7 @@ class SuperadminController extends Controller
                 'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => '© ' . date('Y') . ' RPL_Sentinel. All rights reserved.'],
                 'site_color_theme' => ['label' => 'Tema Warna Website', 'type' => 'palette', 'default' => 'brown'],
                 'custom_primary_color' => ['label' => 'Warna Kustom (Primary)', 'type' => 'color', 'default' => '#85695a'],
+                'enable_faq' => ['label' => 'Aktifkan Fitur Pusat Bantuan (FAQ)', 'type' => 'boolean', 'default' => true],
             ],
             'POS & Struk' => [
                 'invoice_prefix' => ['label' => 'Prefix No. Struk', 'type' => 'text', 'default' => 'INV'],
@@ -278,7 +279,8 @@ class SuperadminController extends Controller
             'cashier_enable_discounts',
             'cashier_enable_camera',
             'cashier_enable_audit_logs',
-            'auto_optimize'
+            'auto_optimize',
+            'enable_faq'
         ];
 
         foreach ($allKeys as $key) {

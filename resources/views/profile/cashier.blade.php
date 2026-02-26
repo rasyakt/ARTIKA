@@ -1,9 +1,12 @@
-@php /** @var \App\Models\User $user */ $user = Auth::user(); @endphp
+@php 
+                                        /** @var \App\Models\User $user */
+    $user = Auth::user();
+    $role = strtolower($user->role->name ?? '');
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    {{-- Apply theme ASAP to prevent flash --}}
     <script>
         (function () {
             const saved = localStorage.getItem('artika-theme') || 'system';
@@ -16,25 +19,27 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Activity Logs - ARTIKA POS</title>
+    <title>{{ __('common.profile') }} - ARTIKA POS</title>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
             --primary: var(--color-primary);
             --primary-dark: var(--color-primary-dark);
+            --primary-light: var(--color-primary-light);
             --brown-50: var(--brown-50);
             --gray-100: var(--color-bg);
             --gray-200: var(--gray-200);
+            --gray-800: var(--gray-700);
         }
 
         body {
             background-color: var(--gray-100);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--color-text, #333);
-            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            color: var(--color-text, var(--gray-800));
         }
 
         /* NAVBAR */
@@ -132,35 +137,6 @@
             color: white;
             transform: translateY(-1px);
         }
-
-        /* Dark Mode Overrides */
-        [data-bs-theme="dark"] .card {
-            background: var(--card-bg);
-        }
-
-        [data-bs-theme="dark"] .bg-white,
-        [data-bs-theme="dark"] .card-footer.bg-white {
-            background-color: var(--card-bg) !important;
-        }
-
-        [data-bs-theme="dark"] .bg-light {
-            background-color: var(--gray-100) !important;
-        }
-
-        [data-bs-theme="dark"] .text-dark {
-            color: var(--color-text) !important;
-        }
-
-        [data-bs-theme="dark"] .form-control {
-            background-color: var(--gray-100);
-            border-color: var(--gray-200);
-            color: var(--color-text);
-        }
-
-        [data-bs-theme="dark"] .btn-outline-primary {
-            color: var(--color-primary-light);
-            border-color: var(--color-primary-light);
-        }
     </style>
 </head>
 
@@ -194,102 +170,13 @@
             </div>
         </div>
     </div>
+    <div class="container mt-4 pb-5">
+        @include('profile.partials')
     </div>
-    </div>
-    </div>
-
-    <div class="container mt-4">
-        <!-- Filters -->
-        <div class="mb-4">
-            <div class="btn-group" role="group">
-                <a href="{{ route('pos.logs') }}" class="btn btn-{{ !request('type') ? 'primary' : 'outline-primary' }}"
-                    style="border-radius: 10px 0 0 10px; padding: 0.6rem 1.25rem;">
-                    {{ __('pos.all') }}
-                </a>
-                <a href="{{ route('pos.logs', ['type' => 'login']) }}"
-                    class="btn btn-{{ request('type') == 'login' ? 'primary' : 'outline-primary' }}"
-                    style="padding: 0.6rem 1.25rem;">
-                    <i class="fa-solid fa-sign-in-alt me-1"></i> {{ __('pos.login') }}
-                </a>
-                <a href="{{ route('pos.logs', ['type' => 'transaction']) }}"
-                    class="btn btn-{{ request('type') == 'transaction' ? 'primary' : 'outline-primary' }}"
-                    style="border-radius: 0 10px 10px 0; padding: 0.6rem 1.25rem;">
-                    <i class="fa-solid fa-receipt me-1"></i> {{ __('pos.transactions') }}
-                </a>
-            </div>
-            @if(request('type'))
-                <a href="{{ route('pos.logs') }}" class="btn btn-link text-muted text-decoration-none ms-2">
-                    <i class="fa-solid fa-times me-1"></i> {{ __('pos.clear_filter') }}
-                </a>
-            @endif
-        </div>
-
-        <div class="card">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0 align-middle">
-                        <thead>
-                            <tr>
-                                <th class="px-4 py-3">{{ __('admin.date_time') }}</th>
-                                <th class="px-4 py-3">{{ __('pos.action') }}</th>
-                                <th class="px-4 py-3">{{ __('pos.entity') }}</th>
-                                <th class="px-4 py-3">{{ __('pos.details') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($logs as $log)
-                                <tr>
-                                    <td class="px-4 py-3 text-muted" style="width: 200px;">
-                                        {{ $log->created_at->format('d M Y H:i') }}
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        @if($log->action == 'login')
-                                            <span class="badge bg-info bg-opacity-10 text-info border border-info">
-                                                <i class="fa-solid fa-sign-in-alt me-1"></i> LOGIN
-                                            </span>
-                                        @elseif($log->action == 'transaction_created')
-                                            <span class="badge bg-success bg-opacity-10 text-success border border-success">
-                                                <i class="fa-solid fa-receipt me-1"></i> TRANSACTION
-                                            </span>
-                                        @else
-                                            <span class="badge bg-light text-dark border">
-                                                {{ strtoupper(str_replace('_', ' ', $log->action)) }}
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td class="px-4 py-3">
-                                        <span class="fw-semibold text-secondary">{{ $log->model_type }}</span>
-                                        <small class="text-muted ms-1">#{{ $log->model_id }}</small>
-                                    </td>
-                                    <td class="px-4 py-3 text-secondary">
-                                        {{ $log->notes }}
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="text-center py-5 text-muted">
-                                        <i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i>
-                                        <p class="mb-0">{{ __('pos.no_logs_found') }}</p>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            @if($logs->hasPages())
-                <div class="card-footer bg-white py-3 d-flex justify-content-end">
-                    {{ $logs->links('vendor.pagination.custom-brown') }}
-                </div>
-            @endif
-        </div>
-    </div>
-
     <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
 
-    {{-- Scripts --}}
     <script>
         // Logout confirmation handler
         document.getElementById('btnLogout')?.addEventListener('click', function () {
@@ -313,8 +200,8 @@
                 }
             });
         });
-    </script>
-    <script>
+
+        { { --Theme Toggle Script-- } }
         (function () {
             const opts = document.querySelectorAll('.pos-theme-opt');
             const icon = document.getElementById('posThemeIcon');
@@ -324,7 +211,7 @@
                 htmlEl.setAttribute('data-bs-theme', getEffective(p));
                 localStorage.setItem('artika-theme', p);
                 const icons = { light: 'fa-sun', dark: 'fa-moon', system: 'fa-desktop' };
-                icon.className = 'fa-solid ' + (icons[p] || 'fa-sun');
+                if (icon) icon.className = 'fa-solid ' + (icons[p] || 'fa-sun');
                 opts.forEach(o => {
                     const chk = o.querySelector('.pos-theme-check');
                     if (o.dataset.theme === p) { o.classList.add('active'); chk?.classList.remove('d-none'); }

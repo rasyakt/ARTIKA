@@ -127,22 +127,22 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.name') }} *</label>
                             <input type="text" class="form-control" name="name" required
-                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--gray-300); padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.phone') }}</label>
                             <input type="text" class="form-control" name="phone"
-                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--gray-300); padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.email') }}</label>
                             <input type="email" class="form-control" name="email"
-                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--gray-300); padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.address') }}</label>
                             <textarea class="form-control" name="address" rows="2"
-                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;"></textarea>
+                                style="border-radius: 12px; border: 2px solid var(--gray-300); padding: 0.75rem 1rem;"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer" style="border-top: 2px solid var(--brown-100);">

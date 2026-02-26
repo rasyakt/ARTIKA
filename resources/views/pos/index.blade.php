@@ -29,7 +29,7 @@
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
@@ -1869,82 +1869,7 @@
                                 style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
                         </div>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
-                        style="min-width: 260px; border-radius: 16px;">
-                        <li class="p-3 bg-light border-bottom">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
-                                    style="width: 42px; height: 42px; font-size: 1.2rem;">
-                                    {{ substr($user?->name ?? '', 0, 1) }}
-                                </div>
-                                <div class="overflow-hidden text-start">
-                                    <h6 class="mb-0 fw-800 text-truncate text-dark">{{ $user?->name }}</h6>
-                                    <div class="small text-muted text-truncate">@ {{ $user?->username }}</div>
-                                    <div class="small fw-700 text-primary" style="font-size: 0.7rem;">NIS:
-                                        {{ $user?->nis ?? '-' }}
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-
-                        {{-- Section: Settings/Theme --}}
-                        <div class="p-2 border-bottom">
-                            <div class="px-3 py-1 mb-1 small fw-bold text-uppercase text-muted"
-                                style="font-size: 0.65rem;">
-                                {{ __('common.settings') ?? 'Pengaturan' }}
-                            </div>
-                            <div class="px-3 py-2">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="small fw-600 text-muted"><i
-                                            class="fa-solid fa-circle-half-stroke me-2"></i>Tema</span>
-                                </div>
-                                <div class="btn-group w-100" role="group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
-                                        data-theme="light" title="Light">
-                                        <i class="fa-solid fa-sun"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
-                                        data-theme="dark" title="Dark">
-                                        <i class="fa-solid fa-moon"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
-                                        data-theme="system" title="System">
-                                        <i class="fa-solid fa-desktop"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <li>
-                            <a class="dropdown-item py-2 px-3 d-flex align-items-center"
-                                href="{{ route('pos.history') }}">
-                                <i class="fa-solid fa-clock-rotate-left me-3 text-primary opacity-75"></i>
-                                <span class="fw-600">Riwayat Transaksi</span>
-                            </a>
-                        </li>
-                        @if(App\Models\Setting::get('cashier_enable_audit_logs', true))
-                            <li>
-                                <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ route('pos.logs') }}">
-                                    <i class="fa-solid fa-list-check me-3 text-primary opacity-75"></i>
-                                    <span class="fw-600">Log Aktivitas</span>
-                                </a>
-                            </li>
-                        @endif
-                        <li>
-                            <a class="dropdown-item py-2 px-3 d-flex align-items-center"
-                                href="{{ route('faq.index') }}">
-                                <i class="fa-solid fa-circle-question me-3 text-primary opacity-75"></i>
-                                <span class="fw-600">Bantuan / FAQ</span>
-                            </a>
-                        </li>
-                        <li class="border-top mt-1">
-                            <button type="button" class="dropdown-item py-3 px-3 d-flex align-items-center text-danger"
-                                id="btnLogout">
-                                <i class="fas fa-sign-out-alt me-3"></i>
-                                <span class="fw-700">Keluar Sistem</span>
-                            </button>
-                        </li>
-                    </ul>
+                    <x-pos-profile-dropdown />
                 </div>
             </div>
         </div>

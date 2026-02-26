@@ -57,9 +57,27 @@ class Faq extends Model
      */
     public function scopeForRole(Builder $query, ?string $role): Builder
     {
+        if ($role === 'superadmin') {
+            return $query;
+        }
+
         return $query->where(function ($q) use ($role) {
-            $q->whereNull('target_role')
-                ->orWhere('target_role', $role);
+            $q->where('target_role', $role)
+                ->orWhere(function ($q2) use ($role) {
+                    $q2->whereNull('target_role');
+
+                    if ($role === 'cashier') {
+                        $q2->whereIn('category', ['general', 'pos']);
+                    } elseif ($role === 'warehouse') {
+                        $q2->whereIn('category', ['general', 'warehouse']);
+                    } elseif ($role === 'admin') {
+                        $q2->whereIn('category', ['general', 'admin']);
+                    } elseif ($role === 'manager') {
+                        $q2->whereIn('category', ['general', 'manager']);
+                    } else {
+                        $q2->where('category', 'general');
+                    }
+                });
         });
     }
 

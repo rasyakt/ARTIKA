@@ -28,6 +28,10 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    // Profile Routes (Universal for all auth'd users)
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+
     // Admin & Superadmin Routes
     Route::middleware(['role:superadmin,admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
@@ -154,6 +158,8 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/faq/{id}', [\App\Http\Controllers\FaqController::class, 'update'])->name('faq.update');
         Route::delete('/faq/{id}', [\App\Http\Controllers\FaqController::class, 'destroy'])->name('faq.destroy');
 
+        // Identity Types Management
+        Route::resource('identity-types', \App\Http\Controllers\IdentityTypeController::class)->except(['create', 'edit', 'show']);
     });
 
     // FAQ / Help Center (All authenticated users)

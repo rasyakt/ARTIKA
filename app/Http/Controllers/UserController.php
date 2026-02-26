@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\IdentityType;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -27,8 +28,9 @@ class UserController extends Controller
         $users = $query->latest()->paginate(10);
 
         $roles = Role::all();
+        $identityTypes = IdentityType::where('is_active', true)->get();
 
-        return view('admin.users.index', compact('users', 'roles'));
+        return view('admin.users.index', compact('users', 'roles', 'identityTypes'));
     }
 
     public function store(Request $request)
@@ -38,7 +40,8 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:8',
             'role_id' => 'required|exists:roles,id',
-            'nis' => 'nullable|string|unique:users',
+            'nis' => 'nullable|string',
+            'identity_type_id' => 'nullable|exists:identity_types,id',
         ]);
 
         // Security check: only superadmin can create admins/warehouse
@@ -59,6 +62,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
             'nis' => $request->nis,
+            'identity_type_id' => $request->identity_type_id,
         ]);
 
         return redirect()->route('admin.users')->with('success', 'User created successfully!');
@@ -87,7 +91,8 @@ class UserController extends Controller
             'username' => 'required|string|max:255|unique:users,username,' . $id,
             'password' => 'nullable|string|min:8',
             'role_id' => 'required|exists:roles,id',
-            'nis' => 'nullable|string|unique:users,nis,' . $id,
+            'nis' => 'nullable|string',
+            'identity_type_id' => 'nullable|exists:identity_types,id',
         ]);
 
         // Security check: cannot change role to superadmin
@@ -106,6 +111,7 @@ class UserController extends Controller
             'username' => $request->username,
             'role_id' => $request->role_id,
             'nis' => $request->nis,
+            'identity_type_id' => $request->identity_type_id,
         ];
 
         if ($request->filled('password')) {

@@ -13,7 +13,7 @@
                 <p class="text-muted mb-0" style="font-size: 0.9rem;">Kelola pertanyaan yang sering diajukan</p>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('faq.index') }}" class="btn btn-outline-primary btn-sm" style="border-radius: 10px;">
+                <a href="{{ route('faq.index') }}" class="btn btn-outline-primary align-self-center btn-sm" style="border-radius: 10px;">
                     <i class="fa-solid fa-eye me-1"></i> Preview
                 </a>
                 <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#faqModal"
