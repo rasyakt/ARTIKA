@@ -382,34 +382,33 @@
             font-size: 1.4rem;
             border: 2px solid var(--color-primary-light);
             transition: all 0.2s;
-        }
 
-        .dropdown-menu {
-            border: none;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            animation: slideIn 0.2s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+            .dropdown-menu {
+                border: none;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                animation: slideIn 0.2s ease-out;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
-        }
 
-        .dropdown-item {
-            transition: all 0.2s;
-        }
+            .dropdown-item {
+                transition: all 0.2s;
+            }
 
-        .dropdown-item:hover {
-            background-color: var(--brown-50);
-            color: var(--primary-dark);
-        }
+            .dropdown-item:hover {
+                background-color: var(--brown-50);
+                color: var(--primary-dark);
+            }
     </style>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -610,8 +609,8 @@
                                     </td>
                                     <td class="text-center">
                                         <span
-                                            class="payment-badge {{ strtolower($transaction->payment_method) === 'cash' ? 'badge-cash' : 'badge-non-cash' }}">
-                                            {{ $transaction->payment_method }}
+                                            class="payment-badge {{ ($transaction->paymentMethod->proof_requirement ?? 'disabled') !== 'disabled' ? 'badge-non-cash' : 'badge-cash' }}">
+                                            {{ $transaction->payment_method_name }}
                                         </span>
                                     </td>
                                     <td class="text-center">
@@ -708,8 +707,8 @@
                                 <div class="t-card-date">{{ $transaction->created_at->format('d M Y, H:i') }}</div>
                             </div>
                             <span
-                                class="payment-badge {{ strtolower($transaction->payment_method) === 'cash' ? 'badge-cash' : 'badge-non-cash' }}">
-                                {{ $transaction->payment_method }}
+                                class="payment-badge {{ ($transaction->paymentMethod->proof_requirement ?? 'disabled') !== 'disabled' ? 'badge-non-cash' : 'badge-cash' }}">
+                                {{ $transaction->payment_method_name }}
                             </span>
                         </div>
                         <div class="t-card-body">

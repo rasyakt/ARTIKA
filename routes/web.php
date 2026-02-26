@@ -145,12 +145,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/logs', [\App\Http\Controllers\SuperadminController::class, 'logs'])->name('logs');
         Route::get('/settings', [\App\Http\Controllers\SuperadminController::class, 'settings'])->name('settings');
         Route::post('/settings', [\App\Http\Controllers\SuperadminController::class, 'updateSettings'])->name('settings.update');
+        Route::resource('payment-methods', \App\Http\Controllers\Admin\PaymentMethodController::class);
+        Route::post('payment-methods/reorder', [\App\Http\Controllers\Admin\PaymentMethodController::class, 'reorder'])->name('payment-methods.reorder');
 
         // FAQ Management (CRUD)
         Route::get('/faq', [\App\Http\Controllers\FaqController::class, 'manage'])->name('faq');
         Route::post('/faq', [\App\Http\Controllers\FaqController::class, 'store'])->name('faq.store');
         Route::put('/faq/{id}', [\App\Http\Controllers\FaqController::class, 'update'])->name('faq.update');
         Route::delete('/faq/{id}', [\App\Http\Controllers\FaqController::class, 'destroy'])->name('faq.destroy');
+
     });
 
     // FAQ / Help Center (All authenticated users)

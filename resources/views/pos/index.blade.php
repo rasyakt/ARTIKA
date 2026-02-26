@@ -2126,16 +2126,17 @@
                         <label class="payment-label"><i class="fas fa-wallet"></i>
                             {{ __('pos.payment_method') }}</label>
                         <div class="payment-methods">
-                            <button class="payment-method-btn paymentMethodBtn active"
-                                data-method="cash">{{ __('pos.cash') }}</button>
-                            <button class="payment-method-btn paymentMethodBtn"
-                                data-method="qris">{{ __('pos.qris') }}</button>
-                            <button class="payment-method-btn paymentMethodBtn"
-                                data-method="transfer">{{ __('pos.transfer') }}</button>
-                            <button class="payment-method-btn paymentMethodBtn"
-                                data-method="debit">{{ __('pos.debit') }}</button>
-                            <button class="payment-method-btn paymentMethodBtn full-width"
-                                data-method="non-cash">{{ __('pos.non_cash') }} (Lainnya)</button>
+                            @foreach($paymentMethods as $method)
+                                <button
+                                    class="payment-method-btn paymentMethodBtn {{ $method->slug === 'cash' ? 'active' : '' }}"
+                                    data-method="{{ $method->slug }}"
+                                    data-proof-requirement="{{ $method->proof_requirement }}">
+                                        @if($method->icon)
+                                            <i class="{{ $method->icon }} me-1"></i>
+                                        @endif
+                                        {{ $method->name }}
+                                    </button>
+                            @endforeach
                         </div>
                     </div>
 
@@ -2197,16 +2198,17 @@
                     </div>
                     <div class="payment-section">
                         <div class="payment-methods">
-                            <button class="payment-method-btn paymentMethodBtn active"
-                                data-method="cash">{{ __('pos.cash') }}</button>
-                            <button class="payment-method-btn paymentMethodBtn"
-                                data-method="qris">{{ __('pos.qris') }}</button>
-                            <button class="payment-method-btn paymentMethodBtn"
-                                data-method="transfer">{{ __('pos.transfer') }}</button>
-                            <button class="payment-method-btn paymentMethodBtn"
-                                data-method="debit">{{ __('pos.debit') }}</button>
-                            <button class="payment-method-btn paymentMethodBtn full-width"
-                                data-method="non-cash">{{ __('pos.non_cash') }} (Lainnya)</button>
+                            @foreach($paymentMethods as $method)
+                                <button
+                                    class="payment-method-btn paymentMethodBtn {{ $method->slug === 'cash' ? 'active' : '' }} {{ $loop->last && $loop->count % 2 != 0 ? 'full-width' : '' }}"
+                                    data-method="{{ $method->slug }}"
+                                    data-proof-requirement="{{ $method->proof_requirement }}">
+                                    @if($method->icon)
+                                        <i class="{{ $method->icon }} me-1"></i>
+                                    @endif
+                                    {{ $method->name }}
+                                </button>
+                            @endforeach
                         </div>
                     </div>
                     <div class="checkout-buttons">
@@ -3110,16 +3112,17 @@
             const modal = window.bootstrap.Modal.getOrCreateInstance(modalElement);
             const isCash = selectedPaymentMethod === 'cash';
 
+            // Get the specific button to check for proof requirement
+            const activeBtn = document.querySelector(`.paymentMethodBtn.active[data-method="${selectedPaymentMethod}"]`);
+            const proofRequirement = activeBtn ? activeBtn.dataset.proofRequirement : 'disabled';
+            const methodName = activeBtn ? activeBtn.innerText.trim() : selectedPaymentMethod;
+
             // Toggle sections
             document.getElementById('cashInputSection').style.display = isCash ? 'block' : 'none';
-            document.getElementById('nonCashInputSection').style.display = isCash ? 'none' : 'block';
+            document.getElementById('nonCashInputSection').style.display = (proofRequirement !== 'disabled') ? 'block' : 'none';
 
             // Set modal title based on specific method
-            let methodLabel = selectedPaymentMethod.charAt(0).toUpperCase() + selectedPaymentMethod.slice(1);
-            if (selectedPaymentMethod === 'non-cash') methodLabel = '{{ __('pos.non_cash') }}';
-            else if (selectedPaymentMethod === 'transfer') methodLabel = 'Transfer Bank';
-
-            document.querySelector('.modal-title').textContent = isCash ? '{{ __('pos.cash_amount') }}' : methodLabel;
+            document.querySelector('.modal-title').textContent = isCash ? '{{ __('pos.cash_amount') }}' : methodName;
 
             if (isCash) {
                 document.getElementById('keypadDisplay').value = '';
@@ -3173,6 +3176,12 @@
                         file = inputCamera.files[0];
                     } else if (inputGallery.files.length > 0) {
                         file = inputGallery.files[0];
+                    }
+
+                    // Validation for methods requiring proof
+                    if (proofRequirement === 'required' && !file) {
+                        showToast('warning', 'Harap upload bukti pembayaran!');
+                        return;
                     }
 
                     modal.hide();

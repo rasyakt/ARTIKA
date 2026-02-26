@@ -10,6 +10,23 @@
         .table-hover tbody tr:hover {
             background-color: var(--brown-50);
         }
+
+        /* Chart toggle buttons */
+        .btn-group .btn-outline-primary {
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+        .btn-group .btn-outline-primary.active,
+        .btn-group .btn-outline-primary:active {
+            background-color: var(--color-primary) !important;
+            border-color: var(--color-primary) !important;
+            color: #fff !important;
+        }
+        .btn-group .btn-outline-primary:hover:not(.active) {
+            background-color: var(--color-primary-light);
+            color: var(--color-primary);
+        }
+        
     </style>
 
     <div class="container-fluid py-4">

@@ -30,7 +30,7 @@ class PosController extends Controller
     {
         $products = $this->productRepository->getAllProducts();
         $categories = Category::all();
-        $paymentMethods = PaymentMethod::where('is_active', true)->get();
+        $paymentMethods = PaymentMethod::where('is_active', true)->ordered()->get();
         $heldTransactions = HeldTransaction::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
             ->get();
@@ -142,7 +142,10 @@ class PosController extends Controller
                 'status' => 'completed',
             ];
 
-            // Handle Payment Proof for Non-Cash (compressed)
+            // Dynamic validation for payment method and proof
+            $paymentMethod = \App\Models\PaymentMethod::where('slug', $validated['payment_method'])->first();
+
+            // Handle Payment Proof (compressed)
             if ($request->hasFile('payment_proof')) {
                 $imageService = app(\App\Services\ImageService::class);
                 $originalSize = $imageService->getFileSizeKB($request->file('payment_proof'));
@@ -151,9 +154,11 @@ class PosController extends Controller
                     'uploads/payment_proofs'
                 );
                 Log::info("Payment proof compressed: {$originalSize}KB -> saved as {$data['payment_proof']}");
-            } elseif ($validated['payment_method'] === 'non-cash') {
-                // If strictly required, throw error. For now, we allow it (or frontend validation handles it).
-                // return response()->json(['success' => false, 'message' => 'Bukti pembayaran wajib diunggah untuk transaksi non-tunai.'], 422);
+            } elseif ($paymentMethod && $paymentMethod->proof_requirement === 'required') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bukti pembayaran wajib diunggah untuk metode ' . $paymentMethod->name
+                ], 422);
             }
 
             $items = $validated['items'];

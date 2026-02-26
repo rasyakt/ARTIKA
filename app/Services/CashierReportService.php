@@ -67,21 +67,38 @@ class CashierReportService
                 return [strtolower($item->payment_method) => $item];
             });
 
-        $cashKeys = ['cash', 'tunai'];
-        $nonCashKeys = ['non-cash', 'non-tunai', 'qris', 'transfer', 'debit'];
+        $paymentMethods = \App\Models\PaymentMethod::all();
+        $cashKeys = $paymentMethods->where('slug', '!=', 'non-cash') // exclude legacy non-cash if any
+            ->where('proof_requirement', 'disabled')
+            ->pluck('slug')
+            ->toArray();
+
+        // Add legacy 'tunai' or other common cash keys if not in DB
+        if (!in_array('cash', $cashKeys))
+            $cashKeys[] = 'cash';
+        if (!in_array('tunai', $cashKeys))
+            $cashKeys[] = 'tunai';
+
+        $nonCashKeys = $paymentMethods->whereIn('proof_requirement', ['required', 'optional'])
+            ->pluck('slug')
+            ->toArray();
+        if (!in_array('non-cash', $nonCashKeys))
+            $nonCashKeys[] = 'non-cash';
 
         $cashSales = 0;
         $cashCount = 0;
         foreach ($cashKeys as $key) {
-            $cashSales += $paymentBreakdown->get($key)->total ?? 0;
-            $cashCount += $paymentBreakdown->get($key)->count ?? 0;
+            $data = $paymentBreakdown->get($key);
+            $cashSales += $data->total ?? 0;
+            $cashCount += $data->count ?? 0;
         }
 
         $nonCashSales = 0;
         $nonCashCount = 0;
         foreach ($nonCashKeys as $key) {
-            $nonCashSales += $paymentBreakdown->get($key)->total ?? 0;
-            $nonCashCount += $paymentBreakdown->get($key)->count ?? 0;
+            $data = $paymentBreakdown->get($key);
+            $nonCashSales += $data->total ?? 0;
+            $nonCashCount += $data->count ?? 0;
         }
 
         return [

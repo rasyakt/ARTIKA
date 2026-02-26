@@ -37,6 +37,22 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the payment method for this transaction
+     */
+    public function paymentMethod(): BelongsTo
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method', 'slug');
+    }
+
+    /**
+     * Get the payment method name
+     */
+    public function getPaymentMethodNameAttribute(): string
+    {
+        return $this->paymentMethod->name ?? ucfirst($this->payment_method);
+    }
+
 
     /**
      * Get all items for this transaction

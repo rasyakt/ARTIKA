@@ -807,6 +807,7 @@
                                             </a>
                                         </li>
                                     @endif
+
                                 </ul>
                             </div>
                         @endif
@@ -828,6 +829,10 @@
                                     class="sidebar-link {{ request()->routeIs('superadmin.settings*') ? 'active' : '' }}">
                                     <i class="fa-solid fa-gears"></i> Advanced Settings
                                 </a>
+                                <a href="{{ route('superadmin.payment-methods.index') }}"
+                                    class="sidebar-link {{ request()->routeIs('superadmin.payment-methods.*') ? 'active' : '' }}">
+                                    <i class="fa-solid fa-credit-card"></i> Kelola Pembayaran
+                                </a>
                                 <a href="{{ route('superadmin.faq') }}"
                                     class="sidebar-link {{ request()->routeIs('superadmin.faq*') ? 'active' : '' }}">
                                     <i class="fa-solid fa-circle-question"></i> Kelola FAQ
@@ -836,40 +841,40 @@
                         @endif
 
                     @elseif($user?->role?->name === 'manager')
-                        <a href="{{ route($routePrefix . 'dashboard') }}"
-                            class="sidebar-link {{ request()->routeIs($routePrefix . 'dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('manager.dashboard') }}"
+                            class="sidebar-link {{ request()->routeIs('manager.dashboard') ? 'active' : '' }}">
                             <i class="fa-solid fa-chart-pie"></i> {{ __('menu.dashboard') }}
                         </a>
 
                         <!-- Reports Group (Read-only for Manager) -->
-                        <div class="sidebar-dropdown {{ request()->routeIs($routePrefix . 'reports*') ? 'active' : '' }}">
+                        <div class="sidebar-dropdown {{ request()->routeIs('manager.reports*') ? 'active' : '' }}">
                             <div class="sidebar-link sidebar-dropdown-toggle">
                                 <i class="fa-solid fa-chart-line"></i> {{ __('menu.reports') }}
                                 <i class="fa-solid fa-chevron-right dropdown-arrow"></i>
                             </div>
                             <ul class="sidebar-submenu">
                                 <li>
-                                    <a href="{{ route($routePrefix . 'reports') }}"
-                                        class="submenu-link {{ request()->is($routePrefix . 'reports') ? 'active' : '' }}">
+                                    <a href="{{ route('manager.reports') }}"
+                                        class="submenu-link {{ request()->is('manager/reports') ? 'active' : '' }}">
                                         <i class="fa-solid fa-th-large"></i> {{ __('admin.reports_hub') ?? 'Reports Hub' }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route($routePrefix . 'reports.warehouse') }}"
-                                        class="submenu-link {{ request()->routeIs($routePrefix . 'reports.warehouse*') ? 'active' : '' }}">
+                                    <a href="{{ route('manager.reports.warehouse') }}"
+                                        class="submenu-link {{ request()->routeIs('manager.reports.warehouse*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-warehouse"></i> {{ __('admin.warehouse_report') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route($routePrefix . 'reports.cashier') }}"
-                                        class="submenu-link {{ request()->routeIs($routePrefix . 'reports.cashier*') ? 'active' : '' }}">
+                                    <a href="{{ route('manager.reports.cashier') }}"
+                                        class="submenu-link {{ request()->routeIs('manager.reports.cashier*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-cash-register"></i> {{ __('admin.cashier_report') }} /
                                         {{ __('admin.transaction_correction') }}
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ route($routePrefix . 'reports.finance') }}"
-                                        class="submenu-link {{ request()->routeIs($routePrefix . 'reports.finance*') ? 'active' : '' }}">
+                                    <a href="{{ route('manager.reports.finance') }}"
+                                        class="submenu-link {{ request()->routeIs('manager.reports.finance*') ? 'active' : '' }}">
                                         <i class="fa-solid fa-file-invoice-dollar"></i> {{ __('admin.finance_report') }}
                                     </a>
                                 </li>
@@ -926,242 +931,237 @@
 
                     @yield('content')
                 </div>
-            </div>
-        </div>
 
-        <!-- Shared Scanner Modal -->
-        @include('components.scanner-modal')
+                <!-- Sidebar Overlay (Mobile) -->
+                <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-        <!-- Sidebar Overlay (Mobile) -->
-        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+                <script>
+                    // Hamburger menu functionality
+                    const hamburgerBtn = document.getElementById('hamburgerBtn');
+                    const sidebar = document.getElementById('sidebar');
+                    const sidebarOverlay = document.getElementById('sidebarOverlay');
+                    const sidebarClose = document.getElementById('sidebarClose');
 
-        <script>
-            // Hamburger menu functionality
-            const hamburgerBtn = document.getElementById('hamburgerBtn');
-            const sidebar = document.getElementById('sidebar');
-            const sidebarOverlay = document.getElementById('sidebarOverlay');
-            const sidebarClose = document.getElementById('sidebarClose');
+                    if (hamburgerBtn) {
+                        // Open sidebar
+                        hamburgerBtn.addEventListener('click', function () {
+                            sidebar.classList.add('active');
+                            sidebarOverlay.classList.add('active');
+                            document.body.style.overflow = 'hidden';
+                        });
 
-            if (hamburgerBtn) {
-                // Open sidebar
-                hamburgerBtn.addEventListener('click', function () {
-                    sidebar.classList.add('active');
-                    sidebarOverlay.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                });
+                        // Close sidebar - close button
+                        sidebarClose.addEventListener('click', closeSidebar);
 
-                // Close sidebar - close button
-                sidebarClose.addEventListener('click', closeSidebar);
+                        // Close sidebar - overlay click
+                        sidebarOverlay.addEventListener('click', closeSidebar);
 
-                // Close sidebar - overlay click
-                sidebarOverlay.addEventListener('click', closeSidebar);
+                        // Close sidebar function
+                        function closeSidebar() {
+                            sidebar.classList.remove('active');
+                            sidebarOverlay.classList.remove('active');
+                            document.body.style.overflow = '';
+                        }
 
-                // Close sidebar function
-                function closeSidebar() {
-                    sidebar.classList.remove('active');
-                    sidebarOverlay.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
+                        // Close sidebar when clicking a link (mobile/tablet)
+                        if (window.innerWidth <= 1023) {
+                            const sidebarLinks = sidebar.querySelectorAll('.sidebar-link:not(.sidebar-dropdown-toggle)');
+                            sidebarLinks.forEach(link => {
+                                link.addEventListener('click', closeSidebar);
+                            });
+                        }
+                    }
 
-                // Close sidebar when clicking a link (mobile/tablet)
-                if (window.innerWidth <= 1023) {
-                    const sidebarLinks = sidebar.querySelectorAll('.sidebar-link:not(.sidebar-dropdown-toggle)');
-                    sidebarLinks.forEach(link => {
-                        link.addEventListener('click', closeSidebar);
+                    // Sidebar Dropdown Toggle Logic
+                    document.querySelectorAll('.sidebar-dropdown-toggle').forEach(toggle => {
+                        toggle.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            const parent = this.closest('.sidebar-dropdown');
+                            const isActive = parent.classList.contains('active');
+
+                            // Close other dropdowns (optional, but cleaner)
+                            // document.querySelectorAll('.sidebar-dropdown').forEach(d => d.classList.remove('active'));
+
+                            if (isActive) {
+                                parent.classList.remove('active');
+                            } else {
+                                parent.classList.add('active');
+                            }
+                        });
                     });
-                }
-            }
 
-            // Sidebar Dropdown Toggle Logic
-            document.querySelectorAll('.sidebar-dropdown-toggle').forEach(toggle => {
-                toggle.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const parent = this.closest('.sidebar-dropdown');
-                    const isActive = parent.classList.contains('active');
-
-                    // Close other dropdowns (optional, but cleaner)
-                    // document.querySelectorAll('.sidebar-dropdown').forEach(d => d.classList.remove('active'));
-
-                    if (isActive) {
-                        parent.classList.remove('active');
-                    } else {
-                        parent.classList.add('active');
-                    }
-                });
-            });
-
-            // Ensure active dropdowns are open on load
-            document.addEventListener('DOMContentLoaded', function () {
-                const activeSubmenuLink = document.querySelector('.submenu-link.active');
-                if (activeSubmenuLink) {
-                    const parentDropdown = activeSubmenuLink.closest('.sidebar-dropdown');
-                    if (parentDropdown) {
-                        parentDropdown.classList.add('active');
-                    }
-                }
-            });
-        </script>
-
-        {{-- Theme Toggle Script --}}
-        <script>
-            (function () {
-                const themeOptions = document.querySelectorAll('.theme-option');
-                const themeIcon = document.getElementById('themeIcon');
-                const themeLabel = document.getElementById('themeLabel');
-                const htmlEl = document.documentElement;
-
-                function getEffectiveTheme(pref) {
-                    if (pref === 'system') {
-                        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                    }
-                    return pref;
-                }
-
-                function applyTheme(pref) {
-                    const effective = getEffectiveTheme(pref);
-                    htmlEl.setAttribute('data-bs-theme', effective);
-                    localStorage.setItem('artika-theme', pref);
-
-                    // Update button icon & label if they exist
-                    const themeIcon = document.getElementById('themeIcon');
-                    const themeLabel = document.getElementById('themeLabel');
-                    const icons = { light: 'fa-sun', dark: 'fa-moon', system: 'fa-desktop' };
-                    const labels = { light: 'Light', dark: 'Dark', system: 'System' };
-
-                    if (themeIcon) {
-                        themeIcon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
-                    }
-                    if (themeLabel) {
-                        themeLabel.textContent = labels[pref] || 'Light';
-                    }
-
-                    // Update active indicator
-                    themeOptions.forEach(opt => {
-                        if (opt.dataset.theme === pref) {
-                            opt.classList.add('active');
-                            opt.querySelector('.theme-check')?.classList.remove('d-none');
-                        } else {
-                            opt.classList.remove('active');
-                            opt.querySelector('.theme-check')?.classList.add('d-none');
+                    // Ensure active dropdowns are open on load
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const activeSubmenuLink = document.querySelector('.submenu-link.active');
+                        if (activeSubmenuLink) {
+                            const parentDropdown = activeSubmenuLink.closest('.sidebar-dropdown');
+                            if (parentDropdown) {
+                                parentDropdown.classList.add('active');
+                            }
                         }
                     });
-                }
+                </script>
 
-                // Init
-                const saved = localStorage.getItem('artika-theme') || 'system';
-                applyTheme(saved);
+                {{-- Theme Toggle Script --}}
+                <script>
+                    (function () {
+                        const themeOptions = document.querySelectorAll('.theme-option');
+                        const themeIcon = document.getElementById('themeIcon');
+                        const themeLabel = document.getElementById('themeLabel');
+                        const htmlEl = document.documentElement;
 
-                // Click handlers
-                themeOptions.forEach(opt => {
-                    opt.addEventListener('click', () => applyTheme(opt.dataset.theme));
-                });
+                        function getEffectiveTheme(pref) {
+                            if (pref === 'system') {
+                                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                            }
+                            return pref;
+                        }
 
-                // Listen for system preference changes
-                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-                    if (localStorage.getItem('artika-theme') === 'system') {
-                        applyTheme('system');
+                        function applyTheme(pref) {
+                            const effective = getEffectiveTheme(pref);
+                            htmlEl.setAttribute('data-bs-theme', effective);
+                            localStorage.setItem('artika-theme', pref);
+
+                            // Update button icon & label if they exist
+                            const themeIcon = document.getElementById('themeIcon');
+                            const themeLabel = document.getElementById('themeLabel');
+                            const icons = { light: 'fa-sun', dark: 'fa-moon', system: 'fa-desktop' };
+                            const labels = { light: 'Light', dark: 'Dark', system: 'System' };
+
+                            if (themeIcon) {
+                                themeIcon.className = 'fa-solid ' + (icons[pref] || 'fa-sun');
+                            }
+                            if (themeLabel) {
+                                themeLabel.textContent = labels[pref] || 'Light';
+                            }
+
+                            // Update active indicator
+                            themeOptions.forEach(opt => {
+                                if (opt.dataset.theme === pref) {
+                                    opt.classList.add('active');
+                                    opt.querySelector('.theme-check')?.classList.remove('d-none');
+                                } else {
+                                    opt.classList.remove('active');
+                                    opt.querySelector('.theme-check')?.classList.add('d-none');
+                                }
+                            });
+                        }
+
+                        // Init
+                        const saved = localStorage.getItem('artika-theme') || 'system';
+                        applyTheme(saved);
+
+                        // Click handlers
+                        themeOptions.forEach(opt => {
+                            opt.addEventListener('click', () => applyTheme(opt.dataset.theme));
+                        });
+
+                        // Listen for system preference changes
+                        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                            if (localStorage.getItem('artika-theme') === 'system') {
+                                applyTheme('system');
+                            }
+                        });
+                    })();
+                </script>
+
+                @stack('scripts')
+
+                <script>
+                    // Professional Notification Helpers
+                    const ArtikaToast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            popup: 'artika-swal-toast'
+                        },
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+
+                    function showToast(icon, title) {
+                        ArtikaToast.fire({
+                            icon: icon,
+                            title: title
+                        });
                     }
-                });
-            })();
-        </script>
 
-        @stack('scripts')
+                    function confirmAction(options = {}) {
+                        const defaults = {
+                            title: 'Apakah Anda yakin?',
+                            text: "Tindakan ini tidak dapat dibatalkan!",
+                            icon: 'warning',
+                            confirmButtonText: 'Ya, Lanjutkan!',
+                            cancelButtonText: 'Batal'
+                        };
 
-        <script>
-            // Professional Notification Helpers
-            const ArtikaToast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                customClass: {
-                    popup: 'artika-swal-toast'
-                },
-                didOpen: (toast) => {
-                    toast.addEventListener('mouseenter', Swal.stopTimer)
-                    toast.addEventListener('mouseleave', Swal.resumeTimer)
-                }
-            });
+                        const settings = { ...defaults, ...options };
 
-            function showToast(icon, title) {
-                ArtikaToast.fire({
-                    icon: icon,
-                    title: title
-                });
-            }
-
-            function confirmAction(options = {}) {
-                const defaults = {
-                    title: 'Apakah Anda yakin?',
-                    text: "Tindakan ini tidak dapat dibatalkan!",
-                    icon: 'warning',
-                    confirmButtonText: 'Ya, Lanjutkan!',
-                    cancelButtonText: 'Batal'
-                };
-
-                const settings = { ...defaults, ...options };
-
-                return Swal.fire({
-                    title: settings.title,
-                    text: settings.text,
-                    icon: settings.icon,
-                    showCancelButton: true,
-                    confirmButtonColor: 'var(--color-primary-dark)',
-                    cancelButtonColor: 'var(--gray-100)',
-                    confirmButtonText: settings.confirmButtonText,
-                    cancelButtonText: settings.cancelButtonText,
-                    customClass: {
-                        popup: 'artika-swal-popup',
-                        title: 'artika-swal-title',
-                        confirmButton: 'artika-swal-confirm-btn',
-                        cancelButton: 'artika-swal-cancel-btn'
-                    },
-                    buttonsStyling: false
-                });
-            }
-
-            // Flash Message Handling
-            document.addEventListener('DOMContentLoaded', function () {
-                @if(session('success') || session('status'))
-                    showToast('success', "{{ session('success') ?: session('status') }}");
-                @endif
-
-                @if(session('error'))
-                    showToast('error', "{{ session('error') }}");
-                @endif
-
-                @if(session('warning'))
-                    showToast('warning', "{{ session('warning') }}");
-                @endif
-
-                @if($errors->any())
-                    showToast('error', "{{ $errors->first() }}");
-                @endif
-            });
-
-            // Global Numeric Input Validation
-            document.addEventListener('keydown', function (e) {
-                if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
-                    // Block 'e', 'E', '-', '+', '.', ','
-                    const blockedKeys = ['e', 'E', '-', '+', '.', ','];
-                    if (blockedKeys.includes(e.key)) {
-                        e.preventDefault();
+                        return Swal.fire({
+                            title: settings.title,
+                            text: settings.text,
+                            icon: settings.icon,
+                            showCancelButton: true,
+                            confirmButtonColor: 'var(--color-primary-dark)',
+                            cancelButtonColor: 'var(--gray-100)',
+                            confirmButtonText: settings.confirmButtonText,
+                            cancelButtonText: settings.cancelButtonText,
+                            customClass: {
+                                popup: 'artika-swal-popup',
+                                title: 'artika-swal-title',
+                                confirmButton: 'artika-swal-confirm-btn',
+                                cancelButton: 'artika-swal-cancel-btn'
+                            },
+                            buttonsStyling: false
+                        });
                     }
-                }
+
+                    // Flash Message Handling
+                    document.addEventListener('DOMContentLoaded', function () {
+                        @if(session('success') || session('status'))
+                            showToast('success', "{{ session('success') ?: session('status') }}");
+                        @endif
+
+                        @if(session('error'))
+                            showToast('error', "{{ session('error') }}");
+                        @endif
+
+                        @if(session('warning'))
+                            showToast('warning', "{{ session('warning') }}");
+                        @endif
+
+                        @if($errors->any())
+                            showToast('error', "{{ $errors->first() }}");
+                        @endif
             });
 
-            // Prevent paste of non-numeric characters
-            document.addEventListener('paste', function (e) {
-                if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
-                    const pasteData = (e.clipboardData || window.clipboardData).getData('text');
-                    if (!/^\d+$/.test(pasteData)) {
-                        e.preventDefault();
-                        showToast('warning', 'Hanya angka bulat yang diperbolehkan');
-                    }
-                }
-            });
-        </script>
+                    // Global Numeric Input Validation
+                    document.addEventListener('keydown', function (e) {
+                        if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                            // Block 'e', 'E', '-', '+', '.', ','
+                            const blockedKeys = ['e', 'E', '-', '+', '.', ','];
+                            if (blockedKeys.includes(e.key)) {
+                                e.preventDefault();
+                            }
+                        }
+                    });
+
+                    // Prevent paste of non-numeric characters
+                    document.addEventListener('paste', function (e) {
+                        if (e.target.tagName === 'INPUT' && e.target.type === 'number') {
+                            const pasteData = (e.clipboardData || window.clipboardData).getData('text');
+                            if (!/^\d+$/.test(pasteData)) {
+                                e.preventDefault();
+                                showToast('warning', 'Hanya angka bulat yang diperbolehkan');
+                            }
+                        }
+                    });
+                </script>
 
 </body>
 
