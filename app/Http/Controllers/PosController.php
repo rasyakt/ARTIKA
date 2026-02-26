@@ -143,7 +143,7 @@ class PosController extends Controller
             ];
 
             // Dynamic validation for payment method and proof
-            $paymentMethod = \App\Models\PaymentMethod::where('slug', $validated['payment_method'])->first();
+            $paymentMethod = PaymentMethod::where('slug', $validated['payment_method'])->first();
 
             // Handle Payment Proof (compressed)
             if ($request->hasFile('payment_proof')) {
