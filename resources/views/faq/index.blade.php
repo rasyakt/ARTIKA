@@ -17,8 +17,7 @@
 
         {{-- Search Bar --}}
         <div class="card border-0 shadow-sm mb-4" style="border-radius: 16px; overflow: hidden;">
-            <div class="card-body p-3 p-lg-4"
-                style="background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);">
+            <div class="card-body p-3 p-lg-4" style="background: var(--color-primary-dark);">
                 <div class="position-relative mx-auto" style="max-width: 600px;">
                     <i class="fa-solid fa-magnifying-glass position-absolute"
                         style="left: 16px; top: 50%; transform: translateY(-50%); color: var(--color-primary); font-size: 1rem; z-index: 2;"></i>
@@ -61,7 +60,7 @@
                                         type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $faq->id }}"
                                         aria-expanded="false" aria-controls="collapse-{{ $faq->id }}"
                                         style="padding: 1rem 1.25rem; font-weight: 600; color: var(--color-text, #333); font-size: 0.925rem;">
-                                        <span class="faq-icon d-flex align-items-center justify-content-center flex-shrink-0"
+                                        <span class="faq-icon d-flex align-items-center justify-content-center shrink-0"
                                             style="width: 32px; height: 32px; border-radius: 8px; background: var(--brown-50); color: var(--color-primary); font-size: 0.85rem;">
                                             <i class="fa-solid fa-chevron-right faq-arrow" style="transition: transform 0.3s;"></i>
                                         </span>
@@ -113,7 +112,7 @@
         }
 
         .category-pill.active {
-            background: var(--gradient-primary) !important;
+            background: var(--color-primary-dark) !important;
             border-color: var(--color-primary) !important;
             color: white !important;
         }

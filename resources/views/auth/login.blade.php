@@ -7,11 +7,22 @@
     <title>{{ $title ?? 'Login' }} - ARTIKA POS</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
     <!-- Using inline SVG icons for reliability and theme control (removed external CDN) -->
+    <!-- Theme Detection ASAP -->
+    <script>
+        (function () {
+            const saved = localStorage.getItem('artika-theme') || 'system';
+            if (saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+            }
+        })();
+    </script>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
     {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <style>
         body {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            background-color: var(--gray-50);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -21,9 +32,16 @@
             overflow-x: hidden;
             overflow-y: auto;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Dark mode overrides for background */
+        [data-bs-theme="dark"] body {
+            background-color: #030712;
         }
 
         /* Animated background pattern */
+        /* Subtle grayscale pattern for ultra-clean look */
         body::before {
             content: '';
             position: absolute;
@@ -32,10 +50,17 @@
             right: 0;
             bottom: 0;
             background-image:
-                radial-gradient(circle at 20% 50%, var(--color-primary-lighter) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, var(--color-primary-light) 0%, transparent 50%);
-            opacity: 0.15;
+                radial-gradient(circle at 20% 50%, var(--gray-200) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--gray-300) 0%, transparent 50%);
+            opacity: 0.1;
             animation: float 15s ease-in-out infinite;
+        }
+
+        [data-bs-theme="dark"] body::before {
+            background-image:
+                radial-gradient(circle at 20% 50%, #1f2937 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, #111827 0%, transparent 50%);
+            opacity: 0.4;
         }
 
         @keyframes float {
@@ -80,15 +105,16 @@
         }
 
         .card-header {
-            background: var(--color-primary);
-            color: white;
-            border-bottom: none;
+            background: var(--card-bg);
+            color: var(--color-text);
+            border-bottom: 1px solid var(--gray-100);
             padding: 2.5rem 2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
+        /* Subtle animated texture in header while keeping it neutral */
         .card-header::before {
             content: '';
             position: absolute;
@@ -96,8 +122,13 @@
             right: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, var(--gray-50) 0%, transparent 70%);
+            opacity: 0.5;
             animation: rotate 20s linear infinite;
+        }
+
+        [data-bs-theme="dark"] .card-header::before {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
         }
 
         @keyframes rotate {
@@ -121,8 +152,12 @@
         .brand-logo img {
             max-width: 260px;
             height: auto;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
             transition: transform 0.3s ease;
+        }
+
+        [data-bs-theme="dark"] .brand-logo img {
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.5));
         }
 
         .brand-logo img:hover {
@@ -140,7 +175,7 @@
 
         .card-body {
             padding: 2.5rem 2rem;
-            background: white;
+            background: var(--card-bg);
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -163,6 +198,7 @@
         .input-wrapper {
             display: block;
             width: 100%;
+            border: 2px solid var(--gray-200);
         }
 
         .input-wrapper .form-control {
@@ -173,21 +209,22 @@
         .form-control {
             border-radius: 12px;
             padding: 14px 18px;
-            border: 2px solid var(--color-secondary-light);
+            border: 2px solid var(--gray-200);
             transition: all 0.3s ease;
             font-size: 1rem;
-            background: var(--brown-50);
+            background: var(--gray-50);
+            color: var(--color-text);
         }
 
         .form-control:focus {
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 4px var(--brown-100);
-            background: white;
+            box-shadow: 0 0 0 4px var(--color-secondary-light);
+            background: var(--card-bg);
             outline: none;
         }
 
         .form-control::placeholder {
-            color: var(--color-primary-lighter);
+            color: gray;
         }
 
         .login-btn-container {
@@ -296,8 +333,12 @@
         .decorative-svg {
             width: 140px;
             height: 140px;
-            color: rgba(255, 255, 255, 0.9);
-            opacity: 0.06;
+            color: var(--color-primary);
+            opacity: 0.1;
+        }
+
+        [data-bs-theme="dark"] .decorative-svg {
+            opacity: 0.2;
         }
 
         .password-field {
@@ -602,8 +643,8 @@
                         <input type="hidden" name="role" value="{{ $role }}">
                     @endif
                     <div class="mb-4 input-group">
-                        <label for="username" class="form-label">Username / NIS</label>
-                        <div class="input-wrapper">
+                        <label for="username" class="form-label">Username</label>
+                        <div class="input-wrapper rounded-4">
                             <span class="input-icon" aria-hidden>
                                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -620,7 +661,7 @@
                     </div>
                     <div class="mb-4 input-group">
                         <label for="password" class="form-label">Password</label>
-                        <div class="input-wrapper">
+                        <div class="input-wrapper rounded-4">
                             <span class="input-icon" aria-hidden>
                                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">

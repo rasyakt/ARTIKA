@@ -250,7 +250,7 @@
                             <div class="col-md-6">
                                 <label class="form-label">{{ __('common.action') }}</label>
                                 <select name="action" class="form-control">
-                                    <option value="">-- {{ __('admin.all_actions') }} --</option>
+                                    <option value="">{{ __('admin.all_actions') }}</option>
                                     @foreach($actions as $action)
                                         <option value="{{ $action }}" @selected(request('action') == $action)>
                                             {{ $action }}
@@ -261,7 +261,7 @@
                             <div class="col-md-6">
                                 <label class="form-label">{{ __('common.role') }}</label>
                                 <select name="role_id" class="form-control">
-                                    <option value="">-- {{ __('admin.all_roles') ?? 'All Roles' }} --</option>
+                                    <option value="">{{ __('admin.all_roles') ?? 'All Roles' }}</option>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->id }}" @selected(request('role_id') == $role->id)>
                                             {{ ucfirst($role->name) }}

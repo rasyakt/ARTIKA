@@ -11,7 +11,7 @@
                 <p class="text-muted mb-0">{{ __('admin.manage_promos_subtitle') }}</p>
             </div>
             <button class="btn shadow-sm" data-bs-toggle="modal" data-bs-target="#addPromoModal"
-                style="background: var(--gradient-primary); color: white; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;">
+                style="background: var(--color-primary-dark); color: white; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;">
                 <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_promo') }}
             </button>
         </div>

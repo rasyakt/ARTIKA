@@ -6,381 +6,773 @@ class ThemeHelper
 {
     /**
      * Get all available color palettes.
-     * Each palette defines CSS custom property values for both light and dark modes.
+     * Professional Minimalist Style: Neutral structural backgrounds, vibrant accents.
      */
     public static function getPalettes(): array
     {
+        $neutralLight = [
+            '--gray-50' => '#f8f9fa',
+            '--gray-100' => '#f1f3f5',
+            '--gray-200' => '#e9ecef',
+            '--gray-300' => '#dee2e6',
+            '--gray-400' => '#ced4da',
+            '--gray-500' => '#adb5bd',
+            '--gray-600' => '#6c757d',
+            '--gray-700' => '#495057',
+            '--gray-800' => '#343a40',
+            '--gray-900' => '#212529',
+            '--navbar-bg' => '#212529',
+            '--navbar-text' => '#ffffff',
+            '--brown-50' => '#f8f9fa',
+            '--brown-100' => '#f1f3f5',
+            '--brown-200' => '#e9ecef',
+            '--brown-300' => '#dee2e6',
+            '--brown-400' => '#ced4da',
+            '--brown-500' => '#adb5bd',
+            '--brown-600' => '#6c757d',
+            '--brown-700' => '#495057',
+            '--brown-800' => '#343a40',
+            '--brown-900' => '#212529',
+            '--color-text' => '#212529',
+            '--card-bg' => '#ffffff',
+            '--color-cream' => '#ffffff',
+            '--color-white' => '#ffffff',
+        ];
+
+        $neutralDark = [
+            '--gray-50' => '#030712', // Body dark
+            '--gray-100' => '#111827', // Card/Surface
+            '--gray-200' => '#1f2937', // Border
+            '--gray-300' => '#374151',
+            '--gray-400' => '#4b5563',
+            '--gray-500' => '#6b7280',
+            '--gray-600' => '#9ca3af',
+            '--gray-700' => '#d1d5db',
+            '--gray-800' => '#e5e7eb',
+            '--gray-900' => '#f9fafb', // Text light
+            '--navbar-bg' => '#000000',
+            '--navbar-text' => '#ffffff',
+            '--brown-50' => '#030712',
+            '--brown-100' => '#111827',
+            '--brown-200' => '#1f2937',
+            '--brown-300' => '#374151',
+            '--brown-400' => '#4b5563',
+            '--brown-500' => '#6b7280',
+            '--brown-600' => '#9ca3af',
+            '--brown-700' => '#d1d5db',
+            '--brown-800' => '#e5e7eb',
+            '--brown-900' => '#f9fafb',
+            '--color-text' => '#f9fafb',
+            '--card-bg' => '#111827',
+            '--color-cream' => '#111827',
+            '--color-white' => '#111827',
+        ];
+
         return [
             'brown' => [
                 'name' => 'Coklat Klasik',
                 'icon' => 'fa-mug-hot',
-                'light' => [
+                'light' => array_merge($neutralLight, [
                     '--color-primary' => '#85695a',
                     '--color-primary-dark' => '#6f5849',
                     '--color-primary-light' => '#a18072',
                     '--color-primary-lighter' => '#bfa094',
                     '--color-secondary' => '#d2bab0',
                     '--color-secondary-dark' => '#bfa094',
-                    '--color-secondary-light' => '#e0cec7',
-                    '--color-accent-warm' => '#c17a5c',
-                    '--color-accent-gold' => '#d4a574',
-                    '--color-cream' => '#f5e6d3',
-                    '--brown-50' => '#fdf8f6',
-                    '--brown-100' => '#f2e8e5',
-                    '--brown-200' => '#eaddd7',
-                    '--brown-300' => '#e0cec7',
-                    '--brown-400' => '#d2bab0',
-                    '--brown-500' => '#bfa094',
-                    '--brown-600' => '#a18072',
-                    '--brown-700' => '#85695a',
-                    '--brown-800' => '#6f5849',
-                    '--brown-900' => '#5c4a3f',
-                    '--card-bg' => '#fdf8f6',
-                    '--gradient-primary' => 'linear-gradient(135deg, #85695a 0%, #6f5849 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #c17a5c 0%, #85695a 100%)',
-                ],
-                'dark' => [
+                    '--color-secondary-light' => '#f8f4f2',
+                ]),
+                'dark' => array_merge($neutralDark, [
                     '--color-primary' => '#a18072',
                     '--color-primary-dark' => '#85695a',
                     '--color-primary-light' => '#b49e8e',
                     '--color-primary-lighter' => '#c8b4a4',
                     '--color-secondary' => '#5c4d42',
                     '--color-secondary-dark' => '#4a3d35',
-                    '--color-secondary-light' => '#3a302a',
-                    '--color-accent-warm' => '#d4976e',
-                    '--color-accent-gold' => '#e0b88a',
-                    '--color-cream' => '#3a302a',
-                    '--brown-50' => '#2d2520',
-                    '--brown-100' => '#3a302a',
-                    '--brown-200' => '#4a3d35',
-                    '--brown-300' => '#5c4d42',
-                    '--brown-400' => '#7a6858',
-                    '--brown-500' => '#9a8474',
-                    '--brown-600' => '#b49e8e',
-                    '--brown-700' => '#c8b4a4',
-                    '--brown-800' => '#daccbf',
-                    '--brown-900' => '#ece2d8',
-                    '--card-bg' => '#2a2a2a',
-                    '--gradient-primary' => 'linear-gradient(135deg, #5c4d42 0%, #4a3d35 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #7a5a42 0%, #5c4d42 100%)',
-                ],
+                    '--color-secondary-light' => '#1a1410',
+                ]),
             ],
 
             'sage' => [
                 'name' => 'Sage Garden',
                 'icon' => 'fa-leaf',
-                'light' => [
-                    '--color-primary' => '#6b8f71',
-                    '--color-primary-dark' => '#4a7050',
-                    '--color-primary-light' => '#8fb296',
-                    '--color-primary-lighter' => '#b3d1b8',
-                    '--color-secondary' => '#c5dbc8',
-                    '--color-secondary-dark' => '#9fc4a4',
-                    '--color-secondary-light' => '#dde9df',
-                    '--color-accent-warm' => '#8db580',
-                    '--color-accent-gold' => '#b8cc7a',
-                    '--color-cream' => '#edf5ee',
-                    '--brown-50' => '#f3f8f4',
-                    '--brown-100' => '#e2ede4',
-                    '--brown-200' => '#d1e2d4',
-                    '--brown-300' => '#b8d3bc',
-                    '--brown-400' => '#9fc4a4',
-                    '--brown-500' => '#8fb296',
-                    '--brown-600' => '#6b8f71',
-                    '--brown-700' => '#4a7050',
-                    '--brown-800' => '#3a5c40',
-                    '--brown-900' => '#2d4a33',
-                    '--card-bg' => '#f7faf7',
-                    '--gradient-primary' => 'linear-gradient(135deg, #6b8f71 0%, #4a7050 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #8db580 0%, #6b8f71 100%)',
-                ],
-                'dark' => [
-                    '--color-primary' => '#8fb296',
-                    '--color-primary-dark' => '#6b8f71',
-                    '--color-primary-light' => '#a8c5ad',
-                    '--color-primary-lighter' => '#c0d6c3',
-                    '--color-secondary' => '#3a5c40',
-                    '--color-secondary-dark' => '#2d4a33',
-                    '--color-secondary-light' => '#253d29',
-                    '--color-accent-warm' => '#a5cc98',
-                    '--color-accent-gold' => '#cce09a',
-                    '--color-cream' => '#253d29',
-                    '--brown-50' => '#1e2b20',
-                    '--brown-100' => '#283828',
-                    '--brown-200' => '#354535',
-                    '--brown-300' => '#435443',
-                    '--brown-400' => '#5a6f5c',
-                    '--brown-500' => '#788d7a',
-                    '--brown-600' => '#99b09b',
-                    '--brown-700' => '#b5c8b7',
-                    '--brown-800' => '#d0ddd1',
-                    '--brown-900' => '#e8f0e9',
-                    '--card-bg' => '#222e24',
-                    '--gradient-primary' => 'linear-gradient(135deg, #3a5c40 0%, #2d4a33 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #4a7050 0%, #3a5c40 100%)',
-                ],
+                'light' => array_merge($neutralLight, [
+                    '--color-primary' => '#10b981',
+                    '--color-primary-dark' => '#059669',
+                    '--color-primary-light' => '#34d399',
+                    '--color-primary-lighter' => '#6ee7b7',
+                    '--color-secondary' => '#a7f3d0',
+                    '--color-secondary-dark' => '#6ee7b7',
+                    '--color-secondary-light' => '#f0fdf4',
+                ]),
+                'dark' => array_merge($neutralDark, [
+                    '--color-primary' => '#34d399',
+                    '--color-primary-dark' => '#10b981',
+                    '--color-primary-light' => '#6ee7b7',
+                    '--color-primary-lighter' => '#a7f3d0',
+                    '--color-secondary' => '#064e3b',
+                    '--color-secondary-dark' => '#022c22',
+                    '--color-secondary-light' => '#022c22',
+                ]),
             ],
 
             'ocean' => [
                 'name' => 'Ocean Breeze',
                 'icon' => 'fa-water',
-                'light' => [
-                    '--color-primary' => '#5b8fa8',
-                    '--color-primary-dark' => '#3d7a96',
-                    '--color-primary-light' => '#7eb0c7',
-                    '--color-primary-lighter' => '#a8cdd9',
-                    '--color-secondary' => '#bdd8e4',
-                    '--color-secondary-dark' => '#8ec3d6',
-                    '--color-secondary-light' => '#d6eaf0',
-                    '--color-accent-warm' => '#6badc4',
-                    '--color-accent-gold' => '#7cc5d5',
-                    '--color-cream' => '#eaf4f8',
-                    '--brown-50' => '#f0f7fa',
-                    '--brown-100' => '#ddedf3',
-                    '--brown-200' => '#c8e1eb',
-                    '--brown-300' => '#aed2e0',
-                    '--brown-400' => '#8ec3d6',
-                    '--brown-500' => '#7eb0c7',
-                    '--brown-600' => '#5b8fa8',
-                    '--brown-700' => '#3d7a96',
-                    '--brown-800' => '#2e6178',
-                    '--brown-900' => '#234d5e',
-                    '--card-bg' => '#f5f9fc',
-                    '--gradient-primary' => 'linear-gradient(135deg, #5b8fa8 0%, #3d7a96 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #6badc4 0%, #5b8fa8 100%)',
-                ],
-                'dark' => [
-                    '--color-primary' => '#7eb0c7',
-                    '--color-primary-dark' => '#5b8fa8',
-                    '--color-primary-light' => '#9cc5d6',
-                    '--color-primary-lighter' => '#b8d6e2',
-                    '--color-secondary' => '#2e6178',
-                    '--color-secondary-dark' => '#234d5e',
-                    '--color-secondary-light' => '#1c3d4b',
-                    '--color-accent-warm' => '#85c4da',
-                    '--color-accent-gold' => '#96d5e5',
-                    '--color-cream' => '#1c3d4b',
-                    '--brown-50' => '#1a2830',
-                    '--brown-100' => '#233640',
-                    '--brown-200' => '#2e4652',
-                    '--brown-300' => '#3c5866',
-                    '--brown-400' => '#527382',
-                    '--brown-500' => '#6e8f9e',
-                    '--brown-600' => '#90aebb',
-                    '--brown-700' => '#b0c8d2',
-                    '--brown-800' => '#cddde5',
-                    '--brown-900' => '#e5eff3',
-                    '--card-bg' => '#1e2e36',
-                    '--gradient-primary' => 'linear-gradient(135deg, #2e6178 0%, #234d5e 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #3d7a96 0%, #2e6178 100%)',
-                ],
+                'light' => array_merge($neutralLight, [
+                    '--color-primary' => '#0ea5e9',
+                    '--color-primary-dark' => '#0284c7',
+                    '--color-primary-light' => '#38bdf8',
+                    '--color-primary-lighter' => '#7dd3fc',
+                    '--color-secondary' => '#bae6fd',
+                    '--color-secondary-dark' => '#7dd3fc',
+                    '--color-secondary-light' => '#f0f9ff',
+                ]),
+                'dark' => array_merge($neutralDark, [
+                    '--color-primary' => '#38bdf8',
+                    '--color-primary-dark' => '#0ea5e9',
+                    '--color-primary-light' => '#7dd3fc',
+                    '--color-primary-lighter' => '#bae6fd',
+                    '--color-secondary' => '#0c4a6e',
+                    '--color-secondary-dark' => '#082f49',
+                    '--color-secondary-light' => '#020617',
+                ]),
             ],
 
             'lavender' => [
                 'name' => 'Lavender Mist',
                 'icon' => 'fa-spa',
-                'light' => [
-                    '--color-primary' => '#8b7db5',
-                    '--color-primary-dark' => '#6f5f9e',
-                    '--color-primary-light' => '#a99dca',
-                    '--color-primary-lighter' => '#c4bbdb',
-                    '--color-secondary' => '#d4cce6',
-                    '--color-secondary-dark' => '#b5a8d4',
-                    '--color-secondary-light' => '#e8e3f0',
-                    '--color-accent-warm' => '#9f8ec5',
-                    '--color-accent-gold' => '#b8a0d4',
-                    '--color-cream' => '#f0ecf6',
-                    '--brown-50' => '#f5f2f9',
-                    '--brown-100' => '#e8e3f0',
-                    '--brown-200' => '#dbd4e7',
-                    '--brown-300' => '#cac0dc',
-                    '--brown-400' => '#b5a8d4',
-                    '--brown-500' => '#a99dca',
-                    '--brown-600' => '#8b7db5',
-                    '--brown-700' => '#6f5f9e',
-                    '--brown-800' => '#594c82',
-                    '--brown-900' => '#463c68',
-                    '--card-bg' => '#f8f5fb',
-                    '--gradient-primary' => 'linear-gradient(135deg, #8b7db5 0%, #6f5f9e 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #9f8ec5 0%, #8b7db5 100%)',
-                ],
-                'dark' => [
-                    '--color-primary' => '#a99dca',
-                    '--color-primary-dark' => '#8b7db5',
-                    '--color-primary-light' => '#beb4d6',
-                    '--color-primary-lighter' => '#d2cbe2',
-                    '--color-secondary' => '#594c82',
-                    '--color-secondary-dark' => '#463c68',
-                    '--color-secondary-light' => '#382f54',
-                    '--color-accent-warm' => '#b8a6d4',
-                    '--color-accent-gold' => '#ccb8e2',
-                    '--color-cream' => '#382f54',
-                    '--brown-50' => '#22202e',
-                    '--brown-100' => '#2e2b3d',
-                    '--brown-200' => '#3c384e',
-                    '--brown-300' => '#4d4862',
-                    '--brown-400' => '#655e7c',
-                    '--brown-500' => '#7f7898',
-                    '--brown-600' => '#9e96b4',
-                    '--brown-700' => '#bab3cb',
-                    '--brown-800' => '#d3cede',
-                    '--brown-900' => '#e9e6f0',
-                    '--card-bg' => '#262434',
-                    '--gradient-primary' => 'linear-gradient(135deg, #594c82 0%, #463c68 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #6f5f9e 0%, #594c82 100%)',
-                ],
+                'light' => array_merge($neutralLight, [
+                    '--color-primary' => '#8b5cf6',
+                    '--color-primary-dark' => '#7c3aed',
+                    '--color-primary-light' => '#a78bfa',
+                    '--color-primary-lighter' => '#c4b5fd',
+                    '--color-secondary' => '#ddd6fe',
+                    '--color-secondary-dark' => '#c4b5fd',
+                    '--color-secondary-light' => '#f5f3ff',
+                ]),
+                'dark' => array_merge($neutralDark, [
+                    '--color-primary' => '#a78bfa',
+                    '--color-primary-dark' => '#8b5cf6',
+                    '--color-primary-light' => '#c4b5fd',
+                    '--color-primary-lighter' => '#ddd6fe',
+                    '--color-secondary' => '#4c1d95',
+                    '--color-secondary-dark' => '#2e1065',
+                    '--color-secondary-light' => '#030014',
+                ]),
             ],
 
             'rose' => [
                 'name' => 'Rose Quartz',
                 'icon' => 'fa-heart',
-                'light' => [
-                    '--color-primary' => '#b5838d',
-                    '--color-primary-dark' => '#9e6370',
-                    '--color-primary-light' => '#d4a5ad',
-                    '--color-primary-lighter' => '#e6c5cb',
-                    '--color-secondary' => '#e8ced3',
-                    '--color-secondary-dark' => '#d4a5ad',
-                    '--color-secondary-light' => '#f2e0e4',
-                    '--color-accent-warm' => '#c4919c',
-                    '--color-accent-gold' => '#dba5a5',
-                    '--color-cream' => '#f9eff1',
-                    '--brown-50' => '#faf3f4',
-                    '--brown-100' => '#f2e0e4',
-                    '--brown-200' => '#e8ced3',
-                    '--brown-300' => '#dbb8bf',
-                    '--brown-400' => '#d4a5ad',
-                    '--brown-500' => '#c9929c',
-                    '--brown-600' => '#b5838d',
-                    '--brown-700' => '#9e6370',
-                    '--brown-800' => '#824e5a',
-                    '--brown-900' => '#683d48',
-                    '--card-bg' => '#fcf6f7',
-                    '--gradient-primary' => 'linear-gradient(135deg, #b5838d 0%, #9e6370 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #c4919c 0%, #b5838d 100%)',
-                ],
-                'dark' => [
-                    '--color-primary' => '#d4a5ad',
-                    '--color-primary-dark' => '#b5838d',
-                    '--color-primary-light' => '#e0bbc1',
-                    '--color-primary-lighter' => '#ead0d4',
-                    '--color-secondary' => '#824e5a',
-                    '--color-secondary-dark' => '#683d48',
-                    '--color-secondary-light' => '#53303a',
-                    '--color-accent-warm' => '#daa8b0',
-                    '--color-accent-gold' => '#ebbaba',
-                    '--color-cream' => '#53303a',
-                    '--brown-50' => '#2c2024',
-                    '--brown-100' => '#3a2b30',
-                    '--brown-200' => '#4c383f',
-                    '--brown-300' => '#604850',
-                    '--brown-400' => '#7a5f68',
-                    '--brown-500' => '#967a82',
-                    '--brown-600' => '#b298a0',
-                    '--brown-700' => '#cab3b9',
-                    '--brown-800' => '#ddcdd1',
-                    '--brown-900' => '#ede4e6',
-                    '--card-bg' => '#30242a',
-                    '--gradient-primary' => 'linear-gradient(135deg, #824e5a 0%, #683d48 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #9e6370 0%, #824e5a 100%)',
-                ],
+                'light' => array_merge($neutralLight, [
+                    '--color-primary' => '#f43f5e',
+                    '--color-primary-dark' => '#e11d48',
+                    '--color-primary-light' => '#fb7185',
+                    '--color-primary-lighter' => '#fda4af',
+                    '--color-secondary' => '#fecdd3',
+                    '--color-secondary-dark' => '#fda4af',
+                    '--color-secondary-light' => '#fff1f2',
+                ]),
+                'dark' => array_merge($neutralDark, [
+                    '--color-primary' => '#fb7185',
+                    '--color-primary-dark' => '#f43f5e',
+                    '--color-primary-light' => '#fda4af',
+                    '--color-primary-lighter' => '#fecdd3',
+                    '--color-secondary' => '#881337',
+                    '--color-secondary-dark' => '#4c0519',
+                    '--color-secondary-light' => '#110005',
+                ]),
             ],
 
             'amber' => [
                 'name' => 'Sunset Amber',
                 'icon' => 'fa-sun',
-                'light' => [
-                    '--color-primary' => '#c08b5c',
-                    '--color-primary-dark' => '#a67040',
-                    '--color-primary-light' => '#d4a87a',
-                    '--color-primary-lighter' => '#e2c4a0',
-                    '--color-secondary' => '#e6d2b8',
-                    '--color-secondary-dark' => '#d4b896',
-                    '--color-secondary-light' => '#f0e4d4',
-                    '--color-accent-warm' => '#d09a60',
-                    '--color-accent-gold' => '#dbb06c',
-                    '--color-cream' => '#faf2e8',
-                    '--brown-50' => '#faf5ee',
-                    '--brown-100' => '#f2e6d4',
-                    '--brown-200' => '#e8d6be',
-                    '--brown-300' => '#dcc4a4',
-                    '--brown-400' => '#d4b896',
-                    '--brown-500' => '#c9a47c',
-                    '--brown-600' => '#c08b5c',
-                    '--brown-700' => '#a67040',
-                    '--brown-800' => '#885a32',
-                    '--brown-900' => '#6e4828',
-                    '--card-bg' => '#fcf8f2',
-                    '--gradient-primary' => 'linear-gradient(135deg, #c08b5c 0%, #a67040 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #d09a60 0%, #c08b5c 100%)',
-                ],
-                'dark' => [
-                    '--color-primary' => '#d4a87a',
-                    '--color-primary-dark' => '#c08b5c',
-                    '--color-primary-light' => '#e0bc96',
-                    '--color-primary-lighter' => '#eacfb0',
-                    '--color-secondary' => '#885a32',
-                    '--color-secondary-dark' => '#6e4828',
-                    '--color-secondary-light' => '#58391e',
-                    '--color-accent-warm' => '#deb078',
-                    '--color-accent-gold' => '#ebc484',
-                    '--color-cream' => '#58391e',
-                    '--brown-50' => '#2a2218',
-                    '--brown-100' => '#382e20',
-                    '--brown-200' => '#4a3d2c',
-                    '--brown-300' => '#5e4e3a',
-                    '--brown-400' => '#7a6650',
-                    '--brown-500' => '#96806a',
-                    '--brown-600' => '#b29c86',
-                    '--brown-700' => '#c8b8a2',
-                    '--brown-800' => '#dbd0c0',
-                    '--brown-900' => '#ece5da',
-                    '--card-bg' => '#2e2620',
-                    '--gradient-primary' => 'linear-gradient(135deg, #885a32 0%, #6e4828 100%)',
-                    '--gradient-warm' => 'linear-gradient(135deg, #a67040 0%, #885a32 100%)',
-                ],
+                'light' => array_merge($neutralLight, [
+                    '--color-primary' => '#f59e0b',
+                    '--color-primary-dark' => '#d97706',
+                    '--color-primary-light' => '#fbbf24',
+                    '--color-primary-lighter' => '#fcd34d',
+                    '--color-secondary' => '#fef3c7',
+                    '--color-secondary-dark' => '#fcd34d',
+                    '--color-secondary-light' => '#fffdf2',
+                ]),
+                'dark' => array_merge($neutralDark, [
+                    '--color-primary' => '#fbbf24',
+                    '--color-primary-dark' => '#f59e0b',
+                    '--color-primary-light' => '#fcd34d',
+                    '--color-primary-lighter' => '#fef3c7',
+                    '--color-secondary' => '#78350f',
+                    '--color-secondary-dark' => '#451a03',
+                    '--color-secondary-light' => '#0c0500',
+                ]),
+            ],
+
+            'emerald' => [
+                'name' => 'Emerald Green',
+                'icon' => 'fa-gem',
+                'light' => array_merge($neutralLight, [
+                    '--color-primary' => '#10b981',
+                    '--color-primary-dark' => '#059669',
+                    '--color-primary-light' => '#34d399',
+                    '--color-primary-lighter' => '#6ee7b7',
+                    '--color-secondary' => '#a7f3d0',
+                    '--color-secondary-dark' => '#6ee7b7',
+                    '--color-secondary-light' => '#f0fdf4',
+                ]),
+                'dark' => array_merge($neutralDark, [
+                    '--color-primary' => '#34d399',
+                    '--color-primary-dark' => '#10b981',
+                    '--color-primary-light' => '#6ee7b7',
+                    '--color-primary-lighter' => '#a7f3d0',
+                    '--color-secondary' => '#064e3b',
+                    '--color-secondary-dark' => '#022c22',
+                    '--color-secondary-light' => '#111827',
+                ]),
+            ],
+
+            'crimson' => [
+                'name' => 'Crimson Red',
+                'icon' => 'fa-fire',
+                'light' => array_merge($neutralLight, [
+                    '--color-primary' => '#dc2626',
+                    '--color-primary-dark' => '#b91c1c',
+                    '--color-primary-light' => '#ef4444',
+                    '--color-primary-lighter' => '#f87171',
+                    '--color-secondary' => '#fecaca',
+                    '--color-secondary-dark' => '#f87171',
+                    '--color-secondary-light' => '#fef2f2',
+                ]),
+                'dark' => array_merge($neutralDark, [
+                    '--color-primary' => '#f87171',
+                    '--color-primary-dark' => '#dc2626',
+                    '--color-primary-light' => '#fca5a5',
+                    '--color-primary-lighter' => '#fecaca',
+                    '--color-secondary' => '#7f1d1d',
+                    '--color-secondary-dark' => '#450a0a',
+                    '--color-secondary-light' => '#111827',
+                ]),
+            ],
+
+            'cobalt' => [
+                'name' => 'Cobalt Blue',
+                'icon' => 'fa-cloud',
+                'light' => array_merge($neutralLight, [
+                    '--color-primary' => '#2563eb',
+                    '--color-primary-dark' => '#1d4ed8',
+                    '--color-primary-light' => '#3b82f6',
+                    '--color-primary-lighter' => '#60a5fa',
+                    '--color-secondary' => '#bfdbfe',
+                    '--color-secondary-dark' => '#60a5fa',
+                    '--color-secondary-light' => '#eff6ff',
+                ]),
+                'dark' => array_merge($neutralDark, [
+                    '--color-primary' => '#60a5fa',
+                    '--color-primary-dark' => '#2563eb',
+                    '--color-primary-light' => '#93c5fd',
+                    '--color-primary-lighter' => '#bfdbfe',
+                    '--color-secondary' => '#1e3a8a',
+                    '--color-secondary-dark' => '#172554',
+                    '--color-secondary-light' => '#111827',
+                ]),
+            ],
+
+            'tangerine' => [
+                'name' => 'Tangerine Orange',
+                'icon' => 'fa-sun',
+                'light' => array_merge($neutralLight, [
+                    '--color-primary' => '#f97316',
+                    '--color-primary-dark' => '#ea580c',
+                    '--color-primary-light' => '#fb923c',
+                    '--color-primary-lighter' => '#fdba74',
+                    '--color-secondary' => '#fed7aa',
+                    '--color-secondary-dark' => '#fdba74',
+                    '--color-secondary-light' => '#fff7ed',
+                ]),
+                'dark' => array_merge($neutralDark, [
+                    '--color-primary' => '#fdba74',
+                    '--color-primary-dark' => '#f97316',
+                    '--color-primary-light' => '#fed7aa',
+                    '--color-primary-lighter' => '#ffedd5',
+                    '--color-secondary' => '#7c2d12',
+                    '--color-secondary-dark' => '#431407',
+                    '--color-secondary-light' => '#111827',
+                ]),
+            ],
+
+            'custom' => [
+                'name' => 'Warna Kustom',
+                'icon' => 'fa-palette',
+                'light' => [],
+                'dark' => [],
             ],
         ];
     }
 
-    /**
-     * Get the CSS variable overrides for a given palette key.
-     * Returns a <style> block string ready to inject into the layout.
-     */
+    public static function derivePaletteFromHex(string $hex): array
+    {
+        [$r, $g, $b] = self::hexToRgb($hex);
+        [$h, $s, $l] = self::rgbToHsl($r, $g, $b);
+
+        $light = [
+            '--color-primary' => $hex,
+            '--color-primary-dark' => self::hslToHex($h, $s, max(0, $l - 12)),
+            '--color-primary-light' => self::hslToHex($h, $s, min(95, $l + 10)),
+            '--color-primary-lighter' => self::hslToHex($h, $s, min(95, $l + 22)),
+            '--color-secondary' => self::hslToHex($h, $s * 0.5, min(95, $l + 34)),
+            '--color-secondary-dark' => self::hslToHex($h, $s * 0.5, min(95, $l + 22)),
+            '--color-secondary-light' => self::hslToHex($h, $s * 0.1, 98),
+            '--gray-50' => '#f8f9fa',
+            '--gray-100' => '#f1f3f5',
+            '--gray-200' => '#e9ecef',
+            '--gray-300' => '#dee2e6',
+            '--gray-400' => '#ced4da',
+            '--gray-500' => '#adb5bd',
+            '--gray-600' => '#6c757d',
+            '--gray-700' => '#495057',
+            '--gray-800' => '#343a40',
+            '--gray-900' => '#212529',
+            '--navbar-bg' => '#212529',
+            '--navbar-text' => '#ffffff',
+            '--brown-50' => '#f8f9fa',
+            '--brown-100' => '#f1f3f5',
+            '--brown-200' => '#e9ecef',
+            '--brown-300' => '#dee2e6',
+            '--brown-400' => '#ced4da',
+            '--brown-500' => '#adb5bd',
+            '--brown-600' => '#6c757d',
+            '--brown-700' => '#495057',
+            '--brown-800' => '#343a40',
+            '--brown-900' => '#212529',
+            '--color-text' => '#212529',
+            '--card-bg' => '#ffffff',
+            '--color-cream' => '#ffffff',
+            '--color-white' => '#ffffff',
+        ];
+
+        $dp = self::hslToHex($h, $s, min(75, $l + 14));
+        $ddark = $hex;
+        $dark = [
+            '--color-primary' => $dp,
+            '--color-primary-dark' => $ddark,
+            '--color-primary-light' => self::hslToHex($h, $s, min(85, $l + 22)),
+            '--color-primary-lighter' => self::hslToHex($h, $s, min(90, $l + 30)),
+            '--color-secondary' => self::hslToHex($h, $s, max(15, $l - 22)),
+            '--color-secondary-dark' => self::hslToHex($h, $s, max(10, $l - 30)),
+            '--color-secondary-light' => '#000000',
+            '--gray-50' => '#030712',
+            '--gray-100' => '#111827',
+            '--gray-200' => '#1f2937',
+            '--gray-300' => '#374151',
+            '--gray-400' => '#4b5563',
+            '--gray-500' => '#6b7280',
+            '--gray-600' => '#9ca3af',
+            '--gray-700' => '#d1d5db',
+            '--gray-800' => '#e5e7eb',
+            '--gray-900' => '#f9fafb',
+            '--navbar-bg' => '#000000',
+            '--navbar-text' => '#ffffff',
+            '--brown-50' => '#030712',
+            '--brown-100' => '#111827',
+            '--brown-200' => '#1f2937',
+            '--brown-300' => '#374151',
+            '--brown-400' => '#4b5563',
+            '--brown-500' => '#6b7280',
+            '--brown-600' => '#9ca3af',
+            '--brown-700' => '#d1d5db',
+            '--brown-800' => '#e5e7eb',
+            '--brown-900' => '#f9fafb',
+            '--color-text' => '#f9fafb',
+            '--card-bg' => '#111827',
+            '--color-cream' => '#111827',
+            '--color-white' => '#111827',
+        ];
+
+        return compact('light', 'dark');
+    }
+
+    private static function hexToRgb(string $hex): array
+    {
+        $hex = ltrim($hex, '#');
+        if (strlen($hex) === 3) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+        return [hexdec(substr($hex, 0, 2)), hexdec(substr($hex, 2, 2)), hexdec(substr($hex, 4, 2))];
+    }
+
+    private static function rgbToHsl(int $r, int $g, int $b): array
+    {
+        $r /= 255;
+        $g /= 255;
+        $b /= 255;
+        $max = max($r, $g, $b);
+        $min = min($r, $g, $b);
+        $l = ($max + $min) / 2;
+
+        if ($max === $min) {
+            $h = $s = 0;
+        } else {
+            $d = $max - $min;
+            $s = $l > 0.5 ? $d / (2 - $max - $min) : $d / ($max + $min);
+            switch ($max) {
+                case $r:
+                    $h = ($g - $b) / $d + ($g < $b ? 6 : 0);
+                    break;
+                case $g:
+                    $h = ($b - $r) / $d + 2;
+                    break;
+                default:
+                    $h = ($r - $g) / $d + 4;
+                    break;
+            }
+            $h /= 6;
+        }
+        return [round($h * 360, 1), round($s * 100, 1), round($l * 100, 1)];
+    }
+
+    private static function hslToHex(float $h, float $s, float $l): string
+    {
+        $h /= 360;
+        $s /= 100;
+        $l /= 100;
+        if ($s === 0.0) {
+            $r = $g = $b = (int) round($l * 255);
+        } else {
+            $q = $l < 0.5 ? $l * (1 + $s) : $l + $s - $l * $s;
+            $p = 2 * $l - $q;
+            $r = (int) round(self::hue2rgb($p, $q, $h + 1 / 3) * 255);
+            $g = (int) round(self::hue2rgb($p, $q, $h) * 255);
+            $b = (int) round(self::hue2rgb($p, $q, $h - 1 / 3) * 255);
+        }
+        return sprintf('#%02x%02x%02x', $r, $g, $b);
+    }
+
+    private static function hue2rgb(float $p, float $q, float $t): float
+    {
+        if ($t < 0)
+            $t += 1;
+        if ($t > 1)
+            $t -= 1;
+        if ($t < 1 / 6)
+            return $p + ($q - $p) * 6 * $t;
+        if ($t < 1 / 2)
+            return $q;
+        if ($t < 2 / 3)
+            return $p + ($q - $p) * (2 / 3 - $t) * 6;
+        return $p;
+    }
+
     public static function getCssVariables(string $paletteKey): string
     {
         $palettes = self::getPalettes();
 
-        // Default palette (brown) doesn't need overrides — it's already in app.scss
-        if ($paletteKey === 'brown' || !isset($palettes[$paletteKey])) {
+        if ($paletteKey === 'brown') {
             return '';
         }
 
-        $palette = $palettes[$paletteKey];
+        if ($paletteKey === 'custom') {
+            $hex = \App\Models\Setting::get('custom_primary_color', '#0078d4');
+            if (!$hex || !preg_match('/^#[0-9a-fA-F]{3,6}$/', (string) $hex)) {
+                $hex = '#0078d4';
+            }
+            $derived = self::derivePaletteFromHex((string) $hex);
+            $palette = ['light' => $derived['light'], 'dark' => $derived['dark']];
+        } elseif (!isset($palettes[$paletteKey])) {
+            return '';
+        } else {
+            $palette = $palettes[$paletteKey];
+        }
+
         $lightVars = '';
         $darkVars = '';
 
         foreach ($palette['light'] as $prop => $value) {
-            $lightVars .= "    {$prop}: {$value};\n";
+            $lightVars .= "    {$prop}: {$value} !important;\n";
         }
-
         foreach ($palette['dark'] as $prop => $value) {
-            $darkVars .= "    {$prop}: {$value};\n";
+            $darkVars .= "    {$prop}: {$value} !important;\n";
         }
 
-        return "<style id=\"artika-color-theme\">\n:root {\n{$lightVars}}\n[data-bs-theme=\"dark\"] {\n{$darkVars}}\n</style>";
+        $overrides = "
+    /* PREMIUM PRO ULTIMATE CLEAN DESIGN */
+
+    /* 1. Ultra-Clean Structural Bases */
+    body, .main-content, .bg-light, .bg-body-tertiary { 
+        background-color: var(--gray-50) !important; 
+    }
+    
+    .card, .modal-content, .offcanvas, .dropdown-menu { 
+        background-color: var(--card-bg) !important; 
+        border: 1px solid var(--gray-200) !important; 
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
+        color: var(--color-text) !important;
+        border-radius: 12px !important;
+    }
+    
+    .modal-header, .card-header { 
+        background-color: transparent !important; 
+        border-bottom: 1px solid var(--gray-100) !important; 
+        color: var(--color-text) !important;
+        padding: 1.25rem 1.5rem !important;
     }
 
-    /**
-     * Get palette preview colors (for the settings UI).
-     * Returns an array of 4 display colors per palette.
-     */
+    /* 2. Sidebar - Modern \"Pill\" Style Indicator */
+    .sidebar {
+        background-color: var(--card-bg) !important;
+        border-right: 1px solid var(--gray-200) !important;
+    }
+
+    .sidebar-link {
+        color: var(--gray-600) !important;
+        padding: 0.7rem 1.25rem !important;
+        margin: 0.2rem 1rem !important;
+        border-radius: 10px !important;
+        font-weight: 500 !important;
+        border: none !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .sidebar-link i { 
+        color: var(--gray-400) !important; 
+        width: 22px !important; 
+        font-size: 1.1rem !important;
+        transition: color 0.2s;
+    }
+
+    .sidebar-link:hover {
+        background-color: var(--gray-100) !important;
+        color: var(--color-primary) !important;
+    }
+    
+    .sidebar-link:hover i { color: var(--color-primary) !important; }
+
+    .sidebar-link.active {
+        background-color: var(--color-secondary-light) !important;
+        color: var(--color-primary) !important;
+        font-weight: 700 !important;
+    }
+    
+    .sidebar-link.active i { color: var(--color-primary) !important; }
+
+    .sidebar-section-title {
+        color: var(--gray-400) !important;
+        font-size: 0.65rem !important;
+        font-weight: 800 !important;
+        padding: 1.75rem 1.75rem 0.6rem !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.1em !important;
+    }
+
+    /* 3. High-End Typography Weights */
+    h1, h2, h3, h4, h5, h6, 
+    .user-name, .card-title, .table th, .breadcrumb-item.active,
+    .nav-tabs .nav-link.active, .accordion-button:not(.collapsed) {
+        color: var(--color-text) !important;
+        font-weight: 700 !important;
+    }
+    
+    .text-muted, .small.text-muted {
+        color: var(--gray-500) !important;
+        font-weight: 500 !important;
+    }
+    
+    [data-bs-theme=\"dark\"] .text-muted, 
+    [data-bs-theme=\"dark\"] .small.text-muted {
+        color: var(--gray-600) !important;
+    }
+
+    /* 4. Surgical Accent Colors for Interactive Elements */
+    .btn-primary, .btn-brown, .bg-brown, .btn-primary-dark {
+        background: var(--color-primary) !important;
+        background-color: var(--color-primary) !important;
+        border-color: var(--color-primary) !important;
+        color: #ffffff !important;
+        font-weight: 600 !important;
+        border-radius: 10px !important;
+        padding: 0.6rem 1.25rem !important;
+        box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .btn-primary:hover, .btn-brown:hover, .btn-primary-dark:hover {
+        background: var(--color-primary-dark) !important;
+        background-color: var(--color-primary-dark) !important;
+        border-color: var(--color-primary-dark) !important;
+        transform: translateY(-1px) !important;
+    }
+    
+    .btn-outline-primary {
+        border: 2px solid var(--color-primary) !important;
+        color: var(--color-primary) !important;
+    }
+    .btn-outline-primary:hover {
+        background: var(--color-primary) !important;
+        color: #ffffff !important;
+    }
+
+    /* Force secondary buttons in dropdowns to be neutral, NOT brown */
+    .dropdown-menu .btn-outline-secondary {
+        border-color: var(--gray-300) !important;
+        color: var(--color-text) !important;
+    }
+    .dropdown-menu .btn-outline-secondary:hover {
+        background-color: var(--gray-100) !important;
+        border-color: var(--gray-400) !important;
+    }
+    
+    .btn-primary:active, .btn-brown:active { transform: translateY(0px) !important; }
+
+    .badge {
+        font-weight: 700 !important;
+        border-radius: 6px !important;
+        padding: 0.45em 0.8em !important;
+    }
+
+    /* Clear brown shadows from ALL cards and components */
+    .card, .btn, .dropdown-menu, .modal-content, .offcanvas {
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Navbar styling - Stabilized for Dark Mode */
+    .main-navbar, .pos-navbar {
+        background-color: var(--navbar-bg) !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+        height: 64px !important;
+    }
+    
+    .main-navbar .navbar-brand, 
+    .main-navbar .nav-link, 
+    .main-navbar .user-name,
+    .main-navbar .hamburger-btn,
+    .main-navbar .profile-avatar,
+    .main-navbar span,
+    .main-navbar i,
+    .pos-navbar .navbar-brand,
+    .pos-navbar .nav-link,
+    .pos-navbar span,
+    .pos-navbar i {
+        color: var(--navbar-text) !important;
+    }
+    
+    .main-navbar .text-white-50, .main-navbar .text-muted, .pos-navbar .text-white-50 {
+        color: rgba(255,255,255,0.6) !important;
+    }
+    
+    /* Dropdown Profil Polish & Contrast Fix */
+    .dropdown-menu {
+        background-color: var(--card-bg) !important;
+    }
+    .dropdown-menu .bg-light {
+        background-color: var(--gray-100) !important;
+        color: var(--color-text) !important;
+    }
+    .dropdown-menu h6, 
+    .dropdown-menu .dropdown-item, 
+    .dropdown-menu span, 
+    .dropdown-menu i {
+        color: var(--color-text) !important;
+    }
+    
+    /* Force neutralize hardcoded Boostrap text classes in dropdowns */
+    .dropdown-menu .text-dark, 
+    .dropdown-menu .text-muted {
+        color: var(--color-text) !important;
+    }
+    
+    .dropdown-menu .dropdown-item:hover {
+        background-color: var(--gray-100) !important;
+    }
+    
+    .dropdown-menu .dropdown-item.text-danger,
+    .dropdown-menu .dropdown-item.text-danger i,
+    .dropdown-menu .dropdown-item.text-danger span {
+        color: #dc3545 !important;
+    }
+
+    /* 5. \"Global Brown Killer\" - Targeted Surgical Overrides */
+    
+    /* Catch any hardcoded background styles */
+    [style*=\"background-color: #85695a\"],
+    [style*=\"background: #85695a\"],
+    [style*=\"background-color: #6f5849\"],
+    [style*=\"background: #6f5849\"] {
+        background-color: var(--color-primary) !important;
+        background: var(--color-primary) !important;
+    }
+
+    /* SweetAlert2 Fixes */
+    .swal2-confirm, .swal2-styled.swal2-confirm, .artika-swal-confirm-btn {
+        background-color: var(--color-primary) !important;
+        border-radius: 10px !important;
+        box-shadow: none !important;
+    }
+    .swal2-cancel, .swal2-styled.swal2-cancel, .artika-swal-cancel-btn {
+        background-color: var(--gray-200) !important;
+        color: var(--gray-800) !important;
+        border: 1px solid var(--gray-300) !important;
+        border-radius: 10px !important;
+    }
+
+    /* POS Specific Stray Brown */
+    .category-btn.active {
+        background: var(--color-primary) !important;
+        border-color: var(--color-primary) !important;
+    }
+    .profile-trigger:hover {
+        background-color: var(--color-primary) !important;
+    }
+    .profile-avatar {
+        background: var(--color-primary) !important;
+        border-color: var(--color-primary-light) !important;
+    }
+
+    /* Tables */
+    .table th { 
+        background-color: var(--gray-100) !important; 
+        text-transform: uppercase !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.05em !important;
+        padding: 1rem !important;
+    }
+    .table td { 
+        border-color: var(--gray-100) !important; 
+        padding: 1rem !important;
+        vertical-align: middle !important;
+    }
+    
+    /* Perfect Scrollbar hint */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+";
+
+        return "<style id=\"artika-color-theme\">\n:root {\n{$lightVars}}\n[data-bs-theme=\"dark\"] {\n{$darkVars}}\n{$overrides}</style>";
+    }
+
     public static function getPalettePreviewColors(): array
     {
         $palettes = self::getPalettes();
         $previews = [];
 
         foreach ($palettes as $key => $palette) {
+            if ($key === 'custom') {
+                $hex = \App\Models\Setting::get('custom_primary_color', '#0078d4');
+                if (!$hex || !preg_match('/^#[0-9a-fA-F]{3,6}$/', (string) $hex)) {
+                    $hex = '#0078d4';
+                }
+                $derived = self::derivePaletteFromHex((string) $hex);
+                $previews['custom'] = [
+                    'name' => 'Warna Kustom',
+                    'icon' => 'fa-palette',
+                    'colors' => [
+                        $derived['light']['--color-primary-dark'],
+                        $derived['light']['--color-primary'],
+                        $derived['light']['--color-primary-light'],
+                        $derived['light']['--color-primary-lighter'],
+                    ],
+                ];
+                continue;
+            }
+
             $previews[$key] = [
                 'name' => $palette['name'],
                 'icon' => $palette['icon'],

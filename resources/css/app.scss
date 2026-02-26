@@ -44,7 +44,7 @@
     --color-secondary-light: #{$secondary-light};
 
     /* Accent */
-    --color-accent-warm: #{$accent-warm};
+    --color-accent-warm: var(--color-primary);
     --color-accent-gold: #{$accent-gold};
     --color-cream: #{$accent-cream};
 
@@ -84,8 +84,8 @@
     --color-info-dark: #{$info-dark};
 
     /* Gradients */
-    --gradient-primary: #{$gradient-primary};
-    --gradient-warm: #{$gradient-warm};
+    --gradient-primary: var(--color-primary-dark);
+    --gradient-warm: var(--color-primary);
 
     /* Radius */
     --radius-sm: #{$radius-sm};
@@ -161,8 +161,8 @@
     --color-info-dark: #7dd3fc;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #5c4d42 0%, #4a3d35 100%);
-    --gradient-warm: linear-gradient(135deg, #7a5a42 0%, #5c4d42 100%);
+    --gradient-primary: var(--color-primary-dark);
+    --gradient-warm: var(--color-primary);
 
     color-scheme: dark;
 }

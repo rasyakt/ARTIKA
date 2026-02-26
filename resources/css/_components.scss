@@ -45,7 +45,7 @@
 }
 
 .btn-primary {
-    background: var(--gradient-primary);
+    background: var(--color-primary-dark);
     color: $white;
     box-shadow: $shadow-brown-md;
 
@@ -224,26 +224,25 @@
     font-size: 1.25rem;
     transition: all $transition-base;
 
+    &.bg-primary-soft,
     &.bg-brown-soft {
-        background: var(--brown-50);
-        color: var(--brown-800);
+        background: var(--color-secondary-light);
+        color: var(--color-primary-dark);
     }
-    &.bg-success-soft,
-    &.bg-danger-soft,
-    &.bg-warning-soft,
-    &.bg-info-soft,
-    &.bg-purple-soft,
-    &.bg-sienna-soft,
-    &.bg-gold-soft {
-        background: var(--brown-50);
-        color: var(--brown-800);
+    &.bg-success-soft { background: var(--color-success-light); color: var(--color-success-dark); opacity: 0.9; }
+    &.bg-danger-soft { background: var(--color-danger-light); color: var(--color-danger-dark); opacity: 0.9; }
+    &.bg-warning-soft { background: var(--color-warning-light); color: var(--color-warning-dark); opacity: 0.9; }
+    &.bg-info-soft { background: var(--color-info-light); color: var(--color-info-dark); opacity: 0.9; }
+    &.bg-purple-soft, &.bg-sienna-soft, &.bg-gold-soft {
+        background: var(--gray-100);
+        color: var(--color-primary-dark);
         opacity: 0.9;
     }
 }
 
 .card-header {
-    background: var(--brown-100);
-    border-bottom: 1px solid var(--brown-200);
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
     border-radius: $radius-xl $radius-xl 0 0;
     padding: $spacing-4 $spacing-5;
     font-weight: $font-weight-semibold;
@@ -499,9 +498,47 @@
     color: var(--color-primary) !important;
 }
 
+.text-primary-dark {
+    color: var(--color-primary-dark) !important;
+}
+
+.text-theme {
+    color: var(--color-text) !important;
+}
+
 .text-secondary {
     color: var(--color-secondary-dark) !important;
 }
+
+.nav-pills {
+    .nav-link {
+        color: var(--color-primary) !important;
+        transition: all 0.3s ease;
+
+        i {
+            color: var(--color-primary) !important;
+        }
+
+        &:hover:not(.active) {
+            background-color: var(--color-secondary-light) !important;
+            color: var(--color-primary-dark) !important;
+            
+            i {
+                color: var(--color-primary-dark) !important;
+            }
+        }
+
+        &.active {
+            background-color: var(--color-primary) !important;
+            color: #fff !important;
+            
+            i, div, span {
+                color: #fff !important;
+            }
+        }
+    }
+}
+
 
 .bg-primary {
     background: var(--color-primary) !important;

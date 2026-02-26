@@ -4,7 +4,7 @@
 @section('content')
     <style>
         .table-hover tbody tr:hover {
-            background-color: var(--brown-50);
+            background-color: var(--color-secondary-light);
         }
 
         html {
@@ -41,13 +41,13 @@
                 <p class="text-muted mb-0 ms-5 ps-4">{{ __('admin.cashier_reports_subtitle') }}</p>
             </div>
             <div class="d-flex gap-2">
-                <button type="button" class="btn btn-outline-brown shadow-sm"
+                <button type="button" class="btn btn-outline-primary shadow-sm"
                     style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;" data-bs-toggle="modal"
                     data-bs-target="#exportPdfModal">
                     <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
                 </button>
                 <a href="{{ route($routePrefix . 'reports.cashier.export', array_merge(request()->all(), ['format' => 'csv', 'search' => $search, 'action' => $action])) }}"
-                    class="btn btn-brown shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
+                    class="btn btn-primary shadow-sm" style="border-radius: 10px; padding: 0.5rem 1rem; font-weight: 600;">
                     <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
                 </a>
             </div>
@@ -59,7 +59,8 @@
                 <form action="{{ route($routePrefix . 'reports.cashier') }}" method="GET" class="row g-3 align-items-end">
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="period" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-calendar me-1" style="color: var(--color-accent-warm);"></i> {{ __('admin.quick_period') }}
+                            <i class="fa-solid fa-calendar me-1" style="color: var(--color-primary);"></i>
+                            {{ __('admin.quick_period') }}
                         </label>
                         <select name="period" id="period" class="form-select" onchange="this.form.submit()">
                             <option value="today" {{ $period == 'today' ? 'selected' : '' }}>{{ __('admin.today') }}</option>
@@ -73,43 +74,45 @@
                     </div>
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="start_date" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-calendar-days me-1" style="color: var(--color-accent-warm);"></i>
+                            <i class="fa-solid fa-calendar-days me-1" style="color: var(--color-primary);"></i>
                             {{ __('admin.start_date') }}
                         </label>
                         <input type="date" class="form-select" name="start_date" value="{{ $startDate->format('Y-m-d') }}">
                     </div>
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <label for="end_date" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-calendar-days me-1" style="color: var(--color-accent-warm);"></i>
+                            <i class="fa-solid fa-calendar-days me-1" style="color: var(--color-primary);"></i>
                             {{ __('admin.end_date') }}
                         </label>
                         <input type="date" class="form-select" name="end_date" value="{{ $endDate->format('Y-m-d') }}">
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6">
                         <label for="search" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-user me-1" style="color: var(--color-accent-warm);"></i> {{ __('common.user') }}
+                            <i class="fa-solid fa-user me-1" style="color: var(--color-primary);"></i>
+                            {{ __('common.user') }}
                         </label>
                         <input type="text" name="search" class="form-control" placeholder="NIS/Username/Nama"
                             value="{{ $search }}">
                     </div>
                     <div class="col-xl-2 col-lg-6 col-md-6">
                         <label for="action" class="form-label text-dark fw-semibold">
-                            <i class="fa-solid fa-clipboard-list me-1" style="color: var(--color-accent-warm);"></i> {{ __('admin.action') }}
+                            <i class="fa-solid fa-clipboard-list me-1" style="color: var(--color-primary);"></i>
+                            {{ __('admin.action') }}
                         </label>
                         <select name="action" class="form-select">
-                            <option value="">-- {{ __('admin.all_actions') }} --</option>
+                            <option value="">{{ __('admin.all_actions') }}</option>
                             @foreach($actions as $act)
                                 <option value="{{ $act }}" {{ $action == $act ? 'selected' : '' }}>{{ $act }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-xl-2 col-lg-12 col-md-12 d-flex gap-2">
-                        <button type="submit" class="btn btn-brown grow fw-bold"
+                        <button type="submit" class="btn btn-primary grow fw-bold"
                             style="border-radius: 8px; padding: 0.6rem;">
                             <i class="fa-solid fa-filter me-1"></i> {{ __('admin.apply_filter') }}
                         </button>
                         @if($search || $action || request('start_date') || request('end_date'))
-                            <a href="{{ route($routePrefix . 'reports.cashier') }}" class="btn btn-outline-brown"
+                            <a href="{{ route($routePrefix . 'reports.cashier') }}" class="btn btn-outline-primary"
                                 style="border-radius: 8px; padding: 0.6rem;">
                                 <i class="fa-solid fa-rotate-left"></i>
                             </a>
@@ -130,13 +133,13 @@
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                     {{ __('admin.total_sales') }}
                                 </p>
-                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">Rp
+                                <h3 class="fw-bold mb-0" style="color: var(--color-primary-dark);">Rp
                                     {{ number_format($summary['total_sales'], 0, ',', '.') }}
                                 </h3>
                                 <small class="text-muted">{{ number_format($summary['total_transactions']) }}
                                     {{ __('admin.transactions_count') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-brown-soft">
+                            <div class="icon-box-premium bg-primary-soft">
                                 <i class="fa-solid fa-money-bill-wave"></i>
                             </div>
                         </div>
@@ -153,12 +156,12 @@
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                     {{ __('admin.avg_transaction_label') }}
                                 </p>
-                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">Rp
+                                <h3 class="fw-bold mb-0" style="color: var(--color-primary-dark);">Rp
                                     {{ number_format($summary['average_transaction'], 0, ',', '.') }}
                                 </h3>
                                 <small class="text-muted">{{ __('admin.per_transaction') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-brown-soft">
+                            <div class="icon-box-premium bg-primary-soft">
                                 <i class="fa-solid fa-chart-line"></i>
                             </div>
                         </div>
@@ -175,13 +178,13 @@
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                     {{ __('admin.cash_sales') }}
                                 </p>
-                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">Rp
+                                <h3 class="fw-bold mb-0" style="color: var(--color-primary-dark);">Rp
                                     {{ number_format($summary['cash_sales'], 0, ',', '.') }}
                                 </h3>
                                 <small class="text-muted">{{ $summary['cash_count'] }}
                                     {{ __('admin.transactions_count') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-brown-soft">
+                            <div class="icon-box-premium bg-primary-soft">
                                 <i class="fa-solid fa-coins"></i>
                             </div>
                         </div>
@@ -198,13 +201,13 @@
                                     style="font-size: 0.75rem; font-weight: 600; letter-spacing: 0.5px;">
                                     {{ __('admin.non_cash_sales') }}
                                 </p>
-                                <h3 class="fw-bold mb-0" style="color: var(--brown-900);">Rp
+                                <h3 class="fw-bold mb-0" style="color: var(--color-primary-dark);">Rp
                                     {{ number_format($summary['non_cash_sales'], 0, ',', '.') }}
                                 </h3>
                                 <small class="text-muted">{{ $summary['non_cash_count'] }}
                                     {{ __('admin.transactions_count') }}</small>
                             </div>
-                            <div class="icon-box-premium bg-brown-soft">
+                            <div class="icon-box-premium bg-primary-soft">
                                 <i class="fa-solid fa-credit-card"></i>
                             </div>
                         </div>
@@ -216,8 +219,8 @@
         <!-- Detailed Reports Section -->
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-white border-bottom-0 pt-4 px-4">
-                <ul class="nav nav-pills nav-fill gap-2 p-1 bg-light rounded mb-0" id="reportTabs" role="tablist"
-                    style="border: 1px solid var(--brown-100);">
+                <ul class="nav nav-pills nav-fill gap-2 p-1 bg-light rounded-5 mb-0" id="reportTabs" role="tablist"
+                    style="border: 1px solid var(--color-primary);">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active rounded-pill fw-bold" id="transactions-tab" data-bs-toggle="tab"
                             data-bs-target="#transactions-pane" type="button" role="tab">
@@ -270,20 +273,25 @@
                     <div class="tab-pane fade show active" id="transactions-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: var(--brown-50);">
+                                <thead style="background: var(--color-secondary-light);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.invoice') }}
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
+                                            {{ __('admin.invoice') }}
                                         </th>
-                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.date') }}</th>
-                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.cashier') }}
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
+                                            {{ __('admin.date') }}</th>
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
+                                            {{ __('admin.cashier') }}
                                         </th>
-                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
+                                        <th class="border-0 fw-semibold text-center"
+                                            style="color: var(--color-primary-dark);">
                                             {{ __('admin.payment_method') }}
                                         </th>
                                         <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">
                                             {{ __('admin.amount') }}
                                         </th>
-                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
+                                        <th class="border-0 fw-semibold text-center"
+                                            style="color: var(--color-primary-dark);">
                                             {{ __('admin.action') }}
                                         </th>
                                     </tr>
@@ -348,7 +356,7 @@
                                                         </li>
                                                         <li><button class="dropdown-item btn-view-transaction py-2"
                                                                 data-id="{{ $transaction->id }}"><i
-                                                                    class="fas fa-eye me-2 text-brown"></i> Detail</button></li>
+                                                                    class="fas fa-eye me-2 text-primary"></i> Detail</button></li>
                                                         <li><button class="dropdown-item btn-print-direct py-2"
                                                                 data-id="{{ $transaction->id }}"><i
                                                                     class="fas fa-print me-2 text-secondary"></i> Cetak</button>
@@ -388,7 +396,7 @@
                         </div>
                         <div class="px-3 py-2 border-top bg-white d-flex justify-content-end"
                             style="border-radius: 0 0 16px 16px;">
-                            {{ $recentTransactions->fragment('transactions-pane')->links('vendor.pagination.custom-brown') }}
+                            {{ $recentTransactions->fragment('transactions-pane')->links('vendor.pagination.custom-primary') }}
                         </div>
                     </div>
 
@@ -396,10 +404,12 @@
                     <div class="tab-pane fade" id="products-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: var(--brown-50);">
+                                <thead style="background: var(--color-secondary-light);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">Produk</th>
-                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">Produk
+                                        </th>
+                                        <th class="border-0 fw-semibold text-center"
+                                            style="color: var(--color-primary-dark);">
                                             {{ __('admin.sold') }}
                                         </th>
                                         <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">
@@ -417,7 +427,8 @@
                                                         {{ $index + 1 }}
                                                     </div>
                                                     <div>
-                                                        <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $product->name }}</div>
+                                                        <div class="fw-bold" style="color: var(--color-primary-dark);">
+                                                            {{ $product->name }}</div>
                                                         <small class="text-muted">{{ $product->barcode }}</small>
                                                     </div>
                                                 </div>
@@ -445,12 +456,15 @@
                     <div class="tab-pane fade" id="categories-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: var(--brown-50);">
+                                <thead style="background: var(--color-secondary-light);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">Kategori</th>
-                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">Item Terjual
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">Kategori
                                         </th>
-                                        <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">Total Pendapatan
+                                        <th class="border-0 fw-semibold text-center"
+                                            style="color: var(--color-primary-dark);">Item Terjual
+                                        </th>
+                                        <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">
+                                            Total Pendapatan
                                         </th>
                                     </tr>
                                 </thead>
@@ -481,11 +495,13 @@
                     <div class="tab-pane fade" id="performance-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: var(--brown-50);">
+                                <thead style="background: var(--color-secondary-light);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.cashier') }}
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
+                                            {{ __('admin.cashier') }}
                                         </th>
-                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">Transaksi</th>
+                                        <th class="border-0 fw-semibold text-center"
+                                            style="color: var(--color-primary-dark);">Transaksi</th>
                                         <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">
                                             {{ __('admin.total_sales') }}
                                         </th>
@@ -495,7 +511,8 @@
                                     @forelse($cashierPerformance as $p)
                                         <tr>
                                             <td>
-                                                <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $p->user->name }}</div>
+                                                <div class="fw-bold" style="color: var(--color-primary-dark);">
+                                                    {{ $p->user->name }}</div>
                                                 <small class="text-muted">{{ $p->user->role->name }}</small>
                                             </td>
                                             <td class="text-center"><span class="badge"
@@ -521,18 +538,21 @@
                     <div class="tab-pane fade" id="payment-pane" role="tabpanel" tabindex="0">
                         <div class="table-responsive">
                             <table class="table table-hover mb-0">
-                                <thead style="background: var(--brown-50);">
+                                <thead style="background: var(--color-secondary-light);">
                                     <tr>
-                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">Metode Pembayaran</th>
-                                        <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">Jumlah
+                                        <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">Metode
+                                            Pembayaran</th>
+                                        <th class="border-0 fw-semibold text-center"
+                                            style="color: var(--color-primary-dark);">Jumlah
                                             Transaksi</th>
-                                        <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">Total Nominal</th>
+                                        <th class="border-0 fw-semibold text-end" style="color: var(--color-primary-dark);">
+                                            Total Nominal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse($paymentBreakdown as $pay)
                                         <tr>
-                                            <td class="fw-bold text-brown">{{ $pay->payment_method }}</td>
+                                            <td class="fw-bold" style="color: var(--color-primary);">{{ $pay->payment_method }}</td>
                                             <td class="text-center">{{ $pay->count }}</td>
                                             <td class="text-end fw-bold" style="color: var(--color-accent-warm);">Rp
                                                 {{ number_format($pay->total, 0, ',', '.') }}
@@ -555,13 +575,15 @@
                         <div class="p-4 text-center">
                             <div class="row g-4 justify-content-center">
                                 <div class="col-md-4">
-                                    <div class="p-4 rounded-16" style="background: var(--color-danger-light); border: 1px solid var(--color-danger-light);">
+                                    <div class="p-4 rounded-16"
+                                        style="background: var(--color-danger-light); border: 1px solid var(--color-danger-light);">
                                         <div class="text-muted small text-uppercase fw-bold mb-1">Transaksi Berdiskon</div>
                                         <h2 class="fw-bold mb-0 text-danger">{{ $discountSummary['count'] }}</h2>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="p-4 rounded-16" style="background: var(--brown-50); border: 1px solid var(--brown-100);">
+                                    <div class="p-4 rounded-16"
+                                        style="background: var(--color-secondary-light); border: 1px solid var(--color-primary-light);">
                                         <div class="text-muted small text-uppercase fw-bold mb-1">Total Potongan Harga</div>
                                         <h2 class="fw-bold mb-0" style="color: var(--color-primary-dark);">Rp
                                             {{ number_format($discountSummary['total_discount'], 0, ',', '.') }}
@@ -569,7 +591,8 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="p-4 rounded-16" style="background: var(--color-success-light); border: 1px solid #dcfce7;">
+                                    <div class="p-4 rounded-16"
+                                        style="background: var(--color-success-light); border: 1px solid #dcfce7;">
                                         <div class="text-muted small text-uppercase fw-bold mb-1">Total Setelah Diskon</div>
                                         <h2 class="fw-bold mb-0 text-success">Rp
                                             {{ number_format($discountSummary['total_revenue'], 0, ',', '.') }}
@@ -585,16 +608,21 @@
                         <div class="tab-pane fade" id="audit-pane" role="tabpanel" tabindex="0">
                             <div class="table-responsive">
                                 <table class="table table-hover mb-0">
-                                    <thead style="background: var(--brown-50);">
+                                    <thead style="background: var(--color-secondary-light);">
                                         <tr>
-                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.date') }}</th>
-                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.user') }}</th>
-                                            <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
+                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
+                                                {{ __('admin.date') }}</th>
+                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
+                                                {{ __('admin.user') }}</th>
+                                            <th class="border-0 fw-semibold text-center"
+                                                style="color: var(--color-primary-dark);">
                                                 {{ __('admin.action') }}
                                             </th>
-                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('admin.details') }}
+                                            <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
+                                                {{ __('admin.details') }}
                                             </th>
-                                            <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">View</th>
+                                            <th class="border-0 fw-semibold text-center"
+                                                style="color: var(--color-primary-dark);">View</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -602,7 +630,8 @@
                                             <tr>
                                                 <td class="text-muted small">{{ $log->created_at->format('d M Y H:i') }}</td>
                                                 <td>
-                                                    <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $log->user->name ?? 'System' }}
+                                                    <div class="fw-bold" style="color: var(--color-primary-dark);">
+                                                        {{ $log->user->name ?? 'System' }}
                                                     </div>
                                                     <small class="text-muted">{{ $log->user->role->name ?? '' }}</small>
                                                 </td>
@@ -611,7 +640,7 @@
                                                 </td>
                                                 <td><span class="small">{{ Str::limit($log->notes, 40) }}</span></td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-sm btn-outline-brown rounded-circle"
+                                                    <button class="btn btn-sm btn-outline-primary rounded-circle"
                                                         data-bs-toggle="modal" data-bs-target="#detailModal"
                                                         data-id="{{ $log->id }}" data-user="{{ $log->user?->name ?? 'System' }}"
                                                         data-role="{{ $log->user?->role->name ?? '' }}"
@@ -657,7 +686,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="border-radius: 16px; border: none;">
                 <div class="modal-header text-white"
-                    style="background: var(--gradient-primary); border-radius: 16px 16px 0 0;">
+                    style="background: var(--color-primary-dark); border-radius: 16px 16px 0 0;">
                     <h5 class="modal-title">{{ __('admin.audit_log_detail') }}</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
@@ -742,7 +771,7 @@
                             <i class="fa-solid fa-rotate-left me-2"></i>{{ __('admin.return_items') }}
                         </button>
                     @endif
-                    <button type="button" class="btn btn-brown px-4" style="border-radius: 10px;"
+                    <button type="button" class="btn btn-primary px-4" style="border-radius: 10px;"
                         data-bs-dismiss="modal">{{ __('common.close') }}</button>
                 </div>
             </div>
@@ -773,7 +802,7 @@
                         </div>
                         <div class="col-md-3">
                             <label class="text-muted small d-block">Metode</label>
-                            <span id="tx-payment-method" class="badge bg-brown-soft text-brown fw-bold">-</span>
+                            <span id="tx-payment-method" class="badge bg-primary-soft text-primary fw-bold">-</span>
                         </div>
                         <div class="col-md-3">
                             <label class="text-muted small d-block">Status</label>
@@ -785,7 +814,7 @@
                     <div class="table-responsive mb-4">
                         <table class="table table-hover">
                             <thead>
-                                <tr style="background: var(--brown-50);">
+                                <tr style="background: var(--color-secondary-light);">
                                     <th class="border-0">Produk</th>
                                     <th class="border-0 text-center">Qty</th>
                                     <th class="border-0 text-center">Subtotal</th>
@@ -831,11 +860,11 @@
                             <i class="fa-solid fa-rotate-left me-2"></i>{{ __('admin.return_items') }}
                         </button>
                     @endif
-                    <button type="button" class="btn btn-outline-brown px-4" id="btn-print-receipt"
+                    <button type="button" class="btn btn-outline-primary px-4" id="btn-print-receipt"
                         style="border-radius: 10px;">
                         <i class="fa-solid fa-print me-2"></i>Cetak Struk
                     </button>
-                    <button type="button" class="btn btn-brown px-4" style="border-radius: 10px;"
+                    <button type="button" class="btn btn-primary px-4" style="border-radius: 10px;"
                         data-bs-dismiss="modal">{{ __('admin.close') }}</button>
                 </div>
             </div>
@@ -877,7 +906,7 @@
                     <div class="modal-footer border-0">
                         <button type="button" class="btn btn-light px-4" style="border-radius: 10px;"
                             data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-brown px-4" style="border-radius: 10px;">Simpan
+                        <button type="submit" class="btn btn-primary px-4" style="border-radius: 10px;">Simpan
                             Perubahan</button>
                     </div>
                 </form>
@@ -920,20 +949,20 @@
                         </div>
 
                         <div class="mb-4">
-                            <label class="form-label fw-bold text-brown">{{ __('admin.return_reason') }}*</label>
+                            <label class="form-label fw-bold text-primary">{{ __('admin.return_reason') }}*</label>
                             <textarea name="reason" class="form-control" rows="2" required
                                 placeholder="Contoh: Barang cacat, Salah beli..." style="border-radius: 12px;"></textarea>
                         </div>
 
-                        <div class="p-3 bg-brown-soft rounded-16">
+                        <div class="p-3 bg-primary-soft rounded-16">
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-bold text-brown">Total Pengembalian Dana (Refund)</span>
-                                <h4 class="fw-bold text-brown mb-0">Rp <span id="return-total-refund">0</span></h4>
+                                <span class="fw-bold text-primary">Total Pengembalian Dana (Refund)</span>
+                                <h4 class="fw-bold text-primary mb-0">Rp <span id="return-total-refund">0</span></h4>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer border-0 p-4 pt-0">
-                        <button type="button" class="btn btn-outline-brown px-4" style="border-radius: 10px;"
+                        <button type="button" class="btn btn-outline-primary px-4" style="border-radius: 10px;"
                             data-bs-toggle="modal"
                             data-bs-target="#transactionDetailModal">{{ __('admin.cancel') }}</button>
                         <button type="submit" class="btn btn-danger px-4" style="border-radius: 10px;">
@@ -1037,7 +1066,7 @@
                     <div class="modal-footer border-top-0 pt-0 pb-4 justify-content-center">
                         <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal"
                             style="border-radius: 10px;">Batal</button>
-                        <button type="submit" class="btn btn-brown px-4" style="border-radius: 10px;">
+                        <button type="submit" class="btn btn-primary px-4" style="border-radius: 10px;">
                             <i class="fa-solid fa-download me-2"></i>Generate PDF
                         </button>
                     </div>
@@ -1205,27 +1234,27 @@
                                         const retQty = parseInt(item.returned_quantity) || 0;
                                         const availableToReturn = qty - retQty;
                                         returnItemsHtml += `
-                                                                                                                <tr>
-                                                                                                                    <td>
-                                                                                                                        <div class="fw-bold">${item.name}</div>
-                                                                                                                        <div class="small text-muted">Rp ${formatIDR(item.price)} / unit</div>
-                                                                                                                        ${retQty > 0 ? `<div class="badge bg-light text-brown border" style="font-size: 0.65rem;">${retQty} Terkumpul</div>` : ''}
-                                                                                                                        <input type="hidden" name="items[${index}][product_id]" value="${item.product_id}">
-                                                                                                                    </td>
-                                                                                                                    <td class="text-center">
-                                                                                                                        ${availableToReturn}
-                                                                                                                    </td>
-                                                                                                                    <td>
-                                                                                                                        <div class="input-group input-group-sm">
-                                                                                                                            <button type="button" class="btn btn-outline-brown btn-qty" data-type="minus" ${availableToReturn <= 0 ? 'disabled' : ''}>-</button>
-                                                                                                                            <input type="number" name="items[${index}][quantity]" class="form-control text-center input-qty" 
-                                                                                                                                value="0" min="0" max="${availableToReturn}" data-price="${item.price}" readonly>
-                                                                                                                            <button type="button" class="btn btn-outline-brown btn-qty" data-type="plus" ${availableToReturn <= 0 ? 'disabled' : ''}>+</button>
-                                                                                                                            </div>
-                                                                                                                    </td>
-                                                                                                                    <td class="text-end fw-bold text-brown">Rp <span class="item-refund-est">0</span></td>
-                                                                                                                </tr>
-                                                                                                            `;
+                                                                                                                    <tr>
+                                                                                                                        <td>
+                                                                                                                            <div class="fw-bold">${item.name}</div>
+                                                                                                                            <div class="small text-muted">Rp ${formatIDR(item.price)} / unit</div>
+                                                                                                                            ${retQty > 0 ? `<div class="badge bg-light text-primary border" style="font-size: 0.65rem;">${retQty} Terkumpul</div>` : ''}
+                                                                                                                            <input type="hidden" name="items[${index}][product_id]" value="${item.product_id}">
+                                                                                                                        </td>
+                                                                                                                        <td class="text-center">
+                                                                                                                            ${availableToReturn}
+                                                                                                                        </td>
+                                                                                                                        <td>
+                                                                                                                            <div class="input-group input-group-sm">
+                                                                                                                                <button type="button" class="btn btn-outline-primary btn-qty" data-type="minus" ${availableToReturn <= 0 ? 'disabled' : ''}>-</button>
+                                                                                                                                <input type="number" name="items[${index}][quantity]" class="form-control text-center input-qty" 
+                                                                                                                                    value="0" min="0" max="${availableToReturn}" data-price="${item.price}" readonly>
+                                                                                                                                <button type="button" class="btn btn-outline-primary btn-qty" data-type="plus" ${availableToReturn <= 0 ? 'disabled' : ''}>+</button>
+                                                                                                                                </div>
+                                                                                                                        </td>
+                                                                                                                        <td class="text-end fw-bold text-primary">Rp <span class="item-refund-est">0</span></td>
+                                                                                                                    </tr>
+                                                                                                                `;
                                     });
                                     document.getElementById('return-items-body').innerHTML = returnItemsHtml;
                                     document.getElementById('return-total-refund').textContent = '0';
@@ -1254,28 +1283,28 @@
                             data.items.forEach(item => {
                                 const netQuantity = item.quantity - item.returned_quantity;
                                 itemsBody.innerHTML += `
-                                                                                                        <tr>
-                                                                                                            <td>
-                                                                                                                <div class="fw-bold text-brown">${item.name}</div>
-                                                                                                                <div class="small text-muted">Rp ${formatIDR(item.price)}</div>
-                                                                                                            </td>
-                                                                                                            <td class="text-center text-brown">
-                                                                                                                ${item.returned_quantity > 0
+                                                                                                            <tr>
+                                                                                                                <td>
+                                                                                                                    <div class="fw-bold text-primary">${item.name}</div>
+                                                                                                                    <div class="small text-muted">Rp ${formatIDR(item.price)}</div>
+                                                                                                                </td>
+                                                                                                                <td class="text-center text-primary">
+                                                                                                                    ${item.returned_quantity > 0
                                         ? `<span class="text-decoration-line-through text-muted small">${item.quantity}</span><br><b>${netQuantity}</b>`
                                         : `<b>${item.quantity}</b>`}
-                                                                                                            </td>
-                                                                                                            <td class="text-center text-brown">
-                                                                                                                ${item.returned_quantity > 0
+                                                                                                                </td>
+                                                                                                                <td class="text-center text-primary">
+                                                                                                                    ${item.returned_quantity > 0
                                         ? `<span class="text-decoration-line-through text-muted small">Rp ${formatIDR(item.subtotal)}</span><br><b>Rp ${formatIDR(netQuantity * item.price)}</b>`
                                         : `<b>Rp ${formatIDR(item.subtotal)}</b>`}
-                                                                                                            </td>
-                                                                                                            <td class="text-end">
-                                                                                                                ${item.returned_quantity > 0
+                                                                                                                </td>
+                                                                                                                <td class="text-end">
+                                                                                                                    ${item.returned_quantity > 0
                                         ? `<span class="badge bg-danger-soft text-danger border border-danger-subtle">- ${item.returned_quantity} Retur</span>`
                                         : '<i class="fa-solid fa-check text-success"></i>'}
-                                                                                                            </td>
-                                                                                                        </tr>
-                                                                                                    `;
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        `;
                             });
                         })
                         .catch(err => {
@@ -1374,8 +1403,8 @@
     </script>
 
     <style>
-        .bg-brown-soft {
-            background-color: rgba(111, 88, 73, 0.1);
+        .bg-primary-soft {
+            background-color: var(--color-secondary-light) !important;
         }
 
         .bg-danger-soft {

@@ -44,7 +44,7 @@
             </div>
             <div>
                 <button class="btn shadow-sm"
-                    style="background: var(--gradient-primary); color: white; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;"
+                    style="background: var(--color-primary-dark); color: white; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;"
                     data-bs-toggle="modal" data-bs-target="#printAllModal"
                     onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                     <i class="fa-solid fa-file-invoice me-2"></i> {{ __('admin.print_all_reports') }}
@@ -306,7 +306,7 @@
                         <button type="submit"
                             onclick="document.getElementById('exportFormat').value='csv'; document.getElementById('printForm').target='_self';"
                             class="btn px-4 fw-bold"
-                            style="background: var(--gradient-primary); color: white; border-radius: 10px; padding: 0.6rem 1.25rem;">
+                            style="background: var(--color-primary-dark); color: white; border-radius: 10px; padding: 0.6rem 1.25rem;">
                             <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
                         </button>
                     </div>

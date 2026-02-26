@@ -112,11 +112,14 @@
                                                             @endforeach
                                                         </div>
                                                     @else
-                                                        <label class="form-label fw-bold text-muted small text-uppercase mb-2">{{ $config['label'] }}</label>
-                                                        <input type="{{ $config['type'] }}" class="form-control form-control-lg" name="{{ $key }}" id="{{ $key }}"
-                                                               value="{{ $settings->get($key, $config['default']) }}"
-                                                               style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 14px 20px;"
-                                                               @if($config['type'] === 'number') min="0" @endif>
+                                                        <div @if($key === 'custom_primary_color') id="custom-color-container" style="display: {{ $settings->get('site_color_theme') === 'custom' ? 'block' : 'none' }};" @endif>
+                                                            <label class="form-label fw-bold text-muted small text-uppercase mb-2">{{ $config['label'] }}</label>
+                                                            <input type="{{ $config['type'] }}" class="form-control form-control-lg @if($config['type'] === 'color') p-1 @endif" 
+                                                                   name="{{ $key }}" id="{{ $key }}"
+                                                                   value="{{ $settings->get($key, $config['default']) }}"
+                                                                   style="border-radius: 12px; border: 2px solid var(--brown-100); @if($config['type'] !== 'color') padding: 14px 20px; @else height: 58px; @endif"
+                                                                   @if($config['type'] === 'number') min="0" @endif>
+                                                        </div>
                                                     @endif
                                                 </div>
                                             @endforeach
@@ -228,8 +231,10 @@
             updatePreview();
 
             // Palette Picker
-            document.querySelectorAll('.palette-radio').forEach(radio => {
+            const customColorContainer = document.getElementById('custom-color-container');
+            document.querySelectorAll('input[name="site_color_theme"]').forEach(radio => {
                 radio.addEventListener('change', function() {
+                    // Update UI active state
                     document.querySelectorAll('.palette-card').forEach(card => {
                         card.classList.remove('palette-active');
                         card.querySelector('.palette-check')?.classList.add('d-none');
@@ -237,6 +242,11 @@
                     const card = this.closest('.palette-card');
                     card.classList.add('palette-active');
                     card.querySelector('.palette-check')?.classList.remove('d-none');
+
+                    // Show/hide custom color picker
+                    if (customColorContainer) {
+                        customColorContainer.style.display = (this.value === 'custom') ? 'block' : 'none';
+                    }
                 });
             });
         });

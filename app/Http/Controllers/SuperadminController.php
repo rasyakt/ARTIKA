@@ -187,6 +187,7 @@ class SuperadminController extends Controller
                 'address' => ['label' => 'Store Address', 'type' => 'text', 'default' => ''],
                 'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => '© ' . date('Y') . ' RPL_Sentinel. All rights reserved.'],
                 'site_color_theme' => ['label' => 'Tema Warna Website', 'type' => 'palette', 'default' => 'brown'],
+                'custom_primary_color' => ['label' => 'Warna Kustom (Primary)', 'type' => 'color', 'default' => '#85695a'],
             ],
             'POS & Struk' => [
                 'invoice_prefix' => ['label' => 'Prefix No. Struk', 'type' => 'text', 'default' => 'INV'],

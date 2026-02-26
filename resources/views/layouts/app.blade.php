@@ -152,33 +152,29 @@
         }
 
         .main-navbar {
-            /* background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%); */
-            background: var(--primary-dark);
-            box-shadow: 0 4px 18px rgba(107, 83, 70, 0.08);
+            background: var(--navbar-bg) !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
             padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1030;
-            height: 70px;
+            height: 64px;
         }
 
         .sidebar {
-            background: var(--card-bg, #fffefc);
+            background: var(--card-bg);
             position: fixed;
-            top: 70px;
+            top: 64px;
             left: 0;
             bottom: 0;
             width: 260px;
-            /* Matched to col-md-2 */
-            border-right: 1px solid var(--brown-100);
+            border-right: 1px solid var(--gray-200);
             padding: 1.25rem 0;
             overflow-y: auto;
             z-index: 1000;
-            scrollbar-width: thin;
-            scrollbar-color: var(--color-primary) transparent;
             transition: background-color 0.3s ease;
         }
 
@@ -194,25 +190,24 @@
         .sidebar-link {
             display: flex;
             align-items: center;
-            padding: 0.875rem 1.5rem;
-            color: var(--color-primary-dark);
+            padding: 0.75rem 1.5rem;
+            color: var(--gray-600);
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s;
-            border-left: 3px solid transparent;
+            transition: all 0.25s ease;
+            margin: 0.2rem 1rem;
+            border-radius: 10px;
         }
 
         .sidebar-link:hover {
-            background: var(--brown-50);
+            background: var(--gray-100);
             color: var(--color-primary);
-            border-left-color: var(--color-primary);
         }
 
         .sidebar-link.active {
-            background: linear-gradient(90deg, var(--brown-50) 0%, var(--brown-100) 100%);
+            background: var(--color-secondary-light);
             color: var(--color-primary);
-            border-left-color: var(--color-primary);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .sidebar-link i {
@@ -309,10 +304,8 @@
             padding: 0;
             background: var(--gray-50);
             margin-left: 260px;
-            /* Offset by fixed sidebar width */
-            margin-top: 70px;
-            /* Offset by fixed navbar height */
-            min-height: calc(100vh - 70px);
+            margin-top: 64px;
+            min-height: calc(100vh - 64px);
             width: calc(100% - 260px);
         }
 
@@ -347,8 +340,8 @@
         .profile-avatar {
             width: 42px;
             height: 42px;
-            border-radius: 3812px;
-            background: var(--color-primary)ff;
+            border-radius: 50%;
+            background: var(--color-primary);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -356,6 +349,7 @@
             font-weight: 700;
             /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); */
             font-size: 1.1rem;
+            line-height: normal;
         }
 
         /* Pagination Styling */
@@ -380,7 +374,7 @@
         }
 
         .pagination .page-item.active .page-link {
-            background: var(--gradient-primary);
+            background: var(--color-primary-dark);
             border-color: var(--color-primary);
         }
 
@@ -537,7 +531,7 @@
                     alt="{{ App\Models\Setting::get('system_name', 'ARTIKA Logo') }}"
                     style="height: 35px; width: auto;">
                 <span
-                    class="ms-2 text-white fw-bold d-none d-sm-inline">{{ App\Models\Setting::get('system_name', 'ARTIKA') }}</span>
+                    class="ms-2 fw-bold d-none d-sm-inline">{{ App\Models\Setting::get('system_name', 'ARTIKA') }}</span>
             </a>
 
             <div class="ms-auto d-flex align-items-center">
@@ -547,21 +541,21 @@
                         <div class="profile-avatar me-3">{{ strtoupper(substr($user?->name ?? '', 0, 1)) }}</div>
                         <div class="d-flex flex-column text-start">
                             <span class="user-name line-height-1 mb-1">{{ $user?->name }}</span>
-                            <span class="text-white-50 fw-700 text-uppercase"
+                            <span class="fw-700 text-uppercase opacity-75"
                                 style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
                         </div>
                     </button>
                     <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
                         style="min-width: 280px; border-radius: 16px;">
                         {{-- Header Profil --}}
-                        <li class="p-3 bg-light border-bottom">
+                        <li class="p-3 bg-light border-bottom border-secondary-subtle">
                             <div class="d-flex align-items-center">
-                                <div class="profile-avatar bg-primary text-white me-3"
-                                    style="width: 45px; height: 45px;">
+                                <div class="profile-avatar bg-primary text-white me-3 d-flex align-items-center justify-content-center"
+                                    style="width: 45px; height: 45px; border-radius: 50%;">
                                     {{ strtoupper(substr($user?->name ?? '', 0, 1)) }}
                                 </div>
                                 <div class="overflow-hidden">
-                                    <h6 class="mb-0 fw-800 text-truncate text-dark">{{ $user?->name }}</h6>
+                                    <h6 class="mb-0 fw-800 text-truncate">{{ $user?->name }}</h6>
                                     <div class="small text-muted text-truncate">{{ $user?->role?->name }}</div>
                                 </div>
                             </div>

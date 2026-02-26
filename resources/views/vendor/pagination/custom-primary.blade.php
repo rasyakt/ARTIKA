@@ -35,7 +35,7 @@
                         @if ($page == $paginator->currentPage())
                             <li class="page-item active" aria-current="page">
                                 <span class="page-link rounded-circle fw-bold d-flex align-items-center justify-content-center"
-                                    style="width: 38px; height: 38px; background: var(--color-primary-dark); border: none; color: white;">
+                                    style="width: 38px; height: 38px; background: var(--color-primary); border: none; color: white;">
                                     {{ $page }}
                                 </span>
                             </li>

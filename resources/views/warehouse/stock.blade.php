@@ -37,10 +37,13 @@
                     <table class="table table-hover mb-0">
                         <thead style="background: var(--brown-50);">
                             <tr>
-                                <th class="border-0 fw-semibold ps-4" style="color: var(--color-primary-dark);">{{ __('common.product') }}
+                                <th class="border-0 fw-semibold ps-4" style="color: var(--color-primary-dark);">
+                                    {{ __('common.product') }}
                                 </th>
-                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('warehouse.batch_no') }}</th>
-                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('warehouse.expired_at') }}
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
+                                    {{ __('warehouse.batch_no') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">
+                                    {{ __('warehouse.expired_at') }}
                                 </th>
                                 <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                     {{ __('warehouse.current_stock') }}
@@ -57,7 +60,8 @@
                             @foreach($stocks as $stock)
                                 <tr>
                                     <td class="ps-4">
-                                        <div class="fw-bold" style="color: var(--color-primary-dark);">{{ $stock->product->name }}</div>
+                                        <div class="fw-bold" style="color: var(--color-primary-dark);">
+                                            {{ $stock->product->name }}</div>
                                         <small class="text-muted">{{ $stock->product->barcode }}</small>
                                         <span class="badge ms-1"
                                             style="background: var(--color-secondary-light); color: var(--color-primary-dark); font-size: 0.7rem;">
@@ -167,7 +171,8 @@
                 </div>
                 <div class="modal-body p-4">
                     <div class="mb-3">
-                        <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.product') }}</label>
+                        <label class="form-label fw-semibold"
+                            style="color: var(--color-primary-dark);">{{ __('common.product') }}</label>
                         <input type="text" class="form-control" id="product_name" readonly
                             style="border-radius: 12px; background: var(--gray-50);">
                     </div>
@@ -192,7 +197,8 @@
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('warehouse.quantity') }}</label>
+                        <label class="form-label fw-semibold"
+                            style="color: var(--color-primary-dark);">{{ __('warehouse.quantity') }}</label>
                         <input type="number" class="form-control" id="adjustment_qty" min="0" step="1"
                             style="border-radius: 20px; border: 2px solid var(--color-secondary-light); font-size: 1.25rem; text-align: center; font-weight: bold;">
                     </div>
@@ -232,7 +238,7 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
                         style="border-radius: 12px; font-weight: 600;">{{ __('common.cancel') }}</button>
                     <button type="button" id="saveAdjustmentBtn" class="btn btn-primary" onclick="saveAdjustment()"
-                        style="background: var(--gradient-primary); border: none; border-radius: 12px; padding: 0.6rem 2rem; font-weight: 600;">
+                        style="background: var(--color-primary-dark); border: none; border-radius: 12px; padding: 0.6rem 2rem; font-weight: 600;">
                         <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('warehouse.save_adjustment') }}
                     </button>
                 </div>
