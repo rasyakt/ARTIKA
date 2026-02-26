@@ -2320,7 +2320,7 @@
                     <button type="button" class="btn btn-secondary"
                         data-bs-dismiss="modal">{{ __('pos.cancel') }}</button>
                     <button type="button" class="btn" style="background: var(--primary); color: white;"
-                        id="keypadConfirm">{{ __('pos.confirm') }}</button>
+                        id="keypadConfirm" onmousedown="event.preventDefault()">{{ __('pos.confirm') }}</button>
                 </div>
             </div>
         </div>

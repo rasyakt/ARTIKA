@@ -41,8 +41,8 @@
                                     style="color: var(--color-primary-dark);">{{ __('common.barcode') }}
                                     *</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control @error('barcode') is-invalid @enderror" id="barcode"
-                                        name="barcode" value="{{ old('barcode', $product->barcode) }}"
+                                    <input type="text" class="form-control @error('barcode') is-invalid @enderror"
+                                        id="barcode" name="barcode" value="{{ old('barcode', $product->barcode) }}"
                                         placeholder="{{ __('common.barcode_placeholder') }}" required
                                         style="border-radius: {{ App\Models\Setting::get('admin_enable_camera', true) ? '12px 0 0 12px' : '12px' }}; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem; {{ App\Models\Setting::get('admin_enable_camera', true) ? 'border-right: none;' : '' }}">
                                     @if(App\Models\Setting::get('admin_enable_camera', true))
@@ -201,4 +201,7 @@
         // Initial calculation
         updateMargin();
     </script>
+
+    <!-- Scanner Modal -->
+    @include('components.scanner-modal')
 @endsection

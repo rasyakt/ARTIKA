@@ -182,4 +182,7 @@
             });
         }
     </script>
+    
+    <!-- Scanner Modal -->
+    @include('components.scanner-modal')
 @endsection
