@@ -25,6 +25,11 @@
                     style="border-radius: 10px; font-weight: 600;">
                     <i class="fa-solid fa-file-csv me-1"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
                 </a>
+                <button class="btn btn-outline-primary shadow-sm" data-bs-toggle="modal"
+                    data-bs-target="#excelImportModal"
+                    style="border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; border: 1px solid var(--color-primary);">
+                    <i class="fa-solid fa-file-import me-1"></i> Import
+                </button>
                 <button class="btn btn-brown shadow-sm" data-bs-toggle="modal" data-bs-target="#addPurchaseModal"
                     style="border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
                     <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_supply') }}
@@ -370,6 +375,10 @@
             </div>
         </div>
     </div>
+
+    {{-- Import Excel Modal --}}
+    <x-excel-import-modal :importRoute="route('admin.supplier-purchases.import', $supplier->id)"
+        :templateRoute="route('admin.supplier-purchases.template', $supplier->id)" title="Pasokan dari {{ $supplier->name }}" />
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

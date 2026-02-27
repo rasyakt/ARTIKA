@@ -428,4 +428,5 @@ return [
     'backup_failed' => 'Backup gagal',
     'clear_success' => 'Data berhasil dihapus',
     'clear_failed' => 'Data gagal dihapus',
+    'no_pre_orders_yet' => 'Belum ada pesanan barang ke supplier',
 ];

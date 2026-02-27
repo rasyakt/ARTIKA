@@ -10,6 +10,9 @@ use App\Models\StockMovement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SupplierTemplateExport;
+use App\Imports\SuppliersImport;
 
 class SupplierPurchaseController extends Controller
 {
@@ -98,6 +101,43 @@ class SupplierPurchaseController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Download the Excel template for importing supplier purchases.
+     */
+    public function downloadTemplate(Supplier $supplier)
+    {
+        return Excel::download(new SupplierTemplateExport, 'Template_Import_Pasokan_' . \Illuminate\Support\Str::slug($supplier->name) . '.xlsx');
+    }
+
+    /**
+     * Handle the Excel file import for a specific supplier.
+     */
+    public function import(Request $request, Supplier $supplier)
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:5120'], // Max 5MB
+        ]);
+
+        try {
+            Excel::import(new SuppliersImport($supplier->id), $request->file('file'));
+
+            return redirect()->back()->with('success', 'Berhasil mengimpor data pasokan dari file Excel secara massal.');
+
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMsg = 'Gagal import, format file salah pada baris: ';
+
+            foreach ($failures as $failure) {
+                $errorMsg .= $failure->row() . ' (' . implode(', ', $failure->errors()) . ')<br>';
+            }
+
+            return redirect()->back()->with('error', $errorMsg);
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat memproses file Excel: ' . $e->getMessage());
         }
     }
 }

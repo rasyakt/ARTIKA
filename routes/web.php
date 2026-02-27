@@ -43,6 +43,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/products/{id}/edit', [\App\Http\Controllers\AdminController::class, 'editProduct'])->name('products.edit');
         Route::put('/products/{id}', [\App\Http\Controllers\AdminController::class, 'updateProduct'])->name('products.update');
         Route::delete('/products/{id}', [\App\Http\Controllers\AdminController::class, 'deleteProduct'])->name('products.delete');
+        Route::get('/products/template', [\App\Http\Controllers\AdminController::class, 'downloadProductTemplate'])->name('products.template');
+        Route::post('/products/import', [\App\Http\Controllers\AdminController::class, 'importProducts'])->name('products.import');
 
         // Category Management
         Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('categories');
@@ -56,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
         // User Management
         Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users');
         Route::post('/users', [\App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/template', [\App\Http\Controllers\UserController::class, 'downloadTemplate'])->name('users.template');
+        Route::post('/users/import', [\App\Http\Controllers\UserController::class, 'import'])->name('users.import');
         Route::put('/users/{id}', [\App\Http\Controllers\UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{id}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.delete');
 
@@ -81,6 +85,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Supplier Purchases
         Route::post('/supplier-purchases', [\App\Http\Controllers\SupplierPurchaseController::class, 'store'])->name('supplier-purchases.store');
+        Route::get('/supplier-purchases/{supplier}/template', [\App\Http\Controllers\SupplierPurchaseController::class, 'downloadTemplate'])->name('supplier-purchases.template');
+        Route::post('/supplier-purchases/{supplier}/import', [\App\Http\Controllers\SupplierPurchaseController::class, 'import'])->name('supplier-purchases.import');
 
         // Expense Management
         Route::get('/expenses', [\App\Http\Controllers\ExpenseController::class, 'index'])->name('expenses.index');

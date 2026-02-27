@@ -9,11 +9,18 @@
                         class="fa-solid fa-users me-2"></i>{{ __('admin.user_management') }}</h2>
                 <p class="text-muted mb-0">{{ __('admin.manage_users_permissions') }}</p>
             </div>
-            <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
-                data-bs-target="#addUserModal"
-                style="background: var(--color-primary-dark); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
-                <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_user') }}
-            </button>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
+                    data-bs-target="#excelImportModal"
+                    style="border-radius: 12px; padding: 0.75rem 1.25rem; font-weight: 600; height: fit-content; border: 1px solid var(--color-primary);">
+                    <i class="fa-solid fa-file-import me-2"></i> Import Excel
+                </button>
+                <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
+                    data-bs-target="#addUserModal"
+                    style="background: var(--color-primary-dark); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                    <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_user') }}
+                </button>
+            </div>
         </div>
 
 
@@ -242,6 +249,46 @@
             </div>
         </div>
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header bg-danger text-white border-0 py-3">
+                    <h5 class="modal-title fw-800 d-flex align-items-center gap-2" id="deleteConfirmModalLabel">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        {{ __('admin.confirm_delete') }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-3 text-danger" style="font-size: 3rem;">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">{{ __('admin.are_you_sure') }}</h5>
+                    <p class="text-muted mb-0">{{ __('admin.delete_warning') }}</p>
+                </div>
+                <div class="modal-footer border-top-0 d-flex justify-content-center pb-4">
+                    <button type="button" class="btn btn-outline-secondary fw-semibold rounded-pill px-4"
+                        data-bs-dismiss="modal">
+                        {{ __('common.cancel') }}
+                    </button>
+                    <button type="button" class="btn btn-danger fw-semibold rounded-pill px-4" id="btnConfirmDelete">
+                        {{ __('admin.yes_delete') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Import Excel Modal Component --}}
+    <x-excel-import-modal
+        title="Pengguna"
+        importRoute="{{ route('admin.users.import') }}"
+        templateRoute="{{ route('admin.users.template') }}"
+    />
 
     <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1">

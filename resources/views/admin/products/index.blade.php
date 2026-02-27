@@ -103,10 +103,18 @@
 					</select>
 				</form>
 
-				<a href="{{ route('admin.products.create') }}" class="btn btn-primary shadow-sm"
-					style="background: var(--color-primary-dark); border:none; border-radius:12px; padding:0.6rem 1rem;">
-					<i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_product') }}
-				</a>
+				<div class="d-flex align-items-center gap-2">
+					<button class="btn btn-outline-primary shadow-sm d-inline-flex align-items-center"
+						data-bs-toggle="modal" data-bs-target="#excelImportModal"
+						style="border-radius: 12px; padding: 0.6rem 1rem; font-weight: 600; height: fit-content; border: 1px solid var(--color-primary);">
+						<i class="fa-solid fa-file-import me-2"></i> Import
+					</button>
+					<a href="{{ route('admin.products.create') }}"
+						class="btn btn-primary shadow-sm d-inline-flex align-items-center"
+						style="background: var(--color-primary-dark); border:none; border-radius:12px; padding:0.6rem 1rem; font-weight: 600; height: fit-content;">
+						<i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_product') }}
+					</a>
+				</div>
 			</div>
 		</div>
 
@@ -235,6 +243,10 @@
 			@endif
 		</div>
 	</div>
+
+	{{-- Import Excel Modal Component --}}
+	<x-excel-import-modal title="Produk" importRoute="{{ route('admin.products.import') }}"
+		templateRoute="{{ route('admin.products.template') }}" />
 
 	<script>
 		// Auto-submit search form on typing (with debounce)

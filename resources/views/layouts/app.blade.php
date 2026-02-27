@@ -1141,19 +1141,19 @@
                     // Flash Message Handling
                     document.addEventListener('DOMContentLoaded', function () {
                         @if(session('success') || session('status'))
-                            showToast('success', "{{ session('success') ?: session('status') }}");
+                            showToast('success', @json(session('success') ?: session('status')));
                         @endif
 
                         @if(session('error'))
-                            showToast('error', "{{ session('error') }}");
+                            showToast('error', @json(session('error')));
                         @endif
 
                         @if(session('warning'))
-                            showToast('warning', "{{ session('warning') }}");
+                            showToast('warning', @json(session('warning')));
                         @endif
 
                         @if($errors->any())
-                            showToast('error', "{{ $errors->first() }}");
+                            showToast('error', @json($errors->first()));
                         @endif
             });
 
