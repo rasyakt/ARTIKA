@@ -75,7 +75,14 @@ Sistem menggunakan Role-Based Access Control dengan 5 tingkatan:
 2. **Hashing Password**: Menggunakan algoritma Bcrypt via Laravel.
 3. **Audit Logging**: Setiap aksi krusial (hapus data, update stok) dicatat dalam tabel `audit_logs` bersama data IP dan User-Agent.
 
+## Pengelolaan File & Keamanan Upload
+
+ARTIKA POS menerapkan teknik keamanan tingkat tinggi untuk mencegah kerentanan upload file (seperti RCE, backdoor, shell script, atau polyglot):
+
+1. **Pemrosesan Gambar Aman (Secure Re-encoding)**: File gambar (bukti bayar, foto produk) diproses via `App\Services\ImageService`. Sistem membaca file dengan _Intervention Image_, kemudian **menggambar ulang (re-encode)** menjadi format aman (`.webp`/`.png`/`.jpg`), lalu diberi nama acak baru. File asli (yang berpotensi disisipi script berbahaya) langsung diabaikan/tidak pernah disimpan.
+2. **Impor Excel Pipa Langsung (Stream Piped)**: Fitur impor massal menggunakan `Maatwebsite\Excel`. File yang diunggah hanya dibaca isinya di memori tanpa pernah disimpan secara permanen di direktori server, menghilangkan risiko eksekusi file liar.
+
 ---
 
-**Versi Arsitektur:** 3.0  
-**Terakhir Diperbarui:** 2026-02-12
+**Versi Arsitektur:** 3.1  
+**Terakhir Diperbarui:** 2026-03-03

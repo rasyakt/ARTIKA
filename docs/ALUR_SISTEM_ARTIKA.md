@@ -24,6 +24,7 @@ Tim gudang memastikan ketersediaan barang tetap terjaga.
 
 - **Monitor Stok**: Melihat jumlah persediaan secara langsung (_real-time_) di layar.
 - **Peringatan Stok Minim**: Sistem memberikan notifikasi otomatis jika ada barang yang jumlahnya menipis, memudahkan proses restock.
+- **Restock via Excel**: Proses penerimaan barang dalam jumlah besar langsung dimuat melalui fitur Import Excel.
 - **Penyesuaian (Stock Opname)**: Tim gudang dapat menyesuaikan angka di sistem agar akurat dengan fisik barang jika terjadi selisih (rusak/hilang).
 
 ## 4. Manajer (Pengawasan)

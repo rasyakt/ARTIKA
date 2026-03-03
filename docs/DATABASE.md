@@ -28,14 +28,16 @@ Berikut adalah tabel-tabel krusial dalam sistem:
 - `expenses`: Pengeluaran operasional toko.
 - `expense_categories`: Jenis pengeluaran (Gaji, Listrik, dll).
 - `suppliers`: Data mitra pemasok barang.
+- `supplier_purchases`: Pencatatan pasokan masuk dari supplier.
 
 ### 4. Otorisasi & Log
 
 - `users`: Data akun pengguna.
 - `roles`: Definisi peran (Superadmin, Admin, Manager, Cashier, Warehouse).
+- `identity_types`: Tipe identitas (NIS, NIK) untuk pendaftaran.
 - `audit_logs`: Rekam jejak aktivitas user (IP, Device, Action).
 - `settings`: Konfigurasi global aplikasi.
 
 ---
 
-**Terakhir Diperbarui:** 2026-02-12
+**Terakhir Diperbarui:** 2026-03-03

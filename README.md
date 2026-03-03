@@ -12,14 +12,15 @@
 
 ## Fitur Unggulan
 
-- **POS Super Cepat**: Mendukung scanner barcode (USB/Kamera), keyboard shortcuts, dan pencarian produk instan.
+- **POS Super Cepat & Cerdas**: Mendukung scanner barcode (USB/Kamera), pencarian produk instan, dan **Sistem Keyboard Shortcut Global** dengan fitur _Smart Focus_ untuk transaksi kilat tanpa mouse.
 - **Manajemen Stok Pintar**: Pantau stok masuk, keluar, dan peringatan stok rendah secara otomatis.
+- **Import Massal (Excel)**: Tambah ratusan produk, pengguna, dan pasokan supplier secara instan melalui sistem _Secure Excel Parsing_.
 - **Laporan Lengkap & Hub**: Dashboard laporan terpusat (Warehouse, Cashier, Finance) dengan ekspor PDF/CSV.
 - **Akuntansi & Jurnal**: Pencatatan otomatis ke dalam Jurnal Keuangan setiap transaksi.
-- **Manajemen Biaya & Supplier**: Kelola pengeluaran operasional dan pembelian stok dari supplier.
+- **Manajemen Biaya & Supplier**: Kelola pengeluaran operasional dan pembelian stok massal dari supplier.
 - **Promo & Diskon**: Fitur promo aktif/non-aktif untuk meningkatkan penjualan.
 - **Retur & Koreksi**: Kelola pengembalian barang dan perbaikan data transaksi dengan audit log.
-- **Multi-Role**: Akses terbatas untuk Superadmin, Admin, Manager, Kasir, dan Petugas Gudang.
+- **Multi-Role & Keamanan Ekstra**: Akses terbatas 5 level role dengan _Secure Image Re-encoding_ untuk menjamin server bebas dari ancaman eksploitasi file.
 - **Responsive Design**: Tampilan optimal di desktop, tablet, maupun ponsel.
 
 ---
