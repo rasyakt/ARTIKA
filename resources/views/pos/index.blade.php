@@ -986,7 +986,7 @@
         .total-row {
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
+            font-size: 1rem;
             padding: 0.4rem 0;
             border-bottom: 1px solid var(--gray-200);
         }
@@ -2259,8 +2259,8 @@
                             </div>
                         @endif
                         <div class="total-row">
-                            <span>{{ __('common.total') }}:</span>
-                            <span class="totalDisplay" id="totalDisplay">Rp0</span>
+                            <span class="fw-bold">{{ __('common.total') }}:</span>
+                            <span class="totalDisplay fw-bold" id="totalDisplay">Rp0</span>
                         </div>
                     </div>
 
