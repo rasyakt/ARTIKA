@@ -226,11 +226,12 @@ class SuperadminController extends Controller
                 'cashier_enable_returns' => ['label' => 'Returns & Refunds', 'type' => 'boolean', 'default' => true],
                 'cashier_enable_discounts' => ['label' => 'Manual Discounts', 'type' => 'boolean', 'default' => true],
                 'cashier_enable_camera' => ['label' => 'Camera Scanner', 'type' => 'boolean', 'default' => true],
+                'cashier_enable_product_photos' => ['label' => 'Tampilkan Foto Produk', 'type' => 'boolean', 'default' => true],
                 'cashier_enable_audit_logs' => ['label' => 'Activity Logs', 'type' => 'boolean', 'default' => true],
             ],
             'Sustainability & Performance' => [
                 'session_duration' => ['label' => 'Session Duration (Minutes)', 'type' => 'number', 'default' => 120],
-                'auto_optimize' => ['label' => 'Auto-Optimize on Login', 'type' => 'boolean', 'default' => false],
+
             ],
             'Image & Storage' => [
                 'image_max_width' => ['label' => 'Max Lebar Gambar (px)', 'type' => 'number', 'default' => 1920],
@@ -278,8 +279,9 @@ class SuperadminController extends Controller
             'cashier_enable_returns',
             'cashier_enable_discounts',
             'cashier_enable_camera',
+            'cashier_enable_product_photos',
             'cashier_enable_audit_logs',
-            'auto_optimize',
+
             'enable_faq'
         ];
 

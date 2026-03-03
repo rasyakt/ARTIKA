@@ -161,8 +161,12 @@
 									data-category="{{ $product->category->name ?? '' }}">
 									<td class="ps-4">
 										<div class="d-flex align-items-center">
-											<div class="me-3 product-badge">
-												<i class="fa-solid fa-box"></i>
+											<div class="me-3 product-badge" style="{{ $product->image && file_exists(public_path($product->image)) ? 'background: transparent;' : '' }}">
+                                                @if($product->image && file_exists(public_path($product->image)))
+                                                    <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" style="width: 100%; height: 100%; object-fit: contain; border-radius: 10px;">
+                                                @else
+												    <i class="fa-solid fa-box"></i>
+                                                @endif
 											</div>
 											<div>
 												<div class="fw-bold" style="color:var(--color-primary-dark);">

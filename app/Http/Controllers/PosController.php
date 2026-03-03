@@ -28,7 +28,9 @@ class PosController extends Controller
 
     public function index()
     {
-        $products = $this->productRepository->getAllProducts();
+        // Load only initial subset of products to speed up first load
+        $products = \App\Models\Product::with('stocks')->limit(50)->get();
+
         $categories = Category::all();
         $paymentMethods = PaymentMethod::where('is_active', true)->ordered()->get();
         $heldTransactions = HeldTransaction::where('user_id', Auth::id())
@@ -38,6 +40,29 @@ class PosController extends Controller
         $activePromos = \App\Models\Promo::active()->get();
 
         return view('pos.index', compact('products', 'categories', 'paymentMethods', 'heldTransactions', 'activePromos'));
+    }
+
+    public function search(Request $request)
+    {
+        $query = \App\Models\Product::with('stocks');
+
+        if ($request->has('q') && $request->q != '') {
+            $searchTerm = $request->q;
+            $query->where('name', 'ilike', '%' . $searchTerm . '%')
+                ->orWhere('barcode', 'like', '%' . $searchTerm . '%');
+        }
+
+        if ($request->has('category_id') && $request->category_id != 'all') {
+            $query->where('category_id', $request->category_id);
+        }
+
+        // Return up to 50 results at a time
+        $products = $query->limit(50)->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $products
+        ]);
     }
 
     public function logs(Request $request)
@@ -78,13 +103,16 @@ class PosController extends Controller
         $summaryQuery = clone $query;
         $totalRevenue = $summaryQuery->sum('total_amount') ?? 0;
 
-        // Get Sold Items Summary
-        $soldItems = TransactionItem::whereIn('transaction_id', $summaryQuery->select('id'))
-            ->join('products', 'transaction_items.product_id', '=', 'products.id')
-            ->select('products.name', DB::raw('SUM(transaction_items.quantity) as total_qty'), DB::raw('SUM(transaction_items.subtotal) as total_sales'))
-            ->groupBy('products.name')
-            ->orderByDesc('total_qty')
-            ->get();
+        // Get Sold Items Summary (Cached for performance)
+        $cacheKey = 'sold_items_' . Auth::id() . '_' . $request->start_date . '_' . $request->end_date;
+        $soldItems = \Illuminate\Support\Facades\Cache::remember($cacheKey, now()->addMinutes(10), function () use ($summaryQuery) {
+            return TransactionItem::whereIn('transaction_id', $summaryQuery->select('id'))
+                ->join('products', 'transaction_items.product_id', '=', 'products.id')
+                ->select('products.name', DB::raw('SUM(transaction_items.quantity) as total_qty'), DB::raw('SUM(transaction_items.subtotal) as total_sales'))
+                ->groupBy('products.name')
+                ->orderByDesc('total_qty')
+                ->get();
+        });
 
         $transactions = $query->orderBy('created_at', 'desc')
             ->paginate(10)

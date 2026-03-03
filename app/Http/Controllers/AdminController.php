@@ -201,10 +201,21 @@ class AdminController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'cost_price' => 'required|numeric|min:0',
+            'image' => 'nullable|mimes:png|max:2048',
         ]);
 
         return DB::transaction(function () use ($request) {
-            $product = Product::create($request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']));
+            $data = $request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']);
+
+            if ($request->hasFile('image')) {
+                $imageService = app(\App\Services\ImageService::class);
+                $data['image'] = $imageService->compress(
+                    $request->file('image'),
+                    'uploads/products'
+                );
+            }
+
+            $product = Product::create($data);
 
             // Create initial stock
             Stock::create([
@@ -245,9 +256,24 @@ class AdminController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'cost_price' => 'required|numeric|min:0',
+            'image' => 'nullable|mimes:png|max:2048',
         ]);
 
-        $product->update($request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']));
+        $data = $request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']);
+
+        if ($request->hasFile('image')) {
+            $imageService = app(\App\Services\ImageService::class);
+            $data['image'] = $imageService->compress(
+                $request->file('image'),
+                'uploads/products'
+            );
+            // Delete old image
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+        }
+
+        $product->update($data);
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
     }

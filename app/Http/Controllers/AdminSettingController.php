@@ -22,7 +22,7 @@ class AdminSettingController extends Controller
         $settings = $request->except('_token');
 
         // Handle checkboxes (if not present, they are false)
-        $checkboxKeys = ['enable_camera'];
+        $checkboxKeys = ['enable_camera', 'cashier_enable_product_photos'];
         foreach ($checkboxKeys as $key) {
             $value = isset($settings[$key]) ? '1' : '0';
             Setting::set($key, $value);

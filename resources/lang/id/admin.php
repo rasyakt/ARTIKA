@@ -429,4 +429,7 @@ return [
     'clear_success' => 'Data berhasil dihapus',
     'clear_failed' => 'Data gagal dihapus',
     'no_pre_orders_yet' => 'Belum ada pesanan barang ke supplier',
+    'finance_report_customization' => 'Kustomisasi Laporan Keuangan',
+    'transaction_detail' => 'Detail Transaksi',
+    'transaction_history' => 'Riwayat Transaksi',
 ];

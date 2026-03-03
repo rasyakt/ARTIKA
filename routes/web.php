@@ -13,6 +13,7 @@ Route::get('/login/admin', [AuthController::class, 'showAdminLoginForm'])->name(
 Route::get('/login/warehouse', [AuthController::class, 'showWarehouseLoginForm'])->name('login.warehouse');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
@@ -177,6 +178,7 @@ Route::middleware(['auth'])->group(function () {
             ->middleware(['feature:cashier_enable_audit_logs'])
             ->name('logs');
         Route::get('/history', [\App\Http\Controllers\PosController::class, 'history'])->name('history');
+        Route::get('/search', [\App\Http\Controllers\PosController::class, 'search'])->name('search');
         Route::get('/', [\App\Http\Controllers\PosController::class, 'index'])->name('index');
         Route::get('/scanner', [\App\Http\Controllers\PosController::class, 'scanner'])->name('scanner');
         Route::post('/checkout', [\App\Http\Controllers\PosController::class, 'store'])->name('checkout');

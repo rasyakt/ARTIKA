@@ -28,7 +28,6 @@ class SuppliersImport implements ToCollection, WithHeadingRow, WithValidation, S
     {
         foreach ($data as $key => $value) {
             if ($value !== null && !is_array($value)) {
-                // Cast all scalar values to string to avoid "validation.string" and "max" errors on numeric formats
                 $data[$key] = (string) $value;
             }
         }
@@ -41,13 +40,18 @@ class SuppliersImport implements ToCollection, WithHeadingRow, WithValidation, S
             $supplier = Supplier::findOrFail($this->supplierId);
 
             foreach ($rows as $row) {
+                // Filter out empty rows or instruction rows
+                if (empty($row['barcode']) || empty($row['jumlah'])) {
+                    continue;
+                }
+
                 $product = Product::where('barcode', $row['barcode'])->first();
                 if (!$product) {
-                    throw new \Exception("Produk dengan barcode '{$row['barcode']}' tidak ditemukan di baris " . ($rows->search($row) + 2) . ". Pastikan Anda mendaftarkan produk tersebut di Master Data Produk terlebih dahulu.");
+                    continue; // Skip if product barcode not registered in master data
                 }
 
                 $quantity = (int) $row['jumlah'];
-                $pcsPerUnit = (int) $row['pcs_per_satuan'];
+                $pcsPerUnit = (int) ($row['pcs_per_satuan'] ?? 1);
                 $purchasePrice = (float) $row['harga_beli_per_pcs'];
                 $totalPrice = $quantity * $pcsPerUnit * $purchasePrice;
 
@@ -56,13 +60,13 @@ class SuppliersImport implements ToCollection, WithHeadingRow, WithValidation, S
                     'uuid' => (string) \Illuminate\Support\Str::uuid(),
                     'supplier_id' => $supplier->id,
                     'product_id' => $product->id,
-                    'unit_name' => $row['satuan'],
+                    'unit_name' => $row['satuan'] ?? 'Pcs',
                     'pcs_per_unit' => $pcsPerUnit,
                     'quantity' => $quantity,
                     'purchase_price' => $purchasePrice,
                     'total_price' => $totalPrice,
                     'notes' => $row['catatan'] ?? null,
-                    'purchase_date' => now(), // Will be overridden by the controller logic if a date field is provided, but since Excel doesn't have a reliable date picker, we use the import date.
+                    'purchase_date' => now(),
                     'user_id' => Auth::id(),
                 ]);
 
@@ -95,7 +99,7 @@ class SuppliersImport implements ToCollection, WithHeadingRow, WithValidation, S
                     'quantity_before' => $qtyBefore,
                     'quantity_after' => $qtyAfter,
                     'quantity_change' => $incrementAmount,
-                    'reason' => 'Pasokan dari Supplier (import massal): ' . $supplier->name . ' (' . $quantity . ' ' . $row['satuan'] . ')' . ($row['catatan'] ? ' - ' . $row['catatan'] : ''),
+                    'reason' => 'Pasokan dari Supplier (import massal): ' . $supplier->name . ' (' . $quantity . ' ' . ($row['satuan'] ?? 'Pcs') . ')' . ($row['catatan'] ? ' - ' . $row['catatan'] : ''),
                     'reference' => 'SUP-PUR-' . $purchase->id,
                 ]);
             }
@@ -110,12 +114,11 @@ class SuppliersImport implements ToCollection, WithHeadingRow, WithValidation, S
     public function rules(): array
     {
         return [
-            'barcode' => ['required', 'string', 'max:255'],
-            'nama_produk' => ['nullable', 'string', 'max:255'], // For visual reference in Excel only
-            'satuan' => ['required', 'string', 'max:50'],
-            'pcs_per_satuan' => ['required', 'numeric', 'min:1'],
-            'jumlah' => ['required', 'numeric', 'min:1'],
-            'harga_beli_per_pcs' => ['required', 'numeric', 'min:0'],
+            'barcode' => ['nullable', 'string', 'max:255'],
+            'satuan' => ['nullable', 'string', 'max:50'],
+            'pcs_per_satuan' => ['nullable', 'numeric', 'min:1'],
+            'jumlah' => ['nullable', 'numeric', 'min:1'],
+            'harga_beli_per_pcs' => ['nullable', 'numeric', 'min:0'],
             'catatan' => ['nullable', 'string', 'max:255'],
         ];
     }

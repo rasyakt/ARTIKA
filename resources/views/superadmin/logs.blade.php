@@ -12,7 +12,7 @@
                 </div>
                 <div class="d-flex gap-3 align-items-center">
                     <div class="position-relative">
-                        <i class="fa-solid fa-search position-absolute text-muted" style="top: 12px; left: 15px;"></i>
+                        <i class="fa-solid fa-search position-absolute" style="top: 12px; left: 15px;"></i>
                         <input type="text" id="logSearch" class="form-control ps-5" placeholder="Search logs..."
                             style="border-radius: 12px; width: 300px;">
                     </div>

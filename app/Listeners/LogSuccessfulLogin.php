@@ -22,6 +22,7 @@ class LogSuccessfulLogin
      */
     public function handle(Login $event): void
     {
+        // 1. Audit Log
         AuditLog::log(
             'login',
             'User',

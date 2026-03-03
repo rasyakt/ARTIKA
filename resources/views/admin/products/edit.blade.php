@@ -17,7 +17,8 @@
                 <!-- Form Card -->
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
-                        <form action="{{ route('admin.products.update', $product->id) }}" method="POST">
+                        <form action="{{ route('admin.products.update', $product->id) }}" method="POST"
+                            enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
 
@@ -133,6 +134,28 @@
                                     style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">{{ old('description', $product->description) }}</textarea>
                             </div>
 
+                            @if(\App\Models\Setting::get('cashier_enable_product_photos', true))
+                                <!-- Product Image (Optional) -->
+                                <div class="mb-4">
+                                    <label for="image" class="form-label fw-semibold"
+                                        style="color: var(--color-primary-dark);">Foto Produk (Opsional)</label>
+                                    <input class="form-control @error('image') is-invalid @enderror" type="file" id="image"
+                                        name="image" accept=".png"
+                                        style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                    <small class="text-muted">Upload gambar baru untuk mengganti foto lama. Hanya file .png,
+                                        maksimal 2MB.</small>
+                                    @error('image')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div
+                                        class="mt-2 preview-container {{ $product->image && file_exists(public_path($product->image)) ? '' : 'd-none' }}">
+                                        <img id="imagePreview"
+                                            src="{{ $product->image && file_exists(public_path($product->image)) ? asset($product->image) : '#' }}"
+                                            alt="Preview" class="img-thumbnail" style="max-height: 150px; object-fit: contain;">
+                                    </div>
+                                </div>
+                            @endif
+
                             <!-- Action Buttons -->
                             <div class="d-flex gap-3 justify-content-end pt-3 border-top">
                                 <a href="{{ route('admin.products') }}" class="btn btn-outline-secondary"
@@ -182,6 +205,34 @@
 
         costInput.addEventListener('input', updateMargin);
         priceInput.addEventListener('input', updateMargin);
+
+        // Image Preview
+        const imageInput = document.getElementById('image');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewContainer = document.querySelector('.preview-container');
+
+        if (imageInput) {
+            imageInput.addEventListener('change', function () {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;
+                        previewContainer.classList.remove('d-none');
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    // Reset to original image if exists
+                    const originalImage = "{{ $product->image ? asset($product->image) : '' }}";
+                    if (originalImage) {
+                        imagePreview.src = originalImage;
+                    } else {
+                        imagePreview.src = '#';
+                        previewContainer.classList.add('d-none');
+                    }
+                }
+            });
+        }
 
         // Scanner Integration
         const scannerBtn = document.getElementById('btnScanner');

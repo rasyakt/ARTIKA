@@ -656,64 +656,144 @@
 
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.5rem;
         }
 
         .product-card {
             background: var(--white);
-            border: 1px solid var(--gray-200);
-            border-radius: 8px;
-            padding: 0.75rem;
+            border: 1px solid var(--gray-100);
+            border-radius: 12px;
+            padding: 0;
             cursor: pointer;
-            transition: all 0.2s;
-            text-align: center;
-            min-height: 100px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden;
             -webkit-user-select: none;
             user-select: none;
             position: relative;
-        }
-
-        .product-card:active {
-            transform: scale(0.95);
-            box-shadow: 0 4px 12px rgba(133, 105, 90, 0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            height: 100%;
         }
 
         .product-card:hover {
             border-color: var(--primary);
-            box-shadow: 0 2px 8px rgba(133, 105, 90, 0.1);
-            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
         }
 
-        .product-icon {
-            font-size: 2rem;
-            color: var(--primary);
-            margin-bottom: 0.4rem;
+        .product-card:active {
+            transform: scale(0.98);
+        }
+
+        .product-image-wrapper {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            position: relative;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .product-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .product-card-body {
+            padding: 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .product-name {
             font-weight: 600;
-            font-size: 0.8rem;
-            color: var(--gray-700);
-            margin-bottom: 0.3rem;
-            word-break: break-word;
+            font-size: 0.95rem;
+            color: var(--gray-800);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 2.8em;
         }
 
         .product-price {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gray-500);
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
         }
 
-        .product-info-stack {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
+        .product-price .discounted-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .product-stock {
+            font-size: 0.85rem;
+            color: #20c997;
+            /* Teal/Green for stock as per image */
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .product-stock.out-of-stock {
+            color: var(--danger);
+        }
+
+        .btn-add-product {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-top: auto;
+        }
+
+        .product-card:hover .btn-add-product {
+            background: var(--primary-dark);
+        }
+
+        .promo-badge {
+            position: absolute;
+            top: 0.75rem;
+            right: 0.75rem;
+            background: var(--danger);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 2;
+        }
+
+        .expiry-badge {
+            position: absolute;
+            top: 0.75rem;
+            left: 0.75rem;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            z-index: 2;
         }
 
         /* CART */
@@ -1285,7 +1365,72 @@
             }
 
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+                display: flex;
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .product-card {
+                flex-direction: row;
+                padding: 0.75rem 1rem;
+                min-height: auto;
+                border-radius: 10px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            }
+
+            .product-card-body {
+                flex-direction: row;
+                width: 100%;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0;
+                gap: 0.5rem;
+            }
+
+            .product-name {
+                margin-bottom: 0;
+                height: auto;
+                -webkit-line-clamp: 1;
+                font-size: 0.85rem;
+                flex: 2;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .product-price {
+                margin-bottom: 0;
+                font-size: 0.8rem;
+                flex: 1.5;
+                text-align: right;
+                display: flex;
+                flex-direction: column;
+                line-height: 1.2;
+            }
+
+            .product-price .discounted-price {
+                font-size: 0.85rem;
+            }
+
+            .product-stock {
+                margin-bottom: 0;
+                font-size: 0.8rem;
+                flex: 1;
+                text-align: right;
+                min-width: 60px;
+            }
+
+            .btn-add-product,
+            .product-image-wrapper,
+            .expiry-badge,
+            .promo-badge {
+                display: none !important;
+            }
+
+            .product-card:hover {
+                transform: none;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             }
         }
 
@@ -1296,7 +1441,12 @@
             }
 
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 1.25rem;
+            }
+
+            .product-image-wrapper {
+                display: none !important;
             }
         }
 
@@ -1845,6 +1995,46 @@
             padding-bottom: 2rem;
             /* Ensure buttons have space */
         }
+
+        /* SHORTCUT HINTS */
+        .shortcut-hint {
+            font-size: 0.65rem;
+            background: rgba(0, 0, 0, 0.15);
+            padding: 1px 5px;
+            border-radius: 4px;
+            margin-left: 6px;
+            font-family: 'Segoe UI Mono', monospace;
+            font-weight: 700;
+            display: inline-block;
+            vertical-align: middle;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        [data-bs-theme="dark"] .shortcut-hint {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-shortcut-help {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.35rem 0.65rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+
+        .btn-shortcut-help:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
     </style>
 </head>
 
@@ -1856,6 +2046,13 @@
                 <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 38px; width: auto;">
             </div>
             <div class="navbar-right">
+                <!-- Shortcut Help Button -->
+                <button class="btn btn-shortcut-help d-none d-md-flex me-2" onclick="openShortcutGuide()"
+                    title="Panduan Shortcut (F1)">
+                    <i class="fas fa-keyboard"></i>
+                    <span>Shortcut <small class="opacity-75">[F1]</small></span>
+                </button>
+
                 <div class="dropdown">
                     <button class="btn p-0 border-0 profile-trigger d-flex align-items-center" type="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -1889,7 +2086,7 @@
                         <div class="barcode-input-group">
                             <span class="search-icon"><i class="fas fa-barcode"></i></span>
                             <input type="text" id="barcodeScannerInput" class="barcode-input"
-                                placeholder="Scan Barcode Di Sini..." autofocus autocomplete="off" inputmode="none">
+                                placeholder="Scan Barcode [F4]..." autofocus autocomplete="off" inputmode="none">
                         </div>
 
                         @if(\App\Models\Setting::get('cashier_enable_camera', true))
@@ -1922,13 +2119,10 @@
                                 $actualTotalStock = $product->total_stock;
                                 $isOutOfStock = $totalStock <= 0;
 
-                                // Skip products that are effectively "All Expired" 
-                                // (If they have physical stock but 0 is available/non-expired)
                                 if ($actualTotalStock > 0 && $totalStock <= 0) {
                                     continue;
                                 }
 
-                                // Find best active promo for this product
                                 $promo = $activePromos->where('product_id', $product->id)->first()
                                     ?? $activePromos->where('category_id', $product->category_id)->first();
 
@@ -1942,8 +2136,7 @@
                                         $promoPrice = max(0, $product->price - $promo->value);
                                     }
                                 }
-                            @endphp
-                            @php
+
                                 $expiry = $product->next_expiry;
                                 $isExpiringSoon = $expiry && \Carbon\Carbon::parse($expiry)->diffInDays(now()->startOfDay()) < 30;
                             @endphp
@@ -1953,11 +2146,13 @@
                                 data-promo-price="{{ $promoPrice }}" data-stock="{{ $totalStock }}"
                                 data-barcode="{{ $product->barcode }}"
                                 data-expiry="{{ $expiry ? \Carbon\Carbon::parse($expiry)->format('Y-m-d') : '' }}">
+
                                 @if($hasPromo)
                                     <div class="promo-badge pulsate-slow">
                                         {{ $promo->type === 'percentage' ? '-' . round($promo->value) . '%' : '-Rp' . number_format($promo->value, 0, ',', '.') }}
                                     </div>
                                 @endif
+
                                 @if($isExpiringSoon)
                                     <div class="expiry-badge expiring bg-warning text-dark">
                                         <i class="fas fa-hourglass-half"></i>
@@ -1965,22 +2160,41 @@
                                     </div>
                                 @endif
 
-                                <div class="product-name text-truncate w-100 px-1">{{ $product->name }}</div>
-                                <div class="product-info-stack">
-                                    <div class="product-price">
-                                        @if($hasPromo)
-                                            <span
-                                                class="original-price text-muted text-decoration-line-through small me-1">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
-                                            <span
-                                                class="discounted-price text-danger">Rp{{ number_format($promoPrice, 0, ',', '.') }}</span>
+                                @if(\App\Models\Setting::get('cashier_enable_product_photos', true))
+                                    <div class="product-image-wrapper">
+                                        @if($product->image && file_exists(public_path($product->image)))
+                                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}" loading="lazy">
                                         @else
-                                            Rp{{ number_format($product->price, 0, ',', '.') }}
+                                            <div class="text-muted opacity-25">
+                                                <i class="fas fa-image fa-3x"></i>
+                                            </div>
                                         @endif
                                     </div>
-                                    <div class="small {{ $isOutOfStock ? 'text-danger fw-bold' : 'text-muted' }}"
-                                        style="font-size: 0.65rem;">
+                                @endif
+
+                                <div class="product-card-body">
+                                    <div class="product-name">
+                                        {{ $product->name }}
+                                    </div>
+
+                                    <div class="product-price">
+                                        @if($hasPromo && $promoPrice < $product->price)
+                                            <span
+                                                class="text-decoration-line-through small me-1">Rp{{ number_format($product->price, 0, ',', '.') }}</span>
+                                            <div class="discounted-price">Rp{{ number_format($promoPrice, 0, ',', '.') }}</div>
+                                        @else
+                                            <div class="discounted-price">Rp{{ number_format($product->price, 0, ',', '.') }}
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="product-stock {{ $isOutOfStock ? 'out-of-stock' : '' }}">
                                         {{ __('pos.qty') }}: {{ $totalStock }}
                                     </div>
+
+                                    <button class="btn-add-product">
+                                        <i class="fas fa-plus me-1"></i> Tambah
+                                    </button>
                                 </div>
                             </div>
                         @endforeach
@@ -2072,16 +2286,19 @@
                     <!-- BUTTONS -->
                     <div class="checkout-buttons">
                         <button class="btn-checkout bg-danger btn-cancel clearBtn" id="clearBtn"
-                            title="Hapus Keranjang">
+                            title="Hapus Keranjang (Alt + C)">
                             <i class="fas fa-trash text-white opacity-90"></i>
+                            <span class="shortcut-hint d-none d-lg-inline-block">Alt+C</span>
                         </button>
                         <button class="btn-checkout btn-primary" id="btnHold" onclick="holdTransaction()"
-                            title="Tunda Transaksi">
+                            title="Tunda Transaksi (F9)">
                             <i class="fas fa-pause"></i>
+                            <span class="shortcut-hint d-none d-lg-inline-block">F9</span>
                         </button>
                         <button class="btn-checkout btn-finish checkoutBtn" id="checkoutBtn" onclick="checkout()"
                             disabled>
-                            <i class="fas fa-check-circle me-2"></i> {{ __('pos.checkout') }}
+                            <i class="fas fa-check-circle me-1"></i> {{ __('pos.checkout') }}
+                            <span class="shortcut-hint d-none d-lg-inline-block">F2</span>
                         </button>
                     </div>
                 </div>
@@ -2181,7 +2398,53 @@
         </div>
     </div>
 
-    <!-- KEYPAD MODAL -->
+    <!-- SHORTCUT GUIDE MODAL -->
+    <div class="modal fade" id="shortcutGuideModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title text-white fw-bold"><i class="fas fa-keyboard me-2"></i> Panduan Shortcut
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span class="fw-600">Buka Panduan Ini</span>
+                            <span class="badge bg-secondary p-2 px-3 fw-bold">F1</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span class="fw-600">Selesaikan Pembayaran (Checkout)</span>
+                            <span class="badge bg-success p-2 px-3 fw-bold">F2</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span class="fw-600">Fokus ke Area Scan Barcode</span>
+                            <span class="badge bg-primary p-2 px-3 fw-bold">F4</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span class="fw-600">Lihat Daftar Transaksi Tertunda</span>
+                            <span class="badge bg-dark p-2 px-3 fw-bold">F8</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span class="fw-600">Tunda Transaksi Sekarang (Hold)</span>
+                            <span class="badge bg-info text-dark p-2 px-3 fw-bold">F9</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                            <span class="fw-600">Kosongkan Keranjang Belanja</span>
+                            <span class="badge bg-danger p-2 px-3 fw-bold">Alt + C</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center p-2">
+                            <span class="fw-600">Tutup Modal / Bersihkan Input</span>
+                            <span class="badge bg-light text-dark border p-2 px-3 fw-bold">Esc</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 bg-light rounded text-center small text-muted">
+                        Gunakan tombol shortcut di atas untuk mempercepat proses transaksi di kasir.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="keypadModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered" style="max-width: 320px;">
             <div class="modal-content">
@@ -2335,6 +2598,103 @@
                 buttonsStyling: false
             });
         }
+
+        // --- KEYBOARD SHORTCUTS SYSTEM ---
+
+        function openShortcutGuide() {
+            const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById('shortcutGuideModal'));
+            modal.show();
+        }
+
+        function refocusBarcode() {
+            const barcodeInput = document.getElementById('barcodeScannerInput');
+            const modals = ['keypadModal', 'heldTransactionsModal', 'shortcutGuideModal'];
+            const isAnyModalOpen = modals.some(id => {
+                const el = document.getElementById(id);
+                return el && el.classList.contains('show');
+            });
+
+            // Focus barcode input if no modals are open AND it's a desktop-sized screen 
+            // Avoid refocus on mobile/tablets to prevent keyboard popping up unexpectedly
+            if (barcodeInput && !isAnyModalOpen && window.innerWidth >= 1025) {
+                barcodeInput.focus();
+            }
+        }
+
+        // Global Keyboard Shortcut Listener
+        document.addEventListener('keydown', function (e) {
+            // [F1] - Show Shortcut Guide
+            if (e.key === 'F1') {
+                e.preventDefault();
+                openShortcutGuide();
+                return;
+            }
+
+            // [F2] - Checkout (Bayar)
+            if (e.key === 'F2') {
+                e.preventDefault();
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                if (checkoutBtn && !checkoutBtn.disabled) {
+                    checkout();
+                } else if (cart.length === 0) {
+                    showToast('warning', 'Keranjang masih kosong!');
+                }
+                return;
+            }
+
+            // [F4] - Focus Barcode Input
+            if (e.key === 'F4') {
+                e.preventDefault();
+                const barcodeInput = document.getElementById('barcodeScannerInput');
+                if (barcodeInput) {
+                    barcodeInput.focus();
+                    barcodeInput.value = '';
+                    showToast('info', 'Siap scan barcode...');
+                }
+                return;
+            }
+
+            // [F8] - Toggle Held Transactions List
+            if (e.key === 'F8') {
+                e.preventDefault();
+                openHeldModal();
+                return;
+            }
+
+            // [F9] - Hold (Tunda) Transaction
+            if (e.key === 'F9') {
+                e.preventDefault();
+                if (cart.length > 0) {
+                    holdTransaction();
+                } else {
+                    showToast('warning', 'Tidak ada item untuk ditunda');
+                }
+                return;
+            }
+
+            // [Alt + C] - Clear Cart (Hapus)
+            if (e.altKey && (e.key === 'c' || e.key === 'C')) {
+                e.preventDefault();
+                if (cart.length > 0) {
+                    clearCart();
+                }
+                return;
+            }
+
+            // [Esc] - Global Escape Handler
+            if (e.key === 'Escape') {
+                // Check if any modal is open and let Bootstrap handle it naturally 
+                // but we also use it to clear search or focus scanner
+                const productSearch = document.getElementById('productSearch');
+                if (document.activeElement === productSearch) {
+                    productSearch.value = '';
+                    searchProducts();
+                    refocusBarcode();
+                }
+            }
+        });
+
+        // --- END SHORTCUTS SYSTEM ---
 
         let cart = [];
         let selectedPaymentMethod = null;
@@ -2516,7 +2876,7 @@
                 barcode = barcode.trim();
                 console.log(`[Diagnostic] Processing barcode: "${barcode}"`);
 
-                // More robust matching: Iterate through all product cards
+                // First check DOM for already loaded products (fast path)
                 let product = null;
                 const cards = document.querySelectorAll('.product-card');
 
@@ -2531,44 +2891,89 @@
                 }
 
                 if (product) {
-                    console.log(`[Success] Match found! Adding ${product.dataset.name} to cart.`);
-                    const wasAdded = addToCart(product);
-
-                    if (wasAdded) {
-                        playBeep();
-                        const price = parseFloat(product.dataset.promoPrice || product.dataset.price);
-                        const priceFormatted = 'Rp' + price.toLocaleString('id-ID');
-                        const existingItem = cart.find(item => item.product_id == product.dataset.productId);
-                        const qtyText = existingItem ? ' (x' + existingItem.quantity + ')' : '';
-                        showToast('success', '✅ ' + product.dataset.name + qtyText + ' — ' + priceFormatted);
-                    }
-
-                    if (productSearch) {
-                        productSearch.value = '';
-                        searchProducts();
-                    }
+                    processScannedProduct(product);
                 } else {
-                    console.warn(`[Fail] No product matches barcode: "${barcode}"`);
-                    playErrorBeep();
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Produk Tidak Ditemukan',
-                        html: '<div style="font-size:0.95rem;">Barcode: <strong>' + barcode + '</strong></div><div style="font-size:0.85rem;color:#888;margin-top:4px;">Produk tidak terdaftar di sistem ARTIKA.</div>',
-                        timer: 2500,
-                        showConfirmButton: false,
-                        allowEnterKey: false,
-                        customClass: {
-                            popup: 'artika-swal-popup',
-                            title: 'artika-swal-title'
-                        }
-                    }).then(() => {
-                        const barcodeInput = document.getElementById('barcodeScannerInput');
-                        if (barcodeInput) {
-                            barcodeInput.value = '';
-                            barcodeInput.focus();
-                        }
-                    });
+                    // Fallback to API check if product is not currently loaded in DOM
+                    console.log(`[Diagnostic] Product not in DOM, querying backend for barcode: "${barcode}"`);
+                    fetch(`{{ route('pos.search') }}?q=${encodeURIComponent(barcode)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success && data.data.length > 0) {
+                                // Match exactly one product's barcode or ID
+                                const match = data.data.find(p => String(p.barcode) === barcode || String(p.id) === barcode);
+                                if (match) {
+                                    // Set search value so it renders immediately
+                                    const productSearch = document.getElementById('productSearch');
+                                    if (productSearch) {
+                                        productSearch.value = barcode;
+                                        searchProducts();
+
+                                        // Wait a tiny bit for DOM to render, then click it
+                                        setTimeout(() => {
+                                            const newCard = document.querySelector(`.product-card[data-barcode="${barcode}"]`) ||
+                                                document.querySelector(`.product-card[data-product-id="${barcode}"]`);
+                                            if (newCard) {
+                                                processScannedProduct(newCard);
+                                            } else {
+                                                showBarcodeNotFoundError(barcode);
+                                            }
+                                        }, 400);
+                                    }
+                                } else {
+                                    showBarcodeNotFoundError(barcode);
+                                }
+                            } else {
+                                showBarcodeNotFoundError(barcode);
+                            }
+                        })
+                        .catch(err => {
+                            console.error('Error fetching barcode:', err);
+                            showBarcodeNotFoundError(barcode);
+                        });
                 }
+            }
+
+            function processScannedProduct(product) {
+                console.log(`[Success] Match found! Adding ${product.dataset.name} to cart.`);
+                const wasAdded = addToCart(product);
+
+                if (wasAdded) {
+                    playBeep();
+                    const price = parseFloat(product.dataset.promoPrice || product.dataset.price);
+                    const priceFormatted = 'Rp' + price.toLocaleString('id-ID');
+                    const existingItem = cart.find(item => item.product_id == product.dataset.productId);
+                    const qtyText = existingItem ? ' (x' + existingItem.quantity + ')' : '';
+                    showToast('success', product.dataset.name + qtyText + ' — ' + priceFormatted);
+                }
+
+                const productSearch = document.getElementById('productSearch');
+                if (productSearch) {
+                    productSearch.value = '';
+                    searchProducts();
+                }
+            }
+
+            function showBarcodeNotFoundError(barcode) {
+                console.warn(`[Fail] No product matches barcode: "${barcode}"`);
+                playErrorBeep();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Produk Tidak Ditemukan',
+                    html: '<div style="font-size:0.95rem;">Barcode: <strong>' + barcode + '</strong></div><div style="font-size:0.85rem;color:#888;margin-top:4px;">Produk tidak terdaftar di sistem ARTIKA.</div>',
+                    timer: 2500,
+                    showConfirmButton: false,
+                    allowEnterKey: false,
+                    customClass: {
+                        popup: 'artika-swal-popup',
+                        title: 'artika-swal-title'
+                    }
+                }).then(() => {
+                    const barcodeInput = document.getElementById('barcodeScannerInput');
+                    if (barcodeInput) {
+                        barcodeInput.value = '';
+                        barcodeInput.focus();
+                    }
+                });
             }
 
             // Scanner handlers with safeties
@@ -3000,28 +3405,138 @@
             document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
-            const categoryId = btn.dataset.category;
-            document.querySelectorAll('.product-card').forEach(card => {
-                if (categoryId === 'all' || card.dataset.category === categoryId) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            // Trigger AJAX search instead of DOM filter
+            searchProducts();
         }
 
+        let searchTimeout = null;
         function searchProducts() {
-            const searchTerm = document.getElementById('productSearch').value.toLowerCase();
-            document.querySelectorAll('.product-card').forEach(card => {
-                const name = card.dataset.name.toLowerCase();
-                const barcode = (card.dataset.barcode || '').toLowerCase();
-                const id = (card.dataset.productId || '').toLowerCase();
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchTerm = document.getElementById('productSearch') ? document.getElementById('productSearch').value : '';
+                const activeCategoryBtn = document.querySelector('.category-btn.active');
+                const categoryId = activeCategoryBtn ? activeCategoryBtn.dataset.category : 'all';
 
-                if (name.includes(searchTerm) || barcode.includes(searchTerm) || id === searchTerm) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
+                // Show loading state (optional: you could add a spinner in productsGrid)
+                const grid = document.getElementById('productsGrid');
+                if (grid && grid.innerHTML.trim() !== '') {
+                    grid.style.opacity = '0.5';
                 }
+
+                fetch(`{{ route('pos.search') }}?q=${encodeURIComponent(searchTerm)}&category_id=${categoryId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            renderProducts(data.data);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error fetching products:', err);
+                        if (grid) grid.style.opacity = '1';
+                    });
+            }, 300); // 300ms debounce
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            if (!grid) return;
+
+            grid.style.opacity = '1';
+
+            if (products.length === 0) {
+                grid.innerHTML = '<div class="col-12 text-center py-5 text-muted"><i class="fas fa-box-open fa-3x mb-3 opacity-50"></i><br>Tidak ada produk ditemukan</div>';
+                return;
+            }
+
+            let html = '';
+            products.forEach(product => {
+                const totalStock = product.stocks ? product.stocks.reduce((sum, s) => {
+                    const isValid = !s.expired_at || new Date(s.expired_at) > new Date();
+                    return isValid ? sum + s.quantity : sum;
+                }, 0) : 0;
+
+                const actualTotalStock = product.stocks ? product.stocks.reduce((sum, s) => sum + s.quantity, 0) : 0;
+                const isOutOfStock = totalStock <= 0;
+
+                if (actualTotalStock > 0 && totalStock <= 0) return;
+
+                let promoPrice = product.price;
+                let hasPromo = false;
+                let promoBadgeHtml = '';
+
+                if (window.activePromos) {
+                    const promo = window.activePromos.find(p => p.product_id == product.id)
+                        || window.activePromos.find(p => p.category_id == product.category_id);
+                    if (promo) {
+                        hasPromo = true;
+                        if (promo.type === 'percentage') {
+                            promoPrice = product.price * (1 - promo.value / 100);
+                            promoBadgeHtml = `<div class="promo-badge pulsate-slow">-${Math.round(promo.value)}%</div>`;
+                        } else {
+                            promoPrice = Math.max(0, product.price - promo.value);
+                            promoBadgeHtml = `<div class="promo-badge pulsate-slow">-Rp${promo.value.toLocaleString('id-ID')}</div>`;
+                        }
+                    }
+                }
+
+                let expiryBadgeHtml = '';
+                let nextExpiry = '';
+                if (product.stocks && product.stocks.length > 0) {
+                    const validStocks = product.stocks.filter(s => s.quantity > 0 && s.expired_at).sort((a, b) => new Date(a.expired_at) - new Date(b.expired_at));
+                    if (validStocks.length > 0) {
+                        nextExpiry = validStocks[0].expired_at;
+                        const diffDays = Math.ceil((new Date(nextExpiry) - new Date()) / (1000 * 60 * 60 * 24));
+                        if (diffDays > 0 && diffDays < 30) {
+                            expiryBadgeHtml = `<div class="expiry-badge expiring bg-warning text-dark"><i class="fas fa-hourglass-half"></i> ${diffDays}d</div>`;
+                        }
+                    }
+                }
+
+                let imageHtml = '';
+                if (product.image) {
+                    imageHtml = `<img src="/${product.image}" alt="${product.name}" loading="lazy">`;
+                } else {
+                    imageHtml = `<div class="text-muted opacity-25"><i class="fas fa-image fa-3x"></i></div>`;
+                }
+
+                const priceDisplay = (hasPromo && promoPrice < product.price) ?
+                    `<span class="text-decoration-line-through small me-1">Rp${product.price.toLocaleString('id-ID')}</span>
+                     <div class="discounted-price">Rp${promoPrice.toLocaleString('id-ID')}</div>` :
+                    `<div class="discounted-price">Rp${product.price.toLocaleString('id-ID')}</div>`;
+
+                let imageWrapperHtml = '';
+                if ({{ \App\Models\Setting::get('cashier_enable_product_photos', true) ? 'true' : 'false' }}) {
+                    imageWrapperHtml = `<div class="product-image-wrapper">${imageHtml}</div>`;
+                }
+
+                html += `
+                <div class="product-card ${isOutOfStock ? 'opacity-50' : ''}"
+                    data-product-id="${product.id}" data-category="${product.category_id}"
+                    data-name="${product.name.replace(/"/g, '&quot;')}" data-price="${product.price}"
+                    data-promo-price="${promoPrice}" data-stock="${totalStock}"
+                    data-barcode="${product.barcode || ''}"
+                    data-expiry="${nextExpiry ? nextExpiry.substring(0, 10) : ''}">
+                    ${promoBadgeHtml}
+                    ${expiryBadgeHtml}
+                    ${imageWrapperHtml}
+                    <div class="product-card-body">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">${priceDisplay}</div>
+                        <div class="product-stock ${isOutOfStock ? 'out-of-stock' : ''}">
+                            {{ __('pos.qty') }}: ${totalStock}
+                        </div>
+                        <button class="btn-add-product">
+                            <i class="fas fa-plus me-1"></i> Tambah
+                        </button>
+                    </div>
+                </div>`;
+            });
+
+            grid.innerHTML = html;
+
+            // Reattach event listeners
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', () => addToCart(card));
             });
         }
 

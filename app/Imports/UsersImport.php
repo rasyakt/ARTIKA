@@ -5,21 +5,20 @@ namespace App\Imports;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\IdentityType;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rule;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 
-class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmptyRows
+class UsersImport implements ToCollection, WithHeadingRow, WithValidation, SkipsEmptyRows
 {
     private $roles;
     private $identityTypes;
 
     public function __construct()
     {
-        // Cache roles and identity types to avoid N+1 queries during bulk import
         $this->roles = Role::pluck('id', 'name')->mapWithKeys(function ($id, $name) {
             return [strtolower($name) => $id];
         });
@@ -33,39 +32,53 @@ class UsersImport implements ToModel, WithHeadingRow, WithValidation, SkipsEmpty
     {
         foreach ($data as $key => $value) {
             if ($value !== null && !is_array($value)) {
-                // Cast all scalar values to string to avoid "validation.string" and "max" errors on numeric formats
                 $data[$key] = (string) $value;
             }
         }
         return $data;
     }
 
-    public function model(array $row)
+    public function collection(Collection $rows)
     {
-        $roleName = strtolower($row['nama_role'] ?? 'cashier');
-        $roleId = $this->roles[$roleName] ?? $this->roles['cashier'];
+        foreach ($rows as $row) {
+            // Skip rows where username or full name is empty
+            if (empty($row['username']) || empty($row['nama_lengkap'])) {
+                continue;
+            }
 
-        $identityName = strtolower($row['jenis_identitas'] ?? 'nis');
-        $identityTypeId = $this->identityTypes[$identityName] ?? null;
+            $roleName = strtolower($row['nama_role'] ?? 'cashier');
+            $roleId = $this->roles[$roleName] ?? ($this->roles['cashier'] ?? Role::where('name', 'Cashier')->first()?->id);
 
-        return new User([
-            'name' => $row['nama_lengkap'],
-            'username' => $row['username'],
-            'nis' => $row['nomor_identitas'],
-            'password' => Hash::make($row['password']),
-            'role_id' => $roleId,
-            'identity_type_id' => $identityTypeId,
-        ]);
+            $identityName = strtolower($row['jenis_identitas'] ?? 'nis');
+            $identityTypeId = $this->identityTypes[$identityName] ?? null;
+
+            $userData = [
+                'name' => $row['nama_lengkap'],
+                'nis' => $row['nomor_identitas'] ?? null,
+                'role_id' => $roleId,
+                'identity_type_id' => $identityTypeId,
+            ];
+
+            // Only update password if provided
+            if (!empty($row['password'])) {
+                $userData['password'] = Hash::make($row['password']);
+            }
+
+            User::updateOrCreate(
+                ['username' => $row['username']],
+                $userData
+            );
+        }
     }
 
     public function rules(): array
     {
         return [
-            'nama_lengkap' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users,username'],
-            'nomor_identitas' => ['nullable', 'string', 'max:255', 'unique:users,nis'],
-            'password' => ['required', 'string', 'min:6'],
-            'nama_role' => ['required', 'string'],
+            'nama_lengkap' => ['nullable', 'string', 'max:255'],
+            'username' => ['nullable', 'string', 'max:255'],
+            'nomor_identitas' => ['nullable', 'string', 'max:255'],
+            'password' => ['nullable', 'string', 'min:6'],
+            'nama_role' => ['nullable', 'string'],
             'jenis_identitas' => ['nullable', 'string'],
         ];
     }

@@ -27,4 +27,9 @@ class Supplier extends Model
     {
         return $this->hasMany(\App\Models\SupplierPurchase::class);
     }
+
+    public function preOrders(): HasMany
+    {
+        return $this->hasMany(\App\Models\SupplierPreOrder::class);
+    }
 }

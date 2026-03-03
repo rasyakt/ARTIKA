@@ -190,7 +190,7 @@
                                     (Opsional)</label>
                                 <select name="product_id" class="form-select select2"
                                     style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
-                                    <option value="">-- Semua Produk --</option>
+                                    <option value="">{{ __('admin.all_products') }}</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }} ({{ $product->barcode }})
                                         </option>
@@ -287,7 +287,7 @@
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Target Produk</label>
                                 <select name="product_id" id="edit_product_id" class="form-select"
                                     style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
-                                    <option value="">-- Semua Produk --</option>
+                                    <option value="">{{ __('admin.all_products') }}</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                                     @endforeach
