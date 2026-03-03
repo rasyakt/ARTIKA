@@ -36,15 +36,19 @@ Anda dapat login menggunakan dua metode:
 
 ---
 
-## Shortcut Keyboard (Penting!)
+## Shortcut Keyboard (Update 2026)
 
-Untuk mempercepat pelayanan, gunakan tombol ini pada keyboard Anda:
+Untuk mempercepat pelayanan secara signifikan tanpa mengandalkan klik mouse, kasir dapat menggunakan sistem **Shortcut Keyboard Global**. Shortcut ini dapat diakses kapan saja:
 
-- **F2**: Langsung fokus ke kolom input pembayaran.
-- **F4**: Tunda transaksi (Park Transaction).
-- **F8**: Batalkan seluruh isi keranjang.
-- **Esc**: Menutup popup atau membatalkan pilihan.
-- **Enter**: Mengkonfirmasi pembayaran/input.
+- **F1**: Membuka **Panduan Shortcut** (Bantuan).
+- **F2**: Langsung menuju proses **Bayar / Checkout**.
+- **F4**: Langsung memfokuskan kursor ke **Input Barcode Scanner** dan membersihkan isinya sebelumnya.
+- **F8**: Membuka daftar **Transaksi Tertunda (Held Transactions)**.
+- **F9**: Menunda transaksi yang sedang berjalan (Hold).
+- **Alt + C**: Menghapus seluruh isi keranjang belanja.
+- **Esc (Escape)**: Menutup popup yang sedang aktif atau membersihkan kolom pencarian produk.
+
+_Catatan Cerdas: Sistem memiliki fitur **Smart Focus**. Setiap kali transaksi selesai atau popup ditutup, layar akan otomatis mengembalikan fokus ke area scan barcode, sehingga kasir dapat melakukan scan barang antrian selanjutnya tanpa henti._
 
 ---
 

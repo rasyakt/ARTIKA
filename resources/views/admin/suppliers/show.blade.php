@@ -17,17 +17,18 @@
                 </h4>
             </div>
             <div class="d-flex gap-2">
-                <a href="{{ route('admin.suppliers.pdf', $supplier->id) }}" class="btn btn-outline-brown shadow-sm"
-                    style="border-radius: 10px; font-weight: 600;">
-                    <i class="fa-solid fa-file-pdf me-1"></i> {{ __('admin.download_pdf') }}
+                <a href="{{ route('admin.suppliers.pdf', $supplier->id) }}" class="btn btn-action btn-brown-outline shadow-sm">
+                    <i class="fa-solid fa-file-pdf me-2"></i> {{ __('admin.download_pdf') }}
                 </a>
-                <a href="{{ route('admin.suppliers.csv', $supplier->id) }}" class="btn btn-outline-brown shadow-sm"
-                    style="border-radius: 10px; font-weight: 600;">
-                    <i class="fa-solid fa-file-csv me-1"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
+                <a href="{{ route('admin.suppliers.csv', $supplier->id) }}" class="btn btn-action btn-brown-outline shadow-sm">
+                    <i class="fa-solid fa-file-csv me-2"></i> {{ __('admin.export_csv') ?? 'Export CSV' }}
                 </a>
-                <button class="btn btn-brown shadow-sm" data-bs-toggle="modal" data-bs-target="#addPurchaseModal"
-                    style="border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600;">
-                    <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_supply') }}
+                <button class="btn btn-action btn-brown-outline shadow-sm" data-bs-toggle="modal"
+                    data-bs-target="#excelImportModal">
+                    <i class="fa-solid fa-file-import me-2"></i> Import
+                </button>
+                <button class="btn btn-action btn-brown-solid shadow-sm" data-bs-toggle="modal" data-bs-target="#addPurchaseModal">
+                    <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_supply') }}
                 </button>
             </div>
         </div>
@@ -346,11 +347,10 @@
                             </table>
                         </div>
 
-                        <button type="button" class="btn btn-outline-brown btn-sm mt-2" id="add-item-btn"
-                            style="border-radius: 8px;">
-                            <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_product') }}
+                        <button type="button" class="btn btn-action btn-brown-outline btn-sm mt-2" id="add-item-btn">
+                            <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_product') }}
                         </button>
-
+ 
                         <div class="mt-4 pt-3 border-top d-flex justify-content-end">
                             <div class="text-end">
                                 <div class="text-muted small text-uppercase">{{ __('admin.total_transaction_value') }}</div>
@@ -360,16 +360,22 @@
                         </div>
                     </div>
                     <div class="modal-footer border-0 pb-4 px-4 d-flex gap-2">
-                        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal"
-                            style="border-radius: 10px;">{{ __('common.cancel') }}</button>
-                        <button type="submit" class="btn btn-brown px-4 shadow-sm" style="border-radius: 10px;">
-                            <i class="fa-solid fa-floppy-disk me-1"></i> {{ __('common.save') }}
+                        <button type="button" class="btn btn-action btn-light" data-bs-dismiss="modal">
+                            {{ __('common.cancel') }}
+                        </button>
+                        <button type="submit" class="btn btn-action btn-brown-solid shadow-sm">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> {{ __('common.save') }}
                         </button>
                     </div>
+
                 </form>
             </div>
         </div>
     </div>
+
+    {{-- Import Excel Modal --}}
+    <x-excel-import-modal :importRoute="route('admin.supplier-purchases.import', $supplier->id)"
+        :templateRoute="route('admin.supplier-purchases.template', $supplier->id)" title="Pasokan dari {{ $supplier->name }}" />
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -510,24 +516,39 @@
     </script>
 
     <style>
-        .btn-brown {
+        .btn-action {
+            border-radius: 12px;
+            padding: 0.6rem 1.25rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+
+        .btn-brown-solid {
             background: var(--color-primary-dark);
             color: white;
             border: none;
         }
 
-        .btn-brown:hover {
+        .btn-brown-solid:hover {
             color: white;
-            opacity: 0.9;
-            background: var(--color-primary)ff;
+            background: var(--color-primary);
         }
 
-        .btn-outline-brown {
+        .btn-brown-outline {
             border: 2px solid var(--color-primary);
             color: var(--color-primary);
+            background: transparent;
         }
 
-        .btn-outline-brown:hover {
+        .btn-brown-outline:hover {
             background: var(--color-primary);
             color: white;
         }
@@ -537,6 +558,7 @@
             border: 2px solid var(--brown-100);
             padding: 0.6rem 1rem;
         }
+
 
         .custom-input:focus {
             border-color: var(--color-secondary);

@@ -9,11 +9,18 @@
                         class="fa-solid fa-users me-2"></i>{{ __('admin.user_management') }}</h2>
                 <p class="text-muted mb-0">{{ __('admin.manage_users_permissions') }}</p>
             </div>
-            <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
-                data-bs-target="#addUserModal"
-                style="background: var(--color-primary-dark); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
-                <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_user') }}
-            </button>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
+                    data-bs-target="#excelImportModal"
+                    style="border-radius: 12px; padding: 0.75rem 1.25rem; font-weight: 600; height: fit-content; border: 1px solid var(--color-primary);">
+                    <i class="fa-solid fa-file-import me-2"></i> Import Excel
+                </button>
+                <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
+                    data-bs-target="#addUserModal"
+                    style="background: var(--color-primary-dark); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                    <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_user') }}
+                </button>
+            </div>
         </div>
 
 
@@ -26,7 +33,7 @@
                             <tr>
                                 <th class="border-0 fw-semibold ps-4" style="color: var(--color-primary-dark);">{{ __('common.user') }}</th>
                                 <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.username') }}</th>
-                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.nis') }}</th>
+                                <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">ID (NIS/NIK/...)</th>
                                 <th class="border-0 fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.role') }}</th>
                                 <th class="border-0 fw-semibold text-center" style="color: var(--color-primary-dark);">
                                     {{ __('common.actions') }}
@@ -52,7 +59,12 @@
                                         <code
                                             style="background: var(--brown-50); padding: 0.25rem 0.5rem; border-radius: 6px; color: var(--color-primary);">{{ $user->username }}</code>
                                     </td>
-                                    <td>{{ $user->nis ?? '-' }}</td>
+                                    <td>
+                                        @if($user->identity_type)
+                                            <span class="text-muted small fw-bold">{{ $user->identity_type->label }}:</span>
+                                        @endif
+                                        {{ $user->nis ?? '-' }}
+                                    </td>
                                     <td>
                                         @php
                                             $roleColors = [
@@ -167,20 +179,20 @@
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.full_name') }}
                                     *</label>
                                 <input type="text" class="form-control" name="name" required
-                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.username') }}
                                     *</label>
                                 <input type="text" class="form-control" name="username" required
-                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.password') }}
                                     *</label>
                                 <div class="password-field">
                                     <input type="password" class="form-control" name="password" id="add_password" required
-                                        style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 2.5rem 0.75rem 1rem;">
+                                        style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 2.5rem 0.75rem 1rem;">
                                     <button type="button" class="toggle-password"
                                         onclick="togglePasswordVisibility('add_password', this)">
                                         <i class="fa-solid fa-eye"></i>
@@ -188,16 +200,25 @@
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.nis') }}
-                                    ({{ __('common.optional') }})</label>
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Jenis ID</label>
+                                <select class="form-select identity-type-select" name="identity_type_id" id="add_identity_type_id"
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
+                                    <option value="">Tanpa ID</option>
+                                    @foreach($identityTypes as $type)
+                                        <option value="{{ $type->id }}" data-label="{{ $type->label }}">{{ $type->label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold identity-number-label" style="color: var(--color-primary-dark);">Nomor ID (Opsional)</label>
                                 <input type="text" class="form-control" name="nis"
-                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.role') }}
                                     *</label>
                                 <select class="form-select" name="role_id" required
-                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
                                     <option value="">{{ __('common.select_role') }}</option>
                                     @foreach($roles as $role)
                                         @php
@@ -229,6 +250,46 @@
         </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteConfirmModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header bg-danger text-white border-0 py-3">
+                    <h5 class="modal-title fw-800 d-flex align-items-center gap-2" id="deleteConfirmModalLabel">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        {{ __('admin.confirm_delete') }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div class="mb-3 text-danger" style="font-size: 3rem;">
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">{{ __('admin.are_you_sure') }}</h5>
+                    <p class="text-muted mb-0">{{ __('admin.delete_warning') }}</p>
+                </div>
+                <div class="modal-footer border-top-0 d-flex justify-content-center pb-4">
+                    <button type="button" class="btn btn-outline-secondary fw-semibold rounded-pill px-4"
+                        data-bs-dismiss="modal">
+                        {{ __('common.cancel') }}
+                    </button>
+                    <button type="button" class="btn btn-danger fw-semibold rounded-pill px-4" id="btnConfirmDelete">
+                        {{ __('admin.yes_delete') }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Import Excel Modal Component --}}
+    <x-excel-import-modal
+        title="Pengguna"
+        importRoute="{{ route('admin.users.import') }}"
+        templateRoute="{{ route('admin.users.template') }}"
+    />
+
     <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -247,20 +308,20 @@
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.full_name') }}
                                     *</label>
                                 <input type="text" class="form-control" id="edit_name" name="name" required
-                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.username') }}
                                     *</label>
                                 <input type="text" class="form-control" id="edit_username" name="username" required
-                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.password') }}
                                     ({{ __('admin.password_leave_blank') }})</label>
                                 <div class="password-field">
                                     <input type="password" class="form-control" name="password" id="edit_password"
-                                        style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 2.5rem 0.75rem 1rem;">
+                                        style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 2.5rem 0.75rem 1rem;">
                                     <button type="button" class="toggle-password"
                                         onclick="togglePasswordVisibility('edit_password', this)">
                                         <i class="fa-solid fa-eye"></i>
@@ -268,16 +329,25 @@
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.nis') }}
-                                    ({{ __('common.optional') }})</label>
+                                <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Jenis ID</label>
+                                <select class="form-select identity-type-select" name="identity_type_id" id="edit_identity_type_id"
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
+                                    <option value="">Tanpa ID</option>
+                                    @foreach($identityTypes as $type)
+                                        <option value="{{ $type->id }}" data-label="{{ $type->label }}">{{ $type->label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold identity-number-label" style="color: var(--color-primary-dark);">Nomor ID (Opsional)</label>
                                 <input type="text" class="form-control" id="edit_nis" name="nis"
-                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.role') }}
                                     *</label>
                                 <select class="form-select" id="edit_role_id" name="role_id" required
-                                    style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                    style="border-radius: 12px; border: 1px solid var(--gray-300); padding: 0.75rem 1rem;">
                                     @foreach($roles as $role)
                                         @php
                                             $isAllowed = false;
@@ -315,6 +385,17 @@
             document.getElementById('edit_username').value = user.username;
             document.getElementById('edit_nis').value = user.nis || '';
             document.getElementById('edit_role_id').value = user.role_id;
+            document.getElementById('edit_identity_type_id').value = user.identity_type_id || '';
+            
+            // Trigger label update for edit modal
+            const editTypeSelect = document.getElementById('edit_identity_type_id');
+            const editLabel = editTypeSelect.parentElement.nextElementSibling.querySelector('.identity-number-label');
+            const selectedOption = editTypeSelect.options[editTypeSelect.selectedIndex];
+            if (selectedOption && selectedOption.value) {
+                editLabel.textContent = selectedOption.dataset.label + ' (Opsional)';
+            } else {
+                editLabel.textContent = 'Nomor ID (Opsional)';
+            }
 
             // Reset password field and toggle icon
             const passwordInput = document.getElementById('edit_password');
@@ -328,6 +409,19 @@
 
             document.getElementById('editUserForm').action = `/admin/users/${user.id}`;
         }
+
+        // Handle dynamic identity labels
+        document.querySelectorAll('.identity-type-select').forEach(select => {
+            select.addEventListener('change', function() {
+                const label = this.parentElement.nextElementSibling.querySelector('.identity-number-label');
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption && selectedOption.value) {
+                    label.textContent = selectedOption.dataset.label + ' (Opsional)';
+                } else {
+                    label.textContent = 'Nomor ID (Opsional)';
+                }
+            });
+        });
 
         function togglePasswordVisibility(inputId, btn) {
             const input = document.getElementById(inputId);

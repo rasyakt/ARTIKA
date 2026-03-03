@@ -12,6 +12,9 @@ use App\Models\TransactionItem;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\ProductsImport;
+use App\Exports\ProductTemplateExport;
 
 class AdminController extends Controller
 {
@@ -198,10 +201,21 @@ class AdminController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'cost_price' => 'required|numeric|min:0',
+            'image' => 'nullable|mimes:png|max:2048',
         ]);
 
         return DB::transaction(function () use ($request) {
-            $product = Product::create($request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']));
+            $data = $request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']);
+
+            if ($request->hasFile('image')) {
+                $imageService = app(\App\Services\ImageService::class);
+                $data['image'] = $imageService->compress(
+                    $request->file('image'),
+                    'uploads/products'
+                );
+            }
+
+            $product = Product::create($data);
 
             // Create initial stock
             Stock::create([
@@ -242,9 +256,24 @@ class AdminController extends Controller
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric|min:0',
             'cost_price' => 'required|numeric|min:0',
+            'image' => 'nullable|mimes:png|max:2048',
         ]);
 
-        $product->update($request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']));
+        $data = $request->only(['barcode', 'name', 'category_id', 'price', 'cost_price', 'description']);
+
+        if ($request->hasFile('image')) {
+            $imageService = app(\App\Services\ImageService::class);
+            $data['image'] = $imageService->compress(
+                $request->file('image'),
+                'uploads/products'
+            );
+            // Delete old image
+            if ($product->image && file_exists(public_path($product->image))) {
+                unlink(public_path($product->image));
+            }
+        }
+
+        $product->update($data);
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully!');
     }
@@ -255,6 +284,43 @@ class AdminController extends Controller
         $product->delete();
 
         return redirect()->route('admin.products')->with('success', 'Product deleted successfully!');
+    }
+
+    /**
+     * Download the Excel template for importing products.
+     */
+    public function downloadProductTemplate()
+    {
+        return Excel::download(new ProductTemplateExport, 'Template_Import_Produk.xlsx');
+    }
+
+    /**
+     * Handle the Excel file import for products.
+     */
+    public function importProducts(Request $request)
+    {
+        $request->validate([
+            'file' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:5120'], // Max 5MB
+        ]);
+
+        try {
+            Excel::import(new ProductsImport, $request->file('file'));
+
+            return redirect()->route('admin.products')->with('success', 'Berhasil mengimpor data produk secara massal dari file Excel.');
+
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            $failures = $e->failures();
+            $errorMsg = 'Gagal import, format file salah pada baris: ';
+
+            foreach ($failures as $failure) {
+                $errorMsg .= $failure->row() . ' (' . implode(', ', $failure->errors()) . ')<br>';
+            }
+
+            return redirect()->route('admin.products')->with('error', $errorMsg);
+
+        } catch (\Exception $e) {
+            return redirect()->route('admin.products')->with('error', 'Terjadi kesalahan saat memproses file Excel: ' . $e->getMessage());
+        }
     }
 }
 

@@ -13,6 +13,7 @@ Route::get('/login/admin', [AuthController::class, 'showAdminLoginForm'])->name(
 Route::get('/login/warehouse', [AuthController::class, 'showWarehouseLoginForm'])->name('login.warehouse');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::get('/logout', [AuthController::class, 'logout']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
@@ -28,6 +29,10 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
+    // Profile Routes (Universal for all auth'd users)
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile/password', [\App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password');
+
     // Admin & Superadmin Routes
     Route::middleware(['role:superadmin,admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\AdminController::class, 'index'])->name('dashboard');
@@ -39,6 +44,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/products/{id}/edit', [\App\Http\Controllers\AdminController::class, 'editProduct'])->name('products.edit');
         Route::put('/products/{id}', [\App\Http\Controllers\AdminController::class, 'updateProduct'])->name('products.update');
         Route::delete('/products/{id}', [\App\Http\Controllers\AdminController::class, 'deleteProduct'])->name('products.delete');
+        Route::get('/products/template', [\App\Http\Controllers\AdminController::class, 'downloadProductTemplate'])->name('products.template');
+        Route::post('/products/import', [\App\Http\Controllers\AdminController::class, 'importProducts'])->name('products.import');
 
         // Category Management
         Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('categories');
@@ -52,6 +59,8 @@ Route::middleware(['auth'])->group(function () {
         // User Management
         Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->name('users');
         Route::post('/users', [\App\Http\Controllers\UserController::class, 'store'])->name('users.store');
+        Route::get('/users/template', [\App\Http\Controllers\UserController::class, 'downloadTemplate'])->name('users.template');
+        Route::post('/users/import', [\App\Http\Controllers\UserController::class, 'import'])->name('users.import');
         Route::put('/users/{id}', [\App\Http\Controllers\UserController::class, 'update'])->name('users.update');
         Route::delete('/users/{id}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('users.delete');
 
@@ -77,6 +86,8 @@ Route::middleware(['auth'])->group(function () {
 
         // Supplier Purchases
         Route::post('/supplier-purchases', [\App\Http\Controllers\SupplierPurchaseController::class, 'store'])->name('supplier-purchases.store');
+        Route::get('/supplier-purchases/{supplier}/template', [\App\Http\Controllers\SupplierPurchaseController::class, 'downloadTemplate'])->name('supplier-purchases.template');
+        Route::post('/supplier-purchases/{supplier}/import', [\App\Http\Controllers\SupplierPurchaseController::class, 'import'])->name('supplier-purchases.import');
 
         // Expense Management
         Route::get('/expenses', [\App\Http\Controllers\ExpenseController::class, 'index'])->name('expenses.index');
@@ -145,7 +156,21 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/logs', [\App\Http\Controllers\SuperadminController::class, 'logs'])->name('logs');
         Route::get('/settings', [\App\Http\Controllers\SuperadminController::class, 'settings'])->name('settings');
         Route::post('/settings', [\App\Http\Controllers\SuperadminController::class, 'updateSettings'])->name('settings.update');
+        Route::resource('payment-methods', \App\Http\Controllers\Admin\PaymentMethodController::class);
+        Route::post('payment-methods/reorder', [\App\Http\Controllers\Admin\PaymentMethodController::class, 'reorder'])->name('payment-methods.reorder');
+
+        // FAQ Management (CRUD)
+        Route::get('/faq', [\App\Http\Controllers\FaqController::class, 'manage'])->name('faq');
+        Route::post('/faq', [\App\Http\Controllers\FaqController::class, 'store'])->name('faq.store');
+        Route::put('/faq/{id}', [\App\Http\Controllers\FaqController::class, 'update'])->name('faq.update');
+        Route::delete('/faq/{id}', [\App\Http\Controllers\FaqController::class, 'destroy'])->name('faq.destroy');
+
+        // Identity Types Management
+        Route::resource('identity-types', \App\Http\Controllers\IdentityTypeController::class)->except(['create', 'edit', 'show']);
     });
+
+    // FAQ / Help Center (All authenticated users)
+    Route::get('/faq', [\App\Http\Controllers\FaqController::class, 'index'])->name('faq.index');
 
     // Cashier Routes (POS)
     Route::middleware(['role:cashier'])->prefix('pos')->name('pos.')->group(function () {
@@ -153,6 +178,7 @@ Route::middleware(['auth'])->group(function () {
             ->middleware(['feature:cashier_enable_audit_logs'])
             ->name('logs');
         Route::get('/history', [\App\Http\Controllers\PosController::class, 'history'])->name('history');
+        Route::get('/search', [\App\Http\Controllers\PosController::class, 'search'])->name('search');
         Route::get('/', [\App\Http\Controllers\PosController::class, 'index'])->name('index');
         Route::get('/scanner', [\App\Http\Controllers\PosController::class, 'scanner'])->name('scanner');
         Route::post('/checkout', [\App\Http\Controllers\PosController::class, 'store'])->name('checkout');

@@ -32,14 +32,21 @@ Pantau jumlah barang. Sistem akan memberikan peringatan otomatis:
 - **Kuning**: Stok di bawah ambang batas (Segera restock!).
 - **Hijau**: Stok Aman.
 
-### 2. Mutasi & Penyesuaian (Adjust)
+### 2. Pemasukan Barang (Supplier Purchases)
 
-Setiap perubahan stok harus memiliki alasan yang jelas (misal: Barang Kadaluwarsa, Bonus Supplier, atau Selisih Opname). Gunakan fitur **Adjust Stock** untuk menjaga akurasi data.
+Setiap restock barang baru **wajib** dicatat melalui sistem Supplier. Anda dapat:
 
-### 3. Riwayat Pergerakan
+- Input manual satu per satu via form.
+- **Import Massal via Excel**: Sangat disarankan untuk pembelanjaan besar. Unduh template khusus supplier tersebut, isi jumlah barang dan harga, lalu unggah. Sistem otomatis menambah stok dan mengupdate Harga Pokok Pembelian (Cost Price).
 
-Anda dapat melihat detail masuk dan keluarnya barang per tanggal di menu **Stock Movements**. Ini penting untuk melacak jika ada barang yang "hilang" tanpa catatan transaksi.
+### 3. Penyesuaian Stok (Adjust)
+
+Jika ada selisih stok (rusak/hilang), gunakan fitur **Adjust Stock**. Berikan alasan yang jelas (misal: "Barang Kadaluwarsa") agar riwayatnya tercatat di _Audit Log_ untuk transparansi.
+
+### 4. Riwayat Pergerakan
+
+Anda dapat melihat detail masuk dan keluarnya barang per tanggal di menu **Stock Movements**. Ini penting untuk melacak ke mana barang "pergi" jika terjadi selisih opname.
 
 ---
 
-**Tips:** Pastikan setiap barang yang masuk sudah ditempel label Barcode agar memudahkan pekerjaan Kasir.
+**Tips:** Pastikan setiap barang yang baru masuk (dari import Excel) segera ditempeli label Barcode agar tidak menghambat kerja Kasir.

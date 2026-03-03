@@ -42,16 +42,18 @@
                             <div class="d-flex justify-content-between align-items-center mb-4 pb-4 border-bottom">
                                 <div class="me-3">
                                     <h6 class="fw-bold mb-1" style="color: var(--color-primary-dark);">
-                                        <i class="fa-solid fa-camera me-2"></i>{{ __('admin.camera_scanner') }}
+                                        <i class="fa-solid fa-camera me-2"></i>{{ __('admin.camera_scanner') ?? 'Scanner Kamera Barcode' }}
                                     </h6>
-                                    <p class="text-muted small mb-0">{{ __('admin.camera_scanner_hint') }}</p>
+                                    <p class="text-muted small mb-0">{{ __('admin.camera_scanner_hint') ?? 'Gunakan kamera perangkat (HP/Tablet) untuk scan barcode produk di halaman Kasir.' }}</p>
                                 </div>
                                 <div class="form-check form-switch custom-switch">
                                     <input class="form-check-input" type="checkbox" name="enable_camera" id="enable_camera"
-                                        {{ $settings['enable_camera'] ? 'checked' : '' }}
+                                        {{ isset($settings['enable_camera']) && $settings['enable_camera'] ? 'checked' : '' }}
                                         style="cursor: pointer; width: 3.5rem; height: 1.75rem;">
                                 </div>
                             </div>
+
+
 
                             <!-- Receipt Paper Size -->
                             <div class="d-flex justify-content-between align-items-center mb-4 pb-4 border-bottom">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\ThemeHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
@@ -185,6 +186,9 @@ class SuperadminController extends Controller
                 'system_name' => ['label' => 'System Name', 'type' => 'text', 'default' => 'ARTIKA POS'],
                 'address' => ['label' => 'Store Address', 'type' => 'text', 'default' => ''],
                 'footer_text' => ['label' => 'Footer Text', 'type' => 'text', 'default' => '© ' . date('Y') . ' RPL_Sentinel. All rights reserved.'],
+                'site_color_theme' => ['label' => 'Tema Warna Website', 'type' => 'palette', 'default' => 'brown'],
+                'custom_primary_color' => ['label' => 'Warna Kustom (Primary)', 'type' => 'color', 'default' => '#85695a'],
+                'enable_faq' => ['label' => 'Aktifkan Fitur Pusat Bantuan (FAQ)', 'type' => 'boolean', 'default' => true],
             ],
             'POS & Struk' => [
                 'invoice_prefix' => ['label' => 'Prefix No. Struk', 'type' => 'text', 'default' => 'INV'],
@@ -222,15 +226,32 @@ class SuperadminController extends Controller
                 'cashier_enable_returns' => ['label' => 'Returns & Refunds', 'type' => 'boolean', 'default' => true],
                 'cashier_enable_discounts' => ['label' => 'Manual Discounts', 'type' => 'boolean', 'default' => true],
                 'cashier_enable_camera' => ['label' => 'Camera Scanner', 'type' => 'boolean', 'default' => true],
+                'cashier_enable_product_photos' => ['label' => 'Tampilkan Foto Produk', 'type' => 'boolean', 'default' => true],
                 'cashier_enable_audit_logs' => ['label' => 'Activity Logs', 'type' => 'boolean', 'default' => true],
             ],
             'Sustainability & Performance' => [
                 'session_duration' => ['label' => 'Session Duration (Minutes)', 'type' => 'number', 'default' => 120],
-                'auto_optimize' => ['label' => 'Auto-Optimize on Login', 'type' => 'boolean', 'default' => false],
+
+            ],
+            'Image & Storage' => [
+                'image_max_width' => ['label' => 'Max Lebar Gambar (px)', 'type' => 'number', 'default' => 1920],
+                'image_quality' => ['label' => 'Kualitas Kompresi (%)', 'type' => 'number', 'default' => 80],
+                'image_format' => [
+                    'label' => 'Format Output Gambar',
+                    'type' => 'select',
+                    'default' => 'webp',
+                    'options' => [
+                        'webp' => 'WebP (Terkecil, Modern)',
+                        'jpg' => 'JPEG (Universal)',
+                        'png' => 'PNG (Tanpa Kompresi Lossy)',
+                    ]
+                ],
             ],
         ];
 
-        return view('superadmin.settings.index', compact('settings', 'categories'));
+        $palettePreviews = ThemeHelper::getPalettePreviewColors();
+
+        return view('superadmin.settings.index', compact('settings', 'categories', 'palettePreviews'));
     }
 
     /**
@@ -258,8 +279,10 @@ class SuperadminController extends Controller
             'cashier_enable_returns',
             'cashier_enable_discounts',
             'cashier_enable_camera',
+            'cashier_enable_product_photos',
             'cashier_enable_audit_logs',
-            'auto_optimize'
+
+            'enable_faq'
         ];
 
         foreach ($allKeys as $key) {

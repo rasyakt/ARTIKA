@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Supplier Report - {{ $supplier->name }}</title>
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <style>
         body {
             font-family: 'Helvetica', sans-serif;
@@ -15,7 +16,7 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
-            border-bottom: 2px solid #85695a;
+            border-bottom: 2px solid var(--color-primary);
             padding-bottom: 10px;
         }
 
@@ -34,16 +35,16 @@
         .supplier-name {
             font-size: 20px;
             font-weight: bold;
-            color: #6f5849;
+            color: var(--color-primary-dark);
         }
 
         .section-title {
             font-size: 14px;
             font-weight: bold;
             margin-bottom: 10px;
-            color: #6f5849;
+            color: var(--color-primary-dark);
             text-transform: uppercase;
-            border-left: 4px solid #85695a;
+            border-left: 4px solid var(--color-primary);
             padding-left: 10px;
         }
 
@@ -54,21 +55,21 @@
         }
 
         table.data th {
-            background-color: #fdf8f6;
-            color: #6f5849;
+            background-color: var(--brown-50);
+            color: var(--color-primary-dark);
             text-align: left;
             padding: 10px;
-            border-bottom: 1px solid #f2e8e5;
+            border-bottom: 1px solid var(--brown-100);
         }
 
         table.data td {
             padding: 10px;
-            border-bottom: 1px solid #f2e8e5;
+            border-bottom: 1px solid var(--brown-100);
         }
 
         .total-row {
             font-weight: bold;
-            background-color: #fdf8f6;
+            background-color: var(--brown-50);
         }
 
         .footer {

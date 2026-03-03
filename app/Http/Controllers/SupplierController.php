@@ -7,6 +7,9 @@ use App\Models\Supplier;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use App\Models\TransactionItem;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\SuppliersImport;
+use App\Exports\SupplierTemplateExport;
 
 class SupplierController extends Controller
 {
@@ -177,4 +180,6 @@ class SupplierController extends Controller
 
         return response()->json($suppliers);
     }
+
+
 }

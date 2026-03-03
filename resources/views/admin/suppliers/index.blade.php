@@ -10,13 +10,11 @@
             </div>
             <div class="d-flex gap-2">
                 <a href="{{ route('admin.suppliers.pre_orders.index') }}"
-                    class="btn btn-outline-brown shadow-sm d-inline-flex align-items-center"
-                    style="border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                    class="btn btn-action btn-brown-outline shadow-sm">
                     <i class="fa-solid fa-receipt me-2"></i> {{ __('admin.pre_orders') ?? 'Pre-Orders' }}
                 </a>
-                <button class="btn btn-primary shadow-sm d-inline-flex align-items-center" data-bs-toggle="modal"
-                    data-bs-target="#addSupplierModal"
-                    style="background: var(--color-primary-dark); border: none; border-radius: 12px; padding: 0.75rem 1.5rem; font-weight: 600; height: fit-content;">
+                <button class="btn btn-action btn-brown-solid shadow-sm" data-bs-toggle="modal"
+                    data-bs-target="#addSupplierModal">
                     <i class="fa-solid fa-plus me-2"></i> {{ __('admin.add_supplier') }}
                 </button>
             </div>
@@ -127,36 +125,35 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.name') }} *</label>
                             <input type="text" class="form-control" name="name" required
-                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--gray-300); padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.phone') }}</label>
                             <input type="text" class="form-control" name="phone"
-                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--gray-300); padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.email') }}</label>
                             <input type="email" class="form-control" name="email"
-                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;">
+                                style="border-radius: 12px; border: 2px solid var(--gray-300); padding: 0.75rem 1rem;">
                         </div>
                         <div class="mb-3">
                             <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">{{ __('common.address') }}</label>
                             <textarea class="form-control" name="address" rows="2"
-                                style="border-radius: 12px; border: 2px solid var(--color-secondary-light); padding: 0.75rem 1rem;"></textarea>
+                                style="border-radius: 12px; border: 2px solid var(--gray-300); padding: 0.75rem 1rem;"></textarea>
                         </div>
                     </div>
-                    <div class="modal-footer" style="border-top: 2px solid var(--brown-100);">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        <button type="button" class="btn btn-action btn-light" data-bs-dismiss="modal"
                             style="border-radius: 12px;">{{ __('common.cancel') }}</button>
-                        <button type="submit" class="btn btn-primary"
-                            style="background: var(--color-primary-dark); border: none; border-radius: 12px;"><i
-                                class="fa-solid fa-floppy-disk me-1"></i>
-                            {{ __('common.save') }}</button>
+                        <button type="submit" class="btn btn-action btn-brown-solid shadow-sm">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> {{ __('common.save') }}
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
 
     <!-- Edit Supplier Modal -->
     <div class="modal fade" id="editSupplierModal" tabindex="-1">
@@ -193,12 +190,11 @@
                         </div>
                     </div>
                     <div class="modal-footer" style="border-top: 2px solid var(--brown-100);">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal"
+                        <button type="button" class="btn btn-action btn-light" data-bs-dismiss="modal"
                             style="border-radius: 12px;">{{ __('common.cancel') }}</button>
-                        <button type="submit" class="btn btn-primary"
-                            style="background: var(--color-primary-dark); border: none; border-radius: 12px;"><i
-                                class="fa-solid fa-floppy-disk me-1"></i>
-                            {{ __('common.update') }}</button>
+                        <button type="submit" class="btn btn-action btn-brown-solid shadow-sm">
+                            <i class="fa-solid fa-floppy-disk me-2"></i> {{ __('common.update') }}
+                        </button>
                     </div>
                 </form>
             </div>
@@ -233,4 +229,52 @@
             });
         });
     </script>
+
+    <style>
+        .btn-action {
+            border-radius: 12px;
+            padding: 0.6rem 1.25rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease-in-out;
+            gap: 0.5rem;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+
+        .btn-brown-solid {
+            background: var(--color-primary-dark);
+            color: white;
+            border: none;
+        }
+
+        .btn-brown-solid:hover {
+            color: white;
+            background: var(--color-primary);
+        }
+
+        .btn-brown-outline {
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+            background: transparent;
+        }
+
+        .btn-brown-outline:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .dropdown-item i {
+            width: 20px;
+        }
+
+        .delete-form {
+            margin: 0;
+        }
+    </style>
 @endsection

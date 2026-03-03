@@ -1,11 +1,12 @@
 @if ($paginator->hasPages())
     <nav class="d-flex justify-content-center mt-4">
         <ul class="pagination pagination-custom shadow-sm p-1 bg-white rounded-pill mb-0"
-            style="border: 1px solid var(--brown-100);">
+            style="border: 1px solid var(--color-primary-light);">
             {{-- Previous Page Link --}}
             @if ($paginator->onFirstPage())
                 <li class="page-item disabled" aria-disabled="true">
-                    <span class="page-link rounded-pill border-0 px-3 py-2" style="background: transparent; color: var(--color-primary-lighter);">
+                    <span class="page-link rounded-pill border-0 px-3 py-2"
+                        style="background: transparent; color: var(--color-primary-lighter);">
                         <i class="fa-solid fa-chevron-left me-2"></i>Sebelumnya
                     </span>
                 </li>
@@ -23,7 +24,8 @@
                 {{-- "Three Dots" Separator --}}
                 @if (is_string($element))
                     <li class="page-item disabled" aria-disabled="true">
-                        <span class="page-link border-0" style="background: transparent; color: var(--color-primary-lighter);">{{ $element }}</span>
+                        <span class="page-link border-0"
+                            style="background: transparent; color: var(--color-primary-lighter);">{{ $element }}</span>
                     </li>
                 @endif
 
@@ -33,7 +35,7 @@
                         @if ($page == $paginator->currentPage())
                             <li class="page-item active" aria-current="page">
                                 <span class="page-link rounded-circle fw-bold d-flex align-items-center justify-content-center"
-                                    style="width: 38px; height: 38px; background: var(--gradient-primary); border: none; color: white;">
+                                    style="width: 38px; height: 38px; background: var(--color-primary-dark); border: none; color: white;">
                                     {{ $page }}
                                 </span>
                             </li>
@@ -59,7 +61,8 @@
                 </li>
             @else
                 <li class="page-item disabled" aria-disabled="true">
-                    <span class="page-link rounded-pill border-0 px-3 py-2" style="background: transparent; color: var(--color-primary-lighter);">
+                    <span class="page-link rounded-pill border-0 px-3 py-2"
+                        style="background: transparent; color: var(--color-primary-lighter);">
                         Berikutnya<i class="fa-solid fa-chevron-right ms-2"></i>
                     </span>
                 </li>

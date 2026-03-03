@@ -83,12 +83,43 @@
                                                                 <option value="{{ $optVal }}" @if($settings->get($key, $config['default']) == $optVal) selected @endif>{{ $optLabel }}</option>
                                                             @endforeach
                                                         </select>
-                                                    @else
+                                                    @elseif($config['type'] === 'palette')
                                                         <label class="form-label fw-bold text-muted small text-uppercase mb-2">{{ $config['label'] }}</label>
-                                                        <input type="{{ $config['type'] }}" class="form-control form-control-lg" name="{{ $key }}" id="{{ $key }}"
-                                                               value="{{ $settings->get($key, $config['default']) }}"
-                                                               style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 14px 20px;"
-                                                               @if($config['type'] === 'number') min="0" @endif>
+                                                        <div class="row g-3" id="palette-picker">
+                                                            @foreach($palettePreviews as $paletteKey => $preview)
+                                                                <div class="col-6 col-md-4">
+                                                                    <label class="palette-card d-block p-3 rounded-4 border-2 cursor-pointer transition-all {{ $settings->get($key, $config['default']) == $paletteKey ? 'palette-active' : '' }}"
+                                                                           style="border: 2px solid var(--brown-200); border-radius: 16px !important; cursor: pointer; transition: all 0.3s ease;"
+                                                                           for="palette_{{ $paletteKey }}">
+                                                                        <input type="radio" name="{{ $key }}" id="palette_{{ $paletteKey }}" 
+                                                                               value="{{ $paletteKey }}" class="d-none palette-radio"
+                                                                               @if($settings->get($key, $config['default']) == $paletteKey) checked @endif>
+                                                                        <div class="d-flex align-items-center mb-2">
+                                                                            <i class="fa-solid {{ $preview['icon'] }} me-2" style="color: {{ $preview['colors'][0] }}; font-size: 1.1rem;"></i>
+                                                                            <span class="fw-bold small">{{ $preview['name'] }}</span>
+                                                                        </div>
+                                                                        <div class="d-flex gap-1">
+                                                                            @foreach($preview['colors'] as $color)
+                                                                                <div style="width: 100%; height: 28px; background: {{ $color }}; border-radius: 8px;"></div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                        <div class="palette-check text-center mt-2 {{ $settings->get($key, $config['default']) == $paletteKey ? '' : 'd-none' }}">
+                                                                            <i class="fa-solid fa-circle-check" style="color: {{ $preview['colors'][0] }};"></i>
+                                                                            <span class="small fw-bold ms-1" style="color: {{ $preview['colors'][0] }};">Aktif</span>
+                                                                        </div>
+                                                                    </label>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    @else
+                                                        <div @if($key === 'custom_primary_color') id="custom-color-container" style="display: {{ $settings->get('site_color_theme') === 'custom' ? 'block' : 'none' }};" @endif>
+                                                            <label class="form-label fw-bold text-muted small text-uppercase mb-2">{{ $config['label'] }}</label>
+                                                            <input type="{{ $config['type'] }}" class="form-control form-control-lg @if($config['type'] === 'color') p-1 @endif" 
+                                                                   name="{{ $key }}" id="{{ $key }}"
+                                                                   value="{{ $settings->get($key, $config['default']) }}"
+                                                                   style="border-radius: 12px; border: 2px solid var(--brown-100); @if($config['type'] !== 'color') padding: 14px 20px; @else height: 58px; @endif"
+                                                                   @if($config['type'] === 'number') min="0" @endif>
+                                                        </div>
                                                     @endif
                                                 </div>
                                             @endforeach
@@ -139,6 +170,20 @@
             background-color: var(--color-primary-dark);
             border-color: var(--color-primary-dark);
         }
+        .palette-card {
+            background: var(--card-bg, #fff);
+            transition: all 0.3s ease;
+        }
+        .palette-card:hover {
+            border-color: var(--color-primary) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+        .palette-active {
+            border-color: var(--color-primary-dark) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: var(--brown-50) !important;
+        }
     </style>
 
     <script>
@@ -184,6 +229,26 @@
             });
 
             updatePreview();
+
+            // Palette Picker
+            const customColorContainer = document.getElementById('custom-color-container');
+            document.querySelectorAll('input[name="site_color_theme"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Update UI active state
+                    document.querySelectorAll('.palette-card').forEach(card => {
+                        card.classList.remove('palette-active');
+                        card.querySelector('.palette-check')?.classList.add('d-none');
+                    });
+                    const card = this.closest('.palette-card');
+                    card.classList.add('palette-active');
+                    card.querySelector('.palette-check')?.classList.remove('d-none');
+
+                    // Show/hide custom color picker
+                    if (customColorContainer) {
+                        customColorContainer.style.display = (this.value === 'custom') ? 'block' : 'none';
+                    }
+                });
+            });
         });
     </script>
 @endsection

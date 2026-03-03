@@ -4,13 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6F5849">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ARTIKA POS">
     <title>{{ $title ?? 'Login' }} - ARTIKA POS</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo2.png') }}">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/img/icons/icon-192x192.png">
     <!-- Using inline SVG icons for reliability and theme control (removed external CDN) -->
+    <!-- Theme Detection ASAP -->
+    <script>
+        (function () {
+            const saved = localStorage.getItem('artika-theme') || 'system';
+            if (saved === 'dark' || (saved === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.setAttribute('data-bs-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-bs-theme', 'light');
+            }
+        })();
+    </script>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <style>
         body {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+            background-color: var(--gray-50);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -20,9 +39,16 @@
             overflow-x: hidden;
             overflow-y: auto;
             -webkit-font-smoothing: antialiased;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Dark mode overrides for background */
+        [data-bs-theme="dark"] body {
+            background-color: #030712;
         }
 
         /* Animated background pattern */
+        /* Subtle grayscale pattern for ultra-clean look */
         body::before {
             content: '';
             position: absolute;
@@ -31,9 +57,17 @@
             right: 0;
             bottom: 0;
             background-image:
-                radial-gradient(circle at 20% 50%, rgba(191, 160, 148, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(161, 128, 114, 0.15) 0%, transparent 50%);
+                radial-gradient(circle at 20% 50%, var(--gray-200) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--gray-300) 0%, transparent 50%);
+            opacity: 0.1;
             animation: float 15s ease-in-out infinite;
+        }
+
+        [data-bs-theme="dark"] body::before {
+            background-image:
+                radial-gradient(circle at 20% 50%, #1f2937 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, #111827 0%, transparent 50%);
+            opacity: 0.4;
         }
 
         @keyframes float {
@@ -78,15 +112,16 @@
         }
 
         .card-header {
-            background: var(--color-primary);
-            color: white;
-            border-bottom: none;
+            background: var(--card-bg);
+            color: var(--color-text);
+            border-bottom: 1px solid var(--gray-100);
             padding: 2.5rem 2rem;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
 
+        /* Subtle animated texture in header while keeping it neutral */
         .card-header::before {
             content: '';
             position: absolute;
@@ -94,8 +129,13 @@
             right: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, var(--gray-50) 0%, transparent 70%);
+            opacity: 0.5;
             animation: rotate 20s linear infinite;
+        }
+
+        [data-bs-theme="dark"] .card-header::before {
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
         }
 
         @keyframes rotate {
@@ -119,8 +159,12 @@
         .brand-logo img {
             max-width: 260px;
             height: auto;
-            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.1));
             transition: transform 0.3s ease;
+        }
+
+        [data-bs-theme="dark"] .brand-logo img {
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.5));
         }
 
         .brand-logo img:hover {
@@ -138,7 +182,7 @@
 
         .card-body {
             padding: 2.5rem 2rem;
-            background: white;
+            background: var(--card-bg);
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -161,6 +205,7 @@
         .input-wrapper {
             display: block;
             width: 100%;
+            border: 2px solid var(--gray-200);
         }
 
         .input-wrapper .form-control {
@@ -171,21 +216,22 @@
         .form-control {
             border-radius: 12px;
             padding: 14px 18px;
-            border: 2px solid var(--color-secondary-light);
+            border: 2px solid var(--gray-200);
             transition: all 0.3s ease;
             font-size: 1rem;
-            background: var(--brown-50);
+            background: var(--gray-50);
+            color: var(--color-text);
         }
 
         .form-control:focus {
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 4px rgba(133, 105, 90, 0.15);
-            background: white;
+            box-shadow: 0 0 0 4px var(--color-secondary-light);
+            background: var(--card-bg);
             outline: none;
         }
 
         .form-control::placeholder {
-            color: var(--color-primary-lighter);
+            color: gray;
         }
 
         .login-btn-container {
@@ -199,7 +245,7 @@
             border-radius: 14px;
             padding: 16px;
             font-weight: 700;
-            background: var(--gradient-primary);
+            background: var(--color-primary-light);
             border: none;
             color: white;
             font-size: 1.1rem;
@@ -207,7 +253,7 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(133, 105, 90, 0.3);
+            box-shadow: 0 8px 20px var(--brown-200);
             text-align: center;
             cursor: pointer;
             -webkit-appearance: none;
@@ -215,7 +261,7 @@
 
         .btn-login:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(133, 105, 90, 0.4);
+            box-shadow: 0 12px 25px var(--brown-300);
             filter: brightness(1.1);
         }
 
@@ -294,8 +340,12 @@
         .decorative-svg {
             width: 140px;
             height: 140px;
-            color: rgba(255, 255, 255, 0.9);
-            opacity: 0.06;
+            color: var(--color-primary);
+            opacity: 0.1;
+        }
+
+        [data-bs-theme="dark"] .decorative-svg {
+            opacity: 0.2;
         }
 
         .password-field {
@@ -337,13 +387,13 @@
 
         .toggle-password-btn:hover {
             transform: translateY(-50%) scale(1.02);
-            background-color: rgba(133, 105, 90, 0.06);
+            background-color: var(--brown-100);
             /* subtle tint matching theme */
-            box-shadow: 0 4px 12px rgba(133, 105, 90, 0.08);
+            box-shadow: 0 4px 12px var(--brown-200);
         }
 
         .toggle-password-btn:focus-visible {
-            outline: 2px solid rgba(133, 105, 90, 0.18);
+            outline: 2px solid var(--brown-300);
             outline-offset: 2px;
         }
 
@@ -600,8 +650,8 @@
                         <input type="hidden" name="role" value="{{ $role }}">
                     @endif
                     <div class="mb-4 input-group">
-                        <label for="username" class="form-label">Username / NIS</label>
-                        <div class="input-wrapper">
+                        <label for="username" class="form-label">Username</label>
+                        <div class="input-wrapper rounded-4">
                             <span class="input-icon" aria-hidden>
                                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -618,7 +668,7 @@
                     </div>
                     <div class="mb-4 input-group">
                         <label for="password" class="form-label">Password</label>
-                        <div class="input-wrapper">
+                        <div class="input-wrapper rounded-4">
                             <span class="input-icon" aria-hidden>
                                 <svg class="icon-svg" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
@@ -707,6 +757,17 @@
                 });
             });
         });
+    </script>
+
+    {{-- PWA Service Worker Registration --}}
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('SW registered:', reg.scope))
+                    .catch(err => console.log('SW registration failed:', err));
+            });
+        }
     </script>
 
 </body>

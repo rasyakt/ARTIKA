@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'username',
         'nis',
+        'identity_type_id',
         'password',
         'role_id',
         'language',
@@ -53,5 +54,10 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function identity_type()
+    {
+        return $this->belongsTo(IdentityType::class);
     }
 }

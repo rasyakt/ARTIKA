@@ -18,7 +18,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction History - ARTIKA POS</title>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -40,87 +41,99 @@
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .navbar {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 60px;
-            box-shadow: 0 4px 12px rgba(133, 105, 90, 0.15);
-            z-index: 1050;
-            position: relative;
-        }
-
-        .card {
-            border: none;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-            overflow: hidden;
-            background: var(--card-bg, white);
-        }
-
-        /* Theme Toggle */
-        .pos-theme-toggle {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 0.35rem 0.65rem;
+        /* NAVBAR */
+        .pos-navbar {
+            background: var(--primary-dark);
             color: white;
-            cursor: pointer;
-            transition: all 0.3s;
+            padding: 0.75rem 1.5rem;
+            height: 55px;
             display: flex;
             align-items: center;
-            gap: 0.3rem;
-            font-size: 0.85rem;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(133, 105, 90, 0.15);
+            z-index: 1050;
+            position: sticky;
+            top: 0;
         }
 
-        .pos-theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.25);
+        .navbar-brand {
+            font-size: 1.2rem;
+            font-weight: 700;
         }
 
-        .pos-theme-menu {
-            min-width: 140px;
-            padding: 0.4rem;
-            border-radius: 10px;
-            border: 1px solid var(--gray-200);
-            background: var(--card-bg, #fff);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .pos-theme-opt {
+        .navbar-right {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.45rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.82rem;
-            color: var(--color-text, #333);
-            cursor: pointer;
-            border: none;
+            gap: 1rem;
+        }
+
+        .profile-trigger {
+            transition: all 0.25s;
+            border-radius: 12px;
+            padding: 0.5rem 1rem;
             background: none;
-            width: 100%;
-            text-align: left;
+            border: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-trigger:hover {
+            background: var(--color-primary) !important;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--color-primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.4rem;
+            border: 2px solid var(--color-primary-light);
             transition: all 0.2s;
         }
 
-        .pos-theme-opt:hover {
-            background: var(--gray-100, #f5f5f5);
+        .dropdown-menu {
+            border: 1px solid rgba(133, 105, 90, 0.1);
+            animation: slideIn 0.2s ease-out;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
         }
 
-        .pos-theme-opt.active {
-            background: var(--brown-100, #f0e7e0);
-            color: var(--color-primary, #85695a);
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--brown-50);
+            color: var(--primary-dark);
+        }
+
+        /* Back Button styled for new navbar */
+        .btn-back-pos {
+            border-radius: 10px;
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
             font-weight: 600;
+            font-size: 0.75rem;
+            transition: all 0.2s;
         }
 
-        .pos-theme-opt i {
-            width: 1rem;
-            text-align: center;
-        }
-
-        .pos-theme-check {
-            margin-left: auto;
-            font-size: 0.7rem;
-            color: var(--color-primary);
+        .btn-back-pos:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            transform: translateY(-1px);
         }
 
         /* Dark Mode Overrides */
@@ -381,133 +394,73 @@
             font-size: 1.4rem;
             border: 2px solid var(--color-primary-light);
             transition: all 0.2s;
-        }
 
-        .dropdown-menu {
-            border: none;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            animation: slideIn 0.2s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+            .dropdown-menu {
+                border: none;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                animation: slideIn 0.2s ease-out;
             }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
-        }
 
-        .dropdown-item {
-            transition: all 0.2s;
-        }
+            .dropdown-item {
+                transition: all 0.2s;
+            }
 
-        .dropdown-item:hover {
-            background-color: var(--brown-50);
-            color: var(--primary-dark);
-        }
+            .dropdown-item:hover {
+                background-color: var(--brown-50);
+                color: var(--primary-dark);
+            }
     </style>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-dark mb-4">
-        <div class="container-fluid px-4">
-            <a class="navbar-brand d-flex align-items-center" href="{{ route('pos.index') }}">
+    <div class="pos-navbar">
+        <div class="navbar-brand d-flex align-items-center">
+            <a href="{{ route('pos.index') }}">
                 <img src="{{ asset('img/logo2.png') }}" alt="ARTIKA Logo" style="height: 38px; width: auto;">
             </a>
-            <div class="d-flex align-items-center">
+        </div>
+        <div class="navbar-right">
+            <a href="{{ route('pos.index') }}" class="btn btn-back-pos d-flex align-items-center">
+                <i class="fa-solid fa-arrow-left me-md-2"></i>
+                <span class="d-none d-md-inline">Back to POS</span>
+            </a>
 
-                <a href="{{ route('pos.index') }}"
-                    class="btn me-2 me-md-3 d-flex align-items-center justify-content-center"
-                    style="border-radius: 10px; padding: 0.4rem 0.8rem; background: var(--color-primary); border: 2px solid var(--color-primary-light); color: white; font-weight: 600; font-size: 0.75rem; transition: all 0.2s;">
-                    <i class="fa-solid fa-arrow-left me-1 me-md-2"></i><span class="d-none d-md-inline">Back to
-                        POS</span><span class="d-inline d-md-none">POS</span>
-                </a>
-
-                <div class="dropdown">
-                    <button class="btn p-0 border-0 profile-trigger" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <div class="profile-avatar">
-                            <i class="fas fa-user-circle"></i>
-                        </div>
-                        <span class="ms-2 fw-600 text-white d-none d-lg-inline">{{ $user?->name }}</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 mt-2 p-0 overflow-hidden"
-                        style="min-width: 240px; border-radius: 16px;">
-                        <li class="p-3 bg-light border-bottom">
-                            <div class="d-flex align-items-center">
-                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3"
-                                    style="width: 42px; height: 42px; font-size: 1.2rem;">
-                                    {{ substr($user?->name ?? '', 0, 1) }}
-                                </div>
-                                <div class="overflow-hidden text-start">
-                                    <h6 class="mb-0 fw-800 text-truncate text-dark">{{ $user?->name }}</h6>
-                                    <div class="small text-muted text-truncate">@ {{ $user?->username }}</div>
-                                </div>
-                            </div>
-                        </li>
-
-                        {{-- Section: Settings/Theme --}}
-                        <div class="p-2 border-bottom">
-                            <div class="px-3 py-1 mb-1 small fw-bold text-uppercase text-muted"
-                                style="font-size: 0.65rem;">
-                                {{ __('common.settings') ?? 'Pengaturan' }}
-                            </div>
-                            <div class="px-3 py-2">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="small fw-600 text-muted"><i
-                                            class="fa-solid fa-circle-half-stroke me-2"></i>Tema</span>
-                                </div>
-                                <div class="btn-group w-100" role="group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
-                                        data-theme="light" title="Light">
-                                        <i class="fa-solid fa-sun"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
-                                        data-theme="dark" title="Dark">
-                                        <i class="fa-solid fa-moon"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary pos-theme-opt"
-                                        data-theme="system" title="System">
-                                        <i class="fa-solid fa-desktop"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <li>
-                            <a class="dropdown-item py-2 px-3 d-flex align-items-center"
-                                href="{{ route('pos.history') }}">
-                                <i class="fa-solid fa-clock-rotate-left me-3 text-primary opacity-75"></i>
-                                <span class="fw-600">{{ __('pos.transaction_history') }}</span>
-                            </a>
-                        </li>
-                        @if(App\Models\Setting::get('cashier_enable_audit_logs', true))
-                            <li>
-                                <a class="dropdown-item py-2 px-3 d-flex align-items-center" href="{{ route('pos.logs') }}">
-                                    <i class="fa-solid fa-list-check me-3 text-primary opacity-75"></i>
-                                    <span class="fw-600">{{ __('pos.activity_logs') }}</span>
-                                </a>
-                            </li>
-                        @endif
-                        <li class="border-top mt-1">
-                            <button type="button" class="dropdown-item py-3 px-3 d-flex align-items-center text-danger"
-                                id="btnLogout">
-                                <i class="fas fa-sign-out-alt me-3"></i>
-                                <span class="fw-700">{{ __('pos.exit_system') }}</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
+            <div class="dropdown">
+                <button class="btn p-0 border-0 profile-trigger d-flex align-items-center" type="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="profile-avatar me-3">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="d-none d-lg-flex flex-column align-items-start me-2">
+                        <span class="text-white fw-700 mb-0"
+                            style="font-size: 1rem; line-height: 1.1;">{{ $user?->name }}</span>
+                        <span class="text-white-50 fw-700 text-uppercase"
+                            style="font-size: 0.75rem; letter-spacing: 0.05em;">{{ $user?->role?->name }}</span>
+                    </div>
+                </button>
+                <x-pos-profile-dropdown />
             </div>
         </div>
-    </nav>
+    </div>
+    </div>
+    </div>
+    </div>
 
-    <div class="container">
+    <div class="container mt-4">
         <div class="row g-4 mb-4">
             <!-- Summary Stats Mini Cards -->
             <div class="col-md-4">
@@ -609,8 +562,8 @@
                                     </td>
                                     <td class="text-center">
                                         <span
-                                            class="payment-badge {{ strtolower($transaction->payment_method) === 'cash' ? 'badge-cash' : 'badge-non-cash' }}">
-                                            {{ $transaction->payment_method }}
+                                            class="payment-badge {{ ($transaction->paymentMethod->proof_requirement ?? 'disabled') !== 'disabled' ? 'badge-non-cash' : 'badge-cash' }}">
+                                            {{ $transaction->payment_method_name }}
                                         </span>
                                     </td>
                                     <td class="text-center">
@@ -707,8 +660,8 @@
                                 <div class="t-card-date">{{ $transaction->created_at->format('d M Y, H:i') }}</div>
                             </div>
                             <span
-                                class="payment-badge {{ strtolower($transaction->payment_method) === 'cash' ? 'badge-cash' : 'badge-non-cash' }}">
-                                {{ $transaction->payment_method }}
+                                class="payment-badge {{ ($transaction->paymentMethod->proof_requirement ?? 'disabled') !== 'disabled' ? 'badge-non-cash' : 'badge-cash' }}">
+                                {{ $transaction->payment_method_name }}
                             </span>
                         </div>
                         <div class="t-card-body">

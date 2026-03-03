@@ -42,6 +42,14 @@ Tambah data supplier untuk melacak asal barang. Gunakan fitur **Purchase** untuk
 
 Admin dapat membuat promo (misal: Diskon Member/Event). Promo dapat diaktifkan atau dinonaktifkan sewaktu-waktu dari dashboard.
 
+### 4. Import Data Massal (Excel)
+
+Untuk mempercepat pengisian data, gunakan fitur **Import Excel**:
+
+- **Produk**: Unduh template dari halaman Produk, isi data (barcode, nama, harga), lalu unggah.
+- **Pengguna/User**: Unduh template dari halaman Pengguna untuk membuat banyak akun staf sekaligus.
+  _(Catatan: Sistem secara otomatis menolak format file yang salah untuk menjaga keamanan)._
+
 ---
 
 ## Manajemen Keuangan

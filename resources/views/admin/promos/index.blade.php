@@ -11,7 +11,7 @@
                 <p class="text-muted mb-0">{{ __('admin.manage_promos_subtitle') }}</p>
             </div>
             <button class="btn shadow-sm" data-bs-toggle="modal" data-bs-target="#addPromoModal"
-                style="background: var(--gradient-primary); color: white; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;">
+                style="background: var(--color-primary-dark); color: white; border: none; border-radius: 10px; padding: 0.6rem 1.25rem; font-weight: 600; transition: all 0.3s;">
                 <i class="fa-solid fa-plus me-1"></i> {{ __('admin.add_promo') }}
             </button>
         </div>
@@ -190,7 +190,7 @@
                                     (Opsional)</label>
                                 <select name="product_id" class="form-select select2"
                                     style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
-                                    <option value="">-- Semua Produk --</option>
+                                    <option value="">{{ __('admin.all_products') }}</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }} ({{ $product->barcode }})
                                         </option>
@@ -287,7 +287,7 @@
                                 <label class="form-label fw-semibold" style="color: var(--color-primary-dark);">Target Produk</label>
                                 <select name="product_id" id="edit_product_id" class="form-select"
                                     style="border-radius: 12px; border: 2px solid var(--brown-100); padding: 0.75rem 1rem;">
-                                    <option value="">-- Semua Produk --</option>
+                                    <option value="">{{ __('admin.all_products') }}</option>
                                     @foreach($products as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                                     @endforeach

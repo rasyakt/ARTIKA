@@ -8,7 +8,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{{ __('pos.receipt') }} - {{ $transaction->invoice_no }}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
     <!-- Professional OCR-B font for thermal printers -->
     <link href="https://fonts.cdnfonts.com/css/ocr-b" rel="stylesheet">
     <style>
@@ -210,11 +211,11 @@
         }
 
         .btn-print {
-            background: #85695a;
+            background: var(--color-primary);
         }
 
         .btn-print:hover {
-            background: #6f5849;
+            background: var(--color-primary-dark);
         }
 
         .btn-share {
@@ -444,7 +445,7 @@
         <div class="items-table">
             @foreach($transaction->items as $item)
                 <div class="item-row">
-                    <div class="item-main" style="text-transform: uppercase; font-weight: 900;">
+                    <div class="item-main" style="text-transform: uppercase; font-weight: 550;">
                         <span>{{ $item->product->name }}</span>
                     </div>
                     <div class="item-details" style="display: flex; justify-content: space-between;">
@@ -479,7 +480,7 @@
         <div class="divider"></div>
 
         <!-- Summary -->
-        <div style="margin: 5px 0; font-size: var(--font-size-summary); font-weight: 700;">
+        <div style="margin: 5px 0; font-size: var(--font-size-summary); font-weight: 670;">
             <div class="total-row">
                 <span>Total Item:</span>
                 <span>{{ $transaction->items->count() }}</span>

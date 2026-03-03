@@ -8,7 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ __('pos.mobile_scanner_title') }}</title>
     @vite(['resources/css/app.scss', 'resources/js/app.js'])
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    {!! \App\Helpers\ThemeHelper::getCssVariables(\App\Models\Setting::get('site_color_theme', 'brown')) !!}
+    <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js" type="text/javascript"></script>
     <style>
         :root {
             --primary: var(--color-primary);
