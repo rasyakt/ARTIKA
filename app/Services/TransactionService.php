@@ -30,73 +30,116 @@ class TransactionService
 
     public function processTransaction(array $data, array $items)
     {
-        // Control Transaction
-        return DB::transaction(function () use ($data, $items) {
-            // 0. Stock Check INSIDE transaction for consistency
-            foreach ($items as $item) {
-                $product = Product::with('stocks')->find($item['product_id']);
-                $available = $product ? $product->available_stock : 0;
+        // 0. Pre-load all products and stocks in ONE query (Bulk Fetch)
+        $productIds = array_column($items, 'product_id');
+        $products = Product::with('stocks')->whereIn('id', $productIds)->get()->keyBy('id');
 
-                if ($available < $item['quantity']) {
-                    $productName = $product ? $product->name : 'Unknown Product';
-                    throw new \Exception(trans('pos.insufficient_stock') . " ({$productName}. Tersedia: {$available}, Diminta: {$item['quantity']})");
-                }
+        // Validate stock in memory
+        foreach ($items as $item) {
+            $product = $products->get($item['product_id']);
+            $available = $product ? $product->available_stock : 0;
+
+            if ($available < $item['quantity']) {
+                $productName = $product ? $product->name : 'Unknown Product';
+                throw new \Exception(trans('pos.insufficient_stock') . " ({$productName}. Tersedia: {$available}, Diminta: {$item['quantity']})");
             }
+        }
 
+        // Control Transaction
+        return DB::transaction(function () use ($data, $items, $products) {
             // 1. Create Transaction Header
             $data['invoice_no'] = $this->generateInvoiceNumber();
             $data['status'] = 'completed';
 
             $transaction = $this->transactionRepository->createTransaction($data);
 
-            // 2. Process Items & Deduct Stock
+            // 2. Prepare Bulk Data for Items and Stock Movements
+            $transactionItemsData = [];
+            $stockMovementsData = [];
+            $now = now()->toDateTimeString();
+            $userId = Auth::id();
+
+            // Prepare Stock Deduction Cases
+            $stockUpdateCases = '';
+            $stockUpdateIds = [];
+
             foreach ($items as $item) {
-                // Get current stock for logging
-                $stock = Stock::where('product_id', $item['product_id'])->first();
-                $qtyBefore = $stock ? $stock->quantity : 0;
+                $product = $products->get($item['product_id']);
+                // Assuming only one stock record per product for simplicity in POS operations,
+                // or aggregating the deduction. Here we get the primary stock row.
+                $stockRecord = $product->stocks->first();
+                $qtyBefore = $stockRecord ? $stockRecord->quantity : 0;
+                $qtyAfter = $qtyBefore - $item['quantity'];
 
-                // Deduct Stock
-                $this->productRepository->updateStock($item['product_id'], $item['quantity']);
-
-                $newStock = Stock::where('product_id', $item['product_id'])->first();
-                $qtyAfter = $newStock ? $newStock->quantity : 0;
-
-                // Log Stock Movement (OUT)
-                StockMovement::create([
+                // Build Bulk Transaction Items Data
+                $transactionItemsData[] = [
+                    'transaction_id' => $transaction->id,
                     'product_id' => $item['product_id'],
-                    'user_id' => Auth::id(),
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                    'subtotal' => $item['quantity'] * $item['price'],
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+
+                // Build Bulk Stock Movements Data
+                $stockMovementsData[] = [
+                    'product_id' => $item['product_id'],
+                    'user_id' => $userId,
                     'type' => 'out',
                     'quantity_before' => $qtyBefore,
                     'quantity_after' => $qtyAfter,
                     'quantity_change' => -$item['quantity'],
                     'reason' => 'POS Sale',
-                    'reference' => $transaction->invoice_no
-                ]);
+                    'reference' => $transaction->invoice_no,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
 
-                $item['transaction_id'] = $transaction->id;
-                $item['subtotal'] = $item['quantity'] * $item['price'];
+                // Prepare Stock Update Cases for Raw Query
+                $productId = (int) $item['product_id'];
+                $qtyToDeduct = (int) $item['quantity'];
+                $stockUpdateCases .= "WHEN product_id = {$productId} THEN quantity - {$qtyToDeduct} ";
+                $stockUpdateIds[] = $productId;
+            }
 
-                $this->transactionRepository->createTransactionItem($item);
+            // Execute Bulk Inserts
+            if (!empty($transactionItemsData)) {
+                TransactionItem::insert($transactionItemsData);
+            }
+
+            if (!empty($stockMovementsData)) {
+                StockMovement::insert($stockMovementsData);
+            }
+
+            // Execute Bulk Stock Update (Deduction)
+            if (!empty($stockUpdateIds)) {
+                $idsList = implode(',', $stockUpdateIds);
+                DB::statement("UPDATE stocks SET quantity = CASE {$stockUpdateCases} ELSE quantity END WHERE product_id IN ({$idsList})");
             }
 
             // 3. Accounting Integration (Simple Double Entry)
-            // Debit Application: Cash
-            Journal::create([
-                'transaction_id' => $transaction->id,
-                'type' => 'debit',
-                'account_name' => 'Cash',
-                'amount' => $transaction->total_amount,
-                'description' => 'Sales Invoice ' . $transaction->invoice_no,
-            ]);
-
-            // Credit Application: Sales Revenue
-            Journal::create([
-                'transaction_id' => $transaction->id,
-                'type' => 'credit',
-                'account_name' => 'Sales Revenue',
-                'amount' => $transaction->total_amount,
-                'description' => 'Sales Invoice ' . $transaction->invoice_no,
-            ]);
+            $journalsData = [
+                [
+                    'transaction_id' => $transaction->id,
+                    'type' => 'debit',
+                    'account_name' => 'Cash',
+                    'amount' => $transaction->total_amount,
+                    'description' => 'Sales Invoice ' . $transaction->invoice_no,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ],
+                [
+                    'transaction_id' => $transaction->id,
+                    'type' => 'credit',
+                    'account_name' => 'Sales Revenue',
+                    'amount' => $transaction->total_amount,
+                    'description' => 'Sales Invoice ' . $transaction->invoice_no,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]
+            ];
+            Journal::insert($journalsData);
 
             return $transaction;
         });

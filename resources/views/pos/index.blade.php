@@ -986,7 +986,7 @@
         .total-row {
             display: flex;
             justify-content: space-between;
-            font-size: 0.8rem;
+            font-size: 1rem;
             padding: 0.4rem 0;
             border-bottom: 1px solid var(--gray-200);
         }
@@ -2017,8 +2017,8 @@
         }
 
         .btn-shortcut-help {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--gray-700);
+            border: 1px solid var(--gray-700);
             border-radius: 8px;
             padding: 0.35rem 0.65rem;
             color: white;
@@ -2032,7 +2032,7 @@
         }
 
         .btn-shortcut-help:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--gray-600);
             color: white;
         }
     </style>
@@ -2259,8 +2259,8 @@
                             </div>
                         @endif
                         <div class="total-row">
-                            <span>{{ __('common.total') }}:</span>
-                            <span class="totalDisplay" id="totalDisplay">Rp0</span>
+                            <span class="fw-bold">{{ __('common.total') }}:</span>
+                            <span class="totalDisplay fw-bold" id="totalDisplay">Rp0</span>
                         </div>
                     </div>
 
