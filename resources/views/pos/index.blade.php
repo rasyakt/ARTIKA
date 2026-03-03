@@ -2017,8 +2017,8 @@
         }
 
         .btn-shortcut-help {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--gray-700);
+            border: 1px solid var(--gray-700);
             border-radius: 8px;
             padding: 0.35rem 0.65rem;
             color: white;
@@ -2032,7 +2032,7 @@
         }
 
         .btn-shortcut-help:hover {
-            background: rgba(255, 255, 255, 0.25);
+            background: var(--gray-600);
             color: white;
         }
     </style>
