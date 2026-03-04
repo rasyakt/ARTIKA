@@ -128,7 +128,7 @@ class AdminController extends Controller
 
         $weeklyResults = Transaction::where('created_at', '>=', $weekStart)
             ->where('status', 'completed')
-            ->selectRaw("TO_CHAR(DATE_TRUNC('week', created_at), 'IYYY-IW') as sale_week, COALESCE(SUM(total_amount), 0) as total")
+            ->selectRaw("DATE_FORMAT(created_at, '%x-%v') as sale_week, COALESCE(SUM(total_amount), 0) as total")
             ->groupBy('sale_week')
             ->pluck('total', 'sale_week');
 
@@ -145,7 +145,7 @@ class AdminController extends Controller
 
         $monthlyResults = Transaction::where('created_at', '>=', $monthStart)
             ->where('status', 'completed')
-            ->selectRaw("TO_CHAR(created_at, 'YYYY-MM') as sale_month, COALESCE(SUM(total_amount), 0) as total")
+            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as sale_month, COALESCE(SUM(total_amount), 0) as total")
             ->groupBy('sale_month')
             ->pluck('total', 'sale_month');
 
@@ -171,8 +171,8 @@ class AdminController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'ilike', "%{$search}%")
-                    ->orWhere('barcode', 'ilike', "%{$search}%");
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('barcode', 'like', "%{$search}%");
             });
         }
 

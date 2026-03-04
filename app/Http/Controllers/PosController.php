@@ -48,7 +48,7 @@ class PosController extends Controller
 
         if ($request->has('q') && $request->q != '') {
             $searchTerm = $request->q;
-            $query->where('name', 'ilike', '%' . $searchTerm . '%')
+            $query->where('name', 'like', '%' . $searchTerm . '%')
                 ->orWhere('barcode', 'like', '%' . $searchTerm . '%');
         }
 

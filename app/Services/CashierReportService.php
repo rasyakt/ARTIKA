@@ -28,9 +28,9 @@ class CashierReportService
 
         if ($search) {
             $query->whereHas('user', function ($q) use ($search) {
-                $q->where('nis', 'ilike', "%{$search}%")
-                    ->orWhere('username', 'ilike', "%{$search}%")
-                    ->orWhere('name', 'ilike', "%{$search}%");
+                $q->where('nis', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
             });
         }
 
@@ -230,9 +230,9 @@ class CashierReportService
 
         if ($search) {
             $query->whereHas('user', function ($q) use ($search) {
-                $q->where('nis', 'ilike', "%{$search}%")
-                    ->orWhere('username', 'ilike', "%{$search}%")
-                    ->orWhere('name', 'ilike', "%{$search}%");
+                $q->where('nis', 'like', "%{$search}%")
+                    ->orWhere('username', 'like', "%{$search}%")
+                    ->orWhere('name', 'like', "%{$search}%");
             });
         }
 
